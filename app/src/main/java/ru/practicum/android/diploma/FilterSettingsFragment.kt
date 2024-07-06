@@ -11,14 +11,13 @@ import ru.practicum.android.diploma.databinding.FragmentFilterSettingsBinding
 class FilterSettingsFragment : Fragment() {
     private var _binding: FragmentFilterSettingsBinding? = null
     private val binding get() = _binding!!
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentFilterSettingsBinding.inflate(inflater, container, false)
