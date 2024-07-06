@@ -6,11 +6,11 @@
     </style>
 
     <style name="RegularText.12size">
-        <item name="android:textSize">@dimen/test_size_12</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
     </style>
 
     <style name="RegularText.16size">
-        <item name="android:textSize">@dimen/test_size_16</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
     </style>
 
     <style name="MediumText">
@@ -19,20 +19,20 @@
     </style>
 
     <style name="MediumText.16size">
-        <item name="android:textSize">@dimen/test_size_16</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
     </style>
 
     <style name="MediumText.22size">
-        <item name="android:textSize">@dimen/test_size_22</item>
+        <item name="android:textSize">@dimen/text_size_22</item>
     </style>
 
     <style name="MediumText.32size">
-        <item name="android:textSize">@dimen/test_size_32</item>
+        <item name="android:textSize">@dimen/text_size_32</item>
     </style>
 
     <style name="MediumText.TypographyText">
         <item name="android:textColor">@color/Gray</item>
-        <item name="android:textSize">@dimen/test_size_22</item>
+        <item name="android:textSize">@dimen/text_size_22</item>
     </style>
 
     <style name="BoldText">
