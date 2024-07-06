@@ -36,6 +36,7 @@ android {
 
     buildFeatures {
         buildConfig = true
+        viewBinding=true
     }
 }
 
@@ -55,4 +56,11 @@ dependencies {
     androidTestImplementation(libs.uiTests.junitExt)
     androidTestImplementation(libs.uiTests.espressoCore)
     // endregion
+
+    //navigation graph
+    implementation(libs.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.fragment.ktx)
+
+
 }
