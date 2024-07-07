@@ -7,11 +7,9 @@ plugins {
     kotlin("plugin.serialization") version "1.9.22"
     id("kotlin-kapt")
 }
-
 android {
     namespace = "ru.practicum.android.diploma"
     compileSdk = libs.versions.compileSdk.get().toInt()
-
     defaultConfig {
         applicationId = "ru.practicum.android.diploma"
         minSdk = libs.versions.targetSdk.get().toInt()
@@ -23,7 +21,6 @@ android {
 
         buildConfigField(type = "String", name = "HH_ACCESS_TOKEN", value = "\"${developProperties.hhAccessToken}\"")
     }
-
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -37,9 +34,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-
     buildFeatures {
         buildConfig = true
+
         // Binding
         viewBinding = true
     }
@@ -51,18 +48,16 @@ val coroutineVersion = "1.7.1"
 val glideVersion = "4.14.2"
 val navigationVersion = "2.7.7"
 val roomVersion = "2.6.1"
+
 dependencies {
     implementation(libs.androidX.core)
     implementation(libs.androidX.appCompat)
-
     // UI layer libraries
     implementation(libs.ui.material)
     implementation(libs.ui.constraintLayout)
-
     // region Unit tests
     testImplementation(libs.unitTests.junit)
     // endregion
-
     // region UI tests
     androidTestImplementation(libs.uiTests.junitExt)
     androidTestImplementation(libs.uiTests.espressoCore)
@@ -103,4 +98,5 @@ dependencies {
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
     kapt("androidx.room:room-compiler:$roomVersion")
+
 }
