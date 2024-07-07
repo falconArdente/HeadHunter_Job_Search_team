@@ -64,13 +64,13 @@
 
     <fragment
         android:id="@+id/fltrDepartmentFragment"
-        android:name="ru.practicum.android.diploma.FltrDepartmentFragment"
+        android:name="ru.practicum.android.diploma.FilterDepartmentFragment"
         android:label="fragment_fltr_department"
         />
 
     <fragment
         android:id="@+id/fltrCountryFragment"
-        android:name="ru.practicum.android.diploma.FltrCountryFragment"
+        android:name="ru.practicum.android.diploma.FilterCountryFragment"
         android:label="fragment_fltr_country" />
 
 </navigation>
