@@ -25,7 +25,7 @@
         tools:layout="@layout/fragment_job_details" />
     <fragment
         android:id="@+id/favoritesJobsFragment"
-        android:name="ru.practicum.android.diploma.favourites.ui.FavoritesJobsFragment"
+        android:name="ru.practicum.android.diploma.favorites.ui.FavoritesJobsFragment"
         android:label="fragment_favorites_jobs"
         tools:layout="@layout/fragment_favorites_jobs" />
     <fragment
