@@ -8,14 +8,13 @@ plugins {
     id("kotlin-kapt")
 }
 
-val minVersion = 26
 android {
     namespace = "ru.practicum.android.diploma"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
         applicationId = "ru.practicum.android.diploma"
-        minSdk = minVersion
+        minSdk = libs.versions.targetSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
