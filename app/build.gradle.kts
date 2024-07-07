@@ -8,13 +8,14 @@ plugins {
     id("kotlin-kapt")
 }
 
+val minSdk = 26
 android {
     namespace = "ru.practicum.android.diploma"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
         applicationId = "ru.practicum.android.diploma"
-        minSdk = 26
+        minSdk = minSdk
         targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
@@ -69,38 +70,38 @@ dependencies {
     // endregion
 
     // Constraint layout
-    implementation (libs.ui.constraintLayout)
+    implementation(libs.ui.constraintLayout)
 
     // Fragments
-    implementation ("androidx.fragment:fragment-ktx:1.8.1")
+    implementation("androidx.fragment:fragment-ktx:1.8.1")
 
     // Navigation
-    implementation ("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
-    implementation ("androidx.navigation:navigation-ui-ktx:$navigationVersion")
+    implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
+    implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
 
     // Glide
-    implementation ("com.github.bumptech.glide:glide:$glideVersion")
-    annotationProcessor ("com.github.bumptech.glide:compiler:$glideVersion")
+    implementation("com.github.bumptech.glide:glide:$glideVersion")
+    annotationProcessor("com.github.bumptech.glide:compiler:$glideVersion")
 
     // Gson and Json (Serialization)
-    implementation ("com.google.code.gson:gson:2.10.1")
-    implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 
     // Retrofit
-    implementation ("com.squareup.retrofit2:retrofit:$retrofitVersion")
-    implementation ("com.squareup.retrofit2:converter-gson:$retrofitVersion")
+    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
+    implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")
 
     // Koin (DI)
-    implementation ("io.insert-koin:koin-android:$koinVersion")
-    implementation ("io.insert-koin:koin-core:$koinVersion")
+    implementation("io.insert-koin:koin-android:$koinVersion")
+    implementation("io.insert-koin:koin-core:$koinVersion")
 
-    //Coroutines
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion")
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion")
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutineVersion")
+    // Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutineVersion")
 
     // Room
-    implementation ("androidx.room:room-runtime:$roomVersion")
-    implementation ("androidx.room:room-ktx:$roomVersion")
-    kapt ("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
 }
