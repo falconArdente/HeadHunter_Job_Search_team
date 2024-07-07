@@ -15,7 +15,7 @@ android {
 
     defaultConfig {
         applicationId = "ru.practicum.android.diploma"
-        minSdk = minSdk
+        minSdk = MIN_SDK
         targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
