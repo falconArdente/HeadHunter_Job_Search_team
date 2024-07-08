@@ -17,7 +17,7 @@
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/btm_nav_view_top_line"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="@dimen/dp1"
         android:background="@color/Gray"
         app:layout_constraintBottom_toTopOf="@id/btm_nav_view" />
 
@@ -25,7 +25,7 @@
         android:id="@+id/btm_nav_view"
         style="@style/BottomNavigationText"
         android:layout_width="match_parent"
-        android:layout_height="58dp"
+        android:layout_height="@dimen/dp58"
         app:itemActiveIndicatorStyle="@android:color/transparent"
         app:itemPaddingBottom="@dimen/dp8"
         app:itemPaddingTop="@dimen/dp8"
