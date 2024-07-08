@@ -12,14 +12,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="@dimen/_16dp" />
+        app:layout_constraintGuide_begin="@dimen/dp16" />
 
     <TextView
         android:id="@+id/teamTitle"
         style="@style/MediumText.22size"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_20dp"
+        android:layout_marginTop="@dimen/dp20"
         android:text="@string/team_title"
         app:layout_constraintStart_toStartOf="@id/teamGuideline"
         app:layout_constraintTop_toTopOf="parent" />
@@ -39,7 +39,7 @@
         style="@style/MediumText.16size"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_32dp"
+        android:layout_marginTop="@dimen/dp32"
         android:text="@string/team_person1"
         app:layout_constraintStart_toStartOf="@id/teamGuideline"
         app:layout_constraintTop_toBottomOf="@+id/teamText" />
@@ -49,7 +49,7 @@
         style="@style/MediumText.16size"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_16dp"
+        android:layout_marginTop="@dimen/dp16"
         android:text="@string/team_person2"
         app:layout_constraintStart_toStartOf="@id/teamGuideline"
         app:layout_constraintTop_toBottomOf="@+id/teamPerson1" />
@@ -59,7 +59,7 @@
         style="@style/MediumText.16size"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_16dp"
+        android:layout_marginTop="@dimen/dp16"
         android:text="@string/team_person3"
         app:layout_constraintStart_toStartOf="@id/teamGuideline"
         app:layout_constraintTop_toBottomOf="@+id/teamPerson2" />
@@ -69,7 +69,7 @@
         style="@style/MediumText.16size"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_16dp"
+        android:layout_marginTop="@dimen/dp16"
         android:text="@string/team_person4"
         app:layout_constraintStart_toStartOf="@id/teamGuideline"
         app:layout_constraintTop_toBottomOf="@+id/teamPerson3" />
@@ -79,7 +79,7 @@
         style="@style/MediumText.16size"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_16dp"
+        android:layout_marginTop="@dimen/dp16"
         android:text="@string/team_person5"
         app:layout_constraintStart_toStartOf="@id/teamGuideline"
         app:layout_constraintTop_toBottomOf="@+id/teamPerson4" />
