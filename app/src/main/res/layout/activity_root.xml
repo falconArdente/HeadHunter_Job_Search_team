@@ -25,7 +25,7 @@
         android:id="@+id/btm_nav_view"
         style="@style/BottomNavigationText"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp58"
+        android:layout_height="@dimen/dp56"
         app:itemActiveIndicatorStyle="@android:color/transparent"
         app:itemPaddingBottom="@dimen/dp8"
         app:itemPaddingTop="@dimen/dp8"
