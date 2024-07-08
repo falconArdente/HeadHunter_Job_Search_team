@@ -3,14 +3,23 @@ package ru.practicum.android.diploma.network
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import ru.practicum.android.diploma.network.api.HeadHunterApplicationApi
 import ru.practicum.android.diploma.network.api.HeadHunterNetworkClient
+import ru.practicum.android.diploma.network.dto.HeadHunterRequest
 import ru.practicum.android.diploma.network.dto.responses.LocaleResponse
 import ru.practicum.android.diploma.network.dto.responses.Response
-import ru.practicum.android.diploma.network.dto.HeadHunterRequest
 
-class RetrofitBasedClient(retrofit: Retrofit) : HeadHunterNetworkClient {
+class RetrofitBasedClient() : HeadHunterNetworkClient {
+    private val retrofit =
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(createOkHttpDefaultClient())
+            .build()
     private val serverService = retrofit.create(HeadHunterApplicationApi::class.java)
     override suspend fun doRequest(request: HeadHunterRequest): Response {
         // if (request !is HeadHunterRequest) return Response().apply { resultCode = -1 }
@@ -26,5 +35,13 @@ class RetrofitBasedClient(retrofit: Retrofit) : HeadHunterNetworkClient {
                 Response().apply { resultCode = 500 }
             }
         }
+    }
+
+    private fun createOkHttpDefaultClient(): OkHttpClient {
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+        return OkHttpClient().newBuilder()
+            .addInterceptor(interceptor)
+            .build()
     }
 }

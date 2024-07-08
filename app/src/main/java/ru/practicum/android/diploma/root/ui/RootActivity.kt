@@ -10,6 +10,8 @@ import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.ActivityRootBinding
 import ru.practicum.android.diploma.network.HeadHunterRepository
+import ru.practicum.android.diploma.network.api.Locale
+import ru.practicum.android.diploma.utils.Resource
 
 class RootActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,10 +26,17 @@ class RootActivity : AppCompatActivity() {
         networkRequestExample(accessToken = BuildConfig.HH_ACCESS_TOKEN)
 
         //NetworkArea+++++
-        val client=HeadHunterRepository()
+        val repo = HeadHunterRepository()
         lifecycleScope.launch {
-          client.getLocales().forEach {
-              Log.d("HHTOKEN",   it.name.toString()) }
+            repo.getLocales()
+                .collect { result ->
+                    if (result is Resource.Success) {
+                        (result.data as List<Locale>)
+                            .forEach {
+                                Log.d("HHTOKEN", it.name.toString())
+                            }
+                    }
+                }
         }
 
 
