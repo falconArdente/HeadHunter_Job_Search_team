@@ -16,7 +16,6 @@ interface HeadHunterApplicationApi {
     @Headers("User-Agent: ${App.USER_AGENT}", "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}")
     @GET("/industries")
     fun getIndustries(
-        @Query("locale") locale: String = App.LOCALE,
-        @Query("host") host: String = App.HOST
+        @Query("locale") locale: String = App.LOCALE, @Query("host") host: String = App.HOST
     ): List<LocaleResponse>
 }

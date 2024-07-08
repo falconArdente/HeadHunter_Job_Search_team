@@ -8,12 +8,19 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
+import okhttp3.internal.wait
+import org.koin.android.ext.android.inject
+import retrofit2.Retrofit
 import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.ActivityRootBinding
 import ru.practicum.android.diploma.network.HeadHunterRepository
+import ru.practicum.android.diploma.network.api.HeadHunterNetworkClient
 import ru.practicum.android.diploma.network.api.Locale
+import ru.practicum.android.diploma.search.data.repository.SearchRepository
 import ru.practicum.android.diploma.utils.Resource
 
 class RootActivity : AppCompatActivity() {
@@ -60,7 +67,7 @@ class RootActivity : AppCompatActivity() {
             }
         }
         //NetworkArea+++++
-        val repo = HeadHunterRepository()
+        val repo by inject <SearchRepository>()
         lifecycleScope.launch {
             repo.getLocales()
                 .collect { result ->
