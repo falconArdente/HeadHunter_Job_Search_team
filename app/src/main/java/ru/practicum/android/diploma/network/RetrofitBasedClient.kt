@@ -6,7 +6,8 @@ import retrofit2.Retrofit
 import ru.practicum.android.diploma.network.api.HeadHunterApplicationApi
 import ru.practicum.android.diploma.network.api.HeadHunterNetworkClient
 import ru.practicum.android.diploma.network.dto.HeadHunterRequest
-import ru.practicum.android.diploma.network.dto.responses.LocaleResponse
+import ru.practicum.android.diploma.network.dto.responses.DictionariesResponse
+import ru.practicum.android.diploma.network.dto.responses.LocalesResponse
 import ru.practicum.android.diploma.network.dto.responses.Response
 
 class RetrofitBasedClient(retrofit: Retrofit) : HeadHunterNetworkClient {
@@ -17,8 +18,13 @@ class RetrofitBasedClient(retrofit: Retrofit) : HeadHunterNetworkClient {
         return withContext(Dispatchers.IO) {
             try {
                 when (request) {
-                    is HeadHunterRequest.LocalesList -> {
-                        val response = LocaleResponse(localeList = serverService.getLocales())
+                    is HeadHunterRequest.Locales -> {
+                        val response = LocalesResponse(localeList = serverService.getLocales())
+                        response.apply { resultCode = 200 }
+                    }
+
+                    HeadHunterRequest.Dictionaries -> {
+                        val response = serverService.getDictionaries()
                         response.apply { resultCode = 200 }
                     }
                 }

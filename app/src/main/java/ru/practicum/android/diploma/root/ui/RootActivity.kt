@@ -8,18 +8,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
-import okhttp3.internal.wait
 import org.koin.android.ext.android.inject
-import retrofit2.Retrofit
 import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.ActivityRootBinding
-import ru.practicum.android.diploma.network.HeadHunterRepository
-import ru.practicum.android.diploma.network.api.HeadHunterNetworkClient
-import ru.practicum.android.diploma.network.api.Locale
+import ru.practicum.android.diploma.network.dto.Locale
+import ru.practicum.android.diploma.network.dto.responses.DictionariesResponse
 import ru.practicum.android.diploma.search.data.repository.SearchRepository
 import ru.practicum.android.diploma.utils.Resource
 
@@ -69,13 +64,15 @@ class RootActivity : AppCompatActivity() {
         //NetworkArea+++++
         val repo by inject <SearchRepository>()
         lifecycleScope.launch {
-            repo.getLocales()
+            repo.getDictionaries()
                 .collect { result ->
                     if (result is Resource.Success) {
-                        (result.data as List<Locale>)
+                        (result.data as DictionariesResponse).currency
                             .forEach {
                                 Log.d("HHTOKEN", it.name.toString())
                             }
+                    }else{
+                        Log.d("HHTOKEN", result.message.toString())
                     }
                 }
         }
