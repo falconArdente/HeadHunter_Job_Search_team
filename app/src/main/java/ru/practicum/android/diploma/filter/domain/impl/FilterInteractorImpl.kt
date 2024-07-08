@@ -1,13 +1,13 @@
 package ru.practicum.android.diploma.filter.domain.impl
 
-import ru.practicum.android.diploma.filter.data.storage.SharedPrefsStorage
 import ru.practicum.android.diploma.filter.domain.api.FilterInteractor
+import ru.practicum.android.diploma.filter.domain.api.FilterStorageRepository
 import ru.practicum.android.diploma.filter.domain.model.Filter
 
-class FilterInteractorImpl(private val sharedPrefsStorage: SharedPrefsStorage) : FilterInteractor {
+class FilterInteractorImpl(private val filterStorageRepository: FilterStorageRepository) : FilterInteractor {
     override fun saveFilter(filter: Filter) {
-        sharedPrefsStorage.saveFilter(filter)
+        filterStorageRepository.saveFilter(filter)
     }
 
-    override fun getFilter(): Filter = sharedPrefsStorage.getFilter()
+    override fun getFilter(): Filter = filterStorageRepository.getFilter()
 }
