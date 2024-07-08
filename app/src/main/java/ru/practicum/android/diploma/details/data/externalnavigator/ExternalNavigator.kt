@@ -29,7 +29,7 @@ class ExternalNavigator(private val context: Context) {
     fun dialNumber(number: String) {
         Intent().apply {
             action = Intent.ACTION_DIAL
-            data = Uri.parse("tel:${number}")
+            data = Uri.parse("tel:$number")
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(this)
         }
