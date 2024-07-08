@@ -7,6 +7,7 @@ import ru.practicum.android.diploma.network.api.HeadHunterApplicationApi
 import ru.practicum.android.diploma.network.api.HeadHunterNetworkClient
 import ru.practicum.android.diploma.network.dto.HeadHunterRequest
 import ru.practicum.android.diploma.network.dto.responses.DictionariesResponse
+import ru.practicum.android.diploma.network.dto.responses.IndustryResponse
 import ru.practicum.android.diploma.network.dto.responses.LocalesResponse
 import ru.practicum.android.diploma.network.dto.responses.Response
 
@@ -27,6 +28,10 @@ class RetrofitBasedClient(retrofit: Retrofit) : HeadHunterNetworkClient {
                         val response = serverService.getDictionaries()
                         response.apply { resultCode = 200 }
                     }
+                    HeadHunterRequest.Industries->{
+                        val response = IndustryResponse(industriesList = serverService.getIndustries())
+                        response.apply { resultCode = 200 }
+                    }
                 }
             } catch (e: Throwable) {
                 Response().apply { resultCode = 500 }
@@ -34,3 +39,4 @@ class RetrofitBasedClient(retrofit: Retrofit) : HeadHunterNetworkClient {
         }
     }
 }
+

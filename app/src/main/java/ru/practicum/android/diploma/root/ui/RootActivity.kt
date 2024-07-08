@@ -13,8 +13,7 @@ import org.koin.android.ext.android.inject
 import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.ActivityRootBinding
-import ru.practicum.android.diploma.network.dto.Locale
-import ru.practicum.android.diploma.network.dto.responses.DictionariesResponse
+import ru.practicum.android.diploma.network.dto.Industry
 import ru.practicum.android.diploma.search.data.repository.SearchRepository
 import ru.practicum.android.diploma.utils.Resource
 
@@ -62,16 +61,16 @@ class RootActivity : AppCompatActivity() {
             }
         }
         //NetworkArea+++++
-        val repo by inject <SearchRepository>()
+        val repo by inject<SearchRepository>()
         lifecycleScope.launch {
-            repo.getDictionaries()
+            repo.getIndustries()
                 .collect { result ->
                     if (result is Resource.Success) {
-                        (result.data as DictionariesResponse).currency
+                        (result.data as List<Industry>)
                             .forEach {
                                 Log.d("HHTOKEN", it.name.toString())
                             }
-                    }else{
+                    } else {
                         Log.d("HHTOKEN", result.message.toString())
                     }
                 }
