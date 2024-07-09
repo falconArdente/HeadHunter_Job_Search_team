@@ -37,6 +37,7 @@ interface HeadHunterApplicationApi {
         @Query("locale") locale: String = App.LOCALE,
         @Query("host") host: String = App.HOST
     ): List<Area>
+
     @Headers("User-Agent: ${App.USER_AGENT}", "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}")
     @GET("/areas/countries")
     suspend fun getCountries(
