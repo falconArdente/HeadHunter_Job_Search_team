@@ -32,6 +32,18 @@ data class VacancyInfoEntity(
     val countryList: List<CountryEntity>,
 
     @Relation(
+        parentColumn = "id",
+        entityColumn = "vacancyId"
+    )
+    val logoList: List<EmployerJoinLogo>,
+
+    @Relation(
+        parentColumn = "experienceId",
+        entityColumn = "id"
+    )
+    val experienceList: List<ExperienceEntity>,
+
+    @Relation(
         parentColumn = "industryId",
         entityColumn = "id"
     )
@@ -47,13 +59,5 @@ data class VacancyInfoEntity(
         parentColumn = "positionId",
         entityColumn = "id"
     )
-    val positionList: List<VacancyPositionEntity>,
-
-
-    @Relation(
-        parentColumn = "id",
-        entityColumn = "vacancyId"
-    )
-    val logoList: List<EmployerJoinLogo>,
-
-    )
+    val positionList: List<VacancyPositionEntity>
+)
