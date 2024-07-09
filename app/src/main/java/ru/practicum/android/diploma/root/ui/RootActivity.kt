@@ -66,10 +66,10 @@ class RootActivity : AppCompatActivity() {
     private fun checkRequest() {
         val repo by inject<SearchRepository>()
         lifecycleScope.launch {
-            repo.getVacancyById("103305913").collect { result ->
+            repo.getVacancyById("102263565").collect { result ->
                 if (result is Resource.Success) {
                     val vac = (result.data as VacancyByIdResponse)
-                    Log.d("HHTOKEN", vac.description)
+                    Log.d("HHTOKEN", vac.employer?.logoUrls?.raw.toString())
                 } else {
                     Log.d("HHTOKEN", result.message.toString())
                 }
