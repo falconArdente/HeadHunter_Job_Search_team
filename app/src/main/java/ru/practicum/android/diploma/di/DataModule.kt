@@ -10,6 +10,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.practicum.android.diploma.network.RetrofitBasedClient
 import ru.practicum.android.diploma.network.api.HeadHunterNetworkClient
+import ru.practicum.android.diploma.details.data.externalnavigator.ExternalNavigator
+import ru.practicum.android.diploma.filter.data.storage.FilterStorage
+import ru.practicum.android.diploma.filter.data.storage.SharedPrefsStorage
 
 const val FUTUREJOB_SHARED_PREFS = "ru.practicum.android.diploma.MY_PREFS"
 const val BASE_URL = "https://api.hh.ru"
@@ -17,9 +20,7 @@ val dataModule = module {
     single {
         androidContext().getSharedPreferences(FUTUREJOB_SHARED_PREFS, Context.MODE_PRIVATE)
     }
-
     factory { Gson() }
-
     factory<HeadHunterNetworkClient> {
         RetrofitBasedClient(retrofit = get())
     }
@@ -39,5 +40,13 @@ val dataModule = module {
     single<HttpLoggingInterceptor> {
         HttpLoggingInterceptor()
             .setLevel(HttpLoggingInterceptor.Level.BODY)
+    }
+
+    single {
+        ExternalNavigator(context = androidContext())
+    }
+
+    single<FilterStorage> {
+        SharedPrefsStorage(sharedPreferences = get(), gson = get())
     }
 }
