@@ -8,7 +8,7 @@ import ru.practicum.android.diploma.network.dto.linkedClasses.Country
 import ru.practicum.android.diploma.network.dto.HeadHunterRequest
 import ru.practicum.android.diploma.network.dto.linkedClasses.Industry
 import ru.practicum.android.diploma.network.dto.linkedClasses.Locale
-import ru.practicum.android.diploma.network.dto.linkedClasses.VacancyPosition
+import ru.practicum.android.diploma.network.dto.linkedClasses.VacancyFunctionalityTitle
 import ru.practicum.android.diploma.network.dto.responses.AreasResponse
 import ru.practicum.android.diploma.network.dto.responses.CountriesResponse
 import ru.practicum.android.diploma.network.dto.responses.DictionariesResponse
@@ -68,7 +68,7 @@ class HeadHunterRepository(private val client: HeadHunterNetworkClient) : Search
         }
     }
 
-    override suspend fun getVacancySuggestions(textForSuggestions: String): Flow<Resource<List<VacancyPosition>>> = flow {
+    override suspend fun getVacancySuggestions(textForSuggestions: String): Flow<Resource<List<VacancyFunctionalityTitle>>> = flow {
         if (textForSuggestions.length in 2..3000) {
             val response = client.doRequest(HeadHunterRequest.VacancySuggestions(textForSuggestions))
             if (response.resultCode == Response.SUCCESS) {

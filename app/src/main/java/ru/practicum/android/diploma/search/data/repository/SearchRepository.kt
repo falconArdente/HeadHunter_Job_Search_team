@@ -5,7 +5,7 @@ import ru.practicum.android.diploma.network.dto.linkedClasses.Area
 import ru.practicum.android.diploma.network.dto.linkedClasses.Country
 import ru.practicum.android.diploma.network.dto.linkedClasses.Industry
 import ru.practicum.android.diploma.network.dto.linkedClasses.Locale
-import ru.practicum.android.diploma.network.dto.linkedClasses.VacancyPosition
+import ru.practicum.android.diploma.network.dto.linkedClasses.VacancyFunctionalityTitle
 import ru.practicum.android.diploma.network.dto.responses.DictionariesResponse
 import ru.practicum.android.diploma.network.dto.responses.VacancyByIdResponse
 import ru.practicum.android.diploma.network.dto.responses.VacancyListResponse
@@ -17,7 +17,7 @@ interface SearchRepository {
     suspend fun getIndustries(): Flow<Resource<List<Industry>>>
     suspend fun getAreas(): Flow<Resource<List<Area>>>
     suspend fun getCountries(): Flow<Resource<List<Country>>>
-    suspend fun getVacancySuggestions(textForSuggestions: String): Flow<Resource<List<VacancyPosition>>>
+    suspend fun getVacancySuggestions(textForSuggestions: String): Flow<Resource<List<VacancyFunctionalityTitle>>>
     suspend fun searchVacancy(textForSearch: String): Flow<Resource<VacancyListResponse>>
     suspend fun getVacancyById(id: String): Flow<Resource<VacancyByIdResponse>>
 }
