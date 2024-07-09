@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "Salary")
 data class SalaryEntity(
-    @PrimaryKey( autoGenerate = true)
+    @PrimaryKey(autoGenerate = true)
     val id: Int,
     val currency: String,
     val salaryFrom: String,
