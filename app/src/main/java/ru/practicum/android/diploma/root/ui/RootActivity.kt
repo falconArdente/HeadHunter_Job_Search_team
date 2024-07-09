@@ -1,20 +1,13 @@
 package ru.practicum.android.diploma.root.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.ActivityRootBinding
-import ru.practicum.android.diploma.network.dto.responses.VacancyByIdResponse
-import ru.practicum.android.diploma.search.data.repository.SearchRepository
-import ru.practicum.android.diploma.utils.Resource
 
 class RootActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,23 +48,6 @@ class RootActivity : AppCompatActivity() {
 
                 else -> {
                     bottomNavigationView.visibility = View.VISIBLE
-                }
-            }
-        }
-        // NetworkArea+++++
-        checkRequest()
-        // NetworkArea-----
-    }
-
-    private fun checkRequest() {
-        val repo by inject<SearchRepository>()
-        lifecycleScope.launch {
-            repo.getVacancyById("102263565").collect { result ->
-                if (result is Resource.Success) {
-                    val vac = (result.data as VacancyByIdResponse)
-                    Log.d("HHTOKEN", vac.employer?.logoUrls?.raw.toString())
-                } else {
-                    Log.d("HHTOKEN", result.message.toString())
                 }
             }
         }

@@ -8,4 +8,5 @@ class VacancyAtSearch(
     @SerializedName("salary") val salary: Salary,
     @SerializedName("url") val url: String,
     @SerializedName("brand_snippet") val brandSnippet: BrandSnippet?,
+    @SerializedName("contacts") val contacts: Contacts?,
 )
