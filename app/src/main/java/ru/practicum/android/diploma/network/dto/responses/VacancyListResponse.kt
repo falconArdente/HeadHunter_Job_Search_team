@@ -1,7 +1,7 @@
 package ru.practicum.android.diploma.network.dto.responses
 
 import com.google.gson.annotations.SerializedName
-import ru.practicum.android.diploma.network.dto.linkedClasses.VacancyAtSearch
+import ru.practicum.android.diploma.network.dto.linked_classes.VacancyAtSearch
 
 class VacancyListResponse(
     @SerializedName("items") val vacancyAtSearchList: List<VacancyAtSearch>,

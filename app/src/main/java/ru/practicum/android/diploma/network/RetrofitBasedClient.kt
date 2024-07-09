@@ -27,8 +27,11 @@ class RetrofitBasedClient(retrofit: Retrofit) : HeadHunterNetworkClient {
                     HeadHunterRequest.Areas -> AreasResponse(areasList = serverService.getAreas())
                     HeadHunterRequest.Counties -> CountriesResponse(countriesList = serverService.getCountries())
                     is HeadHunterRequest.VacancySuggestions -> VacancySuggestionsResponse(
-                        vacancyPositionsList = serverService.getVacancySuggestions(request.textForSuggestions).vacancyPositionsList
+                        vacancyPositionsList = serverService.getVacancySuggestions(
+                            request.textForSuggestions
+                        ).vacancyPositionsList
                     )
+
                     is HeadHunterRequest.VacancySearch -> serverService.searchVacancy(request.textForSearch)
                     is HeadHunterRequest.VacancyById -> serverService.getVacancyById(request.id)
                 }

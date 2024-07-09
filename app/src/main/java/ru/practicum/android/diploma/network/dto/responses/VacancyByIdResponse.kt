@@ -1,9 +1,9 @@
 package ru.practicum.android.diploma.network.dto.responses
 
 import com.google.gson.annotations.SerializedName
-import ru.practicum.android.diploma.network.dto.linkedClasses.Contacts
-import ru.practicum.android.diploma.network.dto.linkedClasses.Employer
-import ru.practicum.android.diploma.network.dto.linkedClasses.Salary
+import ru.practicum.android.diploma.network.dto.linked_classes.Contacts
+import ru.practicum.android.diploma.network.dto.linked_classes.Employer
+import ru.practicum.android.diploma.network.dto.linked_classes.Salary
 
 class VacancyByIdResponse(
     @SerializedName("code") val code: String,

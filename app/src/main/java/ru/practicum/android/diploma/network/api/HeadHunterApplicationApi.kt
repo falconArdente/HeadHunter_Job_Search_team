@@ -6,10 +6,10 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 import ru.practicum.android.diploma.App
 import ru.practicum.android.diploma.BuildConfig
-import ru.practicum.android.diploma.network.dto.linkedClasses.Area
-import ru.practicum.android.diploma.network.dto.linkedClasses.Country
-import ru.practicum.android.diploma.network.dto.linkedClasses.Industry
-import ru.practicum.android.diploma.network.dto.linkedClasses.Locale
+import ru.practicum.android.diploma.network.dto.linked_classes.Area
+import ru.practicum.android.diploma.network.dto.linked_classes.Country
+import ru.practicum.android.diploma.network.dto.linked_classes.Industry
+import ru.practicum.android.diploma.network.dto.linked_classes.Locale
 import ru.practicum.android.diploma.network.dto.responses.DictionariesResponse
 import ru.practicum.android.diploma.network.dto.responses.VacancyByIdResponse
 import ru.practicum.android.diploma.network.dto.responses.VacancyListResponse
@@ -24,25 +24,29 @@ interface HeadHunterApplicationApi {
     @Headers("User-Agent: ${App.USER_AGENT}", "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}")
     @GET("/dictionaries")
     suspend fun getDictionaries(
-        @Query("locale") locale: String = App.LOCALE, @Query("host") host: String = App.HOST
+        @Query("locale") locale: String = App.LOCALE,
+        @Query("host") host: String = App.HOST
     ): DictionariesResponse
 
     @Headers("User-Agent: ${App.USER_AGENT}", "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}")
     @GET("/industries")
     suspend fun getIndustries(
-        @Query("locale") locale: String = App.LOCALE, @Query("host") host: String = App.HOST
+        @Query("locale") locale: String = App.LOCALE,
+        @Query("host") host: String = App.HOST
     ): List<Industry>
 
     @Headers("User-Agent: ${App.USER_AGENT}", "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}")
     @GET("/areas")
     suspend fun getAreas(
-        @Query("locale") locale: String = App.LOCALE, @Query("host") host: String = App.HOST
+        @Query("locale") locale: String = App.LOCALE,
+        @Query("host") host: String = App.HOST
     ): List<Area>
 
     @Headers("User-Agent: ${App.USER_AGENT}", "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}")
     @GET("/areas/countries")
     suspend fun getCountries(
-        @Query("locale") locale: String = App.LOCALE, @Query("host") host: String = App.HOST
+        @Query("locale") locale: String = App.LOCALE,
+        @Query("host") host: String = App.HOST
     ): List<Country>
 
     @Headers("User-Agent: ${App.USER_AGENT}", "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}")

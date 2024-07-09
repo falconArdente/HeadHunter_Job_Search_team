@@ -1,11 +1,11 @@
 package ru.practicum.android.diploma.search.data.repository
 
 import kotlinx.coroutines.flow.Flow
-import ru.practicum.android.diploma.network.dto.linkedClasses.Area
-import ru.practicum.android.diploma.network.dto.linkedClasses.Country
-import ru.practicum.android.diploma.network.dto.linkedClasses.Industry
-import ru.practicum.android.diploma.network.dto.linkedClasses.Locale
-import ru.practicum.android.diploma.network.dto.linkedClasses.VacancyFunctionalityTitle
+import ru.practicum.android.diploma.network.dto.linked_classes.Area
+import ru.practicum.android.diploma.network.dto.linked_classes.Country
+import ru.practicum.android.diploma.network.dto.linked_classes.Industry
+import ru.practicum.android.diploma.network.dto.linked_classes.Locale
+import ru.practicum.android.diploma.network.dto.linked_classes.VacancyFunctionalityTitle
 import ru.practicum.android.diploma.network.dto.responses.DictionariesResponse
 import ru.practicum.android.diploma.network.dto.responses.VacancyByIdResponse
 import ru.practicum.android.diploma.network.dto.responses.VacancyListResponse

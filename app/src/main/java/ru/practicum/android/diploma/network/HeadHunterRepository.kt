@@ -3,12 +3,12 @@ package ru.practicum.android.diploma.network
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.network.api.HeadHunterNetworkClient
-import ru.practicum.android.diploma.network.dto.linkedClasses.Area
-import ru.practicum.android.diploma.network.dto.linkedClasses.Country
 import ru.practicum.android.diploma.network.dto.HeadHunterRequest
-import ru.practicum.android.diploma.network.dto.linkedClasses.Industry
-import ru.practicum.android.diploma.network.dto.linkedClasses.Locale
-import ru.practicum.android.diploma.network.dto.linkedClasses.VacancyFunctionalityTitle
+import ru.practicum.android.diploma.network.dto.linked_classes.Area
+import ru.practicum.android.diploma.network.dto.linked_classes.Country
+import ru.practicum.android.diploma.network.dto.linked_classes.Industry
+import ru.practicum.android.diploma.network.dto.linked_classes.Locale
+import ru.practicum.android.diploma.network.dto.linked_classes.VacancyFunctionalityTitle
 import ru.practicum.android.diploma.network.dto.responses.AreasResponse
 import ru.practicum.android.diploma.network.dto.responses.CountriesResponse
 import ru.practicum.android.diploma.network.dto.responses.DictionariesResponse
@@ -20,6 +20,9 @@ import ru.practicum.android.diploma.network.dto.responses.VacancyListResponse
 import ru.practicum.android.diploma.network.dto.responses.VacancySuggestionsResponse
 import ru.practicum.android.diploma.search.data.repository.SearchRepository
 import ru.practicum.android.diploma.utils.Resource
+
+const val MIN_SUGGESTION_REQUEST_TEXT_LENGHT = 2
+const val MAX_SUGGESTION_REQUEST_TEXT_LENGHT = 3000
 
 class HeadHunterRepository(private val client: HeadHunterNetworkClient) : SearchRepository {
 
@@ -68,24 +71,32 @@ class HeadHunterRepository(private val client: HeadHunterNetworkClient) : Search
         }
     }
 
-    override suspend fun getVacancySuggestions(textForSuggestions: String): Flow<Resource<List<VacancyFunctionalityTitle>>> = flow {
-        if (textForSuggestions.length in 2..3000) {
-            val response = client.doRequest(HeadHunterRequest.VacancySuggestions(textForSuggestions))
-            if (response.resultCode == Response.SUCCESS) {
-                emit(Resource.Success((response as VacancySuggestionsResponse).vacancyPositionsList))
+    override suspend fun getVacancySuggestions(textForSuggestions: String)
+        : Flow<Resource<List<VacancyFunctionalityTitle>>> =
+        flow {
+            if (textForSuggestions.length
+                in MIN_SUGGESTION_REQUEST_TEXT_LENGHT..MAX_SUGGESTION_REQUEST_TEXT_LENGHT
+            ) {
+                val response = client.doRequest(HeadHunterRequest.VacancySuggestions(textForSuggestions))
+                if (response.resultCode == Response.SUCCESS) {
+                    emit(Resource.Success((response as VacancySuggestionsResponse).vacancyPositionsList))
+                } else {
+                    emit(Resource.Error("Vacancy suggestions error"))
+                }
             } else {
-                emit(Resource.Error("Vacancy suggestions error"))
+                emit(Resource.Error("Vacancy suggestion text length should be 2..3000"))
             }
-        } else emit(Resource.Error("Vacancy suggestion text length should be 2..3000"))
-    }
+        }
+
     override suspend fun searchVacancy(textForSearch: String): Flow<Resource<VacancyListResponse>> = flow {
-            val response = client.doRequest(HeadHunterRequest.VacancySearch(textForSearch))
-            if (response.resultCode == Response.SUCCESS) {
-                emit(Resource.Success(response as VacancyListResponse))
-            } else {
-                emit(Resource.Error("Vacancy search error"))
-            }
+        val response = client.doRequest(HeadHunterRequest.VacancySearch(textForSearch))
+        if (response.resultCode == Response.SUCCESS) {
+            emit(Resource.Success(response as VacancyListResponse))
+        } else {
+            emit(Resource.Error("Vacancy search error"))
+        }
     }
+
     override suspend fun getVacancyById(id: String): Flow<Resource<VacancyByIdResponse>> = flow {
         val response = client.doRequest(HeadHunterRequest.VacancyById(id))
         if (response.resultCode == Response.SUCCESS) {
