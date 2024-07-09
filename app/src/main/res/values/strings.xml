@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">Practicum-Android-Diploma</string>
+
+
+    <string name="team_title">Команда</string>
+    <string name="team_text">Над приложением\nработали</string>
+    <string name="team_person1">Соколов Игорь</string>
+    <string name="team_person2">Земцов Никита</string>
+    <string name="team_person3">Равдин Леонид</string>
+    <string name="team_person4">Кобозева Оксана</string>
+    <string name="team_person5">Цыбульский Сергей</string>
+
+    <string name="main">Главная</string>
+    <string name="favorites">Избранное</string>
+    <string name="dev_team">Команда</string>
+
 </resources>
