@@ -4,6 +4,9 @@ import android.content.Context
 import com.google.gson.Gson
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
+import ru.practicum.android.diploma.details.data.externalnavigator.ExternalNavigator
+import ru.practicum.android.diploma.filter.data.storage.FilterStorage
+import ru.practicum.android.diploma.filter.data.storage.SharedPrefsStorage
 
 const val FUTUREJOB_SHARED_PREFS = "ru.practicum.android.diploma.MY_PREFS"
 
@@ -13,5 +16,13 @@ val dataModule = module {
     }
 
     factory { Gson() }
+
+    single {
+        ExternalNavigator(context = androidContext())
+    }
+
+    single<FilterStorage> {
+        SharedPrefsStorage(sharedPreferences = get(), gson = get())
+    }
 
 }
