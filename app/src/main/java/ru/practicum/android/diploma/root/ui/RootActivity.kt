@@ -12,8 +12,7 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.ActivityRootBinding
-import ru.practicum.android.diploma.network.dto.Country
-import ru.practicum.android.diploma.network.dto.Skill
+import ru.practicum.android.diploma.network.dto.VacancyPosition
 import ru.practicum.android.diploma.search.data.repository.SearchRepository
 import ru.practicum.android.diploma.utils.Resource
 
@@ -22,8 +21,7 @@ class RootActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityRootBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment
         val navController = navHostFragment.navController
         // Пример использования access token для HeadHunter API
         // networkRequestExample(accessToken = BuildConfig.HH_ACCESS_TOKEN)
@@ -68,11 +66,9 @@ class RootActivity : AppCompatActivity() {
     private fun checkRequest() {
         val repo by inject<SearchRepository>()
         lifecycleScope.launch {
-            repo.getSkillSuggestions("стр")
-                .collect { result ->
+            repo.getVacancySuggestions("стр").collect { result ->
                     if (result is Resource.Success) {
-                        (result.data as List<Skill>)
-                            .forEach {
+                        (result.data as List<VacancyPosition>).forEach {
                                 Log.d("HHTOKEN", it.text)
                             }
                     } else {

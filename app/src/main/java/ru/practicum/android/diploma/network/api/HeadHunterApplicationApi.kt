@@ -10,7 +10,7 @@ import ru.practicum.android.diploma.network.dto.Country
 import ru.practicum.android.diploma.network.dto.Industry
 import ru.practicum.android.diploma.network.dto.Locale
 import ru.practicum.android.diploma.network.dto.responses.DictionariesResponse
-import ru.practicum.android.diploma.network.dto.responses.SkillSuggestionsResponse
+import ru.practicum.android.diploma.network.dto.responses.VacancySuggestionsResponse
 
 interface HeadHunterApplicationApi {
 
@@ -47,10 +47,10 @@ interface HeadHunterApplicationApi {
     ): List<Country>
 
     @Headers("User-Agent: ${App.USER_AGENT}", "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}")
-    @GET("/suggests/skill_set")
-    suspend fun getSkillSuggestions(
+    @GET("/suggests/vacancy_positions")
+    suspend fun getVacancySuggestions(
         @Query("text") textForSuggestions: String,
         @Query("locale") locale: String = App.LOCALE,
         @Query("host") host: String = App.HOST
-    ): SkillSuggestionsResponse
+    ): VacancySuggestionsResponse
 }

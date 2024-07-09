@@ -1,9 +1,9 @@
 package ru.practicum.android.diploma.network.dto.responses
 
 import com.google.gson.annotations.SerializedName
-import ru.practicum.android.diploma.network.dto.Skill
+import ru.practicum.android.diploma.network.dto.VacancyPosition
 
-class SkillSuggestionsResponse(
+class VacancySuggestionsResponse(
     @SerializedName("items")
-    val skillsList: List<Skill>
+    val vacancyPositionsList: List<VacancyPosition>
 ) : Response()

@@ -11,7 +11,7 @@ import ru.practicum.android.diploma.network.dto.responses.CountriesResponse
 import ru.practicum.android.diploma.network.dto.responses.IndustryResponse
 import ru.practicum.android.diploma.network.dto.responses.LocalesResponse
 import ru.practicum.android.diploma.network.dto.responses.Response
-import ru.practicum.android.diploma.network.dto.responses.SkillSuggestionsResponse
+import ru.practicum.android.diploma.network.dto.responses.VacancySuggestionsResponse
 import java.io.UncheckedIOException
 
 class RetrofitBasedClient(retrofit: Retrofit) : HeadHunterNetworkClient {
@@ -26,8 +26,8 @@ class RetrofitBasedClient(retrofit: Retrofit) : HeadHunterNetworkClient {
                     HeadHunterRequest.Industries -> IndustryResponse(industriesList = serverService.getIndustries())
                     HeadHunterRequest.Areas -> AreasResponse(areasList = serverService.getAreas())
                     HeadHunterRequest.Counties -> CountriesResponse(countriesList = serverService.getCountries())
-                    is HeadHunterRequest.SkillsSuggestions -> SkillSuggestionsResponse(
-                        skillsList = serverService.getSkillSuggestions(request.textForSuggestions).skillsList
+                    is HeadHunterRequest.VacancySuggestions -> VacancySuggestionsResponse(
+                        vacancyPositionsList = serverService.getVacancySuggestions(request.textForSuggestions).vacancyPositionsList
                     )
                 }
                 response.apply { resultCode = Response.SUCCESS }
