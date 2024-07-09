@@ -13,35 +13,23 @@ import ru.practicum.android.diploma.network.dto.responses.Response
 import java.io.UncheckedIOException
 
 class RetrofitBasedClient(retrofit: Retrofit) : HeadHunterNetworkClient {
-
     private val serverService = retrofit.create(HeadHunterApplicationApi::class.java)
     override suspend fun doRequest(request: HeadHunterRequest): Response {
         // if (request !is HeadHunterRequest) return Response().apply { resultCode = -1 }
         return withContext(Dispatchers.IO) {
             try {
-                when (request) {
-                    is HeadHunterRequest.Locales -> {
-                        val response = LocalesResponse(localeList = serverService.getLocales())
-                        response.apply { resultCode = Response.SUCCESS }
-                    }
-
-                    HeadHunterRequest.Dictionaries -> {
-                        val response = serverService.getDictionaries()
-                        response.apply { resultCode = Response.SUCCESS }
-                    }
-
-                    HeadHunterRequest.Industries -> {
-                        val response = IndustryResponse(industriesList = serverService.getIndustries())
-                        response.apply { resultCode = Response.SUCCESS }
-                    }
-
-                    HeadHunterRequest.Areas -> {
-                        val response = AreasResponse(areasList = serverService.getAreas())
-                        response.apply { resultCode = Response.SUCCESS }
-                    }
+                val response = when (request) {
+                    HeadHunterRequest.Locales -> LocalesResponse(localeList = serverService.getLocales())
+                    HeadHunterRequest.Dictionaries -> serverService.getDictionaries()
+                    HeadHunterRequest.Industries -> IndustryResponse(industriesList = serverService.getIndustries())
+                    HeadHunterRequest.Areas -> AreasResponse(areasList = serverService.getAreas())
                 }
+                response.apply { resultCode = Response.SUCCESS }
             } catch (e: UncheckedIOException) {
-                Response().apply { resultCode = Response.FAILURE }
+                Response().apply {
+                    errorMessage = e.message
+                    resultCode = Response.FAILURE
+                }
             }
         }
     }
