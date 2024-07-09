@@ -6,10 +6,10 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 import ru.practicum.android.diploma.App
 import ru.practicum.android.diploma.BuildConfig
-import ru.practicum.android.diploma.network.dto.linked_classes.Area
-import ru.practicum.android.diploma.network.dto.linked_classes.Country
-import ru.practicum.android.diploma.network.dto.linked_classes.Industry
-import ru.practicum.android.diploma.network.dto.linked_classes.Locale
+import ru.practicum.android.diploma.network.dto.linked.Area
+import ru.practicum.android.diploma.network.dto.linked.Country
+import ru.practicum.android.diploma.network.dto.linked.Industry
+import ru.practicum.android.diploma.network.dto.linked.Locale
 import ru.practicum.android.diploma.network.dto.responses.DictionariesResponse
 import ru.practicum.android.diploma.network.dto.responses.VacancyByIdResponse
 import ru.practicum.android.diploma.network.dto.responses.VacancyListResponse

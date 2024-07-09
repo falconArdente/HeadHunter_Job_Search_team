@@ -4,11 +4,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.network.api.HeadHunterNetworkClient
 import ru.practicum.android.diploma.network.dto.HeadHunterRequest
-import ru.practicum.android.diploma.network.dto.linked_classes.Area
-import ru.practicum.android.diploma.network.dto.linked_classes.Country
-import ru.practicum.android.diploma.network.dto.linked_classes.Industry
-import ru.practicum.android.diploma.network.dto.linked_classes.Locale
-import ru.practicum.android.diploma.network.dto.linked_classes.VacancyFunctionalityTitle
+import ru.practicum.android.diploma.network.dto.linked.Area
+import ru.practicum.android.diploma.network.dto.linked.Country
+import ru.practicum.android.diploma.network.dto.linked.Industry
+import ru.practicum.android.diploma.network.dto.linked.Locale
+import ru.practicum.android.diploma.network.dto.linked.VacancyFunctTitle
 import ru.practicum.android.diploma.network.dto.responses.AreasResponse
 import ru.practicum.android.diploma.network.dto.responses.CountriesResponse
 import ru.practicum.android.diploma.network.dto.responses.DictionariesResponse
@@ -71,8 +71,7 @@ class HeadHunterRepository(private val client: HeadHunterNetworkClient) : Search
         }
     }
 
-    override suspend fun getVacancySuggestions(textForSuggestions: String)
-        : Flow<Resource<List<VacancyFunctionalityTitle>>> =
+    override suspend fun getVacancySuggestions(textForSuggestions: String): Flow<Resource<List<VacancyFunctTitle>>> =
         flow {
             if (textForSuggestions.length
                 in MIN_SUGGESTION_REQUEST_TEXT_LENGHT..MAX_SUGGESTION_REQUEST_TEXT_LENGHT

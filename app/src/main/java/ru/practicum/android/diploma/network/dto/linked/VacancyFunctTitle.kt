@@ -1,8 +1,8 @@
-package ru.practicum.android.diploma.network.dto.linked_classes
+package ru.practicum.android.diploma.network.dto.linked
 
 import com.google.gson.annotations.SerializedName
 
-class VacancyFunctionalityTitle(
+class VacancyFunctTitle(
     @SerializedName("id") val id: String,
     @SerializedName("text") val text: String,
 )
