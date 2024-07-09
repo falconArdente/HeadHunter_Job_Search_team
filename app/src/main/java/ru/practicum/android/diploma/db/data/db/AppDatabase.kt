@@ -36,4 +36,4 @@ import ru.practicum.android.diploma.db.data.db.entity.VacancyPositionEntity
         VacancyPositionEntity::class
     ]
 )
-abstract class AppDatabase: RoomDatabase()
+abstract class AppDatabase : RoomDatabase()
