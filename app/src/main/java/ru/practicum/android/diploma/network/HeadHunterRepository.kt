@@ -4,10 +4,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.network.api.HeadHunterNetworkClient
 import ru.practicum.android.diploma.network.dto.Area
+import ru.practicum.android.diploma.network.dto.Country
 import ru.practicum.android.diploma.network.dto.HeadHunterRequest
 import ru.practicum.android.diploma.network.dto.Industry
 import ru.practicum.android.diploma.network.dto.Locale
 import ru.practicum.android.diploma.network.dto.responses.AreasResponse
+import ru.practicum.android.diploma.network.dto.responses.CountriesResponse
 import ru.practicum.android.diploma.network.dto.responses.DictionariesResponse
 import ru.practicum.android.diploma.network.dto.responses.IndustryResponse
 import ru.practicum.android.diploma.network.dto.responses.LocalesResponse
@@ -50,6 +52,15 @@ class HeadHunterRepository(private val client: HeadHunterNetworkClient) : Search
             emit(Resource.Success((response as AreasResponse).areasList))
         } else {
             emit(Resource.Error("areas error"))
+        }
+    }
+
+    override suspend fun getCountries(): Flow<Resource<List<Country>>> = flow {
+        val response = client.doRequest(HeadHunterRequest.Counties)
+        if (response.resultCode == Response.SUCCESS) {
+            emit(Resource.Success((response as CountriesResponse).countriesList))
+        } else {
+            emit(Resource.Error("countries error"))
         }
     }
 }

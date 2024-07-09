@@ -5,4 +5,5 @@ sealed class HeadHunterRequest {
     data object Dictionaries : HeadHunterRequest()
     data object Industries : HeadHunterRequest()
     data object Areas : HeadHunterRequest()
+    data object Counties : HeadHunterRequest()
 }

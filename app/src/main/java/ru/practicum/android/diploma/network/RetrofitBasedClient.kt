@@ -7,6 +7,7 @@ import ru.practicum.android.diploma.network.api.HeadHunterApplicationApi
 import ru.practicum.android.diploma.network.api.HeadHunterNetworkClient
 import ru.practicum.android.diploma.network.dto.HeadHunterRequest
 import ru.practicum.android.diploma.network.dto.responses.AreasResponse
+import ru.practicum.android.diploma.network.dto.responses.CountriesResponse
 import ru.practicum.android.diploma.network.dto.responses.IndustryResponse
 import ru.practicum.android.diploma.network.dto.responses.LocalesResponse
 import ru.practicum.android.diploma.network.dto.responses.Response
@@ -23,6 +24,7 @@ class RetrofitBasedClient(retrofit: Retrofit) : HeadHunterNetworkClient {
                     HeadHunterRequest.Dictionaries -> serverService.getDictionaries()
                     HeadHunterRequest.Industries -> IndustryResponse(industriesList = serverService.getIndustries())
                     HeadHunterRequest.Areas -> AreasResponse(areasList = serverService.getAreas())
+                    HeadHunterRequest.Counties -> CountriesResponse(countriesList = serverService.getCountries())
                 }
                 response.apply { resultCode = Response.SUCCESS }
             } catch (e: UncheckedIOException) {

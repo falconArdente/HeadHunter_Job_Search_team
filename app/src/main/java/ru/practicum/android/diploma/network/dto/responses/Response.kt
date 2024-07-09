@@ -7,5 +7,5 @@ open class Response {
     }
 
     var resultCode = 0
-    var errorMessage:String?=null
+    var errorMessage: String? = null
 }
