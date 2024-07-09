@@ -7,6 +7,7 @@ import org.koin.dsl.module
 import ru.practicum.android.diploma.details.data.externalnavigator.ExternalNavigator
 import ru.practicum.android.diploma.filter.data.storage.FilterStorage
 import ru.practicum.android.diploma.filter.data.storage.SharedPrefsStorage
+import ru.practicum.android.diploma.utils.NetworkStatus
 
 const val FUTUREJOB_SHARED_PREFS = "ru.practicum.android.diploma.MY_PREFS"
 
@@ -24,5 +25,7 @@ val dataModule = module {
     single<FilterStorage> {
         SharedPrefsStorage(sharedPreferences = get(), gson = get())
     }
-
+    factory<NetworkStatus> {
+        NetworkStatus(androidContext())
+    }
 }
