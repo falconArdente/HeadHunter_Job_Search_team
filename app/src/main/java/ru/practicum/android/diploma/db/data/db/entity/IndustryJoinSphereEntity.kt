@@ -4,9 +4,9 @@ import androidx.room.Embedded
 import androidx.room.Relation
 
 
-data class IndusrtyJoinSphereEntity(
+data class IndustryJoinSphereEntity(
     @Embedded
-    val indusrty: IndustryEntity,
+    val industry: IndustryEntity,
 
     @Relation(
         parentColumn = "id",

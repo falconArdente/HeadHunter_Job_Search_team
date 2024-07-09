@@ -3,7 +3,7 @@ package ru.practicum.android.diploma.db.data.db.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
+@Entity(tableName = "IndustrySphere")
 data class IndustrySphereEntity(
     @PrimaryKey
     val id: String,

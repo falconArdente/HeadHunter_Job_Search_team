@@ -18,11 +18,13 @@ import ru.practicum.android.diploma.db.data.db.entity.VacancyEntity
 import ru.practicum.android.diploma.db.data.db.entity.VacancyPositionEntity
 
 @Database(
-    version = 1, entities = [
+    version = 1,
+    entities = [
         AreaEntity::class,
         BrandSnippetEntity::class,
         ContactsEntity::class,
         CountryEntity::class,
+        CurrencyEntity::class,
         EmployerEntity::class,
         ExperienceEntity::class,
         IndustryEntity::class,
@@ -35,5 +37,4 @@ import ru.practicum.android.diploma.db.data.db.entity.VacancyPositionEntity
     ]
 )
 
-abstract class AppDatabase: RoomDatabase() {
-}
+abstract class AppDatabase  :RoomDatabase()

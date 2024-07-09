@@ -35,7 +35,7 @@ data class VacancyInfoEntity(
         parentColumn = "industryId",
         entityColumn = "id"
     )
-    val industryList: List<IndusrtyJoinSphereEntity>,
+    val industryList: List<IndustryJoinSphereEntity>,
 
     @Relation(
         parentColumn = "salaryId",
@@ -56,4 +56,4 @@ data class VacancyInfoEntity(
     )
     val logoList: List<EmployerJoinLogo>,
 
-)
+    )
