@@ -10,7 +10,6 @@ import ru.practicum.android.diploma.network.dto.responses.IndustryResponse
 import ru.practicum.android.diploma.network.dto.responses.LocalesResponse
 import ru.practicum.android.diploma.network.dto.responses.Response
 
-
 class RetrofitBasedClient(retrofit: Retrofit) : HeadHunterNetworkClient {
 
     private val serverService = retrofit.create(HeadHunterApplicationApi::class.java)
@@ -34,7 +33,7 @@ class RetrofitBasedClient(retrofit: Retrofit) : HeadHunterNetworkClient {
                         response.apply { resultCode = Response.SUCCESS }
                     }
                 }
-            } catch (e: RuntimeException) {
+            } catch (e: NullPointerException) {
                 Response().apply { resultCode = Response.FAILURE }
             }
         }
