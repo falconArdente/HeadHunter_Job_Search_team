@@ -24,19 +24,20 @@ val dataModule = module {
         RetrofitBasedClient(retrofit = get())
     }
     single<Retrofit> {
-        return@single Retrofit.Builder()
+        Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
-            .client(get<OkHttpClient>())//interception client
+            .client(get<OkHttpClient>()) // interception client
             .build()
     }
     single<OkHttpClient> {
-        val interceptor = HttpLoggingInterceptor()
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-        val client = OkHttpClient()
+        OkHttpClient()
             .newBuilder()
-            .addInterceptor(interceptor)
+            .addInterceptor(get<HttpLoggingInterceptor>())
             .build()
-        return@single client
+    }
+    single<HttpLoggingInterceptor> {
+        HttpLoggingInterceptor()
+            .setLevel(HttpLoggingInterceptor.Level.BODY)
     }
 }

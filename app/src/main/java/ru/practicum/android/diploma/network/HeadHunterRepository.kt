@@ -9,6 +9,7 @@ import ru.practicum.android.diploma.network.dto.Locale
 import ru.practicum.android.diploma.network.dto.responses.DictionariesResponse
 import ru.practicum.android.diploma.network.dto.responses.IndustryResponse
 import ru.practicum.android.diploma.network.dto.responses.LocalesResponse
+import ru.practicum.android.diploma.network.dto.responses.Response
 import ru.practicum.android.diploma.search.data.repository.SearchRepository
 import ru.practicum.android.diploma.utils.Resource
 
@@ -16,7 +17,7 @@ class HeadHunterRepository(private val client: HeadHunterNetworkClient) : Search
 
     override suspend fun getLocales(): Flow<Resource<List<Locale>>> = flow {
         val response = client.doRequest(HeadHunterRequest.Locales)
-        if (response.resultCode == 200) {
+        if (response.resultCode == Response.SUCCESS) {
             emit(Resource.Success((response as LocalesResponse).localeList))
         } else {
             emit(Resource.Error(""))
@@ -25,7 +26,7 @@ class HeadHunterRepository(private val client: HeadHunterNetworkClient) : Search
 
     override suspend fun getDictionaries(): Flow<Resource<DictionariesResponse>> = flow {
         val response = client.doRequest(HeadHunterRequest.Dictionaries)
-        if (response.resultCode == 200) {
+        if (response.resultCode == Response.SUCCESS) {
             emit(Resource.Success(response as DictionariesResponse))
         } else {
             emit(Resource.Error("dictionary error"))
@@ -34,7 +35,7 @@ class HeadHunterRepository(private val client: HeadHunterNetworkClient) : Search
 
     override suspend fun getIndustries(): Flow<Resource<List<Industry>>> = flow {
         val response = client.doRequest(HeadHunterRequest.Industries)
-        if (response.resultCode == 200) {
+        if (response.resultCode == Response.SUCCESS) {
             emit(Resource.Success((response as IndustryResponse).industriesList))
         } else {
             emit(Resource.Error("industries error"))

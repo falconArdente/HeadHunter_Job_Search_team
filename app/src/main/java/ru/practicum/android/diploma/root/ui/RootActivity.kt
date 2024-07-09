@@ -25,7 +25,7 @@ class RootActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment
         val navController = navHostFragment.navController
         // Пример использования access token для HeadHunter API
-        //networkRequestExample(accessToken = BuildConfig.HH_ACCESS_TOKEN)
+        // networkRequestExample(accessToken = BuildConfig.HH_ACCESS_TOKEN)
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.btm_nav_view)
         bottomNavigationView.setupWithNavController(navController)
         navController.addOnDestinationChangedListener { _, destination, _ ->
@@ -61,7 +61,7 @@ class RootActivity : AppCompatActivity() {
         }
         // NetworkArea+++++
         checkRequest()
-        //NetworkArea-----
+        // NetworkArea-----
     }
 
     private fun checkRequest() {

@@ -18,12 +18,14 @@ interface HeadHunterApplicationApi {
     @Headers("User-Agent: ${App.USER_AGENT}", "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}")
     @GET("/dictionaries")
     suspend fun getDictionaries(
-        @Query("locale") locale: String = App.LOCALE, @Query("host") host: String = App.HOST
+        @Query("locale") locale: String = App.LOCALE,
+        @Query("host") host: String = App.HOST
     ): DictionariesResponse
 
     @Headers("User-Agent: ${App.USER_AGENT}", "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}")
     @GET("/industries")
     suspend fun getIndustries(
-        @Query("locale") locale: String = App.LOCALE, @Query("host") host: String = App.HOST
+        @Query("locale") locale: String = App.LOCALE,
+        @Query("host") host: String = App.HOST
     ): List<Industry>
 }

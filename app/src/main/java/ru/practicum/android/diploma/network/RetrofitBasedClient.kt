@@ -10,8 +10,6 @@ import ru.practicum.android.diploma.network.dto.responses.IndustryResponse
 import ru.practicum.android.diploma.network.dto.responses.LocalesResponse
 import ru.practicum.android.diploma.network.dto.responses.Response
 
-const val SUCCESS = 200
-const val FAILURE = 500
 
 class RetrofitBasedClient(retrofit: Retrofit) : HeadHunterNetworkClient {
 
@@ -23,23 +21,22 @@ class RetrofitBasedClient(retrofit: Retrofit) : HeadHunterNetworkClient {
                 when (request) {
                     is HeadHunterRequest.Locales -> {
                         val response = LocalesResponse(localeList = serverService.getLocales())
-                        response.apply { resultCode = SUCCESS }
+                        response.apply { resultCode = Response.SUCCESS }
                     }
 
                     HeadHunterRequest.Dictionaries -> {
                         val response = serverService.getDictionaries()
-                        response.apply { resultCode = SUCCESS }
+                        response.apply { resultCode = Response.SUCCESS }
                     }
 
                     HeadHunterRequest.Industries -> {
                         val response = IndustryResponse(industriesList = serverService.getIndustries())
-                        response.apply { resultCode = SUCCESS }
+                        response.apply { resultCode = Response.SUCCESS }
                     }
                 }
-            } catch (e: Throwable) {
-                Response().apply { resultCode = FAILURE }
+            } catch (e: RuntimeException) {
+                Response().apply { resultCode = Response.FAILURE }
             }
         }
     }
 }
-
