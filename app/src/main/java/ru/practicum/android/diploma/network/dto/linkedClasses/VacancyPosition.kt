@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.network.dto
+package ru.practicum.android.diploma.network.dto.linkedClasses
 
 import com.google.gson.annotations.SerializedName
 

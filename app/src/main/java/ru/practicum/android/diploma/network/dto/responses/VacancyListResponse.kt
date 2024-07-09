@@ -1,10 +1,10 @@
 package ru.practicum.android.diploma.network.dto.responses
 
 import com.google.gson.annotations.SerializedName
-import ru.practicum.android.diploma.network.dto.Vacancy
+import ru.practicum.android.diploma.network.dto.linkedClasses.VacancyAtSearch
 
-class VacancyResponse(
-    @SerializedName("items") val vacancyList: List<Vacancy>,
+class VacancyListResponse(
+    @SerializedName("items") val vacancyAtSearchList: List<VacancyAtSearch>,
     @SerializedName("page") val currentPage: Number,
     @SerializedName("found") val totalFound: Number,
     @SerializedName("pages") val totalPages: Number,
