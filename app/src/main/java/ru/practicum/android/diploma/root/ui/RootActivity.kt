@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.ActivityRootBinding
-import ru.practicum.android.diploma.network.dto.Industry
+import ru.practicum.android.diploma.network.dto.Area
 import ru.practicum.android.diploma.search.data.repository.SearchRepository
 import ru.practicum.android.diploma.utils.Resource
 
@@ -67,10 +67,10 @@ class RootActivity : AppCompatActivity() {
     private fun checkRequest() {
         val repo by inject<SearchRepository>()
         lifecycleScope.launch {
-            repo.getIndustries()
+            repo.getAreas()
                 .collect { result ->
                     if (result is Resource.Success) {
-                        (result.data as List<Industry>)
+                        (result.data as List<Area>)
                             .forEach {
                                 Log.d("HHTOKEN", it.name)
                             }

@@ -6,9 +6,11 @@ import retrofit2.Retrofit
 import ru.practicum.android.diploma.network.api.HeadHunterApplicationApi
 import ru.practicum.android.diploma.network.api.HeadHunterNetworkClient
 import ru.practicum.android.diploma.network.dto.HeadHunterRequest
+import ru.practicum.android.diploma.network.dto.responses.AreasResponse
 import ru.practicum.android.diploma.network.dto.responses.IndustryResponse
 import ru.practicum.android.diploma.network.dto.responses.LocalesResponse
 import ru.practicum.android.diploma.network.dto.responses.Response
+import java.io.UncheckedIOException
 
 class RetrofitBasedClient(retrofit: Retrofit) : HeadHunterNetworkClient {
 
@@ -32,8 +34,13 @@ class RetrofitBasedClient(retrofit: Retrofit) : HeadHunterNetworkClient {
                         val response = IndustryResponse(industriesList = serverService.getIndustries())
                         response.apply { resultCode = Response.SUCCESS }
                     }
+
+                    HeadHunterRequest.Areas -> {
+                        val response = AreasResponse(areasList = serverService.getAreas())
+                        response.apply { resultCode = Response.SUCCESS }
+                    }
                 }
-            } catch (e: NullPointerException) {
+            } catch (e: UncheckedIOException) {
                 Response().apply { resultCode = Response.FAILURE }
             }
         }

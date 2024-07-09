@@ -5,6 +5,7 @@ import retrofit2.http.Headers
 import retrofit2.http.Query
 import ru.practicum.android.diploma.App
 import ru.practicum.android.diploma.BuildConfig
+import ru.practicum.android.diploma.network.dto.Area
 import ru.practicum.android.diploma.network.dto.Industry
 import ru.practicum.android.diploma.network.dto.Locale
 import ru.practicum.android.diploma.network.dto.responses.DictionariesResponse
@@ -28,4 +29,11 @@ interface HeadHunterApplicationApi {
         @Query("locale") locale: String = App.LOCALE,
         @Query("host") host: String = App.HOST
     ): List<Industry>
+
+    @Headers("User-Agent: ${App.USER_AGENT}", "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}")
+    @GET("/areas")
+    suspend fun getAreas(
+        @Query("locale") locale: String = App.LOCALE,
+        @Query("host") host: String = App.HOST
+    ): List<Area>
 }
