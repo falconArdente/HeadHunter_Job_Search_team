@@ -29,6 +29,7 @@ class RetrofitBasedClient(retrofit: Retrofit) : HeadHunterNetworkClient {
                     is HeadHunterRequest.VacancySuggestions -> VacancySuggestionsResponse(
                         vacancyPositionsList = serverService.getVacancySuggestions(request.textForSuggestions).vacancyPositionsList
                     )
+                    is HeadHunterRequest.Vacancy -> serverService.getVacancy(request.textForSearch)
                 }
                 response.apply { resultCode = Response.SUCCESS }
             } catch (e: UncheckedIOException) {

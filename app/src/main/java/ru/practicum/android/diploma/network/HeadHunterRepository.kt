@@ -15,6 +15,7 @@ import ru.practicum.android.diploma.network.dto.responses.DictionariesResponse
 import ru.practicum.android.diploma.network.dto.responses.IndustryResponse
 import ru.practicum.android.diploma.network.dto.responses.LocalesResponse
 import ru.practicum.android.diploma.network.dto.responses.Response
+import ru.practicum.android.diploma.network.dto.responses.VacancyResponse
 import ru.practicum.android.diploma.network.dto.responses.VacancySuggestionsResponse
 import ru.practicum.android.diploma.search.data.repository.SearchRepository
 import ru.practicum.android.diploma.utils.Resource
@@ -75,5 +76,13 @@ class HeadHunterRepository(private val client: HeadHunterNetworkClient) : Search
                 emit(Resource.Error("Vacancy suggestions error"))
             }
         } else emit(Resource.Error("Vacancy suggestion text length should be 2..3000"))
+    }
+    override suspend fun getVacancy(textForSearch: String): Flow<Resource<VacancyResponse>> = flow {
+            val response = client.doRequest(HeadHunterRequest.Vacancy(textForSearch))
+            if (response.resultCode == Response.SUCCESS) {
+                emit(Resource.Success(response as VacancyResponse))
+            } else {
+                emit(Resource.Error("Vacancy search error"))
+            }
     }
 }

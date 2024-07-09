@@ -13,6 +13,7 @@ import org.koin.android.ext.android.inject
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.ActivityRootBinding
 import ru.practicum.android.diploma.network.dto.VacancyPosition
+import ru.practicum.android.diploma.network.dto.responses.VacancyResponse
 import ru.practicum.android.diploma.search.data.repository.SearchRepository
 import ru.practicum.android.diploma.utils.Resource
 
@@ -66,10 +67,11 @@ class RootActivity : AppCompatActivity() {
     private fun checkRequest() {
         val repo by inject<SearchRepository>()
         lifecycleScope.launch {
-            repo.getVacancySuggestions("стр").collect { result ->
+            repo.getVacancy("стропальщик").collect { result ->
                     if (result is Resource.Success) {
-                        (result.data as List<VacancyPosition>).forEach {
-                                Log.d("HHTOKEN", it.text)
+                        (result.data as VacancyResponse).vacancyList
+                            .forEach {
+                                Log.d("HHTOKEN", it.name)
                             }
                     } else {
                         Log.d("HHTOKEN", result.message.toString())
