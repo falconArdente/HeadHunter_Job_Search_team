@@ -4,7 +4,6 @@ import kotlinx.coroutines.flow.Flow
 import ru.practicum.android.diploma.network.dto.Industry
 import ru.practicum.android.diploma.network.dto.Locale
 import ru.practicum.android.diploma.network.dto.responses.DictionariesResponse
-import ru.practicum.android.diploma.network.dto.responses.IndustryResponse
 import ru.practicum.android.diploma.utils.Resource
 
 interface SearchRepository {

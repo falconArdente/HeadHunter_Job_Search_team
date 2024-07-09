@@ -10,7 +10,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
-import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.ActivityRootBinding
 import ru.practicum.android.diploma.network.dto.Industry
@@ -26,7 +25,7 @@ class RootActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment
         val navController = navHostFragment.navController
         // Пример использования access token для HeadHunter API
-        networkRequestExample(accessToken = BuildConfig.HH_ACCESS_TOKEN)
+        //networkRequestExample(accessToken = BuildConfig.HH_ACCESS_TOKEN)
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.btm_nav_view)
         bottomNavigationView.setupWithNavController(navController)
         navController.addOnDestinationChangedListener { _, destination, _ ->
@@ -60,7 +59,12 @@ class RootActivity : AppCompatActivity() {
                 }
             }
         }
-        //NetworkArea+++++
+        // NetworkArea+++++
+        checkRequest()
+        //NetworkArea-----
+    }
+
+    private fun checkRequest() {
         val repo by inject<SearchRepository>()
         lifecycleScope.launch {
             repo.getIndustries()
@@ -68,20 +72,12 @@ class RootActivity : AppCompatActivity() {
                     if (result is Resource.Success) {
                         (result.data as List<Industry>)
                             .forEach {
-                                Log.d("HHTOKEN", it.name.toString())
+                                Log.d("HHTOKEN", it.name)
                             }
                     } else {
                         Log.d("HHTOKEN", result.message.toString())
                     }
                 }
         }
-
-
-        //NetworkArea-----
     }
-
-    private fun networkRequestExample(accessToken: String) {
-        // ...
-    }
-
 }
