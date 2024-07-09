@@ -8,12 +8,14 @@ import ru.practicum.android.diploma.network.dto.Country
 import ru.practicum.android.diploma.network.dto.HeadHunterRequest
 import ru.practicum.android.diploma.network.dto.Industry
 import ru.practicum.android.diploma.network.dto.Locale
+import ru.practicum.android.diploma.network.dto.Skill
 import ru.practicum.android.diploma.network.dto.responses.AreasResponse
 import ru.practicum.android.diploma.network.dto.responses.CountriesResponse
 import ru.practicum.android.diploma.network.dto.responses.DictionariesResponse
 import ru.practicum.android.diploma.network.dto.responses.IndustryResponse
 import ru.practicum.android.diploma.network.dto.responses.LocalesResponse
 import ru.practicum.android.diploma.network.dto.responses.Response
+import ru.practicum.android.diploma.network.dto.responses.SkillSuggestionsResponse
 import ru.practicum.android.diploma.search.data.repository.SearchRepository
 import ru.practicum.android.diploma.utils.Resource
 
@@ -62,5 +64,16 @@ class HeadHunterRepository(private val client: HeadHunterNetworkClient) : Search
         } else {
             emit(Resource.Error("countries error"))
         }
+    }
+
+    override suspend fun getSkillSuggestions(textForSuggestions: String): Flow<Resource<List<Skill>>> = flow {
+        if (textForSuggestions.length in 2..3000) {
+            val response = client.doRequest(HeadHunterRequest.SkillsSuggestions(textForSuggestions))
+            if (response.resultCode == Response.SUCCESS) {
+                emit(Resource.Success((response as SkillSuggestionsResponse).skillsList))
+            } else {
+                emit(Resource.Error("Skills suggestions error"))
+            }
+        } else emit(Resource.Error("Skill suggestion text length should be 2..3000"))
     }
 }

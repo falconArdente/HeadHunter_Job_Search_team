@@ -13,6 +13,7 @@ import org.koin.android.ext.android.inject
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.ActivityRootBinding
 import ru.practicum.android.diploma.network.dto.Country
+import ru.practicum.android.diploma.network.dto.Skill
 import ru.practicum.android.diploma.search.data.repository.SearchRepository
 import ru.practicum.android.diploma.utils.Resource
 
@@ -67,12 +68,12 @@ class RootActivity : AppCompatActivity() {
     private fun checkRequest() {
         val repo by inject<SearchRepository>()
         lifecycleScope.launch {
-            repo.getCountries()
+            repo.getSkillSuggestions("стр")
                 .collect { result ->
                     if (result is Resource.Success) {
-                        (result.data as List<Country>)
+                        (result.data as List<Skill>)
                             .forEach {
-                                Log.d("HHTOKEN", it.name)
+                                Log.d("HHTOKEN", it.text)
                             }
                     } else {
                         Log.d("HHTOKEN", result.message.toString())

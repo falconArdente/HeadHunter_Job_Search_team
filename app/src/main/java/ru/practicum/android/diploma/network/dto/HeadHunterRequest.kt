@@ -6,4 +6,5 @@ sealed class HeadHunterRequest {
     data object Industries : HeadHunterRequest()
     data object Areas : HeadHunterRequest()
     data object Counties : HeadHunterRequest()
+    data class SkillsSuggestions(val textForSuggestions: String) : HeadHunterRequest()
 }
