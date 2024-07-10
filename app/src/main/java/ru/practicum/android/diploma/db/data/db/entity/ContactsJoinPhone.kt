@@ -9,7 +9,7 @@ data class ContactsJoinPhone(
 
     @Relation(
         parentColumn = "id",
-        entityColumn = "contactId"
+        entityColumn = "contactsId"
     )
     val phoneList: List<PhoneEntity>
 )
