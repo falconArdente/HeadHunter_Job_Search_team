@@ -50,7 +50,7 @@ val dataModule = module {
     single<FilterStorage> {
         SharedPrefsStorage(sharedPreferences = get(), gson = get())
     }
-    
+
     factory<NetworkStatus> {
         NetworkStatus(androidContext())
     }
