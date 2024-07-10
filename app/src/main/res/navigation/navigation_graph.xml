@@ -5,7 +5,6 @@
     android:id="@+id/navigation_graph"
     app:startDestination="@id/searchJobFragment">
 
-
     <fragment
         android:id="@+id/searchJobFragment"
         android:name="ru.practicum.android.diploma.search.ui.SearchJobFragment"
@@ -45,10 +44,10 @@
             android:id="@+id/action_filterSettingsFragment_to_filterPlaceToWorkFragment"
             app:destination="@id/filterPlaceToWorkFragment" />
         <action
-            android:id="@+id/action_filterSettingsFragment_to_fltrDepartmentFragment"
+            android:id="@+id/action_filterSettingsFragment_to_filterDepartmentFragment"
             app:destination="@id/filterDepartmentFragment" />
         <action
-            android:id="@+id/action_filterSettingsFragment_to_fltrCountryFragment"
+            android:id="@+id/action_filterSettingsFragment_to_filterCountryFragment"
             app:destination="@id/filterCountryFragment" />
     </fragment>
     <fragment

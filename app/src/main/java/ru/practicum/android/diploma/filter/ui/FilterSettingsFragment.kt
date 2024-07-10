@@ -29,10 +29,10 @@ class FilterSettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.country.setOnClickListener {
-            findNavController().navigate(R.id.action_filterSettingsFragment_to_fltrCountryFragment)
+            findNavController().navigate(R.id.action_filterSettingsFragment_to_filterCountryFragment)
         }
         binding.department.setOnClickListener {
-            findNavController().navigate(R.id.action_filterSettingsFragment_to_fltrDepartmentFragment)
+            findNavController().navigate(R.id.action_filterSettingsFragment_to_filterDepartmentFragment)
         }
         binding.region.setOnClickListener {
             findNavController().navigate(R.id.action_filterSettingsFragment_to_filterRegionFragment)
