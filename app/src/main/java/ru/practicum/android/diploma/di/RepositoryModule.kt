@@ -6,7 +6,7 @@ import ru.practicum.android.diploma.details.data.repository.NavigatorRepositoryI
 import ru.practicum.android.diploma.details.domain.api.NavigatorRepository
 import ru.practicum.android.diploma.filter.data.repository.FilterStorageRepositoryImpl
 import ru.practicum.android.diploma.filter.domain.api.FilterStorageRepository
-import ru.practicum.android.diploma.network.HeadHunterRepository
+import ru.practicum.android.diploma.network.data.HeadHunterRepository
 import ru.practicum.android.diploma.search.data.repository.SearchRepository
 
 val repositoryModule = module {

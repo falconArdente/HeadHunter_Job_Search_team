@@ -13,8 +13,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 import ru.practicum.android.diploma.details.data.externalnavigator.ExternalNavigator
 import ru.practicum.android.diploma.filter.data.storage.FilterStorage
 import ru.practicum.android.diploma.filter.data.storage.SharedPrefsStorage
-import ru.practicum.android.diploma.network.RetrofitBasedClient
-import ru.practicum.android.diploma.network.api.HeadHunterNetworkClient
+import ru.practicum.android.diploma.network.data.RetrofitBasedClient
+import ru.practicum.android.diploma.network.data.api.HeadHunterNetworkClient
 import ru.practicum.android.diploma.utils.NetworkStatus
 
 const val FUTUREJOB_SHARED_PREFS = "ru.practicum.android.diploma.MY_PREFS"
@@ -25,7 +25,7 @@ val dataModule = module {
     }
     factory { Gson() }
     factory<HeadHunterNetworkClient> {
-        RetrofitBasedClient(retrofit = get())
+        RetrofitBasedClient(retrofit = get(), networkStatus = get())
     }
     single<Retrofit> {
         Retrofit.Builder()
