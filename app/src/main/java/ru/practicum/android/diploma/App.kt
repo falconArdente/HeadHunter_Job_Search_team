@@ -9,6 +9,12 @@ import ru.practicum.android.diploma.di.repositoryModule
 import ru.practicum.android.diploma.di.viewModelModule
 
 class App : Application() {
+    companion object {
+        const val USER_AGENT = "User-Agent: FutureJob/1.0 (79950321710@yandex.ru)"
+        const val LOCALE = "RU"
+        const val HOST = "hh.ru"
+    }
+
     override fun onCreate() {
         super.onCreate()
 

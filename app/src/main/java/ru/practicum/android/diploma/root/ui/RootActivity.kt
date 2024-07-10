@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.ActivityRootBinding
 
@@ -15,11 +14,10 @@ class RootActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityRootBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment
         val navController = navHostFragment.navController
         // Пример использования access token для HeadHunter API
-        networkRequestExample(accessToken = BuildConfig.HH_ACCESS_TOKEN)
+        // networkRequestExample(accessToken = BuildConfig.HH_ACCESS_TOKEN)
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.btm_nav_view)
         bottomNavigationView.setupWithNavController(navController)
         navController.addOnDestinationChangedListener { _, destination, _ ->
@@ -53,9 +51,5 @@ class RootActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    private fun networkRequestExample(accessToken: String) {
-        // ...
     }
 }
