@@ -13,6 +13,7 @@ import ru.practicum.android.diploma.filter.data.storage.FilterStorage
 import ru.practicum.android.diploma.filter.data.storage.SharedPrefsStorage
 import ru.practicum.android.diploma.network.RetrofitBasedClient
 import ru.practicum.android.diploma.network.api.HeadHunterNetworkClient
+import ru.practicum.android.diploma.utils.NetworkStatus
 
 const val FUTUREJOB_SHARED_PREFS = "ru.practicum.android.diploma.MY_PREFS"
 const val BASE_URL = "https://api.hh.ru"
@@ -48,5 +49,9 @@ val dataModule = module {
 
     single<FilterStorage> {
         SharedPrefsStorage(sharedPreferences = get(), gson = get())
+    }
+    
+    factory<NetworkStatus> {
+        NetworkStatus(androidContext())
     }
 }
