@@ -8,12 +8,14 @@ data class VacancyEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val title: String,
-    val areaId: String?,
-    val countryId: String?,
-    val positionId: String?,
+    val areaId: Int?,
+    val countryId: Int?,
+    val positionId: Int?,
     val description: String?,
-    val experienceId: String?,
+    val experienceId: Int?,
+    val industryId: Int,
     val salaryId: Int,
+    val vacancyFuncTitleId: Int,
     val iconPath: String?,
     val vacancyUrl: String
 )

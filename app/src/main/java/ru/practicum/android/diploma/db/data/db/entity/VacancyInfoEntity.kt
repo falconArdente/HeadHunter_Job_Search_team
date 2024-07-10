@@ -56,8 +56,8 @@ data class VacancyInfoEntity(
     val salaryList: List<SalaryEntity>,
 
     @Relation(
-        parentColumn = "positionId",
+        parentColumn = "vacancyFuncTitleId",
         entityColumn = "id"
     )
-    val positionList: List<VacancyPositionEntity>
+    val positionList: List<VacancyFuncTitleEntity>
 )

@@ -15,7 +15,7 @@ import ru.practicum.android.diploma.db.data.db.entity.LogosEntity
 import ru.practicum.android.diploma.db.data.db.entity.PhoneEntity
 import ru.practicum.android.diploma.db.data.db.entity.SalaryEntity
 import ru.practicum.android.diploma.db.data.db.entity.VacancyEntity
-import ru.practicum.android.diploma.db.data.db.entity.VacancyPositionEntity
+import ru.practicum.android.diploma.db.data.db.entity.VacancyFuncTitleEntity
 
 @Database(
     version = 1,
@@ -33,7 +33,7 @@ import ru.practicum.android.diploma.db.data.db.entity.VacancyPositionEntity
         PhoneEntity::class,
         SalaryEntity::class,
         VacancyEntity::class,
-        VacancyPositionEntity::class
+        VacancyFuncTitleEntity::class
     ]
 )
 abstract class AppDatabase : RoomDatabase()
