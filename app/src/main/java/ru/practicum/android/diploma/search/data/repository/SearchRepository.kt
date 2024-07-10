@@ -12,12 +12,12 @@ import ru.practicum.android.diploma.network.data.dto.responses.VacancyListRespon
 import ru.practicum.android.diploma.utils.Resource
 
 interface SearchRepository {
-    suspend fun getLocales(): Flow<Resource<List<ru.practicum.android.diploma.network.data.dto.linked.Locale>>>
-    suspend fun getDictionaries(): Flow<Resource<ru.practicum.android.diploma.network.data.dto.responses.DictionariesResponse>>
-    suspend fun getIndustries(): Flow<Resource<List<ru.practicum.android.diploma.network.data.dto.linked.Industry>>>
-    suspend fun getAreas(): Flow<Resource<List<ru.practicum.android.diploma.network.data.dto.linked.Area>>>
-    suspend fun getCountries(): Flow<Resource<List<ru.practicum.android.diploma.network.data.dto.linked.Country>>>
-    suspend fun getVacancySuggestions(textForSuggestions: String): Flow<Resource<List<ru.practicum.android.diploma.network.data.dto.linked.VacancyFunctTitle>>>
-    suspend fun searchVacancy(textForSearch: String): Flow<Resource<ru.practicum.android.diploma.network.data.dto.responses.VacancyListResponse>>
-    suspend fun getVacancyById(id: String): Flow<Resource<ru.practicum.android.diploma.network.data.dto.responses.VacancyByIdResponse>>
+    suspend fun getLocales(): Flow<Resource<List<Locale>>>
+    suspend fun getDictionaries(): Flow<Resource<DictionariesResponse>>
+    suspend fun getIndustries(): Flow<Resource<List<Industry>>>
+    suspend fun getAreas(): Flow<Resource<List<Area>>>
+    suspend fun getCountries(): Flow<Resource<List<Country>>>
+    suspend fun getVacancySuggestions(textForSuggestions: String): Flow<Resource<List<VacancyFunctTitle>>>
+    suspend fun searchVacancy(textForSearch: String): Flow<Resource<VacancyListResponse>>
+    suspend fun getVacancyById(id: String): Flow<Resource<VacancyByIdResponse>>
 }
