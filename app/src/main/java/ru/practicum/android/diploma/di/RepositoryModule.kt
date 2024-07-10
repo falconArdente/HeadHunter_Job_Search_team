@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.di
 
+import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import ru.practicum.android.diploma.details.data.repository.NavigatorRepositoryImpl
 import ru.practicum.android.diploma.details.domain.api.NavigatorRepository
@@ -18,6 +19,6 @@ val repositoryModule = module {
     }
 
     factory<SearchRepository> {
-        HeadHunterRepository(client = get())
+        HeadHunterRepository(client = get(), context = androidContext())
     }
 }

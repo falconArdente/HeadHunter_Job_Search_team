@@ -17,39 +17,57 @@ import ru.practicum.android.diploma.network.dto.responses.VacancySuggestionsResp
 
 interface HeadHunterApplicationApi {
 
-    @Headers("User-Agent: ${App.USER_AGENT}", "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}")
+    @Headers(
+        "User-Agent: ${App.USER_AGENT}",
+        "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}"
+    )
     @GET("/locales")
     suspend fun getLocales(@Query("host") host: String = App.HOST): List<Locale>
 
-    @Headers("User-Agent: ${App.USER_AGENT}", "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}")
+    @Headers(
+        "User-Agent: ${App.USER_AGENT}",
+        "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}"
+    )
     @GET("/dictionaries")
     suspend fun getDictionaries(
         @Query("locale") locale: String = App.LOCALE,
         @Query("host") host: String = App.HOST
     ): DictionariesResponse
 
-    @Headers("User-Agent: ${App.USER_AGENT}", "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}")
+    @Headers(
+        "User-Agent: ${App.USER_AGENT}",
+        "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}"
+    )
     @GET("/industries")
     suspend fun getIndustries(
         @Query("locale") locale: String = App.LOCALE,
         @Query("host") host: String = App.HOST
     ): List<Industry>
 
-    @Headers("User-Agent: ${App.USER_AGENT}", "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}")
+    @Headers(
+        "User-Agent: ${App.USER_AGENT}",
+        "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}"
+    )
     @GET("/areas")
     suspend fun getAreas(
         @Query("locale") locale: String = App.LOCALE,
         @Query("host") host: String = App.HOST
     ): List<Area>
 
-    @Headers("User-Agent: ${App.USER_AGENT}", "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}")
+    @Headers(
+        "User-Agent: ${App.USER_AGENT}",
+        "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}"
+    )
     @GET("/areas/countries")
     suspend fun getCountries(
         @Query("locale") locale: String = App.LOCALE,
         @Query("host") host: String = App.HOST
     ): List<Country>
 
-    @Headers("User-Agent: ${App.USER_AGENT}", "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}")
+    @Headers(
+        "User-Agent: ${App.USER_AGENT}",
+        "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}"
+    )
     @GET("/suggests/vacancy_positions")
     suspend fun getVacancySuggestions(
         @Query("text") textForSuggestions: String,
@@ -57,7 +75,10 @@ interface HeadHunterApplicationApi {
         @Query("host") host: String = App.HOST
     ): VacancySuggestionsResponse
 
-    @Headers("User-Agent: ${App.USER_AGENT}", "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}")
+    @Headers(
+        "User-Agent: ${App.USER_AGENT}",
+        "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}"
+    )
     @GET("/vacancies")
     suspend fun searchVacancy(
         @Query("text") textForSearch: String,
@@ -65,7 +86,10 @@ interface HeadHunterApplicationApi {
         @Query("host") host: String = App.HOST
     ): VacancyListResponse
 
-    @Headers("User-Agent: ${App.USER_AGENT}", "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}")
+    @Headers(
+        "User-Agent: ${App.USER_AGENT}",
+        "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}"
+    )
     @GET("/vacancies/{vacancy_id}")
     suspend fun getVacancyById(
         @Path("vacancy_id") id: String,
