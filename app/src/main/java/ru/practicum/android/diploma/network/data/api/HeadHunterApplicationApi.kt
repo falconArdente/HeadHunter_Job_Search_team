@@ -22,7 +22,7 @@ interface HeadHunterApplicationApi {
         "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}"
     )
     @GET("/locales")
-    suspend fun getLocales(@Query("host") host: String = App.HOST): List<ru.practicum.android.diploma.network.data.dto.linked.Locale>
+    suspend fun getLocales(@Query("host") host: String = App.HOST): List<Locale>
 
     @Headers(
         "User-Agent: ${App.USER_AGENT}",
@@ -32,7 +32,7 @@ interface HeadHunterApplicationApi {
     suspend fun getDictionaries(
         @Query("locale") locale: String = App.LOCALE,
         @Query("host") host: String = App.HOST
-    ): ru.practicum.android.diploma.network.data.dto.responses.DictionariesResponse
+    ): DictionariesResponse
 
     @Headers(
         "User-Agent: ${App.USER_AGENT}",
@@ -42,7 +42,7 @@ interface HeadHunterApplicationApi {
     suspend fun getIndustries(
         @Query("locale") locale: String = App.LOCALE,
         @Query("host") host: String = App.HOST
-    ): List<ru.practicum.android.diploma.network.data.dto.linked.Industry>
+    ): List<Industry>
 
     @Headers(
         "User-Agent: ${App.USER_AGENT}",
@@ -52,7 +52,7 @@ interface HeadHunterApplicationApi {
     suspend fun getAreas(
         @Query("locale") locale: String = App.LOCALE,
         @Query("host") host: String = App.HOST
-    ): List<ru.practicum.android.diploma.network.data.dto.linked.Area>
+    ): List<Area>
 
     @Headers(
         "User-Agent: ${App.USER_AGENT}",
@@ -62,7 +62,7 @@ interface HeadHunterApplicationApi {
     suspend fun getCountries(
         @Query("locale") locale: String = App.LOCALE,
         @Query("host") host: String = App.HOST
-    ): List<ru.practicum.android.diploma.network.data.dto.linked.Country>
+    ): List<Country>
 
     @Headers(
         "User-Agent: ${App.USER_AGENT}",
@@ -73,7 +73,7 @@ interface HeadHunterApplicationApi {
         @Query("text") textForSuggestions: String,
         @Query("locale") locale: String = App.LOCALE,
         @Query("host") host: String = App.HOST
-    ): ru.practicum.android.diploma.network.data.dto.responses.VacancySuggestionsResponse
+    ): VacancySuggestionsResponse
 
     @Headers(
         "User-Agent: ${App.USER_AGENT}",
@@ -84,7 +84,7 @@ interface HeadHunterApplicationApi {
         @Query("text") textForSearch: String,
         @Query("locale") locale: String = App.LOCALE,
         @Query("host") host: String = App.HOST
-    ): ru.practicum.android.diploma.network.data.dto.responses.VacancyListResponse
+    ): VacancyListResponse
 
     @Headers(
         "User-Agent: ${App.USER_AGENT}",
@@ -95,5 +95,5 @@ interface HeadHunterApplicationApi {
         @Path("vacancy_id") id: String,
         @Query("locale") locale: String = App.LOCALE,
         @Query("host") host: String = App.HOST
-    ): ru.practicum.android.diploma.network.data.dto.responses.VacancyByIdResponse
+    ): VacancyByIdResponse
 }
