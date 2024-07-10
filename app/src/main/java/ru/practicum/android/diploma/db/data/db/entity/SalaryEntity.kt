@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 data class SalaryEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val currency: String,
+    val currencyCode: String,
     val salaryFrom: String,
     val gross: Boolean,
     val salaryTo: Int?
