@@ -1,11 +1,13 @@
 package ru.practicum.android.diploma.di
 
 import android.content.Context
+import androidx.room.Room
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
+import ru.practicum.android.diploma.db.data.db.AppDatabase
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.practicum.android.diploma.details.data.externalnavigator.ExternalNavigator
@@ -49,6 +51,17 @@ val dataModule = module {
 
     single<FilterStorage> {
         SharedPrefsStorage(sharedPreferences = get(), gson = get())
+    }
+
+    single {
+        Room.databaseBuilder(
+            androidContext(),
+            AppDatabase::class.java,
+            "database.db"
+        )
+            .fallbackToDestructiveMigration()
+            .build()
+
     }
 
     factory<NetworkStatus> {
