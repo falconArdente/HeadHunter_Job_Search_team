@@ -14,4 +14,13 @@
     <string name="favorites">Избранное</string>
     <string name="dev_team">Команда</string>
 
+    <string name="net_common_dictionary_income_error_message">Общий словарь не получен</string>
+    <string name="net_locales_dictionary_income_error_message">Словарь отраслей не получен</string>
+    <string name="net_industry_dictionary_income_error_message">Словарь отраслей не получен</string>
+    <string name="net_areas_dictionary_income_error_message">Словарь регионов не полученr</string>
+    <string name="net_countries_dictionary_income_error_message">Словарь стран не получен</string>
+    <string name="net_vacancy_suggestions_income_error_message">Список подсказок должностей  не получен</string>
+    <string name="net_vacancy_suggestions_request_text_length_error_message">Ожидаемая длина запроса подсказок должностей - от 2 до 3000 символов3000</string>
+    <string name="net_vacancy_search_income_error_message">Список вакансий не получен</string>
+    <string name="net_vacancy_get_by_id_income_error_message">Запрошенная  вакансия не полученаr</string>
 </resources>
