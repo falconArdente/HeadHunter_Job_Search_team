@@ -5,7 +5,7 @@ import ru.practicum.android.diploma.network.data.dto.linked.BrandSnippet
 import ru.practicum.android.diploma.network.data.dto.linked.Contacts
 import ru.practicum.android.diploma.network.data.dto.linked.Salary
 
-class VacancyModel (
+class VacancyModel(
     @SerializedName("id") val id: String,
     @SerializedName("name") val name: String,
     @SerializedName("salary") val salary: Salary,
