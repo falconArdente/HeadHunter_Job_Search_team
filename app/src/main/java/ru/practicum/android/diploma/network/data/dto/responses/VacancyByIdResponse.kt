@@ -7,9 +7,9 @@ import ru.practicum.android.diploma.network.data.dto.linked.Salary
 
 class VacancyByIdResponse(
     @SerializedName("description") val description: String,
-    @SerializedName("employer") val employer: ru.practicum.android.diploma.network.data.dto.linked.Employer?,
+    @SerializedName("employer") val employer: Employer?,
     @SerializedName("id") val id: String,
     @SerializedName("name") val name: String,
-    @SerializedName("salary") val salary: ru.practicum.android.diploma.network.data.dto.linked.Salary?,
-    @SerializedName("contacts") val contacts: ru.practicum.android.diploma.network.data.dto.linked.Contacts?,
-) : ru.practicum.android.diploma.network.data.dto.responses.Response()
+    @SerializedName("salary") val salary: Salary?,
+    @SerializedName("contacts") val contacts: Contacts?,
+) : Response()
