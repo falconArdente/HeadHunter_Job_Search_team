@@ -1,3 +1,26 @@
 <resources>
     <string name="app_name">Practicum-Android-Diploma</string>
+
+
+    <string name="team_title">Команда</string>
+    <string name="team_text">Над приложением\nработали</string>
+    <string name="team_person4">Соколов Игорь</string>
+    <string name="team_person1">Земцов Никита</string>
+    <string name="team_person3">Равдин Леонид</string>
+    <string name="team_person2">Кобозева Оксана</string>
+    <string name="team_person5">Цыбульский Сергей</string>
+
+    <string name="main">Главная</string>
+    <string name="favorites">Избранное</string>
+    <string name="dev_team">Команда</string>
+
+    <string name="net_common_dictionary_income_error_message">Общий словарь не получен</string>
+    <string name="net_locales_dictionary_income_error_message">Словарь отраслей не получен</string>
+    <string name="net_industry_dictionary_income_error_message">Словарь отраслей не получен</string>
+    <string name="net_areas_dictionary_income_error_message">Словарь регионов не полученr</string>
+    <string name="net_countries_dictionary_income_error_message">Словарь стран не получен</string>
+    <string name="net_vacancy_suggestions_income_error_message">Список подсказок должностей не получен</string>
+    <string name="net_vacancy_suggestions_request_text_length_error_message">Ожидаемая длина запроса подсказок должностей - от 2 до 3000 символов</string>
+    <string name="net_vacancy_search_income_error_message">Список вакансий не получен</string>
+    <string name="net_vacancy_get_by_id_income_error_message">Запрошенная  вакансия не получена</string>
 </resources>
