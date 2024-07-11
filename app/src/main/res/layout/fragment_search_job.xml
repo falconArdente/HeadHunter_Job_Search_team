@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp20"
-        android:text="@string/search_tltle"
+        android:text="@string/search_title"
         app:layout_constraintStart_toStartOf="@id/searchLeftGuideline"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -79,7 +79,7 @@
         style="@style/RegularText.16size"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="@dimen/dp4"
         android:backgroundTint="@color/Blue"
         android:insetTop="0dp"
         android:insetBottom="0dp"
@@ -87,7 +87,7 @@
         android:minHeight="0dp"
         android:textAllCaps="false"
         android:textColor="@color/White"
-        app:cornerRadius="12dp"
+        app:cornerRadius="@dimen/dp12"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchInputBackground"
@@ -97,8 +97,8 @@
 
     <ProgressBar
         android:id="@+id/searchProgressBar"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="@dimen/dp48"
+        android:layout_height="@dimen/dp48"
         android:layout_marginBottom="@dimen/dp56"
         android:indeterminateTint="@color/Blue"
         android:visibility="gone"
@@ -154,7 +154,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="56dp" />
+                android:layout_height="@dimen/dp56" />
 
         </LinearLayout>
 

@@ -24,6 +24,6 @@
     <string name="net_vacancy_search_income_error_message">Список вакансий не получен</string>
     <string name="net_vacancy_get_by_id_income_error_message">Запрошенная  вакансия не получена</string>
 
-    <string name="search_tltle">Поиск вакансий</string>
+    <string name="search_title">Поиск вакансий</string>
     <string name="search_hint">Введите запрос</string>
 </resources>
