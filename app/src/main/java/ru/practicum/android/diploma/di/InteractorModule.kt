@@ -17,6 +17,6 @@ val interactorModule = module {
         FilterInteractorImpl(filterStorageRepository = get())
     }
     factory<SearchInteractor> {
-        SearchInteractorImpl(repository=get(),converter=get())
+        SearchInteractorImpl(repository = get(), converter = get())
     }
 }
