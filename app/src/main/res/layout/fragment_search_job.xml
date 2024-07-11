@@ -1,20 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="ru.practicum.android.diploma.search.ui.SearchJobFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="Главный Экран поиска"
-        android:textSize="40sp" />
-
-    <Button
-        android:id="@+id/one"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/searchLeftGuideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="вперед" />
-</FrameLayout>
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/dp16" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/searchRightGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/dp16" />
+
+    <TextView
+        android:id="@+id/searchTitle"
+        style="@style/MediumText.22size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp20"
+        android:text="@string/search_tltle"
+        app:layout_constraintStart_toStartOf="@id/searchLeftGuideline"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/searchFilterButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp4"
+        android:background="@drawable/icon_filter"
+        app:layout_constraintBottom_toBottomOf="@id/searchTitle"
+        app:layout_constraintEnd_toEndOf="@id/searchRightGuideline"
+        app:layout_constraintTop_toTopOf="@id/searchTitle" />
+
+    <View
+        android:id="@+id/searchInputBackground"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp56"
+        android:layout_marginTop="@dimen/dp28"
+        android:background="@drawable/search_bg"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@id/searchRightGuideline"
+        app:layout_constraintStart_toStartOf="@id/searchLeftGuideline"
+        app:layout_constraintTop_toBottomOf="@id/searchTitle" />
+
+    <EditText
+        android:id="@+id/searchInput"
+        style="@style/EditTextStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:hint="@string/search_hint"
+        app:layout_constraintBottom_toBottomOf="@id/searchInputBackground"
+        app:layout_constraintEnd_toStartOf="@id/searchInputIcon"
+        app:layout_constraintStart_toStartOf="@id/searchInputBackground"
+        app:layout_constraintTop_toTopOf="@id/searchInputBackground" />
+
+    <ImageButton
+        android:id="@+id/searchInputIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp16"
+        android:background="@drawable/icon_search"
+        app:layout_constraintBottom_toBottomOf="@id/searchInputBackground"
+        app:layout_constraintEnd_toEndOf="@id/searchInputBackground"
+        app:layout_constraintStart_toEndOf="@id/searchInput"
+        app:layout_constraintTop_toTopOf="@id/searchInputBackground" />
+
+    <Button
+        android:id="@+id/searchJobsCountButton"
+        style="@style/RegularText.16size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:backgroundTint="@color/Blue"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:letterSpacing="0"
+        android:minHeight="0dp"
+        android:textAllCaps="false"
+        android:textColor="@color/White"
+        app:cornerRadius="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchInputBackground"
+        tools:text="Найдено 286 вакансий"
+        android:visibility="gone"
+        />
+
+    <ProgressBar
+        android:id="@+id/searchProgressBar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="@dimen/dp56"
+        android:indeterminateTint="@color/Blue"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchInputBackground" />
+
+    <ImageView
+        android:id="@+id/searchPlaceholderImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/dp56"
+        android:background="@drawable/picture_looking_man"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="328:223"
+        app:layout_constraintEnd_toEndOf="@id/searchRightGuideline"
+        app:layout_constraintStart_toStartOf="@id/searchLeftGuideline"
+        app:layout_constraintTop_toBottomOf="@id/searchInputBackground" />
+
+    <TextView
+        android:id="@+id/searchPlaceholderText"
+        style="@style/MediumText.22size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp16"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchPlaceholderImage"
+        tools:text="Ошибка сервера" />
+
+    <ScrollView
+        android:id="@+id/searchJobsScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchInputBackground">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:orientation="vertical">
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/searchJobsList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="56dp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
