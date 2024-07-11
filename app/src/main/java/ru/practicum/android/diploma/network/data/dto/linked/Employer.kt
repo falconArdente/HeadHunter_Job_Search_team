@@ -8,5 +8,5 @@ class Employer(
     @SerializedName("url") val url: String?,
     @SerializedName("vacancies_url") val vacanciesUrl: String?,
     @SerializedName("trusted") val isTrusted: Boolean,
-    @SerializedName("logo_urls") val logoUrls: ru.practicum.android.diploma.network.data.dto.linked.LogoUrls?,
+    @SerializedName("logo_urls") val logoUrls: LogoUrls?,
 )
