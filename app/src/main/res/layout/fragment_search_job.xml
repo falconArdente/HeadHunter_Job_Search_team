@@ -61,7 +61,9 @@
         app:layout_constraintBottom_toBottomOf="@id/searchInputBackground"
         app:layout_constraintEnd_toStartOf="@id/searchInputIcon"
         app:layout_constraintStart_toStartOf="@id/searchInputBackground"
-        app:layout_constraintTop_toTopOf="@id/searchInputBackground" />
+        app:layout_constraintTop_toTopOf="@id/searchInputBackground"
+        android:textCursorDrawable="@drawable/cursor_drawable"
+        />
 
     <ImageButton
         android:id="@+id/searchInputIcon"
@@ -79,7 +81,7 @@
         style="@style/RegularText.16size"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp4"
+        android:layout_marginTop="@dimen/dp12"
         android:backgroundTint="@color/Blue"
         android:insetTop="0dp"
         android:insetBottom="0dp"
