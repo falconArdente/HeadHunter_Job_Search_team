@@ -56,7 +56,7 @@
         style="@style/EditTextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="@dimen/dp16"
         android:hint="@string/search_hint"
         app:layout_constraintBottom_toBottomOf="@id/searchInputBackground"
         app:layout_constraintEnd_toStartOf="@id/searchInputIcon"
