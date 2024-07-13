@@ -51,19 +51,20 @@
         app:layout_constraintStart_toStartOf="@id/searchLeftGuideline"
         app:layout_constraintTop_toBottomOf="@id/searchTitle" />
 
-    <EditText
+
+    <AutoCompleteTextView
         android:id="@+id/searchInput"
         style="@style/EditTextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp16"
         android:hint="@string/search_hint"
+        android:textCursorDrawable="@drawable/cursor_drawable"
         app:layout_constraintBottom_toBottomOf="@id/searchInputBackground"
         app:layout_constraintEnd_toStartOf="@id/searchInputIcon"
         app:layout_constraintStart_toStartOf="@id/searchInputBackground"
         app:layout_constraintTop_toTopOf="@id/searchInputBackground"
-        android:textCursorDrawable="@drawable/cursor_drawable"
-        />
+        android:completionThreshold="1"/>
 
     <ImageButton
         android:id="@+id/searchInputIcon"
@@ -89,13 +90,12 @@
         android:minHeight="0dp"
         android:textAllCaps="false"
         android:textColor="@color/White"
+        android:visibility="gone"
         app:cornerRadius="@dimen/dp12"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchInputBackground"
-        tools:text="Найдено 286 вакансий"
-        android:visibility="gone"
-        />
+        tools:text="Найдено 286 вакансий" />
 
     <ProgressBar
         android:id="@+id/searchProgressBar"
