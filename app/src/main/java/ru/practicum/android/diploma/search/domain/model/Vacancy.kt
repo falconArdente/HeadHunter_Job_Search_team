@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.search.domain.model
 
-import ru.practicum.android.diploma.network.data.dto.linked.BrandSnippet
 import ru.practicum.android.diploma.network.data.dto.linked.Contacts
 
 data class Vacancy(

@@ -7,49 +7,38 @@ import ru.practicum.android.diploma.network.data.dto.responses.VacancyListRespon
 import ru.practicum.android.diploma.search.domain.model.BrandSnippetModel
 import ru.practicum.android.diploma.search.domain.model.SalaryModel
 import ru.practicum.android.diploma.search.domain.model.Vacancy
-import ru.practicum.android.diploma.search.domain.model.VacancyModelResponse
 
 class SearchVacancyConverter {
-    fun mapToVacancyModelResponce(vacancy: VacancyListResponse): VacancyModelResponse {
-        return VacancyModelResponse(
-            mapToListVacancyModel(vacancy.vacancyAtSearchList),
-            vacancy.currentPage,
-            vacancy.totalFound,
-            vacancy.totalPages,
-            vacancy.countForPage
+    fun mapToVacancyModel(vacancy: VacancyAtSearch): Vacancy{
+        return Vacancy(
+            vacancy.id,
+            vacancy.name,
+            mapToSalaryModel(vacancy.salary),
+            vacancy.url,
+            mapToBrandSnippetModel(vacancy.brandSnippet!!),
+            vacancy.contacts
         )
     }
-}
 
-fun mapToVacancyModel(vacancy: VacancyAtSearch): Vacancy {
-    return Vacancy(
-        vacancy.id,
-        vacancy.name,
-        mapToSalaryModel(vacancy.salary),
-        vacancy.url,
-        mapToBrandSnippetModel(vacancy.brandSnippet!!),
-        vacancy.contacts
-    )
-}
+    fun mapToListVacancyModel(vacancy: List<VacancyAtSearch>): List<Vacancy> {
+        return vacancy.map { vacancy -> mapToVacancyModel(vacancy) }
+    }
 
-fun mapToListVacancyModel(vacancy: List<VacancyAtSearch>): List<Vacancy> {
-    return vacancy.map { vacancy -> mapToVacancyModel(vacancy) }
-}
+    fun mapToSalaryModel(salary: Salary): SalaryModel {
+        return SalaryModel(
+            salary.currency,
+            salary.from,
+            salary.gross,
+            salary.to
+        )
+    }
 
-fun mapToSalaryModel(salary: Salary): SalaryModel {
-    return SalaryModel(
-        salary.currency,
-        salary.from,
-        salary.gross,
-        salary.to
-    )
-}
-
-fun mapToBrandSnippetModel(brSnippet: BrandSnippet): BrandSnippetModel {
-    return BrandSnippetModel(
-        brSnippet.logo,
-        brSnippet.logoXs,
-        brSnippet.picture,
-        brSnippet.pictureXs
-    )
+    fun mapToBrandSnippetModel(brSnippet: BrandSnippet): BrandSnippetModel {
+        return BrandSnippetModel(
+            brSnippet.logo,
+            brSnippet.logoXs,
+            brSnippet.picture,
+            brSnippet.pictureXs
+        )
+    }
 }
