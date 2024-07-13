@@ -42,7 +42,10 @@ class SearchJobFragment : Fragment() {
 
         // Удалить потом!
         binding.searchTESTVACANCYButton.setOnClickListener {
-            findNavController().navigate(R.id.action_searchJobFragment_to_jobDetailsFragment, JobDetailsFragment.createArgs("linkToThisVacancy"))
+            findNavController().navigate(
+                R.id.action_searchJobFragment_to_jobDetailsFragment,
+                JobDetailsFragment.createArgs("linkToThisVacancy")
+            )
         }
     }
 

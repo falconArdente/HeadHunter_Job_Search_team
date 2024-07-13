@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.details.ui
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +10,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentJobDetailsBinding
-import ru.practicum.android.diploma.databinding.FragmentSearchJobBinding
 import ru.practicum.android.diploma.details.presentation.model.VacancyDetails
 
 class JobDetailsFragment : Fragment() {
@@ -36,10 +34,16 @@ class JobDetailsFragment : Fragment() {
             imageUrl = null,
             experience = "От 1 года до 3 лет",
             occupation = "Полная занятость, Удаленная работа",
-            responsibilities = "•  Разрабатывать новую функциональность приложения\n•  Помогать с интеграцией нашего SDK в другие приложения\n•  Проектировать большие новые модули\n•  Писать UI- и unit-тесты\n•  Следить за работоспособностью сервиса и устранять технический долг",
+            responsibilities = "•  Разрабатывать новую функциональность приложения\n" +
+                "•  Помогать с интеграцией нашего SDK в другие приложения\n" +
+                "•  Проектировать большие новые модули\n" +
+                "•  Писать UI- и unit-тесты\n" +
+                "•  Следить за работоспособностью сервиса и устранять технический долг",
             requirements = "•  100% Kotlin\n•  WebRTC\n•  CI по модели Trunk Based Development",
-            conditions = "•  сильная команда, с которой можно расти\n•  возможность влиять на процесс и результат\n•  расширенная программа ДМС: стоматология, обследования, вызов врача на дом и многое другое",
-            keySkills = "•  Знание классических алгоритмов и структур данных\n•  Программирование для Android больше одного года\n•  Знание WebRTC",
+            conditions = "•  сильная команда, с которой можно расти\n•  возможность влиять на процесс и результат\n" +
+                "•  расширенная программа ДМС: стоматология, обследования, вызов врача на дом и многое другое",
+            keySkills = "•  Знание классических алгоритмов и структур данных\n" +
+                "•  Программирование для Android больше одного года\n•  Знание WebRTC",
         )
 
         initializeJobDetailsFragment(currentVacancyDetails)
@@ -55,11 +59,8 @@ class JobDetailsFragment : Fragment() {
         binding.jobCity.text = vacancy.city
 
         val roundedCornersSize = 12
-        Glide.with(binding.jobImage)
-            .load(vacancy.imageUrl)
-            .transform(RoundedCorners(roundedCornersSize))
-            .placeholder(R.drawable.placeholder_logo)
-            .into(binding.jobImage)
+        Glide.with(binding.jobImage).load(vacancy.imageUrl).transform(RoundedCorners(roundedCornersSize))
+            .placeholder(R.drawable.placeholder_logo).into(binding.jobImage)
 
         binding.jobExperienceText1.text = vacancy.experience
         binding.jobExperienceText2.text = vacancy.occupation
@@ -69,7 +70,6 @@ class JobDetailsFragment : Fragment() {
         } else {
             binding.jobResponsibilitiesText.text = vacancy.responsibilities
         }
-
 
         if (vacancy.requirements == null) {
             binding.jobRequirementsTitle.visibility = View.GONE
@@ -94,9 +94,6 @@ class JobDetailsFragment : Fragment() {
 
         private const val VACANCY_ID = "vacancy_id"
 
-        fun createArgs(vacancyID: String): Bundle =
-            bundleOf(VACANCY_ID to vacancyID)
+        fun createArgs(vacancyID: String): Bundle = bundleOf(VACANCY_ID to vacancyID)
     }
 }
-
-
