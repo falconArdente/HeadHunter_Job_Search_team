@@ -3,13 +3,12 @@ package ru.practicum.android.diploma.search.data.mapper
 import ru.practicum.android.diploma.network.data.dto.linked.BrandSnippet
 import ru.practicum.android.diploma.network.data.dto.linked.Salary
 import ru.practicum.android.diploma.network.data.dto.linked.VacancyAtSearch
-import ru.practicum.android.diploma.network.data.dto.responses.VacancyListResponse
 import ru.practicum.android.diploma.search.domain.model.BrandSnippetModel
 import ru.practicum.android.diploma.search.domain.model.SalaryModel
 import ru.practicum.android.diploma.search.domain.model.Vacancy
 
 class SearchVacancyConverter {
-    fun mapToVacancyModel(vacancy: VacancyAtSearch): Vacancy{
+    fun mapToVacancyModel(vacancy: VacancyAtSearch): Vacancy {
         return Vacancy(
             vacancy.id,
             vacancy.name,
