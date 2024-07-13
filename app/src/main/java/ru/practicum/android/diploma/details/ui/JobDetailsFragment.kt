@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentJobDetailsBinding
-import ru.practicum.android.diploma.details.presentation.model.VacancyDetails
+import ru.practicum.android.diploma.details.domain.model.VacancyDetails
 
 class JobDetailsFragment : Fragment() {
 
