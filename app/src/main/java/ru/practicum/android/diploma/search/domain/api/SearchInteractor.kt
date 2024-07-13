@@ -1,8 +1,8 @@
 package ru.practicum.android.diploma.search.domain.api
 
 import kotlinx.coroutines.flow.Flow
-import ru.practicum.android.diploma.search.domain.model.VacancyModelResponce
+import ru.practicum.android.diploma.search.domain.model.VacancyModelResponse
 
 interface SearchInteractor {
-    fun searchVacation(expression: String): Flow<Pair<VacancyModelResponce?, String?>>
+    fun searchVacancy(expression: String): Flow<Pair<VacancyModelResponse?, String?>>
 }

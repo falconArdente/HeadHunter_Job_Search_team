@@ -1,13 +1,13 @@
-package ru.practicum.android.diploma.search.data.repository
+package ru.practicum.android.diploma.search.data.mapper
 
 import ru.practicum.android.diploma.network.data.dto.linked.VacancyAtSearch
 import ru.practicum.android.diploma.network.data.dto.responses.VacancyListResponse
-import ru.practicum.android.diploma.search.domain.model.VacancyModel
-import ru.practicum.android.diploma.search.domain.model.VacancyModelResponce
+import ru.practicum.android.diploma.search.domain.model.Vacancy
+import ru.practicum.android.diploma.search.domain.model.VacancyModelResponse
 
 class SearchVacancyConverter {
-    fun mapToVacancyModelResponce(vacancy: VacancyListResponse): VacancyModelResponce {
-        return VacancyModelResponce(
+    fun mapToVacancyModelResponce(vacancy: VacancyListResponse): VacancyModelResponse {
+        return VacancyModelResponse(
             mapToListVacancyModel(vacancy.vacancyAtSearchList),
             vacancy.currentPage,
             vacancy.totalFound,
@@ -17,8 +17,8 @@ class SearchVacancyConverter {
     }
 }
 
-fun mapToVacancyModel(vacancy: VacancyAtSearch): VacancyModel {
-    return VacancyModel(
+fun mapToVacancyModel(vacancy: VacancyAtSearch): Vacancy {
+    return Vacancy(
         vacancy.id,
         vacancy.name,
         vacancy.salary,
@@ -28,6 +28,6 @@ fun mapToVacancyModel(vacancy: VacancyAtSearch): VacancyModel {
     )
 }
 
-fun mapToListVacancyModel(vacancy: List<VacancyAtSearch>): List<VacancyModel> {
+fun mapToListVacancyModel(vacancy: List<VacancyAtSearch>): List<Vacancy> {
     return vacancy.map { vacancy -> mapToVacancyModel(vacancy) }
 }
