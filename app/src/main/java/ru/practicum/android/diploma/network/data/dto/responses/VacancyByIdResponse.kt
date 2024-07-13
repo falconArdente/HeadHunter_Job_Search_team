@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.network.data.dto.responses
 
 import com.google.gson.annotations.SerializedName
+import ru.practicum.android.diploma.details.domain.model.VacancyDetails
 import ru.practicum.android.diploma.network.data.dto.linked.Area
 import ru.practicum.android.diploma.network.data.dto.linked.Contacts
 import ru.practicum.android.diploma.network.data.dto.linked.Employer
@@ -16,7 +17,7 @@ class VacancyByIdResponse(
     @SerializedName("name") val name: String,
     @SerializedName("salary") val salary: Salary?,
     @SerializedName("contacts") val contacts: Contacts?,
-    @SerializedName("area") val area: Area, // необходимо отдельная сущность?
+    @SerializedName("area") val area: Area,
     @SerializedName("experience") val experience: Experience?,
     @SerializedName("employment") val employment: Employment?,
     @SerializedName("key_skills") val keySkills: List<Skill>,

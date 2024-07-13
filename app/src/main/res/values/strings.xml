@@ -23,4 +23,7 @@
     <string name="net_vacancy_suggestions_request_text_length_error_message">Ожидаемая длина запроса подсказок должностей - от 2 до 3000 символов</string>
     <string name="net_vacancy_search_income_error_message">Список вакансий не получен</string>
     <string name="net_vacancy_get_by_id_income_error_message">Запрошенная  вакансия не получена</string>
+    <string name="salary_range">от % d до % d %1s</string>
+    <string name="salary_from">от % d %1s</string>
+    <string name="no_salary_msg">Зарплата не указана</string>
 </resources>

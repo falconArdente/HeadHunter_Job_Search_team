@@ -11,4 +11,6 @@
     <dimen name="dp1">1dp</dimen>
     <dimen name="dp8">8dp</dimen>
     <dimen name="dp56">56dp</dimen>
+    <dimen name="dp12">12dp</dimen>
+
 </resources>
