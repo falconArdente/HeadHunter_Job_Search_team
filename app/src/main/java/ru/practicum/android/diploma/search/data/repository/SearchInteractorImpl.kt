@@ -13,11 +13,11 @@ class SearchInteractorImpl(val repository: SearchRepository, val converter: Sear
         repository.searchVacancy(expression).map { result ->
             when (result) {
                 is Resource.Success -> {
-                    Pair(converter.mapToVacancyModelResponce(result.data!!), null)
+                    converter.mapToVacancyModelResponce(result.data!!)
                 }
 
                 is Resource.Error -> {
-                    Pair(null, result.message)
+                    result.message
                 }
             }
         }

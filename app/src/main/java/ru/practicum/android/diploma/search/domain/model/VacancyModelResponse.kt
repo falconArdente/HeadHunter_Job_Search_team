@@ -6,4 +6,5 @@ data class VacancyModelResponse(
     val totalFound: Number,
     val totalPages: Number,
     val countForPage: Number,
+    var resultCode: String? = null
 )
