@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchJobBinding
+import ru.practicum.android.diploma.details.ui.JobDetailsFragment
 
 class SearchJobFragment : Fragment() {
     private var _binding: FragmentSearchJobBinding? = null
@@ -37,5 +39,16 @@ class SearchJobFragment : Fragment() {
         binding.searchInputIcon.setOnClickListener {
             binding.searchInput.setText("")
         }
+
+        // Удалить потом!
+        binding.searchTESTVACANCYButton.setOnClickListener {
+            findNavController().navigate(R.id.action_searchJobFragment_to_jobDetailsFragment, JobDetailsFragment.createArgs("linkToThisVacancy"))
+        }
+    }
+
+    companion object {
+
+        private const val VACANCY_ID = "vacancy_id"
+
     }
 }
