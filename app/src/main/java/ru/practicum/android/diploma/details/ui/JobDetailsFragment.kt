@@ -58,8 +58,7 @@ class JobDetailsFragment : Fragment() {
         binding.jobCompany.text = vacancy.company
         binding.jobCity.text = vacancy.city
 
-        val roundedCornersSize = 12
-        Glide.with(binding.jobImage).load(vacancy.imageUrl).transform(RoundedCorners(roundedCornersSize))
+        Glide.with(binding.jobImage).load(vacancy.imageUrl).transform(RoundedCorners(ROUNDED_CORNERS_SIZE))
             .placeholder(R.drawable.placeholder_logo).into(binding.jobImage)
 
         binding.jobExperienceText1.text = vacancy.experience
@@ -93,7 +92,7 @@ class JobDetailsFragment : Fragment() {
     companion object {
 
         private const val VACANCY_ID = "vacancy_id"
-
+        private const val ROUNDED_CORNERS_SIZE = 12
         fun createArgs(vacancyID: String): Bundle = bundleOf(VACANCY_ID to vacancyID)
     }
 }

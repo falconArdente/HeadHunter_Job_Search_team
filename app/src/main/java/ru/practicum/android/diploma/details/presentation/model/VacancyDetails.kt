@@ -1,7 +1,5 @@
 package ru.practicum.android.diploma.details.presentation.model
 
-import android.net.Uri
-
 data class VacancyDetails(
     val title: String,
     val salary: String,
@@ -14,4 +12,4 @@ data class VacancyDetails(
     val requirements: String?,
     val conditions: String?,
     val keySkills: String?
-    )
+)
