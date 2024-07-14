@@ -168,7 +168,7 @@ class JobDetailsFragment : Fragment() {
             binding.jobDescriptionTitle.isVisible = false
         } else {
             val htmlTextOriginal = vacancyDetails.description
-            val htmlTextModified = htmlTextOriginal.replace("<li>", "<li>&nbsp;") // убрать?
+            val htmlTextModified = htmlTextOriginal.replace("<li>", "<li>&nbsp;")
             binding.jobDescriptionText.setText(
                 Html.fromHtml(
                     htmlTextModified,
