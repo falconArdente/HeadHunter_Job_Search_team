@@ -2,23 +2,11 @@ package ru.practicum.android.diploma.network.data.mapper
 
 import ru.practicum.android.diploma.details.domain.model.AreaDetails
 import ru.practicum.android.diploma.details.domain.model.ContactsDetails
-import ru.practicum.android.diploma.details.domain.model.EmployerDetails
-import ru.practicum.android.diploma.details.domain.model.EmploymentDetails
-import ru.practicum.android.diploma.details.domain.model.ExperienceDetails
+import ru.practicum.android.diploma.details.domain.model.EmployerInfo
+import ru.practicum.android.diploma.details.domain.model.JobInfo
 import ru.practicum.android.diploma.details.domain.model.LogoUrlsDetails
-import ru.practicum.android.diploma.details.domain.model.PhoneDetails
 import ru.practicum.android.diploma.details.domain.model.SalaryDetails
-import ru.practicum.android.diploma.details.domain.model.SkillDetails
 import ru.practicum.android.diploma.details.domain.model.VacancyDetails
-import ru.practicum.android.diploma.network.data.dto.linked.Area
-import ru.practicum.android.diploma.network.data.dto.linked.Contacts
-import ru.practicum.android.diploma.network.data.dto.linked.Employer
-import ru.practicum.android.diploma.network.data.dto.linked.Employment
-import ru.practicum.android.diploma.network.data.dto.linked.Experience
-import ru.practicum.android.diploma.network.data.dto.linked.LogoUrls
-import ru.practicum.android.diploma.network.data.dto.linked.Phone
-import ru.practicum.android.diploma.network.data.dto.linked.Salary
-import ru.practicum.android.diploma.network.data.dto.linked.Skill
 import ru.practicum.android.diploma.network.data.dto.responses.VacancyByIdResponse
 
 object VacancyDetailsMapper {
@@ -27,73 +15,40 @@ object VacancyDetailsMapper {
             id = this.id,
             name = this.name,
             description = this.description,
-            employer = this.employer?.mapToDomain(),
-            salary = this.salary?.mapToDomain(),
-            contacts = this.contacts?.mapToDomain(),
-            area = this.area.mapToDomain(),
-            experience = this.experience?.mapToDomain(),
-            employment = this.employment?.mapToDomain(),
-            keySkills = this.keySkills.map { it.name },
+            employer = mapToEmployerInfo(this),
+            jobDetails = mapToJobInfo(this),
             vacancyUrl = this.vacancyUrl,
         )
     }
 
-    private fun Employer.mapToDomain(): EmployerDetails {
-        return EmployerDetails(
-            id = this.id,
-            name = this.name,
-            url = this.url,
-            vacanciesUrl = this.vacanciesUrl,
-            isTrusted = this.isTrusted,
-            logoUrls = this.logoUrls?.mapToDomain(),
+    private fun mapToEmployerInfo(vacancyByIdResponse: VacancyByIdResponse): EmployerInfo {
+        return EmployerInfo(
+            employerName = vacancyByIdResponse.employer?.name,
+            contacts = ContactsDetails(
+                email = vacancyByIdResponse.contacts?.email,
+                phones = vacancyByIdResponse.contacts?.phones?.map { it.formatted },
+                name = vacancyByIdResponse.contacts?.name
+            ),
+            area = AreaDetails(name = vacancyByIdResponse.area.name, id = vacancyByIdResponse.area.id),
+            logo = LogoUrlsDetails(
+                size90 = vacancyByIdResponse.employer?.logoUrls?.size90,
+                size240 = vacancyByIdResponse.employer?.logoUrls?.size240,
+                raw = vacancyByIdResponse.employer?.logoUrls?.raw
+            ),
         )
     }
 
-    private fun LogoUrls.mapToDomain(): LogoUrlsDetails {
-        return LogoUrlsDetails(
-            size90 = this.size90,
-            size240 = this.size240,
-            raw = this.raw
-        )
-    }
-
-    private fun Salary.mapToDomain(): SalaryDetails {
-        return SalaryDetails(
-            currency = this.currency,
-            from = this.from,
-            gross = this.gross,
-            to = this.to,
-        )
-    }
-
-    private fun Contacts.mapToDomain(): ContactsDetails {
-        return ContactsDetails(
-            email = this.email,
-            name = this.name,
-            phones = this.phones?.map {
-                it.formatted
-            }
-        )
-    }
-
-    private fun Area.mapToDomain(): AreaDetails {
-        return AreaDetails(
-            id = this.id,
-            name = this.name
-        )
-    }
-
-    private fun Experience.mapToDomain(): ExperienceDetails {
-        return ExperienceDetails(
-            id = this.id,
-            name = this.name
-        )
-    }
-
-    private fun Employment.mapToDomain(): EmploymentDetails {
-        return EmploymentDetails(
-            id = this.id,
-            name = this.name
+    private fun mapToJobInfo(vacancyByIdResponse: VacancyByIdResponse): JobInfo {
+        return JobInfo(
+            salary = SalaryDetails(
+                currency = vacancyByIdResponse.salary?.currency,
+                from = vacancyByIdResponse.salary?.from,
+                to = vacancyByIdResponse.salary?.to,
+                gross = vacancyByIdResponse.salary?.gross,
+            ),
+            experience = vacancyByIdResponse.experience?.name,
+            employment = vacancyByIdResponse.employment?.name,
+            keySkills = vacancyByIdResponse.keySkills.map { it.name },
         )
     }
 }

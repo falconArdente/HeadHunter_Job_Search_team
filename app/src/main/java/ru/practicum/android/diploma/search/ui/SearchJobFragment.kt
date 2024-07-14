@@ -43,7 +43,7 @@ class SearchJobFragment : Fragment() {
         binding.searchTESTVACANCYButton.setOnClickListener {
             findNavController().navigate(
                 R.id.action_searchJobFragment_to_jobDetailsFragment,
-                JobDetailsFragment.createArgs("103305913")
+                JobDetailsFragment.createArgs("linkToThisVacancy")
             )
         }
     }

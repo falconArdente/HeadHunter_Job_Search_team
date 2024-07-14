@@ -75,86 +75,31 @@ class JobDetailsFragment : Fragment() {
 
     private fun initializeJobDetailsFragment(vacancyDetailsState: VacancyDetailsState) {
         setVisibilityOfMainElements(vacancyDetailsState)
+
         if (vacancyDetailsState is VacancyDetailsState.Content) {
             val vacancyDetails: VacancyDetails = vacancyDetailsState.data
+
             binding.jobTitle.text = vacancyDetails.name
-            binding.jobSalary.text = if (vacancyDetails.salary == null) {
-                binding.root.resources.getString(R.string.no_salary_msg)
-            } else if (vacancyDetails.salary.to == null) {
-                binding.root.resources.getString(
-                    R.string.salary_from,
-                    formatSalaryAmount(vacancyDetails.salary.from),
-                    convertCurrencyToSymbol(vacancyDetails)
-                )
-            } else {
-                binding.root.resources.getString(
-                    R.string.salary_range,
-                    formatSalaryAmount(vacancyDetails.salary.from),
-                    formatSalaryAmount(vacancyDetails.salary.to),
-                    convertCurrencyToSymbol(vacancyDetails)
-                )
-            }
 
-            binding.jobCompany.text = vacancyDetails.employer?.name
-            binding.jobCity.text = vacancyDetails.area.name
+            renderJobSalary(vacancyDetails)
 
-            binding.jobExperienceText1.text = vacancyDetails.experience?.name
-            binding.jobExperienceText2.text = vacancyDetails.employment?.name
+            binding.jobCompany.text = vacancyDetails.employer.employerName
+            binding.jobCity.text = vacancyDetails.employer.area.name
 
-            if (vacancyDetails.description.isEmpty()) {
-                binding.jobDescriptionText.isVisible = false
-                binding.jobDescriptionTitle.isVisible = false
-            } else {
-                val htmlTextOriginal = vacancyDetails.description
-                val htmlTextModified = htmlTextOriginal.replace("<li>", "<li>&nbsp;") //убрать?
-                binding.jobDescriptionText.setText(
-                    Html.fromHtml(
-                        htmlTextModified,
-                        Html.FROM_HTML_MODE_COMPACT
-                    )
-                )
-            }
+            renderJobExperience(vacancyDetails)
 
-            if (vacancyDetails.keySkills.isEmpty()) {
-                binding.jobKeySkillsTitle.isVisible = false
-            } else {
-                binding.jobKeySkillsText.text =
-                    getString(R.string.bullet_point) + vacancyDetails.keySkills.joinToString(
-                        separator = "\n${getString(R.string.bullet_point)}"
-                    )
-            }
+            renderJobDetails(vacancyDetails)
 
-            binding.jobContactsEmail.isVisible = vacancyDetails.contacts?.email != null
-            binding.jobContactsPhone.isVisible = !vacancyDetails.contacts?.phones.isNullOrEmpty()
-            if (!binding.jobContactsEmail.isVisible && !binding.jobContactsPhone.isVisible) {
-                binding.jobContactsTitle.isVisible = false
-            }
+            renderKeySkills(vacancyDetails)
 
-            if (vacancyDetails.contacts != null && binding.jobContactsTitle.isVisible) {
-                binding.jobContactsEmail.text = "${binding.jobContactsEmail.text} ${vacancyDetails.contacts.email}"
-                binding.jobContactsPhone.text =
-                    "${binding.jobContactsPhone.text} ${vacancyDetails.contacts.phones?.joinToString(separator = "\n")}"
-            }
+            renderContacts(vacancyDetails)
 
             Glide.with(binding.jobImage)
-                .load(vacancyDetails.employer?.logoUrls?.size240)
+                .load(vacancyDetails.employer.logo?.size240)
                 .transform(RoundedCorners(ROUNDED_CORNERS_SIZE))
                 .placeholder(R.drawable.placeholder_logo)
                 .into(binding.jobImage)
         }
-    }
-
-    private fun formatSalaryAmount(salaryAmount: Int?): String {
-        val delimiterSymbol = DecimalFormatSymbols().apply { groupingSeparator = ' ' }
-        val numberFormat = DecimalFormat("###,###,###,###,###", delimiterSymbol)
-        return numberFormat.format(salaryAmount).toString()
-    }
-
-    private fun convertCurrencyToSymbol(vacancy: VacancyDetails): String { // в Utils?
-        var currencyCode = vacancy.salary?.currency
-        if (currencyCode == "RUR") currencyCode = "RUB"
-        val currency = java.util.Currency.getInstance(currencyCode)
-        return currency.symbol
     }
 
     private fun setVisibilityOfMainElements(vacancyDetailsState: VacancyDetailsState) {
@@ -170,8 +115,96 @@ class JobDetailsFragment : Fragment() {
         binding.loadingProgressBar.isVisible = vacancyDetailsState is VacancyDetailsState.Loading
     }
 
-    companion object {
+    private fun renderJobSalary(vacancyDetails: VacancyDetails) {
+        binding.jobSalary.text = if (vacancyDetails.jobDetails.salary == null) {
+            binding.root.resources.getString(R.string.no_salary_msg)
+        } else if (vacancyDetails.jobDetails.salary.to == null) {
+            binding.root.resources.getString(
+                R.string.salary_from,
+                formatSalaryAmount(vacancyDetails.jobDetails.salary.from),
+                convertCurrencyToSymbol(vacancyDetails)
+            )
+        } else {
+            binding.root.resources.getString(
+                R.string.salary_range,
+                formatSalaryAmount(vacancyDetails.jobDetails.salary.from),
+                formatSalaryAmount(vacancyDetails.jobDetails.salary.to),
+                convertCurrencyToSymbol(vacancyDetails)
+            )
+        }
+    }
 
+    private fun formatSalaryAmount(salaryAmount: Int?): String {
+        val delimiterSymbol = DecimalFormatSymbols().apply { groupingSeparator = ' ' }
+        val numberFormat = DecimalFormat("###,###,###,###,###", delimiterSymbol)
+        return numberFormat.format(salaryAmount).toString()
+    }
+
+    private fun convertCurrencyToSymbol(vacancy: VacancyDetails): String { // в Utils?
+        var currencyCode = vacancy.jobDetails.salary?.currency
+        if (currencyCode == "RUR") currencyCode = "RUB"
+        val currency = java.util.Currency.getInstance(currencyCode)
+        return currency.symbol
+    }
+
+    private fun renderJobExperience(vacancyDetails: VacancyDetails) {
+        if (vacancyDetails.jobDetails.experience != null) {
+            binding.jobExperienceText1.text = vacancyDetails.jobDetails.experience
+        } else {
+            binding.jobExperienceText1.isVisible = false
+        }
+        if (vacancyDetails.jobDetails.employment != null) {
+            binding.jobExperienceText2.text = vacancyDetails.jobDetails.employment
+        } else {
+            binding.jobExperienceText2.isVisible = false
+        }
+        binding.jobExperienceTitle.isVisible =
+            binding.jobExperienceText1.isVisible || binding.jobExperienceText2.isVisible
+    }
+
+    private fun renderJobDetails(vacancyDetails: VacancyDetails) {
+        if (vacancyDetails.description.isEmpty()) {
+            binding.jobDescriptionText.isVisible = false
+            binding.jobDescriptionTitle.isVisible = false
+        } else {
+            val htmlTextOriginal = vacancyDetails.description
+            val htmlTextModified = htmlTextOriginal.replace("<li>", "<li>&nbsp;") //убрать?
+            binding.jobDescriptionText.setText(
+                Html.fromHtml(
+                    htmlTextModified,
+                    Html.FROM_HTML_MODE_COMPACT
+                )
+            )
+        }
+    }
+
+    private fun renderKeySkills(vacancyDetails: VacancyDetails) {
+        if (vacancyDetails.jobDetails.keySkills.isEmpty()) {
+            binding.jobKeySkillsTitle.isVisible = false
+        } else {
+            binding.jobKeySkillsText.text =
+                getString(R.string.bullet_point) + vacancyDetails.jobDetails.keySkills.joinToString(
+                    separator = "\n${getString(R.string.bullet_point)}"
+                )
+        }
+    }
+
+    private fun renderContacts(vacancyDetails: VacancyDetails) {
+        binding.jobContactsEmail.isVisible = vacancyDetails.employer.contacts?.email != null
+        binding.jobContactsPhone.isVisible = !vacancyDetails.employer.contacts?.phones.isNullOrEmpty()
+        if (!binding.jobContactsEmail.isVisible && !binding.jobContactsPhone.isVisible) {
+            binding.jobContactsTitle.isVisible = false
+        }
+
+        if (vacancyDetails.employer.contacts != null && binding.jobContactsTitle.isVisible) {
+            binding.jobContactsEmail.text =
+                "${binding.jobContactsEmail.text} ${vacancyDetails.employer.contacts.email}"
+            binding.jobContactsPhone.text =
+                "${binding.jobContactsPhone.text} ${vacancyDetails.employer.contacts.phones?.joinToString(separator = "\n")}"
+        }
+    }
+
+    companion object {
         private const val VACANCY_ID = "vacancy_id"
         private const val ROUNDED_CORNERS_SIZE = 12
         fun createArgs(vacancyID: String): Bundle = bundleOf(VACANCY_ID to vacancyID)
