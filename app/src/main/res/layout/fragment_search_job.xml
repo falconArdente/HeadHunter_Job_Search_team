@@ -38,7 +38,8 @@
         android:background="@drawable/icon_filter"
         app:layout_constraintBottom_toBottomOf="@id/searchTitle"
         app:layout_constraintEnd_toEndOf="@id/searchRightGuideline"
-        app:layout_constraintTop_toTopOf="@id/searchTitle" />
+        app:layout_constraintTop_toTopOf="@id/searchTitle"
+        tools:ignore="ContentDescription" />
 
     <View
         android:id="@+id/searchInputBackground"
@@ -51,23 +52,24 @@
         app:layout_constraintStart_toStartOf="@id/searchLeftGuideline"
         app:layout_constraintTop_toBottomOf="@id/searchTitle" />
 
-
     <AutoCompleteTextView
         android:id="@+id/searchInput"
         style="@style/EditTextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp16"
-        android:completionThreshold="1"
+        android:completionThreshold="@integer/suggestions_drop_down_completion_threshold"
         android:dropDownAnchor="@id/searchInputBackground"
-
         android:hint="@string/search_hint"
         android:inputType="textAutoComplete"
+        android:minHeight="@dimen/search_input_min_height"
+        android:textColorHint="@color/search_hint_gray_to_white"
         android:textCursorDrawable="@drawable/cursor_drawable"
         app:layout_constraintBottom_toBottomOf="@id/searchInputBackground"
         app:layout_constraintEnd_toStartOf="@id/searchInputIcon"
         app:layout_constraintStart_toStartOf="@id/searchInputBackground"
-        app:layout_constraintTop_toTopOf="@id/searchInputBackground" />
+        app:layout_constraintTop_toTopOf="@id/searchInputBackground"
+        tools:ignore="VisualLintTextFieldSize,TextContrastCheck" />
 
     <ImageButton
         android:id="@+id/searchInputIcon"
@@ -78,7 +80,8 @@
         app:layout_constraintBottom_toBottomOf="@id/searchInputBackground"
         app:layout_constraintEnd_toEndOf="@id/searchInputBackground"
         app:layout_constraintStart_toEndOf="@id/searchInput"
-        app:layout_constraintTop_toTopOf="@id/searchInputBackground" />
+        app:layout_constraintTop_toTopOf="@id/searchInputBackground"
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
     <Button
         android:id="@+id/searchJobsCountButton"
@@ -97,8 +100,7 @@
         app:cornerRadius="@dimen/dp12"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchInputBackground"
-        tools:text="Найдено 286 вакансий" />
+        app:layout_constraintTop_toBottomOf="@+id/searchInputBackground" />
 
     <ProgressBar
         android:id="@+id/searchProgressBar"
@@ -122,7 +124,8 @@
         app:layout_constraintDimensionRatio="328:223"
         app:layout_constraintEnd_toEndOf="@id/searchRightGuideline"
         app:layout_constraintStart_toStartOf="@id/searchLeftGuideline"
-        app:layout_constraintTop_toBottomOf="@id/searchInputBackground" />
+        app:layout_constraintTop_toBottomOf="@id/searchInputBackground"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/searchPlaceholderText"
@@ -133,8 +136,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchPlaceholderImage"
-        tools:text="Ошибка сервера" />
+        app:layout_constraintTop_toBottomOf="@id/searchPlaceholderImage" />
 
     <ScrollView
         android:id="@+id/searchJobsScrollView"
@@ -151,7 +153,6 @@
             android:layout_gravity="top"
             android:orientation="vertical">
 
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/searchJobsList"
                 android:layout_width="match_parent"
@@ -160,10 +161,6 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp56" />
-
         </LinearLayout>
-
     </ScrollView>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

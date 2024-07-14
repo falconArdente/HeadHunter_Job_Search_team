@@ -3,9 +3,8 @@
     android:id="@+id/suggestionsTextView"
     style="@style/SuggestionsStyle"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingVertical="12dp"
+    android:layout_height="@dimen/suggestions_drop_down_height"
     android:background="@color/Light_Gray_OR_Gray"
-    android:completionThreshold="1"
     android:gravity="start|center"
-    android:paddingHorizontal="16dp" />
+    android:paddingHorizontal="@dimen/suggestions_drop_down_horizontal_padding"
+    android:paddingVertical="@dimen/suggestions_drop_down_vertical_padding" />

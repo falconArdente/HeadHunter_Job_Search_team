@@ -15,4 +15,11 @@
     <dimen name="dp32">32dp</dimen>
     <dimen name="dp48">48dp</dimen>
     <dimen name="dp56">56dp</dimen>
+
+    <dimen name="search_input_min_height">48dp</dimen>
+    <dimen name="suggestions_drop_down_height">16dp</dimen>
+    <dimen name="suggestions_drop_down_horizontal_padding">16dp</dimen>
+    <dimen name="suggestions_drop_down_vertical_padding">12dp</dimen>
+    <integer name="suggestions_drop_down_completion_threshold">2</integer>
+
 </resources>
