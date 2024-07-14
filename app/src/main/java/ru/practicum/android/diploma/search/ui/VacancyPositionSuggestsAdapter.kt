@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.search.ui
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +19,8 @@ class VacancyPositionSuggestsAdapter(
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private var suggestionsList: MutableList<String> = mutableListOf()
     private val itemHeightDp: Float = context.resources.getDimension(R.dimen.suggestions_drop_down_height)
-    private val itemPaddingDp = context.resources.getDimension(R.dimen.suggestions_drop_down_vertical_padding)
+
+    //private val itemPaddingDp = context.resources.getDimension(R.dimen.suggestions_drop_down_vertical_padding)
     private val maxListDisplaySize = context.resources.getInteger(R.integer.suggestions_drop_down_max_list_items_count)
     fun add(item: String) {
         suggestionsList.add(item)
@@ -44,7 +46,6 @@ class VacancyPositionSuggestsAdapter(
         this.notifyDataSetChanged()
     }
 
-
     override fun getCount(): Int {
         return suggestionsList.count()
     }
@@ -57,6 +58,7 @@ class VacancyPositionSuggestsAdapter(
         return position.toLong()
     }
 
+    @SuppressLint("ViewHolder", "InflateParams")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         if (convertView != null) {
             (convertView as TextView).text = suggestionsList[position]
@@ -81,7 +83,8 @@ class VacancyPositionSuggestsAdapter(
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
                 if (results != null && results.count > 0) {
                     suggestionsList.clear()
-                    suggestionsList.addAll(results.values as List<String>)
+                    suggestionsList.addAll(results.values as Collection<String>)
+                    notifyDataSetChanged()
                 } else {
                     notifyDataSetInvalidated()
                 }

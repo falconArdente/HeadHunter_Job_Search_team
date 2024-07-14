@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.search.ui
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,4 +20,3 @@ class SearchJobViewModel(private val getSuggestsUseCase: GetSuggestionsForSearch
         }
     }
 }
-
