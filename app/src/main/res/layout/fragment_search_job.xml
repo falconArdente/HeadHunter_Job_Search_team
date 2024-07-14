@@ -58,13 +58,16 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp16"
+        android:completionThreshold="1"
+        android:dropDownAnchor="@id/searchInputBackground"
+
         android:hint="@string/search_hint"
+        android:inputType="textAutoComplete"
         android:textCursorDrawable="@drawable/cursor_drawable"
         app:layout_constraintBottom_toBottomOf="@id/searchInputBackground"
         app:layout_constraintEnd_toStartOf="@id/searchInputIcon"
         app:layout_constraintStart_toStartOf="@id/searchInputBackground"
-        app:layout_constraintTop_toTopOf="@id/searchInputBackground"
-        android:completionThreshold="1"/>
+        app:layout_constraintTop_toTopOf="@id/searchInputBackground" />
 
     <ImageButton
         android:id="@+id/searchInputIcon"
