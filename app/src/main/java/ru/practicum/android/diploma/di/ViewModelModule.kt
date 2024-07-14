@@ -11,7 +11,7 @@ val viewModelModule = module {
         VacancyDetailsViewModel(
             application = androidApplication(),
             getVacancyDetailsUseCase = get(),
-            navigatorInteractorImpl = get(),
+            navigatorInteractor = get(),
             vacancyId = get { parametersOf(vacancyId) }
         )
     }

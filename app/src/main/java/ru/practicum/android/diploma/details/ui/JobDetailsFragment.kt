@@ -1,15 +1,15 @@
 package ru.practicum.android.diploma.details.ui
 
 import android.os.Bundle
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import androidx.fragment.app.viewModels
-import com.bumptech.glide.Glide
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.practicum.android.diploma.R
@@ -17,152 +17,137 @@ import ru.practicum.android.diploma.databinding.FragmentJobDetailsBinding
 import ru.practicum.android.diploma.details.domain.model.VacancyDetails
 import ru.practicum.android.diploma.details.presentation.state.VacancyDetailsState
 import ru.practicum.android.diploma.details.presentation.viewmodel.VacancyDetailsViewModel
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 
 class JobDetailsFragment : Fragment() {
 
     private var _binding: FragmentJobDetailsBinding? = null
     private val binding get() = _binding!!
     private val viewModel: VacancyDetailsViewModel by viewModel<VacancyDetailsViewModel> {
-        parametersOf(requireArguments().getString(VACANCY_ID_KEY))
+        parametersOf(requireArguments().getString(VACANCY_ID))
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View? {
+        // Inflate the layout for this fragment
+        _binding = FragmentJobDetailsBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.searchVacancyById()
         viewModel.stateLiveData.observe(viewLifecycleOwner) {
-            render(it)
+            initializeJobDetailsFragment(it)
+        }
+        viewModel.isFavourite.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.jobHeartIcon.setImageResource(R.drawable.icon_heart_active)
+            } else {
+                binding.jobHeartIcon.setImageResource(R.drawable.icon_heart)
+            }
         }
 
-        binding.shareButton.setOnClickListener {
+        binding.jobShareIcon.setOnClickListener {
             viewModel.shareVacancy()
         }
 
-        binding.addToFavoritesButton.setOnClickListener {
-            // вызвать метод viewModel по добавлению в избранное, когда будет готов
-            // поменять также вид иконки
+        binding.jobHeartIcon.setOnClickListener {
+            viewModel.onFavoriteClicked()
         }
 
-        binding.email.setOnClickListener {
-            viewModel.sendEmail(binding.email.text)
+        binding.jobContactsEmail.setOnClickListener {
+            viewModel.sendEmail(binding.jobContactsEmail.text.toString())
         }
 
-        binding.phoneNumber.setOnClickListener {
-            viewModel.dialNumber(binding.phoneNumber.text)
+        binding.jobContactsPhone.setOnClickListener {
+            viewModel.dialNumber(binding.jobContactsPhone.text.toString())
         }
 
-        // Для тестирования верстки, сюда нужно будет передать данные о текущей вакансии после получения их по id
-        val currentVacancyDetails = VacancyDetails(
-            title = "Android-разработчик",
-            salary = "от 100 000₽",
-            company = "Еда",
-            city = "Москва",
-            imageUrl = null,
-            experience = "От 1 года до 3 лет",
-            occupation = "Полная занятость, Удаленная работа",
-            responsibilities = "•  Разрабатывать новую функциональность приложения\n" +
-                "•  Помогать с интеграцией нашего SDK в другие приложения\n" +
-                "•  Проектировать большие новые модули\n" +
-                "•  Писать UI- и unit-тесты\n" +
-                "•  Следить за работоспособностью сервиса и устранять технический долг",
-            requirements = "•  100% Kotlin\n•  WebRTC\n•  CI по модели Trunk Based Development",
-            conditions = "•  сильная команда, с которой можно расти\n•  возможность влиять на процесс и результат\n" +
-                "•  расширенная программа ДМС: стоматология, обследования, вызов врача на дом и многое другое",
-            keySkills = "•  Знание классических алгоритмов и структур данных\n" +
-                "•  Программирование для Android больше одного года\n•  Знание WebRTC",
-        )
-
-        initializeJobDetailsFragment(currentVacancyDetails)
-
-        // Получение id вакансии для формирования запроса в сеть
-        val currentVacancyLink = requireArguments().getString(VACANCY_ID)
-    }
-
-    private fun initializeJobDetailsFragment(vacancy: VacancyDetails) {
-        binding.jobTitle.text = vacancy.title
-        binding.jobSalary.text = vacancy.salary
-        binding.jobCompany.text = vacancy.company
-        binding.jobCity.text = vacancy.city
-
-        Glide.with(binding.jobImage).load(vacancy.imageUrl).transform(RoundedCorners(ROUNDED_CORNERS_SIZE))
-            .placeholder(R.drawable.placeholder_logo).into(binding.jobImage)
-
-        binding.jobExperienceText1.text = vacancy.experience
-        binding.jobExperienceText2.text = vacancy.occupation
-
-        if (vacancy.responsibilities == null) {
-            binding.jobResponsibilitiesTitle.visibility = View.GONE
-        } else {
-            binding.jobResponsibilitiesText.text = vacancy.responsibilities
-        }
-
-        if (vacancy.requirements == null) {
-            binding.jobRequirementsTitle.visibility = View.GONE
-        } else {
-            binding.jobRequirementsText.text = vacancy.requirements
-        }
-
-        if (vacancy.conditions == null) {
-            binding.jobConditionsTitle.visibility = View.GONE
-        } else {
-            binding.jobConditionsText.text = vacancy.conditions
-        }
-
-        if (vacancy.keySkills == null) {
-            binding.jobKeySkillsTitle.visibility = View.GONE
-        } else {
-            binding.jobKeySkillsText.text = vacancy.keySkills
+        binding.jobArrowBack.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
         }
     }
 
-        override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?,
-        ): View? {
-            // Inflate the layout for this fragment
-            _binding = FragmentJobDetailsBinding.inflate(inflater, container, false)
-            return binding.root
-        }
-
-    private fun render(vacancyDetailsState: VacancyDetailsState) {
+    private fun initializeJobDetailsFragment(vacancyDetailsState: VacancyDetailsState) {
+        setVisibilityOfMainElements(vacancyDetailsState)
         if (vacancyDetailsState is VacancyDetailsState.Content) {
             val vacancyDetails: VacancyDetails = vacancyDetailsState.data
-            binding.vacancyTitle.text = vacancyDetails.name
-            binding.salary.text = if (vacancyDetails.salary == null) {
+            binding.jobTitle.text = vacancyDetails.name
+            binding.jobSalary.text = if (vacancyDetails.salary == null) {
                 binding.root.resources.getString(R.string.no_salary_msg)
             } else if (vacancyDetails.salary.to == null) {
                 binding.root.resources.getString(
                     R.string.salary_from,
-                    vacancyDetails.salary.from,
+                    formatSalaryAmount(vacancyDetails.salary.from),
                     convertCurrencyToSymbol(vacancyDetails)
                 )
             } else {
                 binding.root.resources.getString(
                     R.string.salary_range,
-                    vacancyDetails.salary.from,
-                    vacancyDetails.salary.to,
+                    formatSalaryAmount(vacancyDetails.salary.from),
+                    formatSalaryAmount(vacancyDetails.salary.to),
                     convertCurrencyToSymbol(vacancyDetails)
                 )
             }
-            binding.responsibilities.text = vacancyDetails.description // размотать html в текст!!
-            binding.requirements.text = vacancyDetails.description
-            binding.workingConditions.text = vacancyDetails.description
-            binding.keySkills.text = vacancyDetails.keySkills.forEach { "$it/" } // как список записать в textView?
-            binding.email.text = vacancyDetails.contacts?.email
-            binding.phoneNumber.text = vacancyDetails.contacts?.phones // Как из списка объектов вытянуть телефоны и положить их? Какой нужен? Formatted?
 
-            // добавить проверки - если пустые поля, то isVisible = false сделать
+            binding.jobCompany.text = vacancyDetails.employer?.name
+            binding.jobCity.text = vacancyDetails.area.name
 
-            // Оформить Glide
-//            Glide.with(itemView)
-//                .load(vacancy.brandSnippet?.logo) // тут пока лого поставил, но не уверен, надо разбираться
-//                .placeholder(R.drawable.placeholder_logo)
-//                .centerCrop()
-//                .transform(RoundedCorners(itemView.resources.getDimensionPixelSize(R.dimen.dp12)))
-        } else {
-            binding.errorImage.isVisible = true
+            binding.jobExperienceText1.text = vacancyDetails.experience?.name
+            binding.jobExperienceText2.text = vacancyDetails.employment?.name
+
+            if (vacancyDetails.description.isEmpty()) {
+                binding.jobDescriptionText.isVisible = false
+                binding.jobDescriptionTitle.isVisible = false
+            } else {
+                val htmlTextOriginal = vacancyDetails.description
+                val htmlTextModified = htmlTextOriginal.replace("<li>", "<li>&nbsp;") //убрать?
+                binding.jobDescriptionText.setText(
+                    Html.fromHtml(
+                        htmlTextModified,
+                        Html.FROM_HTML_MODE_COMPACT
+                    )
+                )
+            }
+
+            if (vacancyDetails.keySkills.isEmpty()) {
+                binding.jobKeySkillsTitle.isVisible = false
+            } else {
+                binding.jobKeySkillsText.text =
+                    getString(R.string.bullet_point) + vacancyDetails.keySkills.joinToString(
+                        separator = "\n${getString(R.string.bullet_point)}"
+                    )
+            }
+
+            binding.jobContactsEmail.isVisible = vacancyDetails.contacts?.email != null
+            binding.jobContactsPhone.isVisible = !vacancyDetails.contacts?.phones.isNullOrEmpty()
+            if (!binding.jobContactsEmail.isVisible && !binding.jobContactsPhone.isVisible) {
+                binding.jobContactsTitle.isVisible = false
+            }
+
+            if (vacancyDetails.contacts != null && binding.jobContactsTitle.isVisible) {
+                binding.jobContactsEmail.text = "${binding.jobContactsEmail.text} ${vacancyDetails.contacts.email}"
+                binding.jobContactsPhone.text =
+                    "${binding.jobContactsPhone.text} ${vacancyDetails.contacts.phones?.joinToString(separator = "\n")}"
+            }
+
+            Glide.with(binding.jobImage)
+                .load(vacancyDetails.employer?.logoUrls?.size240)
+                .transform(RoundedCorners(ROUNDED_CORNERS_SIZE))
+                .placeholder(R.drawable.placeholder_logo)
+                .into(binding.jobImage)
         }
+    }
+
+    private fun formatSalaryAmount(salaryAmount: Int?): String {
+        val delimiterSymbol = DecimalFormatSymbols().apply { groupingSeparator = ' ' }
+        val numberFormat = DecimalFormat("###,###,###,###,###", delimiterSymbol)
+        return numberFormat.format(salaryAmount).toString()
     }
 
     private fun convertCurrencyToSymbol(vacancy: VacancyDetails): String { // в Utils?
@@ -170,6 +155,19 @@ class JobDetailsFragment : Fragment() {
         if (currencyCode == "RUR") currencyCode = "RUB"
         val currency = java.util.Currency.getInstance(currencyCode)
         return currency.symbol
+    }
+
+    private fun setVisibilityOfMainElements(vacancyDetailsState: VacancyDetailsState) {
+        binding.jobInfo.isVisible = vacancyDetailsState is VacancyDetailsState.Content
+        binding.jobTitle.isVisible = vacancyDetailsState is VacancyDetailsState.Content
+        binding.jobSalary.isVisible = vacancyDetailsState is VacancyDetailsState.Content
+        binding.jobCard.isVisible = vacancyDetailsState is VacancyDetailsState.Content
+        binding.jobImage.isVisible = vacancyDetailsState is VacancyDetailsState.Content
+        binding.jobCompany.isVisible = vacancyDetailsState is VacancyDetailsState.Content
+        binding.jobCity.isVisible = vacancyDetailsState is VacancyDetailsState.Content
+        binding.jobPlaceholderImage.isVisible = vacancyDetailsState is VacancyDetailsState.Error
+        binding.jobPlaceholderText.isVisible = vacancyDetailsState is VacancyDetailsState.Error
+        binding.loadingProgressBar.isVisible = vacancyDetailsState is VacancyDetailsState.Loading
     }
 
     companion object {

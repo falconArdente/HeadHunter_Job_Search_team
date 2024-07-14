@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.details.domain.model
 
-import com.google.gson.annotations.SerializedName
 
 class PhoneDetails(
     val city: String,

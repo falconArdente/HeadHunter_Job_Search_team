@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.details.domain.model
 
-import com.google.gson.annotations.SerializedName
 
 class LogoUrlsDetails(
     val size90: String,

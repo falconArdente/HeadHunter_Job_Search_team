@@ -23,7 +23,7 @@ val repositoryModule = module {
         HeadHunterRepository(client = get(), context = androidContext())
     }
 
-    single<VacancyDetailsRepository> {
+    factory<VacancyDetailsRepository> {
         HeadHunterRepository(client = get(), context = androidContext())
     }
 }

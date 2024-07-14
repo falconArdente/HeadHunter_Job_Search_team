@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.network.data.dto.responses
 
 import com.google.gson.annotations.SerializedName
-import ru.practicum.android.diploma.details.domain.model.VacancyDetails
 import ru.practicum.android.diploma.network.data.dto.linked.Area
 import ru.practicum.android.diploma.network.data.dto.linked.Contacts
 import ru.practicum.android.diploma.network.data.dto.linked.Employer

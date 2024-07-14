@@ -33,7 +33,7 @@ object VacancyDetailsMapper {
             area = this.area.mapToDomain(),
             experience = this.experience?.mapToDomain(),
             employment = this.employment?.mapToDomain(),
-            keySkills = this.keySkills.map { it.mapToDomain() },
+            keySkills = this.keySkills.map { it.name },
             vacancyUrl = this.vacancyUrl,
         )
     }
@@ -71,20 +71,8 @@ object VacancyDetailsMapper {
             email = this.email,
             name = this.name,
             phones = this.phones?.map {
-                it.mapToDomain()
+                it.formatted
             }
-
-        )
-
-    }
-
-    private fun Phone.mapToDomain(): PhoneDetails {
-        return PhoneDetails(
-            city = this.city,
-            comment = this.comment,
-            country = this.country,
-            formatted = this.formatted,
-            number = this.number
         )
     }
 
@@ -108,9 +96,4 @@ object VacancyDetailsMapper {
             name = this.name
         )
     }
-
-    private fun Skill.mapToDomain(): SkillDetails {
-        return SkillDetails(name = this.name)
-    }
-
 }
