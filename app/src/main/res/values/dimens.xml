@@ -20,6 +20,4 @@
     <dimen name="suggestions_drop_down_height">16dp</dimen>
     <dimen name="suggestions_drop_down_horizontal_padding">16dp</dimen>
     <dimen name="suggestions_drop_down_vertical_padding">12dp</dimen>
-    <integer name="suggestions_drop_down_completion_threshold">2</integer>
-
 </resources>

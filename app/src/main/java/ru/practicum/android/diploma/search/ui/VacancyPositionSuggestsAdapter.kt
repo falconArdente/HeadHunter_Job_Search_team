@@ -10,13 +10,16 @@ import android.widget.Filter
 import android.widget.Filterable
 import android.widget.TextView
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.utils.toPx
+import ru.practicum.android.diploma.utils.exactDpToPx
 
 class VacancyPositionSuggestsAdapter(
     private val context: Activity, private val hostTextView: AutoCompleteTextView
 ) : BaseAdapter(), Filterable {
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private var suggestionsList: MutableList<String> = mutableListOf()
+    private val itemHeightDp: Float = context.resources.getDimension(R.dimen.suggestions_drop_down_height)
+    private val itemPaddingDp = context.resources.getDimension(R.dimen.suggestions_drop_down_vertical_padding)
+    private val maxListDisplaySize = context.resources.getInteger(R.integer.suggestions_drop_down_max_list_items_count)
     fun add(item: String) {
         suggestionsList.add(item)
         adjustDropDownSize()
@@ -24,7 +27,14 @@ class VacancyPositionSuggestsAdapter(
     }
 
     private fun adjustDropDownSize() {
-        hostTextView.dropDownHeight = context.toPx(36).toInt()*suggestionsList.size
+        val suggestionListSizeToCalc =
+            if (suggestionsList.size > maxListDisplaySize) maxListDisplaySize else suggestionsList.size
+        hostTextView.dropDownHeight =
+            exactDpToPx(
+                context, (
+                    (itemHeightDp) * suggestionListSizeToCalc
+                    ).toInt()
+            )
     }
 
     fun applyDataSet(items: Collection<String>) {
