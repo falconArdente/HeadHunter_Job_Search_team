@@ -52,7 +52,8 @@ class VacancyDetailsViewModel(
 
         isFavouriteJob = viewModelScope.launch {
             if (_stateLiveData.value is VacancyDetailsState.Content) {
-                val isInFavoriteList = Random.nextBoolean() // вписать метод(возвращающий boolean) по определению есть ли id вакансии в списке избранных
+                // вписать метод(возвращающий boolean) по определению есть ли id вакансии в списке избранных
+                val isInFavoriteList = Random.nextBoolean()
                 if (isInFavoriteList) {
                     // вызвать метод favoriteInteractor для удаления из избранного
                     _isFavourite.value = false
@@ -61,7 +62,7 @@ class VacancyDetailsViewModel(
                     _isFavourite.value = true
                 }
             } else {
-                return@launch
+                Unit
             }
         }
     }

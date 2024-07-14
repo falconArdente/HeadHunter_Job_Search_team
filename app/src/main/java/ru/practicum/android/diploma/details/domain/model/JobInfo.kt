@@ -5,6 +5,4 @@ class JobInfo(
     val experience: String?,
     val employment: String?,
     val keySkills: List<String>,
-
-
 )

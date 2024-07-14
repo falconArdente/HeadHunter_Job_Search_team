@@ -24,7 +24,6 @@ import ru.practicum.android.diploma.network.data.dto.responses.Response
 import ru.practicum.android.diploma.network.data.dto.responses.VacancyByIdResponse
 import ru.practicum.android.diploma.network.data.dto.responses.VacancyListResponse
 import ru.practicum.android.diploma.network.data.dto.responses.VacancySuggestionsResponse
-import ru.practicum.android.diploma.network.data.mapper.VacancyDetailsMapper
 import ru.practicum.android.diploma.network.data.mapper.VacancyDetailsMapper.mapToDomain
 import ru.practicum.android.diploma.search.data.repository.SearchRepository
 import ru.practicum.android.diploma.utils.Resource
@@ -130,7 +129,7 @@ class HeadHunterRepository(private val client: HeadHunterNetworkClient, context:
             val response =
                 client.doRequest(HeadHunterRequest.VacancyById(id))
             if (response.resultCode == Response.SUCCESS) {
-                val data: VacancyByIdResponse = (response as VacancyByIdResponse)
+                val data: VacancyByIdResponse = response as VacancyByIdResponse
                 emit(Resource.Success(data.mapToDomain()))
             } else {
                 emit(Resource.Error(vacancyGetByIdErrorMessage))

@@ -168,7 +168,7 @@ class JobDetailsFragment : Fragment() {
             binding.jobDescriptionTitle.isVisible = false
         } else {
             val htmlTextOriginal = vacancyDetails.description
-            val htmlTextModified = htmlTextOriginal.replace("<li>", "<li>&nbsp;") //убрать?
+            val htmlTextModified = htmlTextOriginal.replace("<li>", "<li>&nbsp;") // убрать?
             binding.jobDescriptionText.setText(
                 Html.fromHtml(
                     htmlTextModified,
@@ -200,7 +200,8 @@ class JobDetailsFragment : Fragment() {
             binding.jobContactsEmail.text =
                 "${binding.jobContactsEmail.text} ${vacancyDetails.employer.contacts.email}"
             binding.jobContactsPhone.text =
-                "${binding.jobContactsPhone.text} ${vacancyDetails.employer.contacts.phones?.joinToString(separator = "\n")}"
+                "${binding.jobContactsPhone.text} " +
+                    "${vacancyDetails.employer.contacts.phones?.joinToString(separator = "\n")}"
         }
     }
 
