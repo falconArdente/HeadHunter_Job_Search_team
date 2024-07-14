@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchJobBinding
+import ru.practicum.android.diploma.details.ui.JobDetailsFragment
 
 class SearchJobFragment : Fragment() {
     private var _binding: FragmentSearchJobBinding? = null
@@ -41,6 +42,7 @@ class SearchJobFragment : Fragment() {
         binding.searchInputIcon.setOnClickListener {
             binding.searchInput.setText("")
         }
+
         suggestionsAdapter = VacancyPositionSuggestsAdapter(requireActivity(), binding.searchInput)
         binding.searchInput.setAdapter(suggestionsAdapter)
         viewModel.suggestionsLivaData.observe(viewLifecycleOwner) { renderSuggestions(it) }

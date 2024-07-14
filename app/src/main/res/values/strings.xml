@@ -26,4 +26,15 @@
 
     <string name="search_title">Поиск вакансий</string>
     <string name="search_hint">Введите запрос</string>
+
+    <string name="job_title">Вакансия</string>
+
+    <string name="job_experience">Требуемый опыт</string>
+    <string name="job_description">Описание вакансии</string>
+    <string name="job_responsibilities">Обязанности</string>
+    <string name="job_requirements">Требования</string>
+    <string name="job_conditions">Условия</string>
+    <string name="job_key_skills">Ключевые навыки</string>
+
+    <string name="net_vacancy">Вакансия не найдена или удалена</string>
 </resources>
