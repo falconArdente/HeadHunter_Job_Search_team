@@ -14,13 +14,14 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.utils.exactDpToPx
 
 class VacancyPositionSuggestsAdapter(
-    private val context: Activity, private val hostTextView: AutoCompleteTextView
+    private val context: Activity,
+    private val hostTextView: AutoCompleteTextView
 ) : BaseAdapter(), Filterable {
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private var suggestionsList: MutableList<String> = mutableListOf()
     private val itemHeightDp: Float = context.resources.getDimension(R.dimen.suggestions_drop_down_height)
 
-    //private val itemPaddingDp = context.resources.getDimension(R.dimen.suggestions_drop_down_vertical_padding)
+    // private val itemPaddingDp = context.resources.getDimension(R.dimen.suggestions_drop_down_vertical_padding)
     private val maxListDisplaySize = context.resources.getInteger(R.integer.suggestions_drop_down_max_list_items_count)
     fun add(item: String) {
         suggestionsList.add(item)
@@ -34,7 +35,7 @@ class VacancyPositionSuggestsAdapter(
         hostTextView.dropDownHeight =
             exactDpToPx(
                 context, (
-                    (itemHeightDp) * suggestionListSizeToCalc
+                    itemHeightDp * suggestionListSizeToCalc
                     ).toInt()
             )
     }
