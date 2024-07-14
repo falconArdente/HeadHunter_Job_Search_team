@@ -58,6 +58,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp16"
+        android:popupTheme="@style/SuggestionsStyle"
         android:completionThreshold="@integer/suggestions_drop_down_completion_threshold"
         android:dropDownAnchor="@id/searchInputBackground"
         android:hint="@string/search_hint"

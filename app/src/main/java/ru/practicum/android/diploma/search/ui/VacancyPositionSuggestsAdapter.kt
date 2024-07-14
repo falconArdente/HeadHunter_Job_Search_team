@@ -1,7 +1,9 @@
 package ru.practicum.android.diploma.search.ui
 
 import android.annotation.SuppressLint
-import android.app.Activity
+import android.content.Context
+import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,15 +16,15 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.utils.exactDpToPx
 
 class VacancyPositionSuggestsAdapter(
-    private val context: Activity,
+    private val context: Context,
     private val hostTextView: AutoCompleteTextView
 ) : BaseAdapter(), Filterable {
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private var suggestionsList: MutableList<String> = mutableListOf()
-    private val itemHeightDp: Float = context.resources.getDimension(R.dimen.suggestions_drop_down_height)
+    private val itemPaddingDp = context.resources.getDimension(R.dimen.suggestions_drop_down_vertical_padding)
+    private var maxListDisplaySize = context.resources.getInteger(R.integer.suggestions_drop_down_max_list_items_count)
+    private val displayMetrics: DisplayMetrics = context.resources.displayMetrics
 
-    // private val itemPaddingDp = context.resources.getDimension(R.dimen.suggestions_drop_down_vertical_padding)
-    private val maxListDisplaySize = context.resources.getInteger(R.integer.suggestions_drop_down_max_list_items_count)
     fun add(item: String) {
         suggestionsList.add(item)
         adjustDropDownSize()
@@ -30,21 +32,22 @@ class VacancyPositionSuggestsAdapter(
     }
 
     private fun adjustDropDownSize() {
+        Log.d("Disp", "${displayMetrics.density}")
         val suggestionListSizeToCalc =
             if (suggestionsList.size > maxListDisplaySize) maxListDisplaySize else suggestionsList.size
         hostTextView.dropDownHeight =
-            exactDpToPx(
-                context, (
-                    itemHeightDp * suggestionListSizeToCalc
-                    ).toInt()
-            )
+            (hostTextView.lineHeight + exactDpToPx(context, itemPaddingDp.toInt())) * suggestionListSizeToCalc
     }
 
     fun applyDataSet(items: Collection<String>) {
         suggestionsList.clear()
         suggestionsList.addAll(items)
-        adjustDropDownSize()
         this.notifyDataSetChanged()
+    }
+
+    override fun notifyDataSetChanged() {
+        super.notifyDataSetChanged()
+        adjustDropDownSize()
     }
 
     override fun getCount(): Int {

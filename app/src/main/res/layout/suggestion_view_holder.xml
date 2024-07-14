@@ -3,7 +3,7 @@
     android:id="@+id/suggestionsTextView"
     style="@style/SuggestionsStyle"
     android:layout_width="match_parent"
-    android:height="@dimen/suggestions_drop_down_height"
+    android:layout_height="@dimen/suggestions_drop_down_height"
     android:background="@color/Light_Gray_OR_Gray"
     android:gravity="start|center"
     android:paddingHorizontal="@dimen/suggestions_drop_down_horizontal_padding"

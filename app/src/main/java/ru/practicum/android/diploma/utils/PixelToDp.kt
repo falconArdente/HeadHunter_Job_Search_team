@@ -17,6 +17,10 @@ fun exactDpToPx(context: Context, dp: Int): Int {
     val displayMetrics: DisplayMetrics = context.resources.displayMetrics
     return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT))
 }
+fun exactDpToPxHeightBased(context: Context, dp: Int): Int {
+    val displayMetrics: DisplayMetrics = context.resources.displayMetrics
+    return Math.round(dp * (displayMetrics.ydpi / DisplayMetrics.DENSITY_DEFAULT))
+}
 
 fun exactPxToDp(context: Context, px: Int): Int {
     val displayMetrics: DisplayMetrics = context.resources.displayMetrics
