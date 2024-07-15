@@ -11,37 +11,31 @@ data class VacancyInfoEntity(
         parentColumn = "areaId",
         entityColumn = "id"
     )
-    val areaList: List<AreaEntity>,
+    val area: AreaEntity?,
 
     @Relation(
         parentColumn = "id",
         entityColumn = "vacancyId"
     )
-    val brandSnippetList: List<BrandSnippetEntity>,
-
-    @Relation(
-        parentColumn = "id",
-        entityColumn = "vacancyId"
-    )
-    val contactsList: List<ContactsJoinPhone>,
+    val brandSnippet: BrandSnippetEntity?,
 
     @Relation(
         parentColumn = "countryId",
         entityColumn = "id"
     )
-    val countryList: List<CountryEntity>,
+    val country: CountryEntity?,
 
     @Relation(
         parentColumn = "id",
         entityColumn = "vacancyId"
     )
-    val logoList: List<EmployerJoinLogo>,
+    val employer: EmployerJoinLogo?,
 
     @Relation(
         parentColumn = "experienceId",
         entityColumn = "id"
     )
-    val experienceList: List<ExperienceEntity>,
+    val experience: ExperienceEntity?,
 
     @Relation(
         parentColumn = "industryId",
@@ -53,7 +47,7 @@ data class VacancyInfoEntity(
         parentColumn = "salaryId",
         entityColumn = "id"
     )
-    val salaryList: List<SalaryJoinCurrency>,
+    val salary: SalaryJoinCurrency?,
 
     @Relation(
         parentColumn = "vacancyFuncTitleId",

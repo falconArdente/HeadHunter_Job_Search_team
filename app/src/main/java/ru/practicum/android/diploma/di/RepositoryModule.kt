@@ -2,6 +2,8 @@ package ru.practicum.android.diploma.di
 
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
+import ru.practicum.android.diploma.db.data.db.VacancyDbConvertor
+import ru.practicum.android.diploma.db.data.impl.VacancyRepositoryImpl
 import ru.practicum.android.diploma.details.data.repository.NavigatorRepositoryImpl
 import ru.practicum.android.diploma.details.domain.api.NavigatorRepository
 import ru.practicum.android.diploma.filter.data.repository.FilterStorageRepositoryImpl
@@ -20,5 +22,11 @@ val repositoryModule = module {
 
     factory<SearchRepository> {
         HeadHunterRepository(client = get(), context = androidContext())
+    }
+
+    factory { VacancyDbConvertor(get()) }
+
+    single<VacancyRepository>{
+        VacancyRepositoryImpl(get(),get())
     }
 }
