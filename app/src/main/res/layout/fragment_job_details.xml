@@ -20,6 +20,17 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="@dimen/dp16" />
 
+    <ProgressBar
+        android:id="@+id/loadingProgressBar"
+        android:layout_width="@dimen/dp48"
+        android:layout_height="@dimen/dp48"
+        android:indeterminateTint="@color/Blue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/jobPageTitle"
+        android:layout_marginTop="@dimen/dp80"
+        tools:visibility="gone" />
+
     <ImageView
         android:id="@+id/jobArrowBack"
         android:layout_width="wrap_content"
@@ -179,56 +190,13 @@
                 android:text="@string/job_description" />
 
             <TextView
-                android:id="@+id/jobResponsibilitiesTitle"
-                style="@style/MediumText.16size"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dp4"
-                android:text="@string/job_responsibilities" />
-
-            <TextView
-                android:id="@+id/jobResponsibilitiesText"
+                android:id="@+id/jobDescriptionText"
                 style="@style/RegularText.16size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp12"
                 android:layout_marginBottom="@dimen/dp16"
                 tools:text="•  Разрабатывать новую функциональность приложения\n•  Помогать с интеграцией нашего SDK в другие приложения\n•  Проектировать большие новые модули\n•  Писать UI- и unit-тесты\n•  Следить за работоспособностью сервиса и устранять технический долг" />
-
-
-            <TextView
-                android:id="@+id/jobRequirementsTitle"
-                style="@style/MediumText.16size"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dp4"
-                android:text="@string/job_requirements" />
-
-            <TextView
-                android:id="@+id/jobRequirementsText"
-                style="@style/RegularText.16size"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp12"
-                android:layout_marginBottom="@dimen/dp16"
-                tools:text="•  100% Kotlin\n•  WebRTC\n•  CI по модели Trunk Based Development" />
-
-            <TextView
-                android:id="@+id/jobConditionsTitle"
-                style="@style/MediumText.16size"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dp4"
-                android:text="@string/job_conditions" />
-
-            <TextView
-                android:id="@+id/jobConditionsText"
-                style="@style/RegularText.16size"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp12"
-                android:layout_marginBottom="@dimen/dp24"
-                tools:text="•  сильная команда, с которой можно расти\n•  возможность влиять на процесс и результат\n•  расширенная программа ДМС: стоматология, обследования, вызов врача на дом и многое другое" />
 
             <TextView
                 android:id="@+id/jobKeySkillsTitle"
@@ -247,6 +215,35 @@
                 android:layout_marginBottom="@dimen/dp24"
                 tools:text="•  Знание классических алгоритмов и структур данных\n•  Программирование для Android больше одного года\n•  Знание WebRTC" />
 
+            <TextView
+                android:id="@+id/jobContactsTitle"
+                style="@style/MediumText.22size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp4"
+                android:text="@string/job_contacts" />
+
+            <TextView
+                android:id="@+id/jobContactsEmail"
+                style="@style/RegularText.16size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp12"
+                android:layout_marginBottom="@dimen/dp4"
+                android:autoLink="email"
+                android:text="@string/email"
+                />
+
+            <TextView
+                android:id="@+id/jobContactsPhone"
+                style="@style/RegularText.16size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp12"
+                android:layout_marginBottom="@dimen/dp4"
+                android:autoLink="phone"
+                android:text="@string/phone_number"
+                />
 
         </LinearLayout>
 
