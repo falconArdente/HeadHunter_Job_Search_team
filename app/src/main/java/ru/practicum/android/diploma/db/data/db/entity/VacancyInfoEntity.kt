@@ -20,12 +20,6 @@ data class VacancyInfoEntity(
     val brandSnippetList: List<BrandSnippetEntity>,
 
     @Relation(
-        parentColumn = "id",
-        entityColumn = "vacancyId"
-    )
-    val contactsList: List<ContactsJoinPhone>,
-
-    @Relation(
         parentColumn = "countryId",
         entityColumn = "id"
     )
