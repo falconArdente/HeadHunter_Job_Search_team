@@ -4,7 +4,7 @@ import android.content.Context
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.details.domain.api.VacancyDetailsRepository
+import ru.practicum.android.diploma.details.domain.impl.VacancyDetailsRepository
 import ru.practicum.android.diploma.details.domain.model.VacancyDetails
 import ru.practicum.android.diploma.network.data.api.HeadHunterNetworkClient
 import ru.practicum.android.diploma.network.data.api.MAX_VACANCY_SUGGESTION_REQUEST_TEXT_LENGTH

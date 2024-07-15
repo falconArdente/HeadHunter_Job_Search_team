@@ -4,7 +4,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import ru.practicum.android.diploma.details.data.repository.NavigatorRepositoryImpl
 import ru.practicum.android.diploma.details.domain.api.NavigatorRepository
-import ru.practicum.android.diploma.details.domain.api.VacancyDetailsRepository
+import ru.practicum.android.diploma.details.domain.impl.VacancyDetailsRepository
 import ru.practicum.android.diploma.filter.data.repository.FilterStorageRepositoryImpl
 import ru.practicum.android.diploma.filter.domain.api.FilterStorageRepository
 import ru.practicum.android.diploma.network.data.HeadHunterRepository
