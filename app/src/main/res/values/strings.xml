@@ -23,4 +23,26 @@
     <string name="net_vacancy_suggestions_request_text_length_error_message">Ожидаемая длина запроса подсказок должностей - от 2 до 3000 символов</string>
     <string name="net_vacancy_search_income_error_message">Список вакансий не получен</string>
     <string name="net_vacancy_get_by_id_income_error_message">Запрошенная  вакансия не получена</string>
+
+    <string name="search_title">Поиск вакансий</string>
+    <string name="search_hint">Введите запрос</string>
+
+    <string name="job_title">Вакансия</string>
+
+    <string name="job_experience">Требуемый опыт</string>
+    <string name="job_description">Описание вакансии</string>
+    <string name="job_responsibilities">Обязанности</string>
+    <string name="job_requirements">Требования</string>
+    <string name="job_conditions">Условия</string>
+    <string name="job_key_skills">Ключевые навыки</string>
+    <string name="job_contacts">Контакты</string>
+
+    <string name="net_vacancy">Вакансия не найдена или удалена</string>
+
+    <string name="salary_range">от %1s до %1s %1s</string>
+    <string name="salary_from">от %1s %1s</string>
+    <string name="no_salary_msg">Зарплата не указана</string>
+    <string name="bullet_point">•\u0020</string>
+    <string name="email">email:\u0020</string>
+    <string name="phone_number">тел.:\u0020</string>
 </resources>

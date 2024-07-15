@@ -8,7 +8,7 @@ data class SalaryEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val currencyCode: String,
-    val salaryFrom: String,
+    val salaryFrom: Int?,
     val gross: Boolean,
     val salaryTo: Int?
 )

@@ -17,5 +17,6 @@ data class VacancyEntity(
     val salaryId: Int,
     val vacancyFuncTitleId: Int,
     val iconPath: String?,
-    val vacancyUrl: String
+    val vacancyUrl: String,
+    val dateAdd: String?
 )
