@@ -16,7 +16,7 @@ class VacancyByIdResponse(
     @SerializedName("name") val name: String,
     @SerializedName("salary") val salary: Salary?,
     @SerializedName("contacts") val contacts: Contacts?,
-    @SerializedName("area") val area: Area, // необходимо отдельная сущность?
+    @SerializedName("area") val area: Area,
     @SerializedName("experience") val experience: Experience?,
     @SerializedName("employment") val employment: Employment?,
     @SerializedName("key_skills") val keySkills: List<Skill>,
