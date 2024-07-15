@@ -17,7 +17,11 @@ data class VacancyInfoEntity(
         parentColumn = "id",
         entityColumn = "vacancyId"
     )
+
     val brandSnippet: BrandSnippetEntity?,
+
+    val brandSnippetList: List<BrandSnippetEntity>,
+
 
     @Relation(
         parentColumn = "countryId",
