@@ -5,5 +5,5 @@ import ru.practicum.android.diploma.details.domain.model.VacancyDetails
 import ru.practicum.android.diploma.utils.Resource
 
 fun interface GetFavoritesListUseCase {
-   suspend fun execute(): Flow<Resource<List<VacancyDetails>>>
+    suspend fun execute(): Flow<Resource<List<VacancyDetails>>>
 }
