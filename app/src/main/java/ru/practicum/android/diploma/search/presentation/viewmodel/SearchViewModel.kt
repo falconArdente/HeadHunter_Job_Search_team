@@ -29,28 +29,32 @@ class SearchViewModel(private val interactor: SearchInteractor) : ViewModel() {
     }
 
     fun updateState(state: SearchFragmentState) {
-        searchLiveData.value = state
+        searchLiveData.postValue(state)
     }
 
     private val searchJobDetails: Job? = null
     private fun searchResult(text: String) {
         searchJobDetails?.cancel()
         updateState(SearchFragmentState.Loading)
-        Log.d("вм серчРез ",searchLiveData.value.toString())
+        Log.d("ROUTE__", text)
+        Log.d("вм серчРез ", searchLiveData.value.toString())
         searchJobDetails != viewModelScope.launch {
-            interactor.searchVacancy(text).collect { vacancy ->
-                Log.d("коллект ",searchLiveData.value.toString())
-                Log.d("вэк ту стринг ",vacancy.toString())
-                if (vacancy.result!!.isNotEmpty()) {
-                    updateState(SearchFragmentState.SearchVacancy(vacancy.result))
-                    Log.d("нот эмпт ",vacancy.toString())
-                } else if (vacancy.result.isEmpty()) {
-                    updateState(SearchFragmentState.NoResult)
-                } else if (vacancy.errorMessage != null) {
-                    Log.d("еррор ",vacancy.toString())
-                    updateState(SearchFragmentState.ServerError)
+            interactor
+                .searchVacancy(text)
+                .collect { vacancy ->
+                    Log.d("ROUTE__", "searchVacancy ${vacancy.result}")
+                    Log.d("коллект ", searchLiveData.value.toString())
+                    Log.d("вэк ту стринг ", vacancy.toString())
+                    if (vacancy.result!!.isNotEmpty()) {
+                        updateState(SearchFragmentState.SearchVacancy(vacancy.result))
+                        Log.d("нот эмпт ", vacancy.toString())
+                    } else if (vacancy.result.isEmpty()) {
+                        updateState(SearchFragmentState.NoResult)
+                    } else if (vacancy.errorMessage != null) {
+                        Log.d("еррор ", vacancy.toString())
+                        updateState(SearchFragmentState.ServerError)
+                    }
                 }
-            }
         }
     }
 

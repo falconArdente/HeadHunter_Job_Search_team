@@ -110,7 +110,8 @@ class HeadHunterRepository(private val client: HeadHunterNetworkClient, context:
         }
 
     override suspend fun searchVacancy(textForSearch: String): Flow<Resource<VacancyListResponse>> = flow {
-            Log.d("hhRep SearchVac ","щдщдщ")
+        Log.d("ROUTE__", "in repo $textForSearch")
+        Log.d("hhRep SearchVac ","щдщдщ")
             val response = client.doRequest(
                 HeadHunterRequest.VacancySearch(textForSearch)
             )

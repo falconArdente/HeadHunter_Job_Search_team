@@ -10,7 +10,7 @@ import ru.practicum.android.diploma.search.domain.model.Vacancy
 class VacancyViewHolder(private val binding: JobListItemBinding) : RecyclerView.ViewHolder(binding.root) {
     fun bind(vacancy: Vacancy) {
         binding.jobTitle.text = "${vacancy.name}, ${vacancy.area}"
-        binding.jobEmployer.text = vacancy.employer.name
+        binding.jobEmployer.text = vacancy.employer?.name ?: "ЗАМЕЩАЮЩИЙ ТЕКСТ?"
         binding.jobSalary.text = if (vacancy.salary == null) {
             binding.root.resources.getString(R.string.no_salary_msg)
         } else if (vacancy.salary.to == null) {
@@ -35,7 +35,7 @@ class VacancyViewHolder(private val binding: JobListItemBinding) : RecyclerView.
             .into(binding.jobImage)
     }
     private fun convertCurrencyToSymbol(vacancy: Vacancy): String {
-        var currencyCode = vacancy.salary.currency
+        var currencyCode = vacancy.salary?.currency?:"RUR"
         if (currencyCode == "RUR") currencyCode = "RUB"
         val currency = java.util.Currency.getInstance(currencyCode)
         return currency.symbol
