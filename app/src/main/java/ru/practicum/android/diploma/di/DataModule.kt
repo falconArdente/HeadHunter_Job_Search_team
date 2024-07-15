@@ -15,6 +15,7 @@ import ru.practicum.android.diploma.filter.data.storage.FilterStorage
 import ru.practicum.android.diploma.filter.data.storage.SharedPrefsStorage
 import ru.practicum.android.diploma.network.data.RetrofitBasedClient
 import ru.practicum.android.diploma.network.data.api.HeadHunterNetworkClient
+import ru.practicum.android.diploma.search.data.mapper.SearchVacancyConverter
 import ru.practicum.android.diploma.utils.NetworkStatus
 
 const val FUTUREJOB_SHARED_PREFS = "ru.practicum.android.diploma.MY_PREFS"
@@ -67,4 +68,5 @@ val dataModule = module {
     factory<NetworkStatus> {
         NetworkStatus(androidContext())
     }
+    factory { SearchVacancyConverter() }
 }

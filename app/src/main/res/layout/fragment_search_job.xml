@@ -150,7 +150,7 @@
 
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/searchJobsList"
+                android:id="@+id/recyclerViewSearch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

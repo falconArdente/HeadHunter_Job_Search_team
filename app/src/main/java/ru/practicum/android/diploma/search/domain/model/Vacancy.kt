@@ -9,4 +9,6 @@ data class Vacancy(
     val url: String,
     val brandSnippet: BrandSnippetModel?,
     val contacts: Contacts?,
+    var area: AreaModel,
+    var employer: EmployerModel
 )

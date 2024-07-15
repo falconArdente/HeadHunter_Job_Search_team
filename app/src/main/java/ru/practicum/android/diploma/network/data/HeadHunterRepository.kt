@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.network.data
 
 import android.content.Context
+import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.R
@@ -108,8 +109,8 @@ class HeadHunterRepository(private val client: HeadHunterNetworkClient, context:
             }
         }
 
-    override suspend fun searchVacancy(textForSearch: String): Flow<Resource<VacancyListResponse>> =
-        flow {
+    override suspend fun searchVacancy(textForSearch: String): Flow<Resource<VacancyListResponse>> = flow {
+            Log.d("hhRep SearchVac ","щдщдщ")
             val response = client.doRequest(
                 HeadHunterRequest.VacancySearch(textForSearch)
             )

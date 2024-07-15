@@ -15,7 +15,9 @@ class SearchVacancyConverter {
             mapToSalaryModel(vacancy.salary),
             vacancy.url,
             mapToBrandSnippetModel(vacancy.brandSnippet!!),
-            vacancy.contacts
+            vacancy.contacts,
+            null!!,
+            null!!
         )
     }
 
