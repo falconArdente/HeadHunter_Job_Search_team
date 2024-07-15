@@ -3,9 +3,10 @@ package ru.practicum.android.diploma.db.data.db.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "")
-data class IndustryEntity(
-    @PrimaryKey
-    val id: String,
+@Entity
+data class SkillsEntity(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int,
+    val vacancyId: Int,
     val name: String
 )

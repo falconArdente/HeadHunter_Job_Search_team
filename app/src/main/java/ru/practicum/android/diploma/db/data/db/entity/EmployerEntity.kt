@@ -7,10 +7,6 @@ import androidx.room.PrimaryKey
 data class EmployerEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val name: String,
-    val url: String?,
-    val vacancyUrl: String?,
-    val isTrusted: Boolean,
-    val vacancyId: Int
+    val name: String?
 )
 

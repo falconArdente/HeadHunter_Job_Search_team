@@ -1,5 +1,5 @@
 package ru.practicum.android.diploma.db.data.domain
 
-interface VacancyRepositiry {
+interface VacancyRepository {
     suspend fun isExistsVacancy(vacancyId: Int) :Boolean
 }

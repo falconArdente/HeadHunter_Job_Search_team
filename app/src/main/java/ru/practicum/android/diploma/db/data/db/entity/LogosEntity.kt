@@ -7,8 +7,8 @@ import androidx.room.PrimaryKey
 data class LogosEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val size90: String,
-    val size240: String,
-    val raw: String,
+    val size90: String?,
+    val size240: String?,
+    val raw: String?,
     val employerId: Int
 )

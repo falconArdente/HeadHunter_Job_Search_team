@@ -4,10 +4,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "Area")
-class AreaEntity(
+data class AreaEntity(
     @PrimaryKey
     val id: String,
-    val name: String,
-    val prepositional: String?,
-    val parentId: String?
+    val employerId:  Int,
+    val name: String
 )
