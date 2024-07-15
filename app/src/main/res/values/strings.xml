@@ -41,4 +41,7 @@
     <string name="salary_range">от %1d до %1d %1s</string>
     <string name="salary_from">от %1d %1s</string>
     <string name="no_salary_msg">Зарплата не указана</string>
+
+    <string name="no_internet">Нет интернета</string>
+    <string name="failed_list_vacancy">Не удалось получить\n список вакансий</string>
 </resources>

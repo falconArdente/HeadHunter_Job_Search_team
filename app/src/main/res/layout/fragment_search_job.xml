@@ -120,6 +120,21 @@
         app:layout_constraintEnd_toEndOf="@id/searchRightGuideline"
         app:layout_constraintStart_toStartOf="@id/searchLeftGuideline"
         app:layout_constraintTop_toBottomOf="@id/searchInputBackground" />
+    <include
+        android:id="@+id/no_results_search_include"
+        layout="@layout/no_result_search_item"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:listitem="@layout/no_result_search_item" />
+
+    <include
+        android:id="@+id/server_error_include"
+        layout="@layout/server_error_search_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        tools:listitem="@layout/server_error_search_item" />
 
     <TextView
         android:id="@+id/searchPlaceholderText"

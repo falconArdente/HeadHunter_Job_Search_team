@@ -11,13 +11,12 @@ import ru.practicum.android.diploma.utils.Resource
 
 class SearchInteractorImpl(val repository: SearchRepository, val converter: SearchVacancyConverter) : SearchInteractor {
     override fun searchVacancy(expression: String): Flow<VacancyListResult> = flow {
-        Log.d("interactor SearchVac ", "щдщдщ")
         Log.d("interactor SearchVac ", expression)
         repository.searchVacancy(expression).map { result ->
             Log.d("interactor SearchVac Result ", result.toString())
             when (result) {
                 is Resource.Success -> {
-                    Log.d("interactor SearchVac succes ", "щдщдщ")
+                    Log.d("interactor SearchVac success ", "щдщдщ")
                     VacancyListResult(converter.mapToListVacancyModel(result.data!!.vacancyAtSearchList), null)
                 }
 

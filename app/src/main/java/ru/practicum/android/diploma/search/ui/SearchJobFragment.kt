@@ -71,7 +71,7 @@ class SearchJobFragment : Fragment() {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (!p0.isNullOrEmpty()) {
                     viewModel.searchWithDebounce(p0.toString())
-                    Log.d("поиск текст чнж ","поиск текст чнж")
+                    Log.d("поиск текст чнж ", "поиск текст чнж")
                 } else if (p0.isNullOrEmpty()) {
                     adapter.updateList(emptyList())
                     viewModel.updateState(SearchFragmentState.NoTextInInputEditText)
@@ -126,22 +126,41 @@ class SearchJobFragment : Fragment() {
     private fun searchVacancy() {
         binding.recyclerViewSearch.visibility = View.VISIBLE
         binding.searchPlaceholderImage.visibility = View.GONE
+        binding.noResultsSearchInclude.root.visibility = View.GONE
+        binding.serverErrorInclude.root.visibility = View.GONE
     }
 
     private fun loading() {
         binding.recyclerViewSearch.visibility = View.GONE
         binding.searchPlaceholderImage.visibility = View.GONE
         binding.searchProgressBar.visibility = View.VISIBLE
+        binding.noResultsSearchInclude.root.visibility = View.GONE
+        binding.serverErrorInclude.root.visibility = View.GONE
     }
 
     private fun noTextView() {
         binding.recyclerViewSearch.visibility = View.GONE
         binding.searchPlaceholderImage.visibility = View.VISIBLE
         binding.searchProgressBar.visibility = View.GONE
+        binding.noResultsSearchInclude.root.visibility = View.GONE
+        binding.serverErrorInclude.root.visibility = View.GONE
     }
 
-    private fun noResults() {}
-    private fun serverError() {}
+    private fun noResults() {
+        binding.noResultsSearchInclude.root.visibility = View.VISIBLE
+        binding.serverErrorInclude.root.visibility = View.GONE
+        binding.searchProgressBar.visibility = View.GONE
+        binding.recyclerViewSearch.visibility = View.GONE
+        binding.searchPlaceholderImage.visibility = View.GONE
+    }
+
+    private fun serverError() {
+        binding.noResultsSearchInclude.root.visibility = View.GONE
+        binding.serverErrorInclude.root.visibility = View.VISIBLE
+        binding.searchProgressBar.visibility = View.GONE
+        binding.recyclerViewSearch.visibility = View.GONE
+        binding.searchPlaceholderImage.visibility = View.GONE
+    }
 
     private fun clickListenerFun() = object : SearchRecyclerViewEvent {
         override fun onItemClick(vacancy: Vacancy) {

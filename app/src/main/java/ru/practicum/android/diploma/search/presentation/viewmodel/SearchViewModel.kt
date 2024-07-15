@@ -25,7 +25,6 @@ class SearchViewModel(private val interactor: SearchInteractor) : ViewModel() {
 
     init {
         updateState(SearchFragmentState.NoTextInInputEditText)
-
     }
 
     fun updateState(state: SearchFragmentState) {
@@ -36,18 +35,18 @@ class SearchViewModel(private val interactor: SearchInteractor) : ViewModel() {
     private fun searchResult(text: String) {
         searchJobDetails?.cancel()
         updateState(SearchFragmentState.Loading)
-        Log.d("вм серчРез ",searchLiveData.value.toString())
+        Log.d("вм серчРез ", searchLiveData.value.toString())
         searchJobDetails != viewModelScope.launch {
             interactor.searchVacancy(text).collect { vacancy ->
-                Log.d("коллект ",searchLiveData.value.toString())
-                Log.d("вэк ту стринг ",vacancy.toString())
+                Log.d("коллект ", searchLiveData.value.toString())
+                Log.d("вэк ту стринг ", vacancy.toString())
                 if (vacancy.result!!.isNotEmpty()) {
                     updateState(SearchFragmentState.SearchVacancy(vacancy.result))
-                    Log.d("нот эмпт ",vacancy.toString())
+                    Log.d("нот эмпт ", vacancy.toString())
                 } else if (vacancy.result.isEmpty()) {
                     updateState(SearchFragmentState.NoResult)
                 } else if (vacancy.errorMessage != null) {
-                    Log.d("еррор ",vacancy.toString())
+                    Log.d("еррор ", vacancy.toString())
                     updateState(SearchFragmentState.ServerError)
                 }
             }
