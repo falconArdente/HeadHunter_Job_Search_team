@@ -13,7 +13,7 @@ import ru.practicum.android.diploma.favorites.presentation.viewmodel.FavoritesVi
 class FavoritesJobsFragment : Fragment() {
     private val viewModel by viewModel<FavoritesViewModel>()
     private val clickerForItem = View.OnClickListener {
-        // viewModel.openForDetails()
+        // viewModel.openForDetails(someId,findNavController()
     }
 
     override fun onCreateView(

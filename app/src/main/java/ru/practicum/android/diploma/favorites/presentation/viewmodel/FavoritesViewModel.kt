@@ -4,9 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.details.domain.model.VacancyDetails
+import ru.practicum.android.diploma.details.ui.JobDetailsFragment
 import ru.practicum.android.diploma.favorites.domain.api.GetFavoritesListUseCase
 import ru.practicum.android.diploma.favorites.presentation.state.FavoritesListState
 import ru.practicum.android.diploma.utils.Resource
@@ -21,8 +25,11 @@ class FavoritesViewModel(private val getFavoritesListUseCase: GetFavoritesListUs
         }
     }
 
-    fun openForDetails(vacancyId: String) {
-        TODO("Not yet implemented")
+    fun openForDetails(vacancyId: String, navController: NavController) {
+        navController.navigate(
+            R.id.action_searchJobFragment_to_jobDetailsFragment,
+            JobDetailsFragment.createArgs(vacancyId)
+        )
     }
 
     private suspend fun runDataInteraction() {
