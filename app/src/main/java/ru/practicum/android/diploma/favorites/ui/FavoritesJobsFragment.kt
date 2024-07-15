@@ -5,13 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import kotlinx.coroutines.flow.Flow
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.details.domain.model.VacancyDetails
 import ru.practicum.android.diploma.favorites.presentation.state.FavoritesListState
 import ru.practicum.android.diploma.favorites.presentation.viewmodel.FavoritesViewModel
-import ru.practicum.android.diploma.utils.Resource
 
 class FavoritesJobsFragment : Fragment() {
     private val viewModel by viewModel<FavoritesViewModel>()
@@ -33,6 +30,6 @@ class FavoritesJobsFragment : Fragment() {
     }
 
     private fun render(state: FavoritesListState) {
-            TODO("Not yet implemented")
+        TODO("Not yet implemented")
     }
 }
