@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.search.data.repository
 
-import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.search.data.mapper.SearchVacancyConverter
@@ -15,9 +14,10 @@ class SearchInteractorImpl(val repository: SearchRepository, val converter: Sear
             .collect { vacancyListResponse ->
                 when (vacancyListResponse) {
                     is Resource.Success -> {
+                        val vacancyList=converter.mapToListVacancyModel(vacancyListResponse.data!!.vacancyAtSearchList)
                         emit(
                             VacancyListResult(
-                                result = converter.mapToListVacancyModel(vacancyListResponse.data!!.vacancyAtSearchList),
+                                result = vacancyList,
                                 errorMessage = ""
                             )
                         )

@@ -1,15 +1,12 @@
 package ru.practicum.android.diploma.search.ui
 
-import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -68,8 +65,12 @@ class SearchJobFragment : Fragment() {
         }
 
         binding.searchInput.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-            override fun afterTextChanged(p0: Editable?) {}
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                showView()
+            }
+            override fun afterTextChanged(p0: Editable?) {
+                showView()
+            }
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (!p0.isNullOrEmpty()) {
                     viewModel.searchWithDebounce(p0.toString())
@@ -161,20 +162,14 @@ class SearchJobFragment : Fragment() {
             }
         }
     }
-
     private fun viewHolderInit() {
         adapter = VacancyAdapter(emptyList(), clickListenerFun())
         binding.recyclerViewSearch.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.recyclerViewSearch.adapter = adapter
     }
-
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 }
-
-
-
