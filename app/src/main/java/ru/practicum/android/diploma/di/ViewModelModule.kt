@@ -1,13 +1,11 @@
 package ru.practicum.android.diploma.di
 
-import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.dsl.module
-import ru.practicum.android.diploma.search.ui.SearchViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
 import ru.practicum.android.diploma.details.presentation.viewmodel.VacancyDetailsViewModel
+import ru.practicum.android.diploma.search.ui.SearchViewModel
 
 val viewModelModule = module {
     viewModel<VacancyDetailsViewModel> { (vacancyId: String) ->

@@ -4,6 +4,9 @@ import android.content.Context
 import android.util.DisplayMetrics
 import android.util.TypedValue
 
+const val COEFFICIENT_PLATO_SUBTRACTION = 2
+const val COEFFICIENT_DIVIDER_FOR_UNIT = 0.25f
+const val COEFFICIENT_PIXEL_MULTIPLIER = 8.3f
 fun Context.toPx(dp: Int): Float = TypedValue.applyDimension(
     TypedValue.COMPLEX_UNIT_DIP,
     dp.toFloat(),
@@ -29,5 +32,5 @@ fun exactPxToDp(context: Context, px: Int): Int {
 
 fun getCorrectionCoefficient(context: Context): Float {
     val displayMetrics: DisplayMetrics = context.resources.displayMetrics
-    return ((displayMetrics.density - 2) / 0.25f) * 8.3f
+    return ((displayMetrics.density - COEFFICIENT_PLATO_SUBTRACTION) / COEFFICIENT_DIVIDER_FOR_UNIT) * COEFFICIENT_PIXEL_MULTIPLIER
 }
