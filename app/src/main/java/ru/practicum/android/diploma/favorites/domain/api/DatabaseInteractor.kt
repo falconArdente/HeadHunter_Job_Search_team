@@ -1,13 +1,10 @@
-package ru.practicum.android.diploma.db.domain.api
+package ru.practicum.android.diploma.favorites.domain.api
 
 import kotlinx.coroutines.flow.Flow
 import ru.practicum.android.diploma.details.domain.model.VacancyDetails
 
-interface VacancyRepository {
-
+interface DatabaseInteractor {
     fun isExistsVacancy(vacancyId: Int): Flow<Boolean>
-
-    fun getVacancyById(vacancyId: Int): Flow<VacancyDetails?>
 
     fun getAllVacancy(): Flow<List<VacancyDetails>>
 

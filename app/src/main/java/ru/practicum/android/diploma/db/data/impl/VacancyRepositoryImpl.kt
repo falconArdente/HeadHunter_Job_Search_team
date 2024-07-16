@@ -1,5 +1,7 @@
 package ru.practicum.android.diploma.db.data.impl
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.db.data.db.AppDatabase
 import ru.practicum.android.diploma.db.data.db.VacancyDbConvertor
 import ru.practicum.android.diploma.db.domain.api.VacancyRepository
@@ -10,18 +12,25 @@ class VacancyRepositoryImpl(
     private val vacancyDbConvertor: VacancyDbConvertor
 ) : VacancyRepository {
 
-    override suspend fun isExistsVacancy(vacancyId: Int): Boolean {
-        return appDatabase.vacancyDao().isExistsVacancy(vacancyId) != null
+    override fun isExistsVacancy(vacancyId: Int): Flow<Boolean> = flow {
+        emit(appDatabase.vacancyDao().isExistsVacancy(vacancyId) != null)
     }
 
-    override suspend fun getAllVacancy(): List<VacancyDetails> {
+    override fun getVacancyById(vacancyId: Int): Flow<VacancyDetails?> = flow {
+        val vacancy = appDatabase.vacancyDao().getVacancyById(vacancyId)
+        if (vacancy != null)
+            emit(vacancyDbConvertor.mapVacancy(vacancy))
+        else emit(null)
+    }
+
+    override fun getAllVacancy(): Flow<List<VacancyDetails>> = flow {
         val listVacancy = appDatabase.vacancyDao().getAllVacancy()
-        return listVacancy.map { vacancy -> vacancyDbConvertor.mapVacancy(vacancy) }
+        emit(listVacancy.map { vacancy -> vacancyDbConvertor.mapVacancy(vacancy) })
     }
 
-    override suspend fun getAllVacancyByPage(pageNum: Int): List<VacancyDetails> {
+    override fun getAllVacancyByPage(pageNum: Int): Flow<List<VacancyDetails>> = flow {
         val listVacancy = appDatabase.vacancyDao().getAllVacancyByPage(pageNum)
-        return listVacancy.map { vacancy -> vacancyDbConvertor.mapVacancy(vacancy) }
+        emit(listVacancy.map { vacancy -> vacancyDbConvertor.mapVacancy(vacancy) })
     }
 
     override suspend fun insertVacancy(vacancyDetails: VacancyDetails) {
