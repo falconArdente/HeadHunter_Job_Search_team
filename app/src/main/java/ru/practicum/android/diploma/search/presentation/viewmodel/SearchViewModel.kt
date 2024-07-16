@@ -7,26 +7,40 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.search.domain.api.GetSuggestionsForSearchUseCase
 import ru.practicum.android.diploma.search.domain.api.SearchInteractor
 import ru.practicum.android.diploma.search.presentation.state.SearchFragmentState
 
 private const val SEARCH_DEBOUNCE_DELAY = 2000L
 private const val CLICK_DEBOUNCE_DELAY = 1000L
 
-class SearchViewModel(private val interactor: SearchInteractor) : ViewModel() {
+class SearchViewModel(
+    private val interactor: SearchInteractor,
+    private val getSuggestsUseCase: GetSuggestionsForSearchUseCase
+) : ViewModel() {
     private val searchLiveData =
         MutableLiveData<SearchFragmentState>(SearchFragmentState.NoTextInInputEditText)
     private var latestSearchText: String? = null
     private var searchJob: Job? = null
     private var isClickAllowed = true
-
-    fun fragmentStateLiveData(): LiveData<SearchFragmentState> = searchLiveData
+    private var suggestionsList = MutableLiveData<List<String>>(emptyList())
+    val suggestionsLivaData: LiveData<List<String>> = suggestionsList
 
     init {
         updateState(SearchFragmentState.NoTextInInputEditText)
 
     }
 
+    fun getSuggestionsForSearch(textForSuggests: String) {
+        viewModelScope.launch {
+            getSuggestsUseCase.execute(textForSuggests)
+                .collect {
+                    suggestionsList.postValue(it)
+                }
+        }
+    }
+
+    fun fragmentStateLiveData(): LiveData<SearchFragmentState> = searchLiveData
     fun updateState(state: SearchFragmentState) {
         searchLiveData.postValue(state)
     }

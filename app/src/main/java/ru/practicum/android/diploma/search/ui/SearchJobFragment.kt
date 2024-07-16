@@ -12,9 +12,6 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.databinding.FragmentSearchJobBinding
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
@@ -30,8 +27,8 @@ class SearchJobFragment : Fragment() {
     private var suggestionsAdapter: VacancyPositionSuggestsAdapter? = null
     private val viewModel by viewModel<SearchViewModel>()
     private val adapter = VacancyAdapter(emptyList(), clickListenerFun())
-    
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentSearchJobBinding.inflate(inflater, container, false)
         return binding.root
     }
