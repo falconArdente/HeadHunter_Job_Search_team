@@ -5,6 +5,8 @@ import ru.practicum.android.diploma.details.domain.api.GetVacancyDetailsUseCase
 import ru.practicum.android.diploma.details.domain.api.NavigatorInteractor
 import ru.practicum.android.diploma.details.domain.impl.GetVacancyDetailsUseCaseImpl
 import ru.practicum.android.diploma.details.domain.impl.NavigatorInteractorImpl
+import ru.practicum.android.diploma.favorites.domain.api.GetFavoritesListUseCase
+import ru.practicum.android.diploma.favorites.domain.impl.GetFavoritesListImpl
 import ru.practicum.android.diploma.filter.domain.api.FilterInteractor
 import ru.practicum.android.diploma.filter.domain.impl.FilterInteractorImpl
 import ru.practicum.android.diploma.search.data.repository.SearchInteractorImpl
@@ -24,5 +26,8 @@ val interactorModule = module {
 
     factory<GetVacancyDetailsUseCase> {
         GetVacancyDetailsUseCaseImpl(vacancyDetailsRepository = get())
+    }
+    factory<GetFavoritesListUseCase> {
+        GetFavoritesListImpl(repository = get())
     }
 }

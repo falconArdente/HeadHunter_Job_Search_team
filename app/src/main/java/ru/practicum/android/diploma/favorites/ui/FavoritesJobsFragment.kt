@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
@@ -30,6 +31,18 @@ class FavoritesJobsFragment : Fragment() {
     }
 
     private fun render(state: FavoritesListState) {
-        TODO("Not yet implemented")
+        when (state) {
+            FavoritesListState.Empty -> {
+
+            }
+
+            FavoritesListState.Error -> {
+
+            }
+
+            is FavoritesListState.Success -> {
+                Toast.makeText(requireActivity(), "state ${state.listOfFavVacancies.size}", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }
