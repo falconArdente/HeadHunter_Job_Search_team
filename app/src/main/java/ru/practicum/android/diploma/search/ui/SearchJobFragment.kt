@@ -24,9 +24,11 @@ import ru.practicum.android.diploma.search.presentation.viewmodel.SearchViewMode
 class SearchJobFragment : Fragment() {
     private var _binding: FragmentSearchJobBinding? = null
     private val binding get() = _binding!!
+    private var suggestionsAdapter: VacancyPositionSuggestsAdapter? = null
     private val viewModel by viewModel<SearchViewModel>()
     private val adapter = VacancyAdapter(emptyList(), clickListenerFun())
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentSearchJobBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -45,6 +47,7 @@ class SearchJobFragment : Fragment() {
                 binding.searchInputIcon.background = requireActivity().getDrawable(R.drawable.icon_search)
             } else {
                 binding.searchInputIcon.background = requireActivity().getDrawable(R.drawable.icon_cross)
+                viewModel.getSuggestionsForSearch(text.toString())
             }
         }
 
@@ -63,6 +66,14 @@ class SearchJobFragment : Fragment() {
             }
             false
         }
+
+        suggestionsAdapter = VacancyPositionSuggestsAdapter(requireActivity(), binding.searchInput)
+        binding.searchInput.setAdapter(suggestionsAdapter)
+        viewModel.suggestionsLivaData.observe(viewLifecycleOwner) { renderSuggestions(it) }
+    }
+
+    private fun renderSuggestions(incomeSuggestions: List<String>) {
+        suggestionsAdapter?.applyDataSet(incomeSuggestions)
 
         binding.searchInput.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -155,5 +166,6 @@ class SearchJobFragment : Fragment() {
         val inputManager =
             context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputManager.hideSoftInputFromWindow(windowToken, 0)
+
     }
 }
