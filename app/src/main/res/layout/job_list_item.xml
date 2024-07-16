@@ -10,8 +10,8 @@
 
     <ImageView
         android:id="@+id/jobImage"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="@dimen/dp45"
+        android:layout_height="@dimen/dp45"
         android:contentDescription="@null"
         app:layout_constraintEnd_toStartOf="@id/jobTitle"
         app:layout_constraintStart_toStartOf="parent"
