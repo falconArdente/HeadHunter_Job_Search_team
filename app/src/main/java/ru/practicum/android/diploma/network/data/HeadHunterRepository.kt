@@ -5,6 +5,8 @@ import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.details.domain.impl.VacancyDetailsRepository
+import ru.practicum.android.diploma.details.domain.model.VacancyDetails
 import ru.practicum.android.diploma.network.data.api.HeadHunterNetworkClient
 import ru.practicum.android.diploma.network.data.api.MAX_VACANCY_SUGGESTION_REQUEST_TEXT_LENGTH
 import ru.practicum.android.diploma.network.data.api.MIN_VACANCY_SUGGESTION_REQUEST_TEXT_LENGTH
@@ -23,10 +25,12 @@ import ru.practicum.android.diploma.network.data.dto.responses.Response
 import ru.practicum.android.diploma.network.data.dto.responses.VacancyByIdResponse
 import ru.practicum.android.diploma.network.data.dto.responses.VacancyListResponse
 import ru.practicum.android.diploma.network.data.dto.responses.VacancySuggestionsResponse
+import ru.practicum.android.diploma.network.data.mapper.VacancyDetailsMapper.mapToDomain
 import ru.practicum.android.diploma.search.data.repository.SearchRepository
 import ru.practicum.android.diploma.utils.Resource
 
-class HeadHunterRepository(private val client: HeadHunterNetworkClient, context: Context) : SearchRepository {
+class HeadHunterRepository(private val client: HeadHunterNetworkClient, context: Context) : SearchRepository,
+    VacancyDetailsRepository {
     private val commonDictionaryErrorMessage = context.getString(R.string.net_common_dictionary_income_error_message)
     private val localeDictionaryErrorMessage = context.getString(R.string.net_locales_dictionary_income_error_message)
     private val industriesErrorMessage = context.getString(R.string.net_industry_dictionary_income_error_message)
@@ -122,12 +126,13 @@ class HeadHunterRepository(private val client: HeadHunterNetworkClient, context:
             }
         }
 
-    override suspend fun getVacancyById(id: String): Flow<Resource<VacancyByIdResponse>> =
+    override suspend fun getVacancyById(id: String): Flow<Resource<VacancyDetails>> =
         flow {
             val response =
                 client.doRequest(HeadHunterRequest.VacancyById(id))
             if (response.resultCode == Response.SUCCESS) {
-                emit(Resource.Success(response as VacancyByIdResponse))
+                val data: VacancyByIdResponse = response as VacancyByIdResponse
+                emit(Resource.Success(data.mapToDomain()))
             } else {
                 emit(Resource.Error(vacancyGetByIdErrorMessage))
             }

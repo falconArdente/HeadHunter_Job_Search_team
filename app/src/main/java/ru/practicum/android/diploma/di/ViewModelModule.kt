@@ -7,6 +7,7 @@ import org.koin.dsl.module
 import ru.practicum.android.diploma.details.presentation.viewmodel.VacancyDetailsViewModel
 import ru.practicum.android.diploma.search.presentation.viewmodel.SearchViewModel
 
+
 val viewModelModule = module {
     viewModel<VacancyDetailsViewModel> { (vacancyId: String) ->
         VacancyDetailsViewModel(
