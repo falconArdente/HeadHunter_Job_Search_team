@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "Employer")
 data class EmployerEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    val id: Long,
     val name: String?
 )
 

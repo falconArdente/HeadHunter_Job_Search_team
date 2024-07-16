@@ -32,8 +32,7 @@ class VacancyRepositoryImpl(
     override suspend fun deleteVacancy(vacancyId: Int) {
         val vacancy = appDatabase.vacancyDao().getVacancyById(vacancyId)
         if (vacancy != null) {
-            val vacancyJoins = appDatabase.vacancyDao().getVacancyById(vacancyId)
-            appDatabase.vacancyDao().deleteVacancy(vacancyJoins!!)
+            appDatabase.vacancyDao().deleteVacancyJoins(vacancy)
         }
     }
 

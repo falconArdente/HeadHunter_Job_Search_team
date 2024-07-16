@@ -6,9 +6,9 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "Vacancy")
 data class VacancyEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
-    val jobInfoId: Int?,
-    val employerId: Int,
+    val id: Long = 0,
+    val jobInfoId: Long?,
+    val employerId: Long,
     val name: String,
     val description: String,
     val vacancyUrl: String,

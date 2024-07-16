@@ -20,6 +20,35 @@ import ru.practicum.android.diploma.db.data.db.entity.VacancyJoins
 @Dao
 abstract class VacancyDao {
 
+    suspend fun deleteVacancyJoins(vacancyJoins: VacancyJoins) {
+        deleteEmployerJoins(vacancyJoins.employerRow)
+
+        deleteJobInfoJoins(vacancyJoins.jobInfoRow)
+
+        deleteVacancy(vacancyJoins.vacancy)
+    }
+
+    private suspend fun deleteEmployerJoins(employerJoins: EmployerJoins) {
+        deleteEmployer(employerJoins.employer)
+
+        if (employerJoins.logoRow != null) {
+            deleteLogo(employerJoins.logoRow)
+        }
+
+        deleteArea(employerJoins.areaRow)
+    }
+
+    private suspend fun deleteJobInfoJoins(jobInfoJoins: JobInfoJoins) {
+        deleteJobInfo(jobInfoJoins.jobInfo)
+
+        jobInfoJoins.skillList.forEach { skill ->
+            deleteSkill(skill)
+        }
+        if (jobInfoJoins.salaryRow != null) {
+            deleteSalary(jobInfoJoins.salaryRow)
+        }
+    }
+
     suspend fun insertVacancyJoins(vacancy: VacancyJoins) {
         val employerId = insertEmployerJoins(vacancy.employerRow)
 
@@ -38,7 +67,7 @@ abstract class VacancyDao {
         insertVacancy(vacancyEntity)
     }
 
-    private suspend fun insertEmployerJoins(employerJoins: EmployerJoins): Int {
+    private suspend fun insertEmployerJoins(employerJoins: EmployerJoins): Long {
         val employerId = insertEmployer(employerJoins.employer)
 
         if (employerJoins.logoRow != null) {
@@ -62,7 +91,7 @@ abstract class VacancyDao {
         return employerId
     }
 
-    private suspend fun insertJobInfoJoins(jobInfoJoins: JobInfoJoins): Int {
+    private suspend fun insertJobInfoJoins(jobInfoJoins: JobInfoJoins): Long {
         val jobInfoId = insertJobInfo(jobInfoJoins.jobInfo)
 
         jobInfoJoins.skillList.forEach { skill ->
@@ -92,7 +121,7 @@ abstract class VacancyDao {
     abstract suspend fun insertArea(areaEntity: AreaEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun insertEmployer(employerEntity: EmployerEntity): Int
+    abstract suspend fun insertEmployer(employerEntity: EmployerEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insertLogo(logosEntity: LogosEntity)
@@ -104,7 +133,7 @@ abstract class VacancyDao {
     abstract suspend fun insertSkill(skillsEntity: SkillsEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun insertJobInfo(jobInfoEntity: JobInfoEntity): Int
+    abstract suspend fun insertJobInfo(jobInfoEntity: JobInfoEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insertVacancy(vacancyEntity: VacancyEntity)
@@ -131,7 +160,25 @@ abstract class VacancyDao {
     ): List<VacancyJoins>
 
     @Delete
-    abstract suspend fun deleteVacancy(vacancy: VacancyJoins)
+    abstract suspend fun deleteJobInfo(jobInfo: JobInfoEntity)
+
+    @Delete
+    abstract suspend fun deleteEmployer(employer: EmployerEntity)
+
+    @Delete
+    abstract suspend fun deleteSalary(salary: SalaryEntity)
+
+    @Delete
+    abstract suspend fun deleteSkill(skill: SkillsEntity)
+
+    @Delete
+    abstract suspend fun deleteLogo(logo: LogosEntity)
+
+    @Delete
+    abstract suspend fun deleteArea(area: AreaEntity)
+
+    @Delete
+    abstract suspend fun deleteVacancy(vacancy: VacancyEntity)
 
     companion object {
         const val VACANCY_COUNT_ON_PAGE = 20
