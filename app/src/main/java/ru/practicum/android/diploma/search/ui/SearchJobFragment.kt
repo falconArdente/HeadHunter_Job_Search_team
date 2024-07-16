@@ -92,6 +92,8 @@ class SearchJobFragment : Fragment() {
                 is SearchFragmentState.SearchVacancy -> {
                     adapter.updateList(it.searchVacancy)
                     binding.recyclerViewSearch.visibility = View.VISIBLE
+                    binding.searchJobsCountButton.visibility=View.VISIBLE
+                    binding.searchJobsCountButton.text= "здесь будет число"
                 }
 
                 is SearchFragmentState.Loading -> {
@@ -99,6 +101,8 @@ class SearchJobFragment : Fragment() {
                 }
 
                 is SearchFragmentState.NoResult -> {
+                    binding.searchJobsCountButton.visibility=View.VISIBLE
+                    binding.searchJobsCountButton.text=requireActivity().getString(R.string.no_such_vacancies)
                     binding.noResultsSearchInclude.root.visibility = View.VISIBLE
                 }
 
@@ -121,6 +125,7 @@ class SearchJobFragment : Fragment() {
         binding.searchProgressBar.visibility = View.GONE
         binding.recyclerViewSearch.visibility = View.GONE
         binding.searchPlaceholderImage.visibility = View.GONE
+        binding.searchJobsCountButton.visibility=View.GONE
     }
 
     private fun clickListenerFun() = object : SearchRecyclerViewEvent {

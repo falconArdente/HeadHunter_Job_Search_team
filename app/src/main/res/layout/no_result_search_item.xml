@@ -9,9 +9,12 @@
 
     <ImageView
         android:id="@+id/no_results_image"
-        android:layout_width="@dimen/dp328"
-        android:layout_height="@dimen/dp224"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginBottom="@dimen/dp16"
+        app:layout_constraintDimensionRatio="1:1"
+        android:maxHeight="@dimen/dp224"
+        android:maxWidth="@dimen/dp328"
         android:contentDescription="@string/failed_list_vacancy"
         android:src="@drawable/picture_angry_cat"
         app:layout_constraintBottom_toBottomOf="parent"
