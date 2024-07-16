@@ -15,8 +15,6 @@ import ru.practicum.android.diploma.db.data.db.entity.SalaryEntity
 import ru.practicum.android.diploma.db.data.db.entity.SkillsEntity
 import ru.practicum.android.diploma.db.data.db.entity.VacancyEntity
 import ru.practicum.android.diploma.db.data.db.entity.VacancyJoins
-import java.text.SimpleDateFormat
-import java.util.Date
 
 @Dao
 abstract class VacancyDao {
@@ -40,7 +38,6 @@ abstract class VacancyDao {
     }
 
     private suspend fun insertEmployerJoins(employerJoins: EmployerJoins): Int {
-
         val employerId = insertEmployer(employerJoins.employer)
 
         if (employerJoins.logoRow != null) {
@@ -65,7 +62,6 @@ abstract class VacancyDao {
     }
 
     private suspend fun insertJobInfoJoins(jobInfoJoins: JobInfoJoins): Int {
-
         val jobInfoId = insertJobInfo(jobInfoJoins.jobInfo)
 
         jobInfoJoins.skillList.forEach { skill ->

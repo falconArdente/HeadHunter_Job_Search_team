@@ -26,7 +26,6 @@ val repositoryModule = module {
         HeadHunterRepository(client = get(), context = androidContext())
     }
 
-
     factory { VacancyDbConvertor() }
 
     single<VacancyRepository> {
