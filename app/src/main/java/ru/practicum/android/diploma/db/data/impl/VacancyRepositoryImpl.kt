@@ -20,7 +20,9 @@ class VacancyRepositoryImpl(
         val vacancy = appDatabase.vacancyDao().getVacancyById(vacancyId)
         if (vacancy != null)
             emit(vacancyDbConvertor.mapVacancy(vacancy))
-        else emit(null)
+        else {
+            emit(null)
+        }
     }
 
     override fun getAllVacancy(): Flow<List<VacancyDetails>> = flow {
