@@ -29,7 +29,7 @@ class VacancyDbConvertor {
             employer = mapEmployer(vacancy.employerRow),
             jobDetails = mapJobDetails(vacancy.jobInfoRow),
             vacancyUrl = vacancy.vacancy.vacancyUrl
-            )
+        )
     }
 
     fun mapVacancy(vacancy: VacancyDetails): VacancyJoins {
@@ -66,7 +66,7 @@ class VacancyDbConvertor {
             salary = if (jobDetails.salaryRow != null) mapSalary(jobDetails.salaryRow) else null,
             experience = jobDetails.jobInfo.experience,
             employment = jobDetails.jobInfo.employment,
-            keySkills = jobDetails.skillList.map{skill -> mapSkills(skill) }
+            keySkills = jobDetails.skillList.map { skill -> mapSkills(skill) }
         )
     }
 
@@ -74,7 +74,7 @@ class VacancyDbConvertor {
         return JobInfoJoins(
             jobInfo = mapJobInfo(jobDetails),
             salaryRow = if (jobDetails.salary != null) mapSalary(jobDetails.salary) else null,
-            skillList = jobDetails.keySkills.map{skill -> mapSkills(skill) }
+            skillList = jobDetails.keySkills.map { skill -> mapSkills(skill) }
         )
     }
 
@@ -82,7 +82,7 @@ class VacancyDbConvertor {
         return skill.name
     }
 
-    private fun mapSkills(skill: String) :SkillsEntity {
+    private fun mapSkills(skill: String): SkillsEntity {
         return SkillsEntity(
             id = 0,
             jobInfoId = 0,
@@ -149,7 +149,7 @@ class VacancyDbConvertor {
             size90 = logo.size90,
             size240 = logo.size240,
             raw = logo.raw
-            )
+        )
     }
 
     private fun mapArea(area: AreaEntity): AreaDetails {
