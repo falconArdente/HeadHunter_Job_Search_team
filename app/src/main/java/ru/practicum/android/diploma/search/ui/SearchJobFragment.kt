@@ -49,7 +49,7 @@ class SearchJobFragment : Fragment() {
         }
 
         binding.searchInputIcon.setOnClickListener {
-            binding.searchInput.setText("")
+            binding.searchInput.setText(String())
         }
         binding.searchInput.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
