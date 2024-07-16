@@ -120,6 +120,24 @@
         app:layout_constraintEnd_toEndOf="@id/searchRightGuideline"
         app:layout_constraintStart_toStartOf="@id/searchLeftGuideline"
         app:layout_constraintTop_toBottomOf="@id/searchInputBackground" />
+    <include
+        android:id="@+id/no_results_search_include"
+        layout="@layout/no_result_search_item"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        tools:listitem="@layout/no_result_search_item"
+        app:layout_constraintTop_toTopOf="@id/searchInputIcon"
+        />
+
+    <include
+        android:id="@+id/server_error_include"
+        layout="@layout/server_error_search_item"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        tools:listitem="@layout/server_error_search_item"
+        app:layout_constraintTop_toBottomOf="@id/searchInputBackground"/>
 
     <TextView
         android:id="@+id/searchPlaceholderText"
@@ -150,7 +168,7 @@
 
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/searchJobsList"
+                android:id="@+id/recyclerViewSearch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -161,25 +179,4 @@
         </LinearLayout>
 
     </ScrollView>
-
-    <Button
-        android:id="@+id/searchTESTVACANCYButton"
-        style="@style/RegularText.16size"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp12"
-        android:backgroundTint="@color/Blue"
-        android:insetTop="0dp"
-        android:insetBottom="0dp"
-        android:letterSpacing="0"
-        android:minHeight="0dp"
-        android:textAllCaps="false"
-        android:textColor="@color/White"
-        app:cornerRadius="@dimen/dp12"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="100dp"
-        android:text="Просмотреть вакансию\n (Кнопка для тестов)"
-        />
 </androidx.constraintlayout.widget.ConstraintLayout>
