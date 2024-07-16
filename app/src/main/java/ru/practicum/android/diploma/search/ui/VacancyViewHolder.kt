@@ -9,13 +9,14 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.JobListItemBinding
 import ru.practicum.android.diploma.search.domain.model.Vacancy
 
+private const val CORNER = 12f
+
 class VacancyViewHolder(private val binding: JobListItemBinding) : RecyclerView.ViewHolder(binding.root) {
     fun bind(vacancy: Vacancy) {
         var allText = "${vacancy.name}, ${vacancy.area}"
         if (vacancy.area == null) {
             allText = vacancy.name
         }
-        val dp = 12f
         binding.jobTitle.text = allText
         binding.jobEmployer.text = vacancy.employer?.name ?: "ЗАМЕЩАЮЩИЙ ТЕКСТ?"
         binding.jobSalary.text = if (vacancy.salary == null) {
@@ -38,7 +39,7 @@ class VacancyViewHolder(private val binding: JobListItemBinding) : RecyclerView.
             .load(vacancy.employer?.logoUrls?.size90)
             .placeholder(R.drawable.placeholder_logo)
             .centerCrop()
-            .transform(RoundedCorners(dpToPx(itemView, dp)))
+            .transform(RoundedCorners(dpToPx(itemView, CORNER)))
             .into(binding.jobImage)
     }
 

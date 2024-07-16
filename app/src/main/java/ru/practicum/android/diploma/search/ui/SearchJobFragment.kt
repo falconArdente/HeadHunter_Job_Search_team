@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.search.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -7,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -18,8 +20,6 @@ import ru.practicum.android.diploma.details.ui.JobDetailsFragment
 import ru.practicum.android.diploma.search.domain.model.Vacancy
 import ru.practicum.android.diploma.search.presentation.state.SearchFragmentState
 import ru.practicum.android.diploma.search.presentation.viewmodel.SearchViewModel
-import ru.practicum.android.diploma.utils.hideKeyboard
-import ru.practicum.android.diploma.utils.showKeyboard
 
 class SearchJobFragment : Fragment() {
     private var _binding: FragmentSearchJobBinding? = null
@@ -174,5 +174,16 @@ class SearchJobFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+    private fun View.showKeyboard(context: Context) {
+        val imm =
+            context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(this, 0)
+    }
+
+    private fun View.hideKeyboard(context: Context) {
+        val inputManager =
+            context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputManager.hideSoftInputFromWindow(windowToken, 0)
     }
 }
