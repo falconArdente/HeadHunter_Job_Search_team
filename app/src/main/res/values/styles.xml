@@ -64,4 +64,9 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
+    <style name="SuggestionsStyle" parent="EditTextStyle">
+        <item name="android:imeOptions">actionNone</item>
+        <item name="android:inputType">none</item>
+        <item name="android:background">@color/Light_Gray_OR_Gray</item>
+    </style>
 </resources>

@@ -10,4 +10,5 @@
 
     <color name="Light_Gray_OR_Gray">@color/Gray</color>
     <color name="Gray_OR_White">@color/White</color>
+    <color name="search_hint_gray_to_white">@color/White</color>
 </resources>

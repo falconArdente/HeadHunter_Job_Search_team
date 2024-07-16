@@ -38,7 +38,8 @@
         android:background="@drawable/icon_filter"
         app:layout_constraintBottom_toBottomOf="@id/searchTitle"
         app:layout_constraintEnd_toEndOf="@id/searchRightGuideline"
-        app:layout_constraintTop_toTopOf="@id/searchTitle" />
+        app:layout_constraintTop_toTopOf="@id/searchTitle"
+        tools:ignore="ContentDescription" />
 
     <View
         android:id="@+id/searchInputBackground"
@@ -51,19 +52,25 @@
         app:layout_constraintStart_toStartOf="@id/searchLeftGuideline"
         app:layout_constraintTop_toBottomOf="@id/searchTitle" />
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/searchInput"
         style="@style/EditTextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp16"
+        android:popupTheme="@style/SuggestionsStyle"
+        android:completionThreshold="@integer/suggestions_drop_down_completion_threshold"
+        android:dropDownAnchor="@id/searchInputBackground"
         android:hint="@string/search_hint"
+        android:inputType="textAutoComplete"
+        android:minHeight="@dimen/search_input_min_height"
+        android:textColorHint="@color/search_hint_gray_to_white"
+        android:textCursorDrawable="@drawable/cursor_drawable"
         app:layout_constraintBottom_toBottomOf="@id/searchInputBackground"
         app:layout_constraintEnd_toStartOf="@id/searchInputIcon"
         app:layout_constraintStart_toStartOf="@id/searchInputBackground"
         app:layout_constraintTop_toTopOf="@id/searchInputBackground"
-        android:textCursorDrawable="@drawable/cursor_drawable"
-        />
+        tools:ignore="VisualLintTextFieldSize,TextContrastCheck" />
 
     <ImageButton
         android:id="@+id/searchInputIcon"
@@ -74,7 +81,8 @@
         app:layout_constraintBottom_toBottomOf="@id/searchInputBackground"
         app:layout_constraintEnd_toEndOf="@id/searchInputBackground"
         app:layout_constraintStart_toEndOf="@id/searchInput"
-        app:layout_constraintTop_toTopOf="@id/searchInputBackground" />
+        app:layout_constraintTop_toTopOf="@id/searchInputBackground"
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
     <Button
         android:id="@+id/searchJobsCountButton"
@@ -89,13 +97,11 @@
         android:minHeight="0dp"
         android:textAllCaps="false"
         android:textColor="@color/White"
+        android:visibility="gone"
         app:cornerRadius="@dimen/dp12"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchInputBackground"
-        tools:text="Найдено 286 вакансий"
-        android:visibility="gone"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/searchInputBackground" />
 
     <ProgressBar
         android:id="@+id/searchProgressBar"
@@ -119,7 +125,27 @@
         app:layout_constraintDimensionRatio="328:223"
         app:layout_constraintEnd_toEndOf="@id/searchRightGuideline"
         app:layout_constraintStart_toStartOf="@id/searchLeftGuideline"
-        app:layout_constraintTop_toBottomOf="@id/searchInputBackground" />
+
+        app:layout_constraintTop_toBottomOf="@id/searchInputBackground"
+        tools:ignore="ContentDescription" />
+    <include
+        android:id="@+id/no_results_search_include"
+        layout="@layout/no_result_search_item"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        tools:listitem="@layout/no_result_search_item"
+        app:layout_constraintTop_toTopOf="@id/searchInputIcon"
+        />
+
+    <include
+        android:id="@+id/server_error_include"
+        layout="@layout/server_error_search_item"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        tools:listitem="@layout/server_error_search_item"
+        app:layout_constraintTop_toBottomOf="@id/searchInputBackground"/>
 
     <TextView
         android:id="@+id/searchPlaceholderText"
@@ -130,8 +156,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchPlaceholderImage"
-        tools:text="Ошибка сервера" />
+        app:layout_constraintTop_toBottomOf="@id/searchPlaceholderImage" />
 
     <ScrollView
         android:id="@+id/searchJobsScrollView"
@@ -148,38 +173,14 @@
             android:layout_gravity="top"
             android:orientation="vertical">
 
-
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/searchJobsList"
+                android:id="@+id/recyclerViewSearch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp56" />
-
         </LinearLayout>
-
     </ScrollView>
-
-    <Button
-        android:id="@+id/searchTESTVACANCYButton"
-        style="@style/RegularText.16size"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp12"
-        android:backgroundTint="@color/Blue"
-        android:insetTop="0dp"
-        android:insetBottom="0dp"
-        android:letterSpacing="0"
-        android:minHeight="0dp"
-        android:textAllCaps="false"
-        android:textColor="@color/White"
-        app:cornerRadius="@dimen/dp12"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="100dp"
-        android:text="Просмотреть вакансию\n (Кнопка для тестов)"
-        />
 </androidx.constraintlayout.widget.ConstraintLayout>

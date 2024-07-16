@@ -6,9 +6,10 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "Salary")
 data class SalaryEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
-    val currencyCode: String,
-    val salaryFrom: String,
-    val gross: Boolean,
-    val salaryTo: Int?
+    val id: Long,
+    val currency: String?,
+    val salaryFrom: Int?,
+    val gross: Boolean?,
+    val salaryTo: Int?,
+    val jobInfoId: Long
 )

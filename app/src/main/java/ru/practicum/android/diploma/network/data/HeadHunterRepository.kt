@@ -112,17 +112,16 @@ class HeadHunterRepository(private val client: HeadHunterNetworkClient, context:
             }
         }
 
-    override suspend fun searchVacancy(textForSearch: String): Flow<Resource<VacancyListResponse>> =
-        flow {
-            val response = client.doRequest(
-                HeadHunterRequest.VacancySearch(textForSearch)
-            )
-            if (response.resultCode == Response.SUCCESS) {
-                emit(Resource.Success(response as VacancyListResponse))
-            } else {
-                emit(Resource.Error(vacancySearchErrorMessage))
-            }
+    override suspend fun searchVacancy(textForSearch: String): Flow<Resource<VacancyListResponse>> = flow {
+        val response = client.doRequest(
+            HeadHunterRequest.VacancySearch(textForSearch)
+        )
+        if (response.resultCode == Response.SUCCESS) {
+            emit(Resource.Success(response as VacancyListResponse))
+        } else {
+            emit(Resource.Error(vacancySearchErrorMessage))
         }
+    }
 
     override suspend fun getVacancyById(id: String): Flow<Resource<VacancyDetails>> =
         flow {

@@ -6,8 +6,8 @@ data class Vacancy(
     val id: String,
     val name: String,
     val salary: SalaryModel?,
-    var employer: EmployerModel?,
+    val employer: EmployerModel?,
     val brandSnippet: BrandSnippetModel?,
     val contacts: Contacts?,
-    var area: AreaModel?,
+    val area: AreaModel?,
 )

@@ -37,6 +37,6 @@ class VacancyAdapter(
     }
 }
 
-fun interface SearchRecyclerViewEvent {
+interface SearchRecyclerViewEvent {
     fun onItemClick(vacancy: Vacancy)
 }
