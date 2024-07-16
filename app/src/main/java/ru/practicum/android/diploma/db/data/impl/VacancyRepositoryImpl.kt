@@ -20,8 +20,7 @@ class VacancyRepositoryImpl(
         val vacancy = appDatabase.vacancyDao().getVacancyById(vacancyId)
         if (vacancy != null) {
             emit(vacancyDbConvertor.mapVacancy(vacancy))
-        }
-        else {
+        } else {
             emit(null)
         }
     }
