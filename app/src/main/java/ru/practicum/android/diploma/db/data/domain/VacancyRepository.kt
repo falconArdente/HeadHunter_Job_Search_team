@@ -4,7 +4,7 @@ import ru.practicum.android.diploma.details.domain.model.VacancyDetails
 
 interface VacancyRepository {
 
-    suspend fun isExistsVacancy(vacancyId: Int) :Boolean
+    suspend fun isExistsVacancy(vacancyId: Int): Boolean
 
     suspend fun getAllVacancy(): List<VacancyDetails>
 

@@ -7,6 +7,6 @@ import androidx.room.PrimaryKey
 data class AreaEntity(
     @PrimaryKey
     val id: String,
-    var employerId:  Int,
+    val employerId: Int,
     val name: String
 )

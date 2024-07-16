@@ -15,6 +15,8 @@ import ru.practicum.android.diploma.db.data.db.entity.SalaryEntity
 import ru.practicum.android.diploma.db.data.db.entity.SkillsEntity
 import ru.practicum.android.diploma.db.data.db.entity.VacancyEntity
 import ru.practicum.android.diploma.db.data.db.entity.VacancyJoins
+import java.text.SimpleDateFormat
+import java.util.Date
 
 @Dao
 abstract class VacancyDao {
@@ -24,10 +26,17 @@ abstract class VacancyDao {
 
         val jobInfoId = insertJobInfoJoins(vacancy.jobInfoRow)
 
-        vacancy.vacancy.employerId = employerId
-        vacancy.vacancy.jobInfoId = jobInfoId
+        val vacancyEntity = VacancyEntity(
+                id = 0,
+                jobInfoId = jobInfoId,
+                employerId = employerId,
+                name = vacancy.vacancy.name,
+                description = vacancy.vacancy.description,
+                vacancyUrl = vacancy.vacancy.vacancyUrl,
+                dateAdd = SimpleDateFormat("yyyy/dd/M hh:mm:ss").format(Date())
+        )
 
-        insertVacancy(vacancy.vacancy)
+        insertVacancy(vacancyEntity)
     }
 
     private suspend fun insertEmployerJoins(employerJoins: EmployerJoins): Int {
@@ -35,12 +44,22 @@ abstract class VacancyDao {
         val employerId = insertEmployer(employerJoins.employer)
 
         if(employerJoins.logoRow!= null){
-            employerJoins.logoRow.employerId = employerId
-            insertLogo(employerJoins.logoRow)
+            val logosEntity = LogosEntity(
+                id = 0,
+                size90 = employerJoins.logoRow.size90,
+                size240 = employerJoins.logoRow.size240,
+                employerId = employerId,
+                raw = employerJoins.logoRow.raw
+            )
+            insertLogo(logosEntity)
         }
 
-        employerJoins.areaRow.employerId = employerId
-        insertArea(employerJoins.areaRow)
+        val  areaEntity = AreaEntity(
+            id = employerJoins.areaRow.id,
+            name = employerJoins.areaRow.name,
+            employerId = employerId
+        )
+        insertArea(areaEntity)
 
         return employerId
     }
@@ -49,12 +68,23 @@ abstract class VacancyDao {
         val jobInfoId = insertJobInfo(jobInfoJoins.jobInfo)
 
         jobInfoJoins.skillList.forEach { skill->
-            skill.jobInfoId = jobInfoId
-            insertSkill(skill)
+            val skillsEntity = SkillsEntity(
+                id = 0,
+                name = skill.name,
+                jobInfoId = jobInfoId
+            )
+            insertSkill(skillsEntity)
         }
         if (jobInfoJoins.salaryRow != null){
-            jobInfoJoins.salaryRow.jobInfoId = jobInfoId
-            insertSalary(jobInfoJoins.salaryRow)
+            val salaryEntity = SalaryEntity(
+                id = 0,
+                currency = jobInfoJoins.salaryRow.currency,
+                salaryFrom = jobInfoJoins.salaryRow.salaryFrom,
+                salaryTo = jobInfoJoins.salaryRow.salaryTo,
+                gross = jobInfoJoins.salaryRow.gross,
+                jobInfoId = jobInfoId
+            )
+            insertSalary(salaryEntity)
         }
 
         return jobInfoId
@@ -89,8 +119,12 @@ abstract class VacancyDao {
     @Query("Select * from vacancy order by dateAdd")
     abstract suspend fun getAllVacancy(): List<VacancyJoins>
 
-    @Query("Select * from vacancy order by dateAdd LIMIT :vacancyByPage OFFSET :vacancyByPage * :pageNum ")
-    abstract suspend fun getAllVacancyByPage(pageNum: Int, vacancyByPage: Int = VACANCY_COUNT_ON_PAGE): List<VacancyJoins>
+    @Query("Select * from vacancy order by dateAdd " +
+        "LIMIT :vacancyByPage OFFSET :vacancyByPage * :pageNum ")
+    abstract suspend fun getAllVacancyByPage(
+        pageNum: Int,
+        vacancyByPage: Int = VACANCY_COUNT_ON_PAGE
+    ): List<VacancyJoins>
 
     @Delete
     abstract suspend fun deleteVacancy(vacancy: VacancyJoins)

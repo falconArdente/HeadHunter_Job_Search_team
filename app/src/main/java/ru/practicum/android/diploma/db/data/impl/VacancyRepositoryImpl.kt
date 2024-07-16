@@ -8,7 +8,7 @@ import ru.practicum.android.diploma.details.domain.model.VacancyDetails
 class VacancyRepositoryImpl(
     private val appDatabase:  AppDatabase,
     private val vacancyDbConvertor: VacancyDbConvertor
-): VacancyRepository {
+) : VacancyRepository {
 
     override suspend fun isExistsVacancy(vacancyId: Int): Boolean {
         return appDatabase.vacancyDao().isExistsVacancy(vacancyId) != null

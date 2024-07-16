@@ -11,5 +11,5 @@ data class SalaryEntity(
     val salaryFrom: Int?,
     val gross: Boolean?,
     val salaryTo: Int?,
-    var jobInfoId: Int
+    val jobInfoId: Int
 )

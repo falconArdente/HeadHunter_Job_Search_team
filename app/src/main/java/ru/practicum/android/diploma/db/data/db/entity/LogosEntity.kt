@@ -10,5 +10,5 @@ data class LogosEntity(
     val size90: String?,
     val size240: String?,
     val raw: String?,
-    var employerId: Int
+    val employerId: Int
 )
