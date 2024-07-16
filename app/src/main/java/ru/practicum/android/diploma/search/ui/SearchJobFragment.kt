@@ -87,26 +87,27 @@ class SearchJobFragment : Fragment() {
 
     private fun showView() {
         viewModel.fragmentStateLiveData().observe(viewLifecycleOwner) {
+            allViewGone()
             when (it) {
                 is SearchFragmentState.SearchVacancy -> {
                     adapter.updateList(it.searchVacancy)
-                    searchVacancyView()
+                    binding.recyclerViewSearch.visibility = View.VISIBLE
                 }
 
                 is SearchFragmentState.Loading -> {
-                    loadingView()
+                    binding.searchProgressBar.visibility = View.VISIBLE
                 }
 
                 is SearchFragmentState.NoResult -> {
-                    noResultsView()
+                    binding.noResultsSearchInclude.root.visibility = View.VISIBLE
                 }
 
                 is SearchFragmentState.ServerError -> {
-                    serverErrorView()
+                    binding.serverErrorInclude.root.visibility = View.VISIBLE
                 }
 
                 is SearchFragmentState.NoTextInInputEditText -> {
-                    noTextView()
+                    binding.searchPlaceholderImage.visibility = View.VISIBLE
                 }
 
                 else -> {}
@@ -114,41 +115,9 @@ class SearchJobFragment : Fragment() {
         }
     }
 
-    private fun searchVacancyView() {
-        binding.recyclerViewSearch.visibility = View.VISIBLE
-        binding.searchPlaceholderImage.visibility = View.GONE
+    private fun allViewGone() {
         binding.noResultsSearchInclude.root.visibility = View.GONE
         binding.serverErrorInclude.root.visibility = View.GONE
-        binding.searchProgressBar.visibility = View.GONE
-    }
-
-    private fun loadingView() {
-        binding.recyclerViewSearch.visibility = View.GONE
-        binding.searchPlaceholderImage.visibility = View.GONE
-        binding.searchProgressBar.visibility = View.VISIBLE
-        binding.noResultsSearchInclude.root.visibility = View.GONE
-        binding.serverErrorInclude.root.visibility = View.GONE
-    }
-
-    private fun noTextView() {
-        binding.recyclerViewSearch.visibility = View.GONE
-        binding.searchPlaceholderImage.visibility = View.VISIBLE
-        binding.searchProgressBar.visibility = View.GONE
-        binding.noResultsSearchInclude.root.visibility = View.GONE
-        binding.serverErrorInclude.root.visibility = View.GONE
-    }
-
-    private fun noResultsView() {
-        binding.noResultsSearchInclude.root.visibility = View.VISIBLE
-        binding.serverErrorInclude.root.visibility = View.GONE
-        binding.searchProgressBar.visibility = View.GONE
-        binding.recyclerViewSearch.visibility = View.GONE
-        binding.searchPlaceholderImage.visibility = View.GONE
-    }
-
-    private fun serverErrorView() {
-        binding.noResultsSearchInclude.root.visibility = View.GONE
-        binding.serverErrorInclude.root.visibility = View.VISIBLE
         binding.searchProgressBar.visibility = View.GONE
         binding.recyclerViewSearch.visibility = View.GONE
         binding.searchPlaceholderImage.visibility = View.GONE
@@ -175,6 +144,7 @@ class SearchJobFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
     private fun View.showKeyboard(context: Context) {
         val imm =
             context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
