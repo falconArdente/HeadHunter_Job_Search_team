@@ -14,7 +14,8 @@ class SearchInteractorImpl(val repository: SearchRepository, val converter: Sear
             .collect { vacancyListResponse ->
                 when (vacancyListResponse) {
                     is Resource.Success -> {
-                        val vacancyList=converter.mapToListVacancyModel(vacancyListResponse.data!!.vacancyAtSearchList)
+                        val vacancyList =
+                            converter.mapToListVacancyModel(vacancyListResponse.data!!.vacancyAtSearchList)
                         emit(
                             VacancyListResult(
                                 result = vacancyList,

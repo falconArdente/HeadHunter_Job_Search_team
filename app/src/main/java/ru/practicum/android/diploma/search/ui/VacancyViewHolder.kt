@@ -9,9 +9,9 @@ import ru.practicum.android.diploma.search.domain.model.Vacancy
 
 class VacancyViewHolder(private val binding: JobListItemBinding) : RecyclerView.ViewHolder(binding.root) {
     fun bind(vacancy: Vacancy) {
-        var allText="${vacancy.name}, ${vacancy.area}"
-        if(vacancy.area==null){
-            allText=vacancy.name
+        var allText = "${vacancy.name}, ${vacancy.area}"
+        if (vacancy.area == null) {
+            allText = vacancy.name
         }
         binding.jobTitle.text = allText
         binding.jobEmployer.text = vacancy.employer?.name ?: "ЗАМЕЩАЮЩИЙ ТЕКСТ?"
@@ -20,14 +20,14 @@ class VacancyViewHolder(private val binding: JobListItemBinding) : RecyclerView.
         } else if (vacancy.salary.to == null) {
             binding.root.resources.getString(
                 R.string.salary_from,
-                vacancy.salary.from,
+                vacancy.salary.from.toString(),
                 convertCurrencyToSymbol(vacancy)
             )
         } else {
             binding.root.resources.getString(
                 R.string.salary_range,
-                vacancy.salary.from,
-                vacancy.salary.to,
+                vacancy.salary.from.toString(),
+                vacancy.salary,
                 convertCurrencyToSymbol(vacancy)
             )
         }
@@ -38,8 +38,9 @@ class VacancyViewHolder(private val binding: JobListItemBinding) : RecyclerView.
             .transform(RoundedCorners(itemView.resources.getDimensionPixelSize(R.dimen.dp12))) // вставить нашу функцию из util?
             .into(binding.jobImage)
     }
+
     private fun convertCurrencyToSymbol(vacancy: Vacancy): String {
-        var currencyCode = vacancy.salary?.currency?:"RUR"
+        var currencyCode = vacancy.salary?.currency ?: "RUR"
         if (currencyCode == "RUR") currencyCode = "RUB"
         val currency = java.util.Currency.getInstance(currencyCode)
         return currency.symbol

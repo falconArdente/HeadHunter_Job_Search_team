@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.network.data
 
 import android.content.Context
-import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.R
@@ -114,17 +113,15 @@ class HeadHunterRepository(private val client: HeadHunterNetworkClient, context:
         }
 
     override suspend fun searchVacancy(textForSearch: String): Flow<Resource<VacancyListResponse>> = flow {
-        Log.d("ROUTE__", "in repo $textForSearch")
-        Log.d("hhRep SearchVac ","щдщдщ")
-            val response = client.doRequest(
-                HeadHunterRequest.VacancySearch(textForSearch)
-            )
-            if (response.resultCode == Response.SUCCESS) {
-                emit(Resource.Success(response as VacancyListResponse))
-            } else {
-                emit(Resource.Error(vacancySearchErrorMessage))
-            }
+        val response = client.doRequest(
+            HeadHunterRequest.VacancySearch(textForSearch)
+        )
+        if (response.resultCode == Response.SUCCESS) {
+            emit(Resource.Success(response as VacancyListResponse))
+        } else {
+            emit(Resource.Error(vacancySearchErrorMessage))
         }
+    }
 
     override suspend fun getVacancyById(id: String): Flow<Resource<VacancyDetails>> =
         flow {

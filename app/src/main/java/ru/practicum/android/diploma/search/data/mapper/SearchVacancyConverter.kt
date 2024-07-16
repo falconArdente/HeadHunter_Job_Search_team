@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.search.data.mapper
 
-import android.util.Log
 import ru.practicum.android.diploma.network.data.dto.linked.BrandSnippet
 import ru.practicum.android.diploma.network.data.dto.linked.Employer
 import ru.practicum.android.diploma.network.data.dto.linked.LogoUrls
@@ -27,13 +26,12 @@ class SearchVacancyConverter {
 
     fun mapToListVacancyModel(vacancy: List<VacancyAtSearch>): List<Vacancy> {
         return vacancy.map { vacancyAtSearch ->
-            Log.d("ROUTE__", "go for remap list ${vacancyAtSearch.name}")
             mapToVacancyModel(vacancyAtSearch)
         }
     }
 
     fun mapToSalaryModel(salaryDTO: Salary?): SalaryModel? {
-        if (salaryDTO==null)return null
+        if (salaryDTO == null) return null
         return SalaryModel(
             salaryDTO.currency,
             salaryDTO.from,

@@ -24,9 +24,8 @@ import ru.practicum.android.diploma.utils.showKeyboard
 class SearchJobFragment : Fragment() {
     private var _binding: FragmentSearchJobBinding? = null
     private val binding get() = _binding!!
-    lateinit var adapter: VacancyAdapter
     private val viewModel by viewModel<SearchViewModel>()
-
+    private val adapter = VacancyAdapter(emptyList(), clickListenerFun())
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentSearchJobBinding.inflate(inflater, container, false)
         return binding.root
@@ -34,6 +33,7 @@ class SearchJobFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         viewHolderInit()
 
         binding.searchFilterButton.setOnClickListener {
@@ -68,9 +68,11 @@ class SearchJobFragment : Fragment() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 showView()
             }
+
             override fun afterTextChanged(p0: Editable?) {
                 showView()
             }
+
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (!p0.isNullOrEmpty()) {
                     viewModel.searchWithDebounce(p0.toString())
@@ -162,12 +164,13 @@ class SearchJobFragment : Fragment() {
             }
         }
     }
+
     private fun viewHolderInit() {
-        adapter = VacancyAdapter(emptyList(), clickListenerFun())
         binding.recyclerViewSearch.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.recyclerViewSearch.adapter = adapter
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

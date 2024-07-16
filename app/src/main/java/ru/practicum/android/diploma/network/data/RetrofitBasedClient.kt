@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.network.data
 
-import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
@@ -19,7 +18,6 @@ import java.io.UncheckedIOException
 class RetrofitBasedClient(retrofit: Retrofit, private val networkStatus: NetworkStatus) : HeadHunterNetworkClient {
     private val serverService = retrofit.create(HeadHunterApplicationApi::class.java)
     override suspend fun doRequest(request: HeadHunterRequest): Response {
-        Log.d("дуРекв ретр нетв кл ","щдщдщ")
         if (!networkStatus.isConnected()) return Response().apply { resultCode = -1 }
         return withContext(Dispatchers.IO) {
             try {
