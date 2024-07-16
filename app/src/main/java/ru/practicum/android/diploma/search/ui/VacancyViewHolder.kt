@@ -9,7 +9,11 @@ import ru.practicum.android.diploma.search.domain.model.Vacancy
 
 class VacancyViewHolder(private val binding: JobListItemBinding) : RecyclerView.ViewHolder(binding.root) {
     fun bind(vacancy: Vacancy) {
-        binding.jobTitle.text = "${vacancy.name}, ${vacancy.area}"
+        var allText="${vacancy.name}, ${vacancy.area}"
+        if(vacancy.area==null){
+            allText=vacancy.name
+        }
+        binding.jobTitle.text = allText
         binding.jobEmployer.text = vacancy.employer?.name ?: "ЗАМЕЩАЮЩИЙ ТЕКСТ?"
         binding.jobSalary.text = if (vacancy.salary == null) {
             binding.root.resources.getString(R.string.no_salary_msg)
@@ -28,7 +32,7 @@ class VacancyViewHolder(private val binding: JobListItemBinding) : RecyclerView.
             )
         }
         Glide.with(itemView)
-            .load(vacancy.brandSnippet?.logo) // тут пока лого поставил, но не уверен, надо разбираться
+            .load(vacancy.employer?.logoUrls?.size90) // тут пока лого поставил, но не уверен, надо разбираться
             .placeholder(R.drawable.placeholder_logo)
             .centerCrop()
             .transform(RoundedCorners(itemView.resources.getDimensionPixelSize(R.dimen.dp12))) // вставить нашу функцию из util?

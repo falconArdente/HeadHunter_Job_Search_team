@@ -21,6 +21,8 @@ import ru.practicum.android.diploma.details.ui.JobDetailsFragment
 import ru.practicum.android.diploma.search.domain.model.Vacancy
 import ru.practicum.android.diploma.search.presentation.state.SearchFragmentState
 import ru.practicum.android.diploma.search.presentation.viewmodel.SearchViewModel
+import ru.practicum.android.diploma.utils.hideKeyboard
+import ru.practicum.android.diploma.utils.showKeyboard
 
 class SearchJobFragment : Fragment() {
     private var _binding: FragmentSearchJobBinding? = null
@@ -54,13 +56,13 @@ class SearchJobFragment : Fragment() {
         }
         binding.searchInput.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
-                binding.searchInput.showKeyboard()
+                binding.searchInput.showKeyboard(requireContext())
                 showView()
             }
         }
         binding.searchInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                binding.searchInput.hideKeyboard()
+                binding.searchInput.hideKeyboard(requireContext())
             }
             false
         }
@@ -71,50 +73,36 @@ class SearchJobFragment : Fragment() {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (!p0.isNullOrEmpty()) {
                     viewModel.searchWithDebounce(p0.toString())
-                    Log.d("поиск текст чнж ", "поиск текст чнж")
                 } else if (p0.isNullOrEmpty()) {
                     adapter.updateList(emptyList())
                     viewModel.updateState(SearchFragmentState.NoTextInInputEditText)
                     showView()
-                    Log.d("текст чнж ", "пусто в эдит текст")
                 }
             }
         })
-        // Удалить потом!
-        binding.searchTESTVACANCYButton.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_searchJobFragment_to_jobDetailsFragment,
-                JobDetailsFragment.createArgs("linkToThisVacancy")
-            )
-        }
     }
 
     private fun showView() {
         viewModel.fragmentStateLiveData().observe(viewLifecycleOwner) {
             when (it) {
                 is SearchFragmentState.SearchVacancy -> {
-                    Log.d("списокShowView ", it.searchVacancy.toString())
                     adapter.updateList(it.searchVacancy)
-                    searchVacancy()
+                    searchVacancyView()
                 }
 
                 is SearchFragmentState.Loading -> {
-                    Log.d("шоу вью ", " Loading")
-                    loading()
+                    loadingView()
                 }
 
                 is SearchFragmentState.NoResult -> {
-                    Log.d("шоу вью", "NoResult")
-                    noResults()
+                    noResultsView()
                 }
 
                 is SearchFragmentState.ServerError -> {
-                    Log.d("шоу вью ", "Error")
-                    serverError()
+                    serverErrorView()
                 }
 
                 is SearchFragmentState.NoTextInInputEditText -> {
-                    Log.d("шоу вью ", "No text ")
                     noTextView()
                 }
 
@@ -123,14 +111,15 @@ class SearchJobFragment : Fragment() {
         }
     }
 
-    private fun searchVacancy() {
+    private fun searchVacancyView() {
         binding.recyclerViewSearch.visibility = View.VISIBLE
         binding.searchPlaceholderImage.visibility = View.GONE
         binding.noResultsSearchInclude.root.visibility = View.GONE
         binding.serverErrorInclude.root.visibility = View.GONE
+        binding.searchProgressBar.visibility = View.GONE
     }
 
-    private fun loading() {
+    private fun loadingView() {
         binding.recyclerViewSearch.visibility = View.GONE
         binding.searchPlaceholderImage.visibility = View.GONE
         binding.searchProgressBar.visibility = View.VISIBLE
@@ -146,7 +135,7 @@ class SearchJobFragment : Fragment() {
         binding.serverErrorInclude.root.visibility = View.GONE
     }
 
-    private fun noResults() {
+    private fun noResultsView() {
         binding.noResultsSearchInclude.root.visibility = View.VISIBLE
         binding.serverErrorInclude.root.visibility = View.GONE
         binding.searchProgressBar.visibility = View.GONE
@@ -154,7 +143,7 @@ class SearchJobFragment : Fragment() {
         binding.searchPlaceholderImage.visibility = View.GONE
     }
 
-    private fun serverError() {
+    private fun serverErrorView() {
         binding.noResultsSearchInclude.root.visibility = View.GONE
         binding.serverErrorInclude.root.visibility = View.VISIBLE
         binding.searchProgressBar.visibility = View.GONE
@@ -180,21 +169,6 @@ class SearchJobFragment : Fragment() {
         binding.recyclerViewSearch.adapter = adapter
     }
 
-    private fun View.showKeyboard() {
-        val imm =
-            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.showSoftInput(this, 0)
-    }
-
-    private fun View.hideKeyboard() {
-        val inputManager =
-            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputManager.hideSoftInputFromWindow(windowToken, 0)
-    }
-
-    companion object {
-        private const val VACANCY_ID = "vacancy_id"
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

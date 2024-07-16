@@ -4,7 +4,7 @@ import ru.practicum.android.diploma.network.data.dto.linked.Contacts
 
 data class Vacancy(
     val id: String,
-    val name: String,
+    var name: String,
     val salary: SalaryModel?,
     var employer: EmployerModel?,
     val brandSnippet: BrandSnippetModel?,
