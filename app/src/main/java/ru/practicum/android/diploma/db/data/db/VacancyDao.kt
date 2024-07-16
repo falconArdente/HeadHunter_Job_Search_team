@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import ru.practicum.android.diploma.db.data.db.entity.AreaEntity
 import ru.practicum.android.diploma.db.data.db.entity.EmployerEntity
 import ru.practicum.android.diploma.db.data.db.entity.EmployerJoins
@@ -111,12 +112,15 @@ abstract class VacancyDao {
     @Query("Select 1 from vacancy where id = :vacancyId")
     abstract suspend fun isExistsVacancy(vacancyId: Int): Int?
 
+    @Transaction
     @Query("Select * from vacancy where id = :vacancyId")
     abstract suspend fun getVacancyById(vacancyId: Int): VacancyJoins?
 
+    @Transaction
     @Query("Select * from vacancy order by dateAdd")
     abstract suspend fun getAllVacancy(): List<VacancyJoins>
 
+    @Transaction
     @Query(
         "Select * from vacancy order by dateAdd " +
             "LIMIT :vacancyByPage OFFSET :vacancyByPage * :pageNum "
