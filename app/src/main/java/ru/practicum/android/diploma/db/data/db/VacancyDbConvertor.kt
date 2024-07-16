@@ -19,8 +19,7 @@ import ru.practicum.android.diploma.details.domain.model.VacancyDetails
 import java.text.SimpleDateFormat
 import java.util.Date
 
-class VacancyDbConvertor(
-) {
+class VacancyDbConvertor {
 
     fun mapVacancy(vacancy: VacancyJoins): VacancyDetails {
         return VacancyDetails(
@@ -41,18 +40,18 @@ class VacancyDbConvertor(
         )
     }
 
-    fun  mapEmployerJoin(employer: EmployerInfo): EmployerJoins{
+    fun mapEmployerJoin(employer: EmployerInfo): EmployerJoins {
         return EmployerJoins(
             employer = mapEmployer(employer),
             areaRow = mapArea(employer.area, 0),
-            logoRow = if(employer.logo != null) mapLogo(employer.logo) else null
+            logoRow = if (employer.logo != null) mapLogo(employer.logo) else null
         )
     }
 
 
-    fun mapVacancyEntity(vacancy: VacancyDetails): VacancyEntity{
+    fun mapVacancyEntity(vacancy: VacancyDetails): VacancyEntity {
         return VacancyEntity(
-            id  = 0,
+            id = 0,
             jobInfoId = 0,
             employerId = 0,
             name = vacancy.name,
@@ -62,36 +61,36 @@ class VacancyDbConvertor(
         )
     }
 
-    fun mapJobDetails(jobDetails: JobInfoJoins): JobInfo{
+    fun mapJobDetails(jobDetails: JobInfoJoins): JobInfo {
         return JobInfo(
-            salary = if(jobDetails.salaryRow != null) mapSalary(jobDetails.salaryRow) else null,
+            salary = if (jobDetails.salaryRow != null) mapSalary(jobDetails.salaryRow) else null,
             experience = jobDetails.jobInfo.experience,
             employment = jobDetails.jobInfo.employment,
-            keySkills = jobDetails.skillList.map{skill -> mapSkills(skill)}
+            keySkills = jobDetails.skillList.map{skill -> mapSkills(skill) }
         )
     }
 
-    fun mapJobDetails(jobDetails: JobInfo): JobInfoJoins{
+    fun mapJobDetails(jobDetails: JobInfo): JobInfoJoins {
         return JobInfoJoins(
             jobInfo = mapJobInfo(jobDetails),
-            salaryRow = if(jobDetails.salary != null) mapSalary(jobDetails.salary) else null,
-            skillList = jobDetails.keySkills.map{skill -> mapSkills(skill)}
-
+            salaryRow = if (jobDetails.salary != null) mapSalary(jobDetails.salary) else null,
+            skillList = jobDetails.keySkills.map{skill -> mapSkills(skill) }
         )
     }
 
-    fun mapSkills(skill: SkillsEntity): String{
+    fun mapSkills(skill: SkillsEntity): String {
         return skill.name
     }
 
-    fun mapSkills(skill: String) :SkillsEntity{
+    fun mapSkills(skill: String) :SkillsEntity {
         return SkillsEntity(
             id = 0,
             jobInfoId = 0,
-            name = skill)
+            name = skill
+        )
     }
 
-    fun mapJobInfo(jobInfo: JobInfo): JobInfoEntity{
+    fun mapJobInfo(jobInfo: JobInfo): JobInfoEntity {
         return JobInfoEntity(
             id = 0,
             experience = jobInfo.experience,
@@ -99,25 +98,25 @@ class VacancyDbConvertor(
         )
     }
 
-    fun mapEmployer(employer: EmployerInfo): EmployerEntity{
+    fun mapEmployer(employer: EmployerInfo): EmployerEntity {
         return EmployerEntity(
             id = 0,
             name = employer.employerName
         )
     }
 
-    fun mapEmployer(employer: EmployerJoins): EmployerInfo{
+    fun mapEmployer(employer: EmployerJoins): EmployerInfo {
         return EmployerInfo(
             employerName = employer.employer.name,
             contacts = null,
             area = mapArea(employer.areaRow),
-            logo = if(employer.logoRow != null) mapLogo(employer.logoRow) else null
+            logo = if (employer.logoRow != null) mapLogo(employer.logoRow) else null
         )
     }
 
-    fun mapSalary(salary: SalaryDetails): SalaryEntity{
+    fun mapSalary(salary: SalaryDetails): SalaryEntity {
         return SalaryEntity(
-            id  = 0,
+            id = 0,
             currency = salary.currency,
             salaryFrom = salary.from,
             salaryTo = salary.to,
@@ -126,15 +125,16 @@ class VacancyDbConvertor(
         )
     }
 
-    fun mapSalary(salary: SalaryEntity): SalaryDetails{
+    fun mapSalary(salary: SalaryEntity): SalaryDetails {
         return SalaryDetails(
             currency = salary.currency,
             from = salary.salaryFrom,
             to = salary.salaryTo,
-            gross = salary.gross)
+            gross = salary.gross
+        )
     }
 
-    fun mapLogo(logo: LogoUrlsDetails): LogosEntity{
+    fun mapLogo(logo: LogoUrlsDetails): LogosEntity {
         return LogosEntity(
             id = 0,
             size90 = logo.size90,
@@ -144,7 +144,7 @@ class VacancyDbConvertor(
         )
     }
 
-    fun mapLogo(logo: LogosEntity): LogoUrlsDetails{
+    fun mapLogo(logo: LogosEntity): LogoUrlsDetails {
         return LogoUrlsDetails(
             size90 = logo.size90,
             size240 = logo.size240,
@@ -152,14 +152,14 @@ class VacancyDbConvertor(
             )
     }
 
-    fun mapArea(area: AreaEntity): AreaDetails{
+    fun mapArea(area: AreaEntity): AreaDetails {
         return AreaDetails(
             id = area.id,
             name = area.name
         )
     }
 
-    fun mapArea(area: AreaDetails, employerId: Int): AreaEntity{
+    fun mapArea(area: AreaDetails, employerId: Int): AreaEntity {
         return AreaEntity(
             id = area.id,
             name = area.name,
