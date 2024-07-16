@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.search.domain.api.GetSuggestionsForSearchUseCase
 
-class SearchJobViewModel(private val getSuggestsUseCase: GetSuggestionsForSearchUseCase) :
+class SearchViewModel(private val getSuggestsUseCase: GetSuggestionsForSearchUseCase) :
     ViewModel() {
     private var suggestionsList = MutableLiveData<List<String>>(emptyList())
     val suggestionsLivaData: LiveData<List<String>> = suggestionsList

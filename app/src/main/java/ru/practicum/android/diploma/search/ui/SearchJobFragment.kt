@@ -10,14 +10,13 @@ import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchJobBinding
-import ru.practicum.android.diploma.details.ui.JobDetailsFragment
 
 class SearchJobFragment : Fragment() {
     private var _binding: FragmentSearchJobBinding? = null
     private val binding get() = _binding!!
     private var suggestionsAdapter: VacancyPositionSuggestsAdapter? = null
 
-    private val viewModel by viewModel<SearchJobViewModel>()
+    private val viewModel by viewModel<SearchViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentSearchJobBinding.inflate(inflater, container, false)

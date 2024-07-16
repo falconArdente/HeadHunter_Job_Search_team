@@ -2,8 +2,6 @@ package ru.practicum.android.diploma.search.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.DisplayMetrics
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +12,7 @@ import android.widget.Filterable
 import android.widget.TextView
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.utils.exactDpToPxHeightBased
+import ru.practicum.android.diploma.utils.getCorrectionCoefficient
 
 class VacancyPositionSuggestsAdapter(
     private val context: Context,
@@ -23,7 +22,7 @@ class VacancyPositionSuggestsAdapter(
     private var suggestionsList: MutableList<String> = mutableListOf()
     private val itemPaddingDp = context.resources.getDimension(R.dimen.suggestions_drop_down_vertical_padding)
     private var maxListDisplaySize = context.resources.getInteger(R.integer.suggestions_drop_down_max_list_items_count)
-    private val displayMetrics: DisplayMetrics = context.resources.displayMetrics
+    private val correctionCoefficient = getCorrectionCoefficient(context)
 
     fun add(item: String) {
         suggestionsList.add(item)
@@ -32,12 +31,13 @@ class VacancyPositionSuggestsAdapter(
     }
 
     private fun adjustDropDownSize() {
-        Log.d("Disp", "${displayMetrics.density}")
-        val coefficient=((displayMetrics.density-2)/0.25f)*8.3f
         val suggestionListSizeToCalc =
             if (suggestionsList.size > maxListDisplaySize) maxListDisplaySize else suggestionsList.size
         hostTextView.dropDownHeight =
-            (hostTextView.lineHeight-coefficient.toInt() + exactDpToPxHeightBased(context, itemPaddingDp.toInt())) * suggestionListSizeToCalc
+            (hostTextView.lineHeight - correctionCoefficient.toInt() + exactDpToPxHeightBased(
+                context,
+                itemPaddingDp.toInt()
+            )) * suggestionListSizeToCalc
     }
 
     fun applyDataSet(items: Collection<String>) {

@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.search.data.repository
 
-import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.network.data.dto.linked.VacancyFunctTitle
@@ -21,7 +20,6 @@ class GetSuggestionsForSearchUseCaseImpl(private val repository: SearchRepositor
 
                         is Resource.Error -> {
                             emit(emptyList())
-                            Log.d("Search suggestions", resource.message.toString())
                         }
                     }
                 }
