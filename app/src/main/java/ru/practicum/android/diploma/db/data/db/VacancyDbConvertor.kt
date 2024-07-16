@@ -48,7 +48,6 @@ class VacancyDbConvertor {
         )
     }
 
-
     private fun mapVacancyEntity(vacancy: VacancyDetails): VacancyEntity {
         return VacancyEntity(
             id = 0,
@@ -166,5 +165,4 @@ class VacancyDbConvertor {
             employerId = 0
         )
     }
-
 }
