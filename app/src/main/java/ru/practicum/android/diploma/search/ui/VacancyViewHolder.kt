@@ -1,5 +1,7 @@
 package ru.practicum.android.diploma.search.ui
 
+import android.util.TypedValue
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -32,10 +34,10 @@ class VacancyViewHolder(private val binding: JobListItemBinding) : RecyclerView.
             )
         }
         Glide.with(itemView)
-            .load(vacancy.employer?.logoUrls?.size90) // тут пока лого поставил, но не уверен, надо разбираться
+            .load(vacancy.employer?.logoUrls?.size90)
             .placeholder(R.drawable.placeholder_logo)
             .centerCrop()
-            .transform(RoundedCorners(itemView.resources.getDimensionPixelSize(R.dimen.dp12))) // вставить нашу функцию из util?
+            .transform(RoundedCorners(dpToPx(itemView, 12f)))// вставить нашу функцию из util?
             .into(binding.jobImage)
     }
 
@@ -44,5 +46,11 @@ class VacancyViewHolder(private val binding: JobListItemBinding) : RecyclerView.
         if (currencyCode == "RUR") currencyCode = "RUB"
         val currency = java.util.Currency.getInstance(currencyCode)
         return currency.symbol
+    }
+
+    private fun dpToPx(view: View, dp: Float): Int {
+        val displayMetrics = view.resources.displayMetrics
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, displayMetrics)
+            .toInt()
     }
 }
