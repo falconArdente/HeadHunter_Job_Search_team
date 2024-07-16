@@ -47,7 +47,7 @@ class VacancyRepositoryImpl(
         }
     }
 
-    override suspend fun insertVacancyWitCheck(vacancyDetails: VacancyDetails) {
+    override suspend fun insertVacancyWithCheck(vacancyDetails: VacancyDetails) {
         deleteVacancy(vacancyDetails.id.toInt())
         val vacancyJoins = vacancyDbConvertor.mapVacancy(vacancyDetails)
         appDatabase.vacancyDao().insertVacancyJoins(vacancyJoins)

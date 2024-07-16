@@ -14,8 +14,8 @@ class DetailsDbInteractorImpl(private val vacancyRepository: VacancyRepository) 
         vacancyRepository.insertVacancy(vacancyDetails)
     }
 
-    override suspend fun insertVacancyWitCheck(vacancyDetails: VacancyDetails) {
-        vacancyRepository.insertVacancyWitCheck(vacancyDetails)
+    override suspend fun insertVacancyWithCheck(vacancyDetails: VacancyDetails) {
+        vacancyRepository.insertVacancyWithCheck(vacancyDetails)
     }
 
     override fun isExistsVacancy(vacancyId: Int): Flow<Boolean> {

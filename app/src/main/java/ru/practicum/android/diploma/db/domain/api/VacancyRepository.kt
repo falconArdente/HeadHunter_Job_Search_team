@@ -17,5 +17,5 @@ interface VacancyRepository {
 
     suspend fun deleteVacancy(vacancyId: Int)
 
-    suspend fun insertVacancyWitCheck(vacancyDetails: VacancyDetails)
+    suspend fun insertVacancyWithCheck(vacancyDetails: VacancyDetails)
 }

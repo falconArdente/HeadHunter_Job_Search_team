@@ -10,7 +10,7 @@ interface DetailsDbInteractor {
 
     suspend fun deleteVacancy(vacancyId: Int)
 
-    suspend fun insertVacancyWitCheck(vacancyDetails: VacancyDetails)
+    suspend fun insertVacancyWithCheck(vacancyDetails: VacancyDetails)
 
     fun getVacancyById(vacancyId: Int): Flow<VacancyDetails?>
 }

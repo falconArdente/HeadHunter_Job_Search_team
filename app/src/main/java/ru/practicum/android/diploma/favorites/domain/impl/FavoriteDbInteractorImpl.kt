@@ -23,7 +23,7 @@ class FavoriteDbInteractorImpl(private val vacancyRepository: VacancyRepository)
     }
 
     override suspend fun insertVacancyWitCheck(vacancyDetails: VacancyDetails) {
-        vacancyRepository.insertVacancyWitCheck(vacancyDetails)
+        vacancyRepository.insertVacancyWithCheck(vacancyDetails)
     }
 
     override fun isExistsVacancy(vacancyId: Int): Flow<Boolean> {
