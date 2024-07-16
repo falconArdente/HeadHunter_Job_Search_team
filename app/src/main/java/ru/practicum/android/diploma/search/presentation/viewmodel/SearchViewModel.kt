@@ -46,7 +46,6 @@ class SearchViewModel(private val interactor: SearchInteractor) : ViewModel() {
                         updateState(SearchFragmentState.ServerError)
                     } else if (vacancy.errorMessage.isNullOrEmpty()) {
                         updateState(SearchFragmentState.NoResult)
-                        //
                     }
                 }
         }
