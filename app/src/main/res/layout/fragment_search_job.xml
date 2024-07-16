@@ -125,8 +125,27 @@
         app:layout_constraintDimensionRatio="328:223"
         app:layout_constraintEnd_toEndOf="@id/searchRightGuideline"
         app:layout_constraintStart_toStartOf="@id/searchLeftGuideline"
+
         app:layout_constraintTop_toBottomOf="@id/searchInputBackground"
         tools:ignore="ContentDescription" />
+    <include
+        android:id="@+id/no_results_search_include"
+        layout="@layout/no_result_search_item"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        tools:listitem="@layout/no_result_search_item"
+        app:layout_constraintTop_toTopOf="@id/searchInputIcon"
+        />
+
+    <include
+        android:id="@+id/server_error_include"
+        layout="@layout/server_error_search_item"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        tools:listitem="@layout/server_error_search_item"
+        app:layout_constraintTop_toBottomOf="@id/searchInputBackground"/>
 
     <TextView
         android:id="@+id/searchPlaceholderText"
@@ -155,7 +174,7 @@
             android:orientation="vertical">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/searchJobsList"
+                android:id="@+id/recyclerViewSearch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

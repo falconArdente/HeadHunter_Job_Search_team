@@ -6,5 +6,5 @@ data class EmployerModel(
     val url: String?,
     val vacanciesUrl: String?,
     val isTrusted: Boolean,
-    val logoUrls: LogoUrlsModel?
+    val logoUrls: LogoUrlsModel?,
 )
