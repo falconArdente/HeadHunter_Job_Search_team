@@ -33,7 +33,7 @@ abstract class VacancyDao {
             name = vacancy.vacancy.name,
             description = vacancy.vacancy.description,
             vacancyUrl = vacancy.vacancy.vacancyUrl,
-            dateAdd = SimpleDateFormat("yyyy/dd/M hh:mm:ss").format(Date())
+            dateAdd = vacancy.vacancy.dateAdd
         )
 
         insertVacancy(vacancyEntity)
