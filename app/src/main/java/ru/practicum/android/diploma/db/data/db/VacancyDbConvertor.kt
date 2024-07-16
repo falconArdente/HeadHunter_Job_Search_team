@@ -40,16 +40,16 @@ class VacancyDbConvertor {
         )
     }
 
-    fun mapEmployerJoin(employer: EmployerInfo): EmployerJoins {
+    private fun mapEmployerJoin(employer: EmployerInfo): EmployerJoins {
         return EmployerJoins(
             employer = mapEmployer(employer),
-            areaRow = mapArea(employer.area, 0),
+            areaRow = mapArea(employer.area),
             logoRow = if (employer.logo != null) mapLogo(employer.logo) else null
         )
     }
 
 
-    fun mapVacancyEntity(vacancy: VacancyDetails): VacancyEntity {
+    private fun mapVacancyEntity(vacancy: VacancyDetails): VacancyEntity {
         return VacancyEntity(
             id = 0,
             jobInfoId = 0,
@@ -61,7 +61,7 @@ class VacancyDbConvertor {
         )
     }
 
-    fun mapJobDetails(jobDetails: JobInfoJoins): JobInfo {
+    private fun mapJobDetails(jobDetails: JobInfoJoins): JobInfo {
         return JobInfo(
             salary = if (jobDetails.salaryRow != null) mapSalary(jobDetails.salaryRow) else null,
             experience = jobDetails.jobInfo.experience,
@@ -70,7 +70,7 @@ class VacancyDbConvertor {
         )
     }
 
-    fun mapJobDetails(jobDetails: JobInfo): JobInfoJoins {
+    private fun mapJobDetails(jobDetails: JobInfo): JobInfoJoins {
         return JobInfoJoins(
             jobInfo = mapJobInfo(jobDetails),
             salaryRow = if (jobDetails.salary != null) mapSalary(jobDetails.salary) else null,
@@ -78,11 +78,11 @@ class VacancyDbConvertor {
         )
     }
 
-    fun mapSkills(skill: SkillsEntity): String {
+    private fun mapSkills(skill: SkillsEntity): String {
         return skill.name
     }
 
-    fun mapSkills(skill: String) :SkillsEntity {
+    private fun mapSkills(skill: String) :SkillsEntity {
         return SkillsEntity(
             id = 0,
             jobInfoId = 0,
@@ -90,7 +90,7 @@ class VacancyDbConvertor {
         )
     }
 
-    fun mapJobInfo(jobInfo: JobInfo): JobInfoEntity {
+    private fun mapJobInfo(jobInfo: JobInfo): JobInfoEntity {
         return JobInfoEntity(
             id = 0,
             experience = jobInfo.experience,
@@ -98,14 +98,14 @@ class VacancyDbConvertor {
         )
     }
 
-    fun mapEmployer(employer: EmployerInfo): EmployerEntity {
+    private fun mapEmployer(employer: EmployerInfo): EmployerEntity {
         return EmployerEntity(
             id = 0,
             name = employer.employerName
         )
     }
 
-    fun mapEmployer(employer: EmployerJoins): EmployerInfo {
+    private fun mapEmployer(employer: EmployerJoins): EmployerInfo {
         return EmployerInfo(
             employerName = employer.employer.name,
             contacts = null,
@@ -114,7 +114,7 @@ class VacancyDbConvertor {
         )
     }
 
-    fun mapSalary(salary: SalaryDetails): SalaryEntity {
+    private fun mapSalary(salary: SalaryDetails): SalaryEntity {
         return SalaryEntity(
             id = 0,
             currency = salary.currency,
@@ -125,7 +125,7 @@ class VacancyDbConvertor {
         )
     }
 
-    fun mapSalary(salary: SalaryEntity): SalaryDetails {
+    private fun mapSalary(salary: SalaryEntity): SalaryDetails {
         return SalaryDetails(
             currency = salary.currency,
             from = salary.salaryFrom,
@@ -134,7 +134,7 @@ class VacancyDbConvertor {
         )
     }
 
-    fun mapLogo(logo: LogoUrlsDetails): LogosEntity {
+    private fun mapLogo(logo: LogoUrlsDetails): LogosEntity {
         return LogosEntity(
             id = 0,
             size90 = logo.size90,
@@ -144,7 +144,7 @@ class VacancyDbConvertor {
         )
     }
 
-    fun mapLogo(logo: LogosEntity): LogoUrlsDetails {
+    private fun mapLogo(logo: LogosEntity): LogoUrlsDetails {
         return LogoUrlsDetails(
             size90 = logo.size90,
             size240 = logo.size240,
@@ -152,18 +152,18 @@ class VacancyDbConvertor {
             )
     }
 
-    fun mapArea(area: AreaEntity): AreaDetails {
+    private fun mapArea(area: AreaEntity): AreaDetails {
         return AreaDetails(
             id = area.id,
             name = area.name
         )
     }
 
-    fun mapArea(area: AreaDetails, employerId: Int): AreaEntity {
+    private fun mapArea(area: AreaDetails): AreaEntity {
         return AreaEntity(
             id = area.id,
             name = area.name,
-            employerId = employerId
+            employerId = 0
         )
     }
 
