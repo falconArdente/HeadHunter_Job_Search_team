@@ -36,7 +36,7 @@ class SearchJobFragment : Fragment() {
         }
 
         binding.searchInputIcon.setOnClickListener {
-            binding.searchInput.setText("")
+            binding.searchInput.setText(String())
         }
 
         // Удалить потом!
