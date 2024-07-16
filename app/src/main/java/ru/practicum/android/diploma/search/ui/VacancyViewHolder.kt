@@ -15,6 +15,7 @@ class VacancyViewHolder(private val binding: JobListItemBinding) : RecyclerView.
         if (vacancy.area == null) {
             allText = vacancy.name
         }
+        val dp = 12f
         binding.jobTitle.text = allText
         binding.jobEmployer.text = vacancy.employer?.name ?: "ЗАМЕЩАЮЩИЙ ТЕКСТ?"
         binding.jobSalary.text = if (vacancy.salary == null) {
@@ -37,7 +38,7 @@ class VacancyViewHolder(private val binding: JobListItemBinding) : RecyclerView.
             .load(vacancy.employer?.logoUrls?.size90)
             .placeholder(R.drawable.placeholder_logo)
             .centerCrop()
-            .transform(RoundedCorners(dpToPx(itemView, 12f)))// вставить нашу функцию из util?
+            .transform(RoundedCorners(dpToPx(itemView, dp)))
             .into(binding.jobImage)
     }
 
