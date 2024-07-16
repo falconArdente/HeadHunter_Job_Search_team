@@ -2,7 +2,7 @@ package ru.practicum.android.diploma.db.data.impl
 
 import ru.practicum.android.diploma.db.data.db.AppDatabase
 import ru.practicum.android.diploma.db.data.db.VacancyDbConvertor
-import ru.practicum.android.diploma.db.data.domain.VacancyRepository
+import ru.practicum.android.diploma.db.domain.api.VacancyRepository
 import ru.practicum.android.diploma.details.domain.model.VacancyDetails
 
 class VacancyRepositoryImpl(

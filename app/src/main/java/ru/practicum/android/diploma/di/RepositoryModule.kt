@@ -3,7 +3,7 @@ package ru.practicum.android.diploma.di
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import ru.practicum.android.diploma.db.data.db.VacancyDbConvertor
-import ru.practicum.android.diploma.db.data.domain.VacancyRepository
+import ru.practicum.android.diploma.db.domain.api.VacancyRepository
 import ru.practicum.android.diploma.db.data.impl.VacancyRepositoryImpl
 import ru.practicum.android.diploma.details.data.repository.NavigatorRepositoryImpl
 import ru.practicum.android.diploma.details.domain.api.NavigatorRepository
