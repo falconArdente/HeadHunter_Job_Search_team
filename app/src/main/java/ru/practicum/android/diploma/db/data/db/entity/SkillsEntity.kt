@@ -7,6 +7,6 @@ import androidx.room.PrimaryKey
 data class SkillsEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val vacancyId: Int,
+    var jobInfoId: Int,
     val name: String
 )

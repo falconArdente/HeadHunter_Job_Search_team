@@ -75,7 +75,7 @@ class VacancyDbConvertor(
         return JobInfoJoins(
             jobInfo = mapJobInfo(jobDetails),
             salaryRow = if(jobDetails.salary != null) mapSalary(jobDetails.salary) else null,
-            skillList = jobDetails.keySkills.map{skill -> mapSkills(skill,0)}
+            skillList = jobDetails.keySkills.map{skill -> mapSkills(skill)}
 
         )
     }
@@ -84,10 +84,10 @@ class VacancyDbConvertor(
         return skill.name
     }
 
-    fun mapSkills(skill: String, vacancyId: Int) :SkillsEntity{
+    fun mapSkills(skill: String) :SkillsEntity{
         return SkillsEntity(
             id = 0,
-            vacancyId = vacancyId,
+            jobInfoId = 0,
             name = skill)
     }
 
