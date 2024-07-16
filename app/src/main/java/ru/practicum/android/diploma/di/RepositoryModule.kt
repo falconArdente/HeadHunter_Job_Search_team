@@ -35,6 +35,5 @@ val repositoryModule = module {
 
     factory<VacancyDetailsRepository> {
         HeadHunterRepository(client = get(), context = androidContext())
-
     }
 }
