@@ -57,11 +57,11 @@
 
     <string name="found_x_vacancies">Найдено %1s</string>
     <plurals name="plurals_vacancy">
-        <item quantity="zero">вакансий</item>
+        <item quantity="zero"> вакансий</item>
         <item quantity="one"> вакансия</item>
         <item quantity="two"> вакансии</item>
         <item quantity="few"> вакансии</item>
         <item quantity="many"> вакансий</item>
-        <item quantity="other"> вакансия</item>
+        <item quantity="other"> вакансий</item>
     </plurals>
 </resources>

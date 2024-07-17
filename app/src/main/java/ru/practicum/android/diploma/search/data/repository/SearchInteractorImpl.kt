@@ -16,10 +16,7 @@ class SearchInteractorImpl(val repository: SearchRepository, val converter: Sear
                     is Resource.Success -> {
                         val vacancyList =
                             converter.mapToListVacancyModel(vacancyListResponse.data!!.vacancyAtSearchList)
-                        var foundVacancy = vacancyListResponse.data.totalFound
-                        if (foundVacancy == null) {
-                            foundVacancy = -1
-                        }
+                        val foundVacancy = vacancyListResponse.data.totalFound
                         val pagesTotal = vacancyListResponse.data.totalPages
                         emit(
                             VacancyListResult(

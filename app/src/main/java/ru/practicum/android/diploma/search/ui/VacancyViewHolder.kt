@@ -16,7 +16,7 @@ private const val CORNER = 12f
 class VacancyViewHolder(private val binding: JobListItemBinding) : RecyclerView.ViewHolder(binding.root) {
     fun bind(vacancy: Vacancy) {
         binding.jobTitle.text = jobTitleText(vacancy)
-        binding.jobEmployer.text = vacancy.employer?.name ?: "ЗАМЕЩАЮЩИЙ ТЕКСТ?"
+        binding.jobEmployer.text = vacancy.employer?.name ?: ""
         binding.jobSalary.text = jobSalaryText(vacancy)
         Glide.with(itemView)
             .load(vacancy.employer?.logoUrls?.size90)
@@ -24,15 +24,14 @@ class VacancyViewHolder(private val binding: JobListItemBinding) : RecyclerView.
             .centerCrop()
             .transform(RoundedCorners(dpToPx(itemView, CORNER)))
             .into(binding.jobImage)
-
     }
 
     private fun jobTitleText(vacancy: Vacancy): String {
-        var allText = "${vacancy.name}, ${vacancy.area}"
-        if (vacancy.area == null) {
-            allText = vacancy.name
+        return if (vacancy.area?.name == null) {
+            vacancy.name
+        } else {
+            "${vacancy.name}, ${vacancy.area.name}"
         }
-        return allText
     }
 
     private fun jobSalaryText(vacancy: Vacancy): String {

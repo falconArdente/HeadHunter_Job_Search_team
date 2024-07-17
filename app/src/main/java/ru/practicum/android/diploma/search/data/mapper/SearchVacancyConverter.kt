@@ -1,10 +1,12 @@
 package ru.practicum.android.diploma.search.data.mapper
 
+import ru.practicum.android.diploma.network.data.dto.linked.Area
 import ru.practicum.android.diploma.network.data.dto.linked.BrandSnippet
 import ru.practicum.android.diploma.network.data.dto.linked.Employer
 import ru.practicum.android.diploma.network.data.dto.linked.LogoUrls
 import ru.practicum.android.diploma.network.data.dto.linked.Salary
 import ru.practicum.android.diploma.network.data.dto.linked.VacancyAtSearch
+import ru.practicum.android.diploma.search.domain.model.AreaModel
 import ru.practicum.android.diploma.search.domain.model.BrandSnippetModel
 import ru.practicum.android.diploma.search.domain.model.EmployerModel
 import ru.practicum.android.diploma.search.domain.model.LogoUrlsModel
@@ -19,8 +21,7 @@ class SearchVacancyConverter {
             salary = mapToSalaryModel(vacancy.salary),
             employer = mapToEmployerModel(vacancy.employer),
             brandSnippet = mapToBrandSnippetModel(vacancy.brandSnippet),
-            contacts = vacancy.contacts,
-            area = null,
+            area = mapToAreaModel(vacancy.area)
         )
     }
 
@@ -28,6 +29,18 @@ class SearchVacancyConverter {
         return vacancy.map { vacancyAtSearch ->
             mapToVacancyModel(vacancyAtSearch)
         }
+    }
+
+    fun mapToAreaModel(remote: Area?): AreaModel? {
+        if (remote == null) return null
+        return AreaModel(
+            subAreas = remote.subAreas?.map { mapToAreaModel(it) } ,
+            id = remote.id,
+            name = remote.name,
+            prepositional = remote.prepositional,
+            parentId = remote.parentId,
+        )
+
     }
 
     fun mapToSalaryModel(salaryDTO: Salary?): SalaryModel? {
