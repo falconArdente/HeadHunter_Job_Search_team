@@ -35,7 +35,9 @@ abstract class VacancyDao {
             deleteLogo(employerJoins.logoRow)
         }
 
-        deleteArea(employerJoins.areaRow)
+        if (employerJoins.employer.areaId != null) {
+            deleteArea(employerJoins.employer.areaId)
+        }
     }
 
     private suspend fun deleteJobInfoJoins(jobInfoJoins: JobInfoJoins) {
@@ -173,8 +175,11 @@ abstract class VacancyDao {
     @Delete
     abstract suspend fun deleteLogo(logo: LogosEntity)
 
-    @Delete
-    abstract suspend fun deleteArea(area: AreaEntity)
+    @Query(
+        "DELETE FROM Area where id = :areaId " +
+            "AND not exists (select 1 FROM Employer p1 where p1.areaId = :areaId )"
+    )
+    abstract suspend fun deleteArea(areaId: Long)
 
     @Delete
     abstract suspend fun deleteVacancy(vacancy: VacancyEntity)
