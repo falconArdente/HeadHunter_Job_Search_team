@@ -185,7 +185,7 @@ abstract class VacancyDao {
         "DELETE FROM Area where id = :areaId " +
             "AND not exists (select 1 FROM Employer p1 where p1.areaId = :areaId )"
     )
-    abstract suspend fun deleteArea(areaId: String?)
+    abstract suspend fun deleteArea(areaId: String)
 
     @Delete
     abstract suspend fun deleteVacancy(vacancy: VacancyEntity)

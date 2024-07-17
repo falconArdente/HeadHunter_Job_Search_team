@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.db.data.impl
 
+import androidx.room.withTransaction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.db.data.db.AppDatabase
@@ -43,7 +44,9 @@ class VacancyRepositoryImpl(
     override suspend fun deleteVacancy(vacancyId: Int) {
         val vacancy = appDatabase.vacancyDao().getVacancyById(vacancyId)
         if (vacancy != null) {
-            appDatabase.vacancyDao().deleteVacancyJoins(vacancy)
+            appDatabase.withTransaction {
+                appDatabase.vacancyDao().deleteVacancyJoins(vacancy)
+            }
         }
     }
 
