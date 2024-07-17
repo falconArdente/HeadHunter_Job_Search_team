@@ -173,4 +173,9 @@ class SearchJobFragment : Fragment() {
         inputManager.hideSoftInputFromWindow(windowToken, 0)
 
     }
+
+    override fun onResume() {
+        super.onResume()
+        showView()
+    }
 }
