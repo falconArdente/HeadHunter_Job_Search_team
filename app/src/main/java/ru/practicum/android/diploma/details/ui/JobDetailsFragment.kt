@@ -19,13 +19,14 @@ import ru.practicum.android.diploma.details.presentation.state.VacancyDetailsSta
 import ru.practicum.android.diploma.details.presentation.viewmodel.VacancyDetailsViewModel
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
+import java.util.Locale
 
 class JobDetailsFragment : Fragment() {
 
     private var _binding: FragmentJobDetailsBinding? = null
     private val binding get() = _binding!!
     private val viewModel: VacancyDetailsViewModel by viewModel<VacancyDetailsViewModel> {
-        parametersOf(requireArguments().getString(VACANCY_ID))
+        parametersOf("103907971")
     }
 
     override fun onCreateView(
@@ -116,21 +117,33 @@ class JobDetailsFragment : Fragment() {
     }
 
     private fun renderJobSalary(vacancyDetails: VacancyDetails) {
-        binding.jobSalary.text = if (vacancyDetails.jobInfo.salary == null) {
-            binding.root.resources.getString(R.string.no_salary_msg)
-        } else if (vacancyDetails.jobInfo.salary.to == null) {
-            binding.root.resources.getString(
-                R.string.salary_from,
-                formatSalaryAmount(vacancyDetails.jobInfo.salary.from),
-                convertCurrencyToSymbol(vacancyDetails)
-            )
-        } else {
-            binding.root.resources.getString(
-                R.string.salary_range,
-                formatSalaryAmount(vacancyDetails.jobInfo.salary.from),
-                formatSalaryAmount(vacancyDetails.jobInfo.salary.to),
-                convertCurrencyToSymbol(vacancyDetails)
-            )
+        binding.jobSalary.text = when {
+            vacancyDetails.jobInfo.salary == null -> binding.root.resources.getString(R.string.no_salary_msg)
+
+            vacancyDetails.jobInfo.salary.from == null && vacancyDetails.jobInfo.salary.to != null -> {
+                binding.root.resources.getString(
+                    R.string.salary_to,
+                    formatSalaryAmount(vacancyDetails.jobInfo.salary.to),
+                    convertCurrencyToSymbol(vacancyDetails)
+                )
+            }
+
+            vacancyDetails.jobInfo.salary.to == null -> {
+                binding.root.resources.getString(
+                    R.string.salary_from,
+                    formatSalaryAmount(vacancyDetails.jobInfo.salary.from),
+                    convertCurrencyToSymbol(vacancyDetails)
+                )
+            }
+
+            else -> {
+                binding.root.resources.getString(
+                    R.string.salary_range,
+                    formatSalaryAmount(vacancyDetails.jobInfo.salary.from),
+                    formatSalaryAmount(vacancyDetails.jobInfo.salary.to),
+                    convertCurrencyToSymbol(vacancyDetails)
+                )
+            }
         }
     }
 
@@ -143,6 +156,11 @@ class JobDetailsFragment : Fragment() {
     private fun convertCurrencyToSymbol(vacancy: VacancyDetails): String { // в Utils?
         var currencyCode = vacancy.jobInfo.salary?.currency
         if (currencyCode == "RUR") currencyCode = "RUB"
+        if (currencyCode == "KZT") {
+            val kztLocale = Locale("kk", "KZ")
+            val currency = java.util.Currency.getInstance(currencyCode)
+            return currency.getSymbol(kztLocale)
+        }
         val currency = java.util.Currency.getInstance(currencyCode)
         return currency.symbol
     }
@@ -201,7 +219,7 @@ class JobDetailsFragment : Fragment() {
                 "${binding.jobContactsEmail.text} ${vacancyDetails.employerInfo.contacts.email}"
             binding.jobContactsPhone.text =
                 "${binding.jobContactsPhone.text} " +
-                "${vacancyDetails.employerInfo.contacts.phones?.joinToString(separator = "\n")}"
+                    "${vacancyDetails.employerInfo.contacts.phones?.joinToString(separator = "\n")}"
         }
     }
 

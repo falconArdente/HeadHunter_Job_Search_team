@@ -48,6 +48,7 @@
 
     <string name="salary_range">от %1s до %1s %1s</string>
     <string name="salary_from">от %1s %1s</string>
+    <string name="salary_to">до %1s %1s</string>
     <string name="no_salary_msg">Зарплата не указана</string>
     <string name="bullet_point">•\u0020</string>
     <string name="email">email:\u0020</string>
