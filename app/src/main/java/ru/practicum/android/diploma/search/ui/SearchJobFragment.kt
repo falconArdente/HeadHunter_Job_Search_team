@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,8 +51,6 @@ class SearchJobFragment : Fragment() {
 
     private fun renderSuggestions(incomeSuggestions: List<String>) {
         suggestionsAdapter?.applyDataSet(incomeSuggestions)
-
-
     }
 
     private fun showView() {
@@ -61,22 +58,25 @@ class SearchJobFragment : Fragment() {
             allViewGone()
             when (it) {
                 is SearchFragmentState.SearchVacancy -> {
-                    Log.d("серч вэк", "")
                     adapter.updateList(it.searchVacancy)
                     binding.recyclerViewSearch.visibility = View.VISIBLE
                     binding.searchJobsCountButton.visibility = View.VISIBLE
-                    val text = requireActivity().getString(R.string.found_x_vacancies, it.totalFoundVacancy.toString())
+                    val pluralVacancy = resources.getQuantityString(
+                        R.plurals.plurals_vacancy, it.totalFoundVacancy
+                    )
+                    val foundVac =
+                        requireActivity().getString(R.string.found_x_vacancies, it.totalFoundVacancy.toString())
+                    val text = " $foundVac $pluralVacancy"
                     binding.searchJobsCountButton.text = text
                 }
 
                 is SearchFragmentState.Loading -> {
-                    Log.d("лоад", "")
                     binding.searchProgressBar.visibility = View.VISIBLE
                 }
 
                 is SearchFragmentState.NoResult -> {
-                    Log.d("но рез", "")
                     binding.searchJobsCountButton.visibility = View.VISIBLE
+
                     binding.searchJobsCountButton.text = requireActivity().getString(R.string.no_such_vacancies)
                     binding.noResultsSearchInclude.root.visibility = View.VISIBLE
                 }
@@ -86,12 +86,10 @@ class SearchJobFragment : Fragment() {
                 }
 
                 is SearchFragmentState.NoTextInInputEditText -> {
-                    Log.d("ноу текст", "")
                     binding.searchPlaceholderImage.visibility = View.VISIBLE
                 }
 
                 else -> {
-                    Log.d("tkc", "")
                 }
             }
         }
@@ -104,6 +102,7 @@ class SearchJobFragment : Fragment() {
         binding.recyclerViewSearch.visibility = View.GONE
         binding.searchPlaceholderImage.visibility = View.GONE
         binding.searchJobsCountButton.visibility = View.GONE
+
     }
 
     private fun clickListenerFun() = object : SearchRecyclerViewEvent {
@@ -139,7 +138,7 @@ class SearchJobFragment : Fragment() {
             }
 
             override fun afterTextChanged(p0: Editable?) {
-                // для детекта
+                // detect
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {

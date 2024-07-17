@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.search.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -27,13 +28,13 @@ class SearchViewModel(
     private var suggestionsList = MutableLiveData<List<String>>(emptyList())
     val suggestionsLivaData: LiveData<List<String>> = suggestionsList
 
-    private var currentPage = -1
+    private var currentPage = 1
     private var maxPages = 0
     private val vacanciesList = mutableListOf<Vacancy>()
+    private var totalFound = 0
 
     init {
         updateState(SearchFragmentState.NoTextInInputEditText)
-
     }
 
     fun getSuggestionsForSearch(textForSuggests: String) {
@@ -60,9 +61,15 @@ class SearchViewModel(
                 .collect { vacancy ->
                     if (vacancy.result!!.isNotEmpty()) {
                         maxPages = vacancy.pages
-                        currentPage = vacancy.page
-                        vacanciesList += vacancy.result
-                        updateState(SearchFragmentState.SearchVacancy(vacanciesList, vacancy.foundVacancy))
+                        if (currentPage == maxPages || vacanciesList.count() == vacancy.foundVacancy) {
+                            vacanciesList.addAll(vacancy.result)
+                            updateState(SearchFragmentState.SearchVacancy(vacanciesList, totalFound))
+                        }
+                        if (currentPage < maxPages) {
+                            vacanciesList += vacancy.result
+                        }
+                        totalFound = vacancy.foundVacancy
+                        updateState(SearchFragmentState.SearchVacancy(vacanciesList, totalFound))
                     } else if (vacancy.errorMessage!!.isNotEmpty()) {
                         updateState(SearchFragmentState.ServerError)
                     } else if (vacancy.errorMessage.isNullOrEmpty()) {
@@ -73,7 +80,7 @@ class SearchViewModel(
     }
 
     fun searchWithDebounce(text: String) {
-        currentPage = 0
+        //  currentPage = 0
         vacanciesList.clear()
         latestSearchText = text
         searchJob?.cancel()
@@ -98,7 +105,12 @@ class SearchViewModel(
     fun onLastItemReached() {
         if (currentPage < maxPages) {
             currentPage++
+            updateState(SearchFragmentState.Loading)
             searchResult(latestSearchText!!)
+        }
+        if (currentPage == maxPages) {
+            updateState(SearchFragmentState.SearchVacancy(vacanciesList, totalFound))
         }
     }
 }
+

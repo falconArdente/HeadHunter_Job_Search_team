@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.search.data.repository
 
-import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.search.data.mapper.SearchVacancyConverter
@@ -22,8 +21,6 @@ class SearchInteractorImpl(val repository: SearchRepository, val converter: Sear
                             foundVacancy = -1
                         }
                         val pagesTotal = vacancyListResponse.data.totalPages
-                        Log.d("тотал фаунд", foundVacancy.toString())
-                        Log.d("тотал пэйджз", pagesTotal.toString())
                         emit(
                             VacancyListResult(
                                 result = vacancyList,
@@ -31,8 +28,7 @@ class SearchInteractorImpl(val repository: SearchRepository, val converter: Sear
                                 foundVacancy = foundVacancy.toInt(),
                                 page = 0,
                                 pages = pagesTotal.toInt(),
-
-                                )
+                            )
                         )
                     }
 
