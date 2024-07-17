@@ -51,14 +51,16 @@ class RetrofitBasedClient(retrofit: Retrofit, private val networkStatus: Network
                 }
                 response.apply { resultCode = Response.SUCCESS }
             } catch (e: HttpException) {
-                if (e.code() == 404) {
+                if (e.code() == Response.NOT_FOUND) {
                     Response().apply {
                         errorMessage = e.message
                         resultCode = Response.NOT_FOUND
                     }
-                } else Response().apply {
-                    errorMessage = e.message
-                    resultCode = Response.FAILURE
+                } else {
+                    Response().apply {
+                        errorMessage = e.message
+                        resultCode = Response.FAILURE
+                    }
                 }
             } catch (e: UncheckedIOException) {
                 Response().apply {
