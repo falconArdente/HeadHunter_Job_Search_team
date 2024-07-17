@@ -48,6 +48,8 @@ class FavoritesViewModel(private val getFavoritesListUseCase: GetFavoritesListUs
                             }
                         }
                     }
+
+                    else -> Unit
                 }
             }
     }

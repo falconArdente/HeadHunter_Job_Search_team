@@ -2,6 +2,7 @@ package ru.practicum.android.diploma.network.data
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 import retrofit2.Retrofit
 import ru.practicum.android.diploma.network.data.api.HeadHunterApplicationApi
 import ru.practicum.android.diploma.network.data.api.HeadHunterNetworkClient
@@ -49,6 +50,18 @@ class RetrofitBasedClient(retrofit: Retrofit, private val networkStatus: Network
                     is HeadHunterRequest.VacancyById -> serverService.getVacancyById(request.id)
                 }
                 response.apply { resultCode = Response.SUCCESS }
+            } catch (e: HttpException) {
+                if (e.code() == Response.NOT_FOUND) {
+                    Response().apply {
+                        errorMessage = e.message
+                        resultCode = Response.NOT_FOUND
+                    }
+                } else {
+                    Response().apply {
+                        errorMessage = e.message
+                        resultCode = Response.FAILURE
+                    }
+                }
             } catch (e: UncheckedIOException) {
                 Response().apply {
                     errorMessage = e.message

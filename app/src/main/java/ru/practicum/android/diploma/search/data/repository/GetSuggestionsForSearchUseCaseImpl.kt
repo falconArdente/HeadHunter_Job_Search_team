@@ -18,7 +18,7 @@ class GetSuggestionsForSearchUseCaseImpl(private val repository: SearchRepositor
                             emit(vacancyFuncTitleListToListForSuggestions(resource.data as List<VacancyFunctTitle>))
                         }
 
-                        is Resource.Error -> {
+                        is Resource.Error, is Resource.InternetConnectionError, is Resource.NotFoundError -> {
                             emit(emptyList())
                         }
                     }

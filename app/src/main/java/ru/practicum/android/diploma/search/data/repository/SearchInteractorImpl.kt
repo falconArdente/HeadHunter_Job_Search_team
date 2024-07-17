@@ -32,7 +32,7 @@ class SearchInteractorImpl(val repository: SearchRepository, val converter: Sear
                         )
                     }
 
-                    is Resource.Error -> {
+                    is Resource.Error, is Resource.InternetConnectionError, is Resource.NotFoundError -> {
                         emit(
                             VacancyListResult(emptyList(), vacancyListResponse.message, 0, 0, 0)
                         )
