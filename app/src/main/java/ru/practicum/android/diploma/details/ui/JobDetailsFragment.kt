@@ -26,7 +26,7 @@ class JobDetailsFragment : Fragment() {
     private var _binding: FragmentJobDetailsBinding? = null
     private val binding get() = _binding!!
     private val viewModel: VacancyDetailsViewModel by viewModel<VacancyDetailsViewModel> {
-        parametersOf("103907971")
+        parametersOf(requireArguments().getString(VACANCY_ID))
     }
 
     override fun onCreateView(
@@ -219,7 +219,7 @@ class JobDetailsFragment : Fragment() {
                 "${binding.jobContactsEmail.text} ${vacancyDetails.employerInfo.contacts.email}"
             binding.jobContactsPhone.text =
                 "${binding.jobContactsPhone.text} " +
-                    "${vacancyDetails.employerInfo.contacts.phones?.joinToString(separator = "\n")}"
+                "${vacancyDetails.employerInfo.contacts.phones?.joinToString(separator = "\n")}"
         }
     }
 
