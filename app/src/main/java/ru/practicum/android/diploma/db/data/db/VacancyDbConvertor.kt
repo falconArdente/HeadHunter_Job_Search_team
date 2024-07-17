@@ -26,8 +26,8 @@ class VacancyDbConvertor {
             id = vacancy.vacancy.id.toString(),
             name = vacancy.vacancy.name,
             description = vacancy.vacancy.description,
-            employer = mapEmployer(vacancy.employerRow),
-            jobDetails = mapJobDetails(vacancy.jobInfoRow),
+            employerInfo = mapEmployer(vacancy.employerRow),
+            jobInfo = mapJobDetails(vacancy.jobInfoRow),
             vacancyUrl = vacancy.vacancy.vacancyUrl
         )
     }
@@ -35,8 +35,8 @@ class VacancyDbConvertor {
     fun mapVacancy(vacancy: VacancyDetails): VacancyJoins {
         return VacancyJoins(
             vacancy = mapVacancyEntity(vacancy),
-            jobInfoRow = mapJobDetails(vacancy.jobDetails),
-            employerRow = mapEmployerJoin(vacancy.employer)
+            jobInfoRow = mapJobDetails(vacancy.jobInfo),
+            employerRow = mapEmployerJoin(vacancy.employerInfo)
         )
     }
 

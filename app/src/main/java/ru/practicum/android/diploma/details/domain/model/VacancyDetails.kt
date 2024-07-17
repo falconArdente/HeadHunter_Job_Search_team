@@ -4,7 +4,7 @@ class VacancyDetails(
     val id: String,
     val name: String,
     val description: String,
-    val employer: EmployerInfo,
-    val jobDetails: JobInfo,
+    val employerInfo: EmployerInfo,
+    val jobInfo: JobInfo,
     val vacancyUrl: String,
 )

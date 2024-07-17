@@ -18,8 +18,8 @@ object VacancyDetailsMapper {
             id = this.id,
             name = this.name,
             description = this.description,
-            employer = mapToEmployerInfo(this),
-            jobDetails = mapToJobInfo(this),
+            employerInfo = mapToEmployerInfo(this),
+            jobInfo = mapToJobInfo(this),
             vacancyUrl = this.vacancyUrl,
         )
     }
