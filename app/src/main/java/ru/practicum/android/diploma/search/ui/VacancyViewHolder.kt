@@ -36,7 +36,7 @@ class VacancyViewHolder(private val binding: JobListItemBinding) : RecyclerView.
     }
 
     private fun jobSalaryText(vacancy: Vacancy): String {
-        var text = when {
+        val text = when {
             vacancy.salary == null -> binding.root.resources.getString(R.string.no_salary_msg)
             vacancy.salary.from == null && vacancy.salary.to != null -> {
                 binding.root.resources.getString(
