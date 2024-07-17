@@ -2,6 +2,7 @@ package ru.practicum.android.diploma.favorites.data.repository
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import ru.practicum.android.diploma.db.data.db.AppDatabase
 import ru.practicum.android.diploma.db.data.db.VacancyDbConvertor
 import ru.practicum.android.diploma.details.domain.model.VacancyDetails
@@ -16,10 +17,16 @@ class FavoritesRepositoryRoomBased(
     override suspend fun getFavoritesVacancyList(): Flow<Resource<List<VacancyDetails>>> {
         return flow {
             try {
-                val listVacancy = appDatabase.vacancyDao().getAllVacancy()
-                emit(Resource.Success(listVacancy.map { vacancy ->
-                    vacancyDbConvertor.mapVacancy(vacancy)
-                }))
+                appDatabase.vacancyDao()
+                    .getAllVacancyFlow()
+                    .map { list ->
+                        list.map {
+                            vacancyDbConvertor.mapVacancy(it)
+                        }
+                    }
+                    .collect {
+                        emit(Resource.Success(it))
+                    }
             } catch (e: UncheckedIOException) {
                 emit(Resource.Error(message = e.message.toString()))
             }
@@ -27,4 +34,3 @@ class FavoritesRepositoryRoomBased(
         }
     }
 }
-// listOf(Mok.vacancyDetailsMok, Mok.vacancyDetailsMok)

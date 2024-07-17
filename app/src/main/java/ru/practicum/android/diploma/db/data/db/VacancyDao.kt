@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import kotlinx.coroutines.flow.Flow
 import ru.practicum.android.diploma.db.data.db.entity.AreaEntity
 import ru.practicum.android.diploma.db.data.db.entity.EmployerEntity
 import ru.practicum.android.diploma.db.data.db.entity.EmployerJoins
@@ -29,8 +30,6 @@ abstract class VacancyDao {
     }
 
     private suspend fun deleteEmployerJoins(employerJoins: EmployerJoins) {
-        deleteEmployer(employerJoins.employer)
-
         if (employerJoins.logoRow != null) {
             deleteLogo(employerJoins.logoRow)
         }
@@ -38,17 +37,19 @@ abstract class VacancyDao {
         if (employerJoins.employer.areaId != null) {
             deleteArea(employerJoins.employer.areaId)
         }
+
+        deleteEmployer(employerJoins.employer)
     }
 
     private suspend fun deleteJobInfoJoins(jobInfoJoins: JobInfoJoins) {
-        deleteJobInfo(jobInfoJoins.jobInfo)
-
         jobInfoJoins.skillList.forEach { skill ->
             deleteSkill(skill)
         }
         if (jobInfoJoins.salaryRow != null) {
             deleteSalary(jobInfoJoins.salaryRow)
         }
+
+        deleteJobInfo(jobInfoJoins.jobInfo)
     }
 
     suspend fun insertVacancyJoins(vacancy: VacancyJoins) {
@@ -151,6 +152,10 @@ abstract class VacancyDao {
     abstract suspend fun getAllVacancy(): List<VacancyJoins>
 
     @Transaction
+    @Query("Select * from vacancy order by dateAdd")
+    abstract fun getAllVacancyFlow(): Flow<List<VacancyJoins>>
+
+    @Transaction
     @Query(
         "Select * from vacancy order by dateAdd " +
             "LIMIT :vacancyByPage OFFSET :vacancyByPage * :pageNum "
@@ -179,7 +184,7 @@ abstract class VacancyDao {
         "DELETE FROM Area where id = :areaId " +
             "AND not exists (select 1 FROM Employer p1 where p1.areaId = :areaId )"
     )
-    abstract suspend fun deleteArea(areaId: Long)
+    abstract suspend fun deleteArea(areaId: String)
 
     @Delete
     abstract suspend fun deleteVacancy(vacancy: VacancyEntity)

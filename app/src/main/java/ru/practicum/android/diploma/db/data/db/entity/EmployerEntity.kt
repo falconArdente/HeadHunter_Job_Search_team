@@ -8,6 +8,6 @@ data class EmployerEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
     val name: String?,
-    val areaId: Long?
+    val areaId: String?
 )
 

@@ -101,7 +101,7 @@ class VacancyDbConvertor {
         return EmployerEntity(
             id = 0,
             name = employer.employerName,
-            areaId = employer.area.id.toLong()
+            areaId = employer.area.id
         )
     }
 
