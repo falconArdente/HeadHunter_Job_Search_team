@@ -9,6 +9,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.search.domain.api.GetSuggestionsForSearchUseCase
 import ru.practicum.android.diploma.search.domain.api.SearchInteractor
+import ru.practicum.android.diploma.search.domain.model.Vacancy
 import ru.practicum.android.diploma.search.presentation.state.SearchFragmentState
 
 private const val SEARCH_DEBOUNCE_DELAY = 2000L
@@ -25,6 +26,10 @@ class SearchViewModel(
     private var isClickAllowed = true
     private var suggestionsList = MutableLiveData<List<String>>(emptyList())
     val suggestionsLivaData: LiveData<List<String>> = suggestionsList
+
+    private var currentPage = -1
+    private var maxPages = 0
+    private val vacanciesList = mutableListOf<Vacancy>()
 
     init {
         updateState(SearchFragmentState.NoTextInInputEditText)
@@ -54,7 +59,7 @@ class SearchViewModel(
                 .searchVacancy(text)
                 .collect { vacancy ->
                     if (vacancy.result!!.isNotEmpty()) {
-                        updateState(SearchFragmentState.SearchVacancy(vacancy.result))
+                        updateState(SearchFragmentState.SearchVacancy(vacancy.result, vacancy.foundVacancy))
                     } else if (vacancy.errorMessage!!.isNotEmpty()) {
                         updateState(SearchFragmentState.ServerError)
                     } else if (vacancy.errorMessage.isNullOrEmpty()) {
@@ -83,5 +88,13 @@ class SearchViewModel(
             }
         }
         return current
+    }
+    fun onLastItemReached(){
+
+
+
+
+
+
     }
 }

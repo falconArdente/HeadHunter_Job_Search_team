@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchJobBinding
@@ -35,38 +37,14 @@ class SearchJobFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         viewHolderInit()
+        showView()
+        searchInputClick()
+        onScrollListener()
 
         binding.searchFilterButton.setOnClickListener {
             findNavController().navigate(R.id.action_searchJobFragment_to_filterSettingsFragment)
         }
-
-        binding.searchInput.doOnTextChanged { text, _, _, _ ->
-            if (text.isNullOrEmpty()) {
-                binding.searchInputIcon.background = requireActivity().getDrawable(R.drawable.icon_search)
-            } else {
-                binding.searchInputIcon.background = requireActivity().getDrawable(R.drawable.icon_cross)
-                viewModel.getSuggestionsForSearch(text.toString())
-            }
-        }
-
-        binding.searchInputIcon.setOnClickListener {
-            binding.searchInput.setText(String())
-        }
-        binding.searchInput.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                binding.searchInput.showKeyboard(requireContext())
-                showView()
-            }
-        }
-        binding.searchInput.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                binding.searchInput.hideKeyboard(requireContext())
-            }
-            false
-        }
-
         suggestionsAdapter = VacancyPositionSuggestsAdapter(requireActivity(), binding.searchInput)
         binding.searchInput.setAdapter(suggestionsAdapter)
         viewModel.suggestionsLivaData.observe(viewLifecycleOwner) { renderSuggestions(it) }
@@ -75,25 +53,7 @@ class SearchJobFragment : Fragment() {
     private fun renderSuggestions(incomeSuggestions: List<String>) {
         suggestionsAdapter?.applyDataSet(incomeSuggestions)
 
-        binding.searchInput.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                showView()
-            }
 
-            override fun afterTextChanged(p0: Editable?) {
-                showView()
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (!p0.isNullOrEmpty()) {
-                    viewModel.searchWithDebounce(p0.toString())
-                } else if (p0.isNullOrEmpty()) {
-                    adapter.updateList(emptyList())
-                    viewModel.updateState(SearchFragmentState.NoTextInInputEditText)
-                    showView()
-                }
-            }
-        })
     }
 
     private fun showView() {
@@ -101,17 +61,21 @@ class SearchJobFragment : Fragment() {
             allViewGone()
             when (it) {
                 is SearchFragmentState.SearchVacancy -> {
+                    Log.d("серч вэк", "")
                     adapter.updateList(it.searchVacancy)
                     binding.recyclerViewSearch.visibility = View.VISIBLE
                     binding.searchJobsCountButton.visibility = View.VISIBLE
-                    binding.searchJobsCountButton.text = "здесь будет число"
+                    val text = requireActivity().getString(R.string.found_x_vacancies, it.totalFoundVacancy.toString())
+                    binding.searchJobsCountButton.text = text
                 }
 
                 is SearchFragmentState.Loading -> {
+                    Log.d("лоад", "")
                     binding.searchProgressBar.visibility = View.VISIBLE
                 }
 
                 is SearchFragmentState.NoResult -> {
+                    Log.d("но рез", "")
                     binding.searchJobsCountButton.visibility = View.VISIBLE
                     binding.searchJobsCountButton.text = requireActivity().getString(R.string.no_such_vacancies)
                     binding.noResultsSearchInclude.root.visibility = View.VISIBLE
@@ -122,10 +86,13 @@ class SearchJobFragment : Fragment() {
                 }
 
                 is SearchFragmentState.NoTextInInputEditText -> {
+                    Log.d("ноу текст", "")
                     binding.searchPlaceholderImage.visibility = View.VISIBLE
                 }
 
-                else -> {}
+                else -> {
+                    Log.d("tkc", "")
+                }
             }
         }
     }
@@ -156,6 +123,53 @@ class SearchJobFragment : Fragment() {
         binding.recyclerViewSearch.adapter = adapter
     }
 
+    private fun searchInputClick() {
+        binding.searchInput.doOnTextChanged { text, _, _, _ ->
+            if (text.isNullOrEmpty()) {
+                binding.searchInputIcon.background = requireActivity().getDrawable(R.drawable.icon_search)
+            } else {
+                binding.searchInputIcon.background = requireActivity().getDrawable(R.drawable.icon_cross)
+                viewModel.getSuggestionsForSearch(text.toString())
+            }
+        }
+
+        binding.searchInput.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                //  для детекта
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                // для детекта
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (!p0.isNullOrEmpty()) {
+                    viewModel.searchWithDebounce(p0.toString())
+                } else if (p0.isNullOrEmpty()) {
+                    adapter.updateList(emptyList())
+                    viewModel.updateState(SearchFragmentState.NoTextInInputEditText)
+                    showView()
+                }
+            }
+        })
+        binding.searchInputIcon.setOnClickListener {
+            binding.searchInput.setText(String())
+        }
+        binding.searchInput.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                binding.searchInput.showKeyboard(requireContext())
+                showView()
+            }
+        }
+        binding.searchInput.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                binding.searchInput.hideKeyboard(requireContext())
+            }
+            false
+        }
+
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -172,5 +186,21 @@ class SearchJobFragment : Fragment() {
             context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputManager.hideSoftInputFromWindow(windowToken, 0)
 
+    }
+
+    private fun onScrollListener() {
+        binding.recyclerViewSearch.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (dy > 0) {
+                    val pos =
+                        (binding.recyclerViewSearch.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                    val itemsCount = adapter.itemCount
+                    if (pos >= itemsCount - 1) {
+                        viewModel.onLastItemReached()
+                    }
+                }
+            }
+        })
     }
 }
