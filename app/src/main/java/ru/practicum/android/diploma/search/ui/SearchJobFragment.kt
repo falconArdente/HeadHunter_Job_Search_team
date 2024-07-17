@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -108,6 +109,7 @@ class SearchJobFragment : Fragment() {
             when (it) {
                 is SearchFragmentState.SearchVacancy -> {
                     adapter.updateList(it.searchVacancy)
+                    binding.searchPlaceholderText.isVisible = false
                     binding.recyclerViewSearch.visibility = View.VISIBLE
                     binding.searchJobsCountButton.visibility = View.VISIBLE
                     val pluralVacancy = resources.getQuantityString(

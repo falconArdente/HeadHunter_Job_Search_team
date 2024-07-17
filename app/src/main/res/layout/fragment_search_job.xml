@@ -70,7 +70,7 @@
         app:layout_constraintEnd_toStartOf="@id/searchInputIcon"
         app:layout_constraintStart_toStartOf="@id/searchInputBackground"
         app:layout_constraintTop_toTopOf="@id/searchInputBackground"
-        tools:ignore="VisualLintTextFieldSize,TextContrastCheck" />
+        tools:ignore="VisualLintTextFieldSize,TextContrastCheck,VisualLintOverlap" />
 
     <ImageButton
         android:id="@+id/searchInputIcon"
@@ -100,7 +100,8 @@
         app:cornerRadius="@dimen/dp12"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchInputBackground" />
+        app:layout_constraintTop_toBottomOf="@+id/searchInputBackground"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,VisualLintOverlap" />
 
     <ProgressBar
         android:id="@+id/searchProgressBar"
@@ -144,12 +145,11 @@
         android:id="@+id/searchJobsScrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/dp8"
+        android:layout_marginTop="@dimen/search_view_recycler_margin_top"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchJobsCountButton">
-
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
