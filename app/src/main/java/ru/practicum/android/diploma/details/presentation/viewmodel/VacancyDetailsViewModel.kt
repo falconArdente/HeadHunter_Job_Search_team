@@ -11,20 +11,21 @@ import ru.practicum.android.diploma.details.domain.api.GetVacancyDetailsUseCase
 import ru.practicum.android.diploma.details.domain.api.NavigatorInteractor
 import ru.practicum.android.diploma.details.domain.model.VacancyDetails
 import ru.practicum.android.diploma.details.presentation.state.VacancyDetailsState
+import ru.practicum.android.diploma.favorites.domain.api.FavoriteDbInteractor
 import ru.practicum.android.diploma.utils.Resource
-import kotlin.random.Random
 
 class VacancyDetailsViewModel(
     application: Application,
     private val getVacancyDetailsUseCase: GetVacancyDetailsUseCase,
     private val navigatorInteractor: NavigatorInteractor,
+    private val favoriteDbInteractor: FavoriteDbInteractor,
     private val vacancyId: String,
 ) : AndroidViewModel(application) {
     private val _stateLiveData = MutableLiveData<VacancyDetailsState>(VacancyDetailsState.Loading)
     val stateLiveData: LiveData<VacancyDetailsState> = _stateLiveData
 
-    private val _isFavourite = MutableLiveData<Boolean>()
-    val isFavourite: LiveData<Boolean> = _isFavourite
+    private val _isFavorite = MutableLiveData<Boolean>()
+    val isFavorite: LiveData<Boolean> = _isFavorite
 
     private var vacancyDetails: VacancyDetails? = null
     private var isFavouriteJob: Job? = null
@@ -33,6 +34,9 @@ class VacancyDetailsViewModel(
         viewModelScope.launch {
             getVacancyDetailsUseCase.execute(vacancyId).collect {
                 processSearchVacancyResponse(it)
+            }
+            favoriteDbInteractor.isExistsVacancy(vacancyId.toInt()).collect {
+                _isFavorite.value = it
             }
         }
     }
@@ -52,14 +56,16 @@ class VacancyDetailsViewModel(
 
         isFavouriteJob = viewModelScope.launch {
             if (_stateLiveData.value is VacancyDetailsState.Content) {
-                // вписать метод(возвращающий boolean) по определению есть ли id вакансии в списке избранных
-                val isInFavoriteList = Random.nextBoolean()
+                var isInFavoriteList = false
+                favoriteDbInteractor.isExistsVacancy(vacancyId.toInt()).collect {
+                    isInFavoriteList = it
+                }
                 if (isInFavoriteList) {
-                    // вызвать метод favoriteInteractor для удаления из избранного
-                    _isFavourite.value = false
+                    favoriteDbInteractor.deleteVacancy(vacancyId.toInt())
+                    _isFavorite.value = false
                 } else {
-                    // вызвать метод favoriteInteractor для добавления в избранное
-                    _isFavourite.value = true
+                    favoriteDbInteractor.insertVacancy((_stateLiveData.value as VacancyDetailsState.Content).data)
+                    _isFavorite.value = true
                 }
             } else {
                 Unit
