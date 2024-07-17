@@ -18,28 +18,36 @@ class VacancyDetailsViewHolder(private val binding: JobListItemBinding) : Recycl
         }
         binding.jobTitle.text = allText
         binding.jobEmployer.text = vacancy.employerInfo.employerName ?: ""
+        val from: Int? = vacancy.jobInfo.salary?.from
+        val to: Int? = vacancy.jobInfo.salary?.to
         binding.jobSalary.text = if (vacancy.jobInfo.salary == null) {
             binding.root.resources.getString(R.string.no_salary_msg)
-        } else if (vacancy.jobInfo.salary.to == null) {
-            binding.root.resources.getString(
-                R.string.salary_from,
-                vacancy.jobInfo.salary.from.toString(),
-                convertCurrencyToSymbol(vacancy.jobInfo.salary.currency ?: "RUR")
-            )
         } else {
-            binding.root.resources.getString(
-                R.string.salary_range,
-                vacancy.jobInfo.salary.from.toString(),
-                vacancy.jobInfo.salary,
-                if (vacancy.jobInfo.salary.currency != null) {
-                    convertCurrencyToSymbol(vacancy.jobInfo.salary.currency)
-                } else {
-                    ""
-                }
-            )
+            if (from != null && to != null) {
+                binding.root.resources.getString(
+                    R.string.salary_range,
+                    vacancy.jobInfo.salary.from.toString(),
+                    vacancy.jobInfo.salary.to.toString(),
+                    getCurrencySymbol(vacancy)
+                )
+            } else if (from == null && to != null) {
+                binding.root.resources.getString(
+                    R.string.salary_to,
+                    vacancy.jobInfo.salary.to.toString(),
+                    getCurrencySymbol(vacancy)
+                )
+            } else if (from != null && to == null) {
+                binding.root.resources.getString(
+                    R.string.salary_from,
+                    vacancy.jobInfo.salary.from.toString(),
+                    getCurrencySymbol(vacancy)
+                )
+            } else {
+                binding.root.resources.getString(R.string.no_salary_msg)
+            }
         }
         Glide.with(itemView)
-            .load(vacancy.employerInfo.logo)
+            .load(vacancy.employerInfo.logo?.size240)
             .placeholder(R.drawable.placeholder_logo)
             .centerCrop()
             .transform(
@@ -48,9 +56,16 @@ class VacancyDetailsViewHolder(private val binding: JobListItemBinding) : Recycl
             .into(binding.jobImage)
     }
 
-    private fun convertCurrencyToSymbol(currencyCode: String): String {
-        val codeForSymbol = if (currencyCode == "RUR") "RUB" else currencyCode
-        val currency = java.util.Currency.getInstance(codeForSymbol)
-        return currency.symbol
+    private fun getCurrencySymbol(vacancy: VacancyDetails): String {
+        if (vacancy.jobInfo.salary?.currency != null) {
+            val codeForSymbol = if (vacancy.jobInfo.salary.currency == "RUR") {
+                "RUB"
+            } else {
+                vacancy.jobInfo.salary.currency
+            }
+            return java.util.Currency.getInstance(codeForSymbol).symbol
+        } else {
+            return ""
+        }
     }
 }

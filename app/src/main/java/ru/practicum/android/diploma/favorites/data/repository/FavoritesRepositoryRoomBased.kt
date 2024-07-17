@@ -34,4 +34,3 @@ class FavoritesRepositoryRoomBased(
         }
     }
 }
-// listOf(Mok.vacancyDetailsMok, Mok.vacancyDetailsMok)
