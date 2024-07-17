@@ -22,7 +22,6 @@ import ru.practicum.android.diploma.db.data.db.entity.VacancyJoins
 abstract class VacancyDao {
 
     suspend fun deleteVacancyJoins(vacancyJoins: VacancyJoins) {
-
         deleteEmployerJoins(vacancyJoins.employerRow)
 
         deleteJobInfoJoins(vacancyJoins.jobInfoRow)
