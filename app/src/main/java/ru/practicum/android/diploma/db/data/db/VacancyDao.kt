@@ -68,6 +68,7 @@ abstract class VacancyDao {
     }
 
     private suspend fun insertEmployerJoins(employerJoins: EmployerJoins): Long {
+
         val employerId = insertEmployer(employerJoins.employer)
 
         if (employerJoins.logoRow != null) {
@@ -83,8 +84,7 @@ abstract class VacancyDao {
 
         val areaEntity = AreaEntity(
             id = employerJoins.areaRow.id,
-            name = employerJoins.areaRow.name,
-            employerId = employerId
+            name = employerJoins.areaRow.name
         )
         insertArea(areaEntity)
 
