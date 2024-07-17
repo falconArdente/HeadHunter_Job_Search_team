@@ -57,6 +57,8 @@ class SearchJobFragment : Fragment() {
 
         binding.searchInputIcon.setOnClickListener {
             binding.searchInput.setText(String())
+            viewModel.updateState(SearchFragmentState.NoTextInInputEditText)
+
         }
         binding.searchInput.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
@@ -126,16 +128,28 @@ class SearchJobFragment : Fragment() {
                 }
 
                 is SearchFragmentState.NoResult -> {
-                    binding.searchJobsCountButton.visibility = View.VISIBLE
+                    binding.searchPlaceholderImage.background =
+                        requireActivity().getDrawable(R.drawable.picture_angry_cat)
+                    binding.searchPlaceholderImage.visibility = View.VISIBLE
                     binding.searchJobsCountButton.text = requireActivity().getString(R.string.no_such_vacancies)
-                    binding.noResultsSearchInclude.root.visibility = View.VISIBLE
+                    binding.searchPlaceholderText.text =
+                        requireActivity().getString(R.string.failed_list_vacancy)
+                    binding.searchPlaceholderText.visibility = View.VISIBLE
                 }
 
                 is SearchFragmentState.ServerError -> {
-                    binding.serverErrorInclude.root.visibility = View.VISIBLE
+                    binding.searchPlaceholderImage.background =
+                        requireActivity().getDrawable(R.drawable.picture_funny_head)
+                    binding.searchPlaceholderImage.visibility = View.VISIBLE
+                    binding.searchPlaceholderText.text =
+                        requireActivity().getString(R.string.no_internet)
+                    binding.searchPlaceholderText.visibility = View.VISIBLE
                 }
 
                 is SearchFragmentState.NoTextInInputEditText -> {
+                    binding.searchPlaceholderImage.background =
+                        requireActivity().getDrawable(R.drawable.picture_looking_man)
+                    binding.searchPlaceholderText.visibility = View.GONE
                     binding.searchPlaceholderImage.visibility = View.VISIBLE
                 }
 
@@ -145,8 +159,6 @@ class SearchJobFragment : Fragment() {
     }
 
     private fun allViewGone() {
-        binding.noResultsSearchInclude.root.visibility = View.GONE
-        binding.serverErrorInclude.root.visibility = View.GONE
         binding.searchProgressBar.visibility = View.GONE
         binding.recyclerViewSearch.visibility = View.GONE
         binding.searchPlaceholderImage.visibility = View.GONE
@@ -239,6 +251,7 @@ class SearchJobFragment : Fragment() {
         super.onResume()
         showView()
     }
+
     private fun onScrollListener() {
         binding.recyclerViewSearch.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {

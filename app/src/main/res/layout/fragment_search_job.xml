@@ -125,28 +125,8 @@
         app:layout_constraintEnd_toEndOf="@id/searchRightGuideline"
         app:layout_constraintStart_toStartOf="@id/searchLeftGuideline"
 
-        app:layout_constraintTop_toBottomOf="@id/searchInputBackground"
+        app:layout_constraintTop_toTopOf="@id/searchInputBackground"
         tools:ignore="ContentDescription" />
-
-    <include
-        android:id="@+id/no_results_search_include"
-        layout="@layout/no_result_search_item"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchInput"
-        tools:listitem="@layout/no_result_search_item" />
-
-    <include
-        android:id="@+id/server_error_include"
-        layout="@layout/server_error_search_item"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/searchInputBackground"
-        tools:listitem="@layout/server_error_search_item" />
 
     <TextView
         android:id="@+id/searchPlaceholderText"
@@ -154,6 +134,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp16"
+        android:layout_marginBottom="@dimen/dp56"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
