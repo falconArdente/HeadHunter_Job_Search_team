@@ -13,6 +13,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchJobBinding
@@ -37,6 +38,9 @@ class SearchJobFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewHolderInit()
+        showView()
+        searchInputClick()
+        onScrollListener()
 
         binding.searchFilterButton.setOnClickListener {
             findNavController().navigate(R.id.action_searchJobFragment_to_filterSettingsFragment)
@@ -104,7 +108,17 @@ class SearchJobFragment : Fragment() {
                     adapter.updateList(it.searchVacancy)
                     binding.recyclerViewSearch.visibility = View.VISIBLE
                     binding.searchJobsCountButton.visibility = View.VISIBLE
-                    binding.searchJobsCountButton.text = "здесь будет число"
+                    val pluralVacancy = resources.getQuantityString(
+                        R.plurals.plurals_vacancy,
+                        it.totalFoundVacancy
+                    )
+                    val foundVac =
+                        requireActivity().getString(
+                            R.string.found_x_vacancies,
+                            it.totalFoundVacancy.toString()
+                        )
+                    val text = " $foundVac $pluralVacancy"
+                    binding.searchJobsCountButton.text = text
                 }
 
                 is SearchFragmentState.Loading -> {
@@ -156,6 +170,53 @@ class SearchJobFragment : Fragment() {
         binding.recyclerViewSearch.adapter = adapter
     }
 
+    private fun searchInputClick() {
+        binding.searchInput.doOnTextChanged { text, _, _, _ ->
+            if (text.isNullOrEmpty()) {
+                binding.searchInputIcon.background = requireActivity().getDrawable(R.drawable.icon_search)
+            } else {
+                binding.searchInputIcon.background = requireActivity().getDrawable(R.drawable.icon_cross)
+                viewModel.getSuggestionsForSearch(text.toString())
+            }
+        }
+
+        binding.searchInput.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                //  для детекта
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                // detect
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (!p0.isNullOrEmpty()) {
+                    viewModel.searchWithDebounce(p0.toString())
+                } else if (p0.isNullOrEmpty()) {
+                    adapter.updateList(emptyList())
+                    viewModel.updateState(SearchFragmentState.NoTextInInputEditText)
+                    showView()
+                }
+            }
+        })
+        binding.searchInputIcon.setOnClickListener {
+            binding.searchInput.setText(String())
+        }
+        binding.searchInput.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                binding.searchInput.showKeyboard(requireContext())
+                showView()
+            }
+        }
+        binding.searchInput.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                binding.searchInput.hideKeyboard(requireContext())
+            }
+            false
+        }
+
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -174,9 +235,23 @@ class SearchJobFragment : Fragment() {
 
     }
 
-    // Фикс бага
     override fun onResume() {
         super.onResume()
         showView()
+    }
+    private fun onScrollListener() {
+        binding.recyclerViewSearch.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (dy > 0) {
+                    val pos =
+                        (binding.recyclerViewSearch.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                    val itemsCount = adapter.itemCount
+                    if (pos >= itemsCount - 1) {
+                        viewModel.onLastItemReached()
+                    }
+                }
+            }
+        })
     }
 }

@@ -24,6 +24,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp12"
+        android:layout_marginEnd="@dimen/dp16"
         android:ellipsize="end"
         android:maxLines="3"
         app:layout_constraintBottom_toTopOf="@id/jobEmployer"
