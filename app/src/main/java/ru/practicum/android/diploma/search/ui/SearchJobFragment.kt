@@ -239,6 +239,7 @@ class SearchJobFragment : Fragment() {
         super.onResume()
         showView()
     }
+
     private fun onScrollListener() {
         binding.recyclerViewSearch.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
