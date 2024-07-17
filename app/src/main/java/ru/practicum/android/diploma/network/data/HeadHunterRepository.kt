@@ -127,11 +127,14 @@ class HeadHunterRepository(private val client: HeadHunterNetworkClient, context:
         flow {
             val response =
                 client.doRequest(HeadHunterRequest.VacancyById(id))
-            if (response.resultCode == Response.SUCCESS) {
-                val data: VacancyByIdResponse = response as VacancyByIdResponse
-                emit(Resource.Success(data.mapToDomain()))
-            } else {
-                emit(Resource.Error(vacancyGetByIdErrorMessage))
+            when (response.resultCode) {
+                Response.SUCCESS -> {
+                    val data: VacancyByIdResponse = response as VacancyByIdResponse
+                    emit(Resource.Success(data.mapToDomain()))
+                }
+                -1 -> emit(Resource.InternetConnectionError(vacancyGetByIdErrorMessage))
+                Response.NOT_FOUND -> emit(Resource.NotFoundError(vacancyGetByIdErrorMessage))
+                else -> emit(Resource.Error(vacancyGetByIdErrorMessage))
             }
         }
 }

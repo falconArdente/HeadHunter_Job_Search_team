@@ -13,7 +13,7 @@ val viewModelModule = module {
             application = androidApplication(),
             getVacancyDetailsUseCase = get(),
             navigatorInteractor = get(),
-            favoriteDbInteractor = get(),
+            detailsDbInteractor = get(),
             vacancyId = get { parametersOf(vacancyId) }
         )
     }
