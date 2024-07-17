@@ -4,9 +4,9 @@ import android.content.Context
 import android.util.DisplayMetrics
 import android.util.TypedValue
 
-const val COEFFICIENT_PLATO_SUBTRACTION = 2
-const val COEFFICIENT_DIVIDER_FOR_UNIT = 0.25f
-const val COEFFICIENT_PIXEL_MULTIPLIER = 8.3f
+private const val COEFFICIENT_PLATO_SUBTRACTION = 2
+private const val COEFFICIENT_DIVIDER_FOR_UNIT = 0.25f
+private const val COEFFICIENT_PIXEL_MULTIPLIER = 8.3f
 fun Context.toPx(dp: Int): Float = TypedValue.applyDimension(
     TypedValue.COMPLEX_UNIT_DIP,
     dp.toFloat(),
