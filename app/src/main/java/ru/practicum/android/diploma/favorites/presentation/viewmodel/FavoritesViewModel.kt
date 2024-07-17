@@ -26,7 +26,7 @@ class FavoritesViewModel(private val getFavoritesListUseCase: GetFavoritesListUs
 
     fun openForDetails(vacancyId: String, navController: NavController) {
         navController.navigate(
-            R.id.action_searchJobFragment_to_jobDetailsFragment,
+            R.id.action_favoritesJobsFragment_to_jobDetailsFragment,
             JobDetailsFragment.createArgs(vacancyId)
         )
     }
