@@ -68,7 +68,6 @@ abstract class VacancyDao {
     }
 
     private suspend fun insertEmployerJoins(employerJoins: EmployerJoins): Long {
-
         val employerId = insertEmployer(employerJoins.employer)
 
         if (employerJoins.logoRow != null) {
