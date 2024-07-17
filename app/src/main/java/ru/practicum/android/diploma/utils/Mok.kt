@@ -13,7 +13,7 @@ object Mok {
         name = "Стропальщик",
         description = "<p>Вахтовый метод работы в г. Ленск</p> <p> </p> <p><strong>Обязанности:" +
             "</strong></p> <p>* Строповка тяжелых грузов;<br />* Строповка и увязка простых изделий, деталей, ",
-        employer = EmployerInfo(
+        employerInfo = EmployerInfo(
             employerName = "Алмаздортранс",
             contacts = null,
             area = AreaDetails(
@@ -26,7 +26,7 @@ object Mok {
                 raw = "https://img.hhcdn.ru/employer-logo-original/872857.png"
             )
         ),
-        jobDetails = JobInfo(
+        jobInfo = JobInfo(
             salary = SalaryDetails(
                 currency = "RUR",
                 from = 100_000,

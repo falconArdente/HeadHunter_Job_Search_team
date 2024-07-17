@@ -11,35 +11,35 @@ import ru.practicum.android.diploma.utils.toPx
 class VacancyDetailsViewHolder(private val binding: JobListItemBinding) : RecyclerView.ViewHolder(binding.root) {
     private val roundCornerValue = itemView.context.resources.getDimension(R.dimen.view_holder_round_corner)
     fun bind(vacancy: VacancyDetails, action: ClickerForVacancyDetail) {
-        val allText = "${vacancy.name}, ${vacancy.employer.area.name}"
+        val allText = "${vacancy.name}, ${vacancy.employerInfo.area.name}"
 
         binding.root.setOnClickListener {
             action.onItemClick(vacancy)
         }
         binding.jobTitle.text = allText
-        binding.jobEmployer.text = vacancy.employer.employerName ?: ""
-        binding.jobSalary.text = if (vacancy.jobDetails.salary == null) {
+        binding.jobEmployer.text = vacancy.employerInfo.employerName ?: ""
+        binding.jobSalary.text = if (vacancy.jobInfo.salary == null) {
             binding.root.resources.getString(R.string.no_salary_msg)
-        } else if (vacancy.jobDetails.salary.to == null) {
+        } else if (vacancy.jobInfo.salary.to == null) {
             binding.root.resources.getString(
                 R.string.salary_from,
-                vacancy.jobDetails.salary.from.toString(),
-                convertCurrencyToSymbol(vacancy.jobDetails.salary.currency ?: "RUR")
+                vacancy.jobInfo.salary.from.toString(),
+                convertCurrencyToSymbol(vacancy.jobInfo.salary.currency ?: "RUR")
             )
         } else {
             binding.root.resources.getString(
                 R.string.salary_range,
-                vacancy.jobDetails.salary.from.toString(),
-                vacancy.jobDetails.salary,
-                if (vacancy.jobDetails.salary.currency != null) {
-                    convertCurrencyToSymbol(vacancy.jobDetails.salary.currency)
+                vacancy.jobInfo.salary.from.toString(),
+                vacancy.jobInfo.salary,
+                if (vacancy.jobInfo.salary.currency != null) {
+                    convertCurrencyToSymbol(vacancy.jobInfo.salary.currency)
                 } else {
                     ""
                 }
             )
         }
         Glide.with(itemView)
-            .load(vacancy.employer.logo)
+            .load(vacancy.employerInfo.logo)
             .placeholder(R.drawable.placeholder_logo)
             .centerCrop()
             .transform(
