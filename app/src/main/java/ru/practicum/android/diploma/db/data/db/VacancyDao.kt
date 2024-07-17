@@ -31,8 +31,6 @@ abstract class VacancyDao {
     }
 
     private suspend fun deleteEmployerJoins(employerJoins: EmployerJoins) {
-        deleteEmployer(employerJoins.employer)
-
         if (employerJoins.logoRow != null) {
             deleteLogo(employerJoins.logoRow)
         }
@@ -40,17 +38,19 @@ abstract class VacancyDao {
         if (employerJoins.employer.areaId != null) {
             deleteArea(employerJoins.employer.areaId)
         }
+
+        deleteEmployer(employerJoins.employer)
     }
 
     private suspend fun deleteJobInfoJoins(jobInfoJoins: JobInfoJoins) {
-        deleteJobInfo(jobInfoJoins.jobInfo)
-
         jobInfoJoins.skillList.forEach { skill ->
             deleteSkill(skill)
         }
         if (jobInfoJoins.salaryRow != null) {
             deleteSalary(jobInfoJoins.salaryRow)
         }
+
+        deleteJobInfo(jobInfoJoins.jobInfo)
     }
 
     suspend fun insertVacancyJoins(vacancy: VacancyJoins) {
