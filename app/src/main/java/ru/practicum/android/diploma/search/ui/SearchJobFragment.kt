@@ -103,56 +103,72 @@ class SearchJobFragment : Fragment() {
         })
     }
 
+    private fun setVisible(
+        placeholder: Boolean,
+        list: Boolean,
+        blueButton: Boolean,
+        progress: Boolean,
+        image: Boolean = placeholder,
+    ) {
+        with(binding) {
+            searchPlaceholderText.isVisible = placeholder
+            searchPlaceholderImage.isVisible = image
+            recyclerViewSearch.isVisible = list
+            searchJobsCountButton.isVisible = blueButton
+            searchProgressBar.isVisible = progress
+        }
+    }
+
+    private fun setBlueButtonText(state: SearchFragmentState.SearchVacancy) {
+        val pluralVacancy = resources.getQuantityString(
+            R.plurals.plurals_vacancy,
+            state.totalFoundVacancy
+        )
+        val foundVac =
+            requireActivity().getString(
+                R.string.found_x_vacancies,
+                state.totalFoundVacancy.toString()
+            )
+        val text = " $foundVac $pluralVacancy"
+        binding.searchJobsCountButton.text = text
+
+    }
+
     private fun showView() {
         viewModel.fragmentStateLiveData().observe(viewLifecycleOwner) {
             allViewGone()
             when (it) {
                 is SearchFragmentState.SearchVacancy -> {
                     adapter.updateList(it.searchVacancy)
-                    binding.searchPlaceholderText.isVisible = false
-                    binding.recyclerViewSearch.visibility = View.VISIBLE
-                    binding.searchJobsCountButton.visibility = View.VISIBLE
-                    val pluralVacancy = resources.getQuantityString(
-                        R.plurals.plurals_vacancy,
-                        it.totalFoundVacancy
-                    )
-                    val foundVac =
-                        requireActivity().getString(
-                            R.string.found_x_vacancies,
-                            it.totalFoundVacancy.toString()
-                        )
-                    val text = " $foundVac $pluralVacancy"
-                    binding.searchJobsCountButton.text = text
+                    setVisible(placeholder = false, list = true, blueButton = true, progress = false)
+                    setBlueButtonText(it)
                 }
 
                 is SearchFragmentState.Loading -> {
-                    binding.searchProgressBar.visibility = View.VISIBLE
+                    setVisible(placeholder = false, list = false, blueButton = false, progress = true)
                 }
 
                 is SearchFragmentState.NoResult -> {
                     binding.searchPlaceholderImage.background =
                         requireActivity().getDrawable(R.drawable.picture_angry_cat)
-                    binding.searchPlaceholderImage.visibility = View.VISIBLE
                     binding.searchJobsCountButton.text = requireActivity().getString(R.string.no_such_vacancies)
                     binding.searchPlaceholderText.text =
                         requireActivity().getString(R.string.failed_list_vacancy)
-                    binding.searchPlaceholderText.visibility = View.VISIBLE
+                    setVisible(placeholder = true, list = false, blueButton = false, progress = false)
                 }
 
                 is SearchFragmentState.ServerError -> {
                     binding.searchPlaceholderImage.background =
                         requireActivity().getDrawable(R.drawable.picture_funny_head)
-                    binding.searchPlaceholderImage.visibility = View.VISIBLE
                     binding.searchPlaceholderText.text =
                         requireActivity().getString(R.string.no_internet)
-                    binding.searchPlaceholderText.visibility = View.VISIBLE
+                    setVisible(placeholder = true, list = false, blueButton = false, progress = false)
                 }
 
                 is SearchFragmentState.NoTextInInputEditText -> {
                     binding.searchPlaceholderImage.background =
                         requireActivity().getDrawable(R.drawable.picture_looking_man)
-                    binding.searchPlaceholderText.visibility = View.GONE
-                    binding.searchPlaceholderImage.visibility = View.VISIBLE
+                    setVisible(placeholder = false, list = false, blueButton = false, progress = false, image = true)
                 }
 
                 else -> {}
