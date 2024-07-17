@@ -28,7 +28,7 @@ class VacancyDetailsViewModel(
     val isFavorite: LiveData<Boolean> = _isFavorite
 
     private var vacancyDetails: VacancyDetails? = null
-    private var isFavouriteJob: Job? = null
+    private var isFavoriteJob: Job? = null
 
     init {
         viewModelScope.launch {
@@ -75,9 +75,9 @@ class VacancyDetailsViewModel(
     }
 
     fun onFavoriteClicked() {
-        if (isFavouriteJob?.isActive == true) return
+        if (isFavoriteJob?.isActive == true) return
 
-        isFavouriteJob = viewModelScope.launch {
+        isFavoriteJob = viewModelScope.launch {
             if (_stateLiveData.value is VacancyDetailsState.Content) {
                 var isInFavoriteList = false
                 detailsDbInteractor.isExistsVacancy(vacancyId.toInt()).collect {
