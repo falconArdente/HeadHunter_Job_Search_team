@@ -59,7 +59,10 @@ class SearchViewModel(
                 .searchVacancy(text)
                 .collect { vacancy ->
                     if (vacancy.result!!.isNotEmpty()) {
-                        updateState(SearchFragmentState.SearchVacancy(vacancy.result, vacancy.foundVacancy))
+                        maxPages = vacancy.pages
+                        currentPage = vacancy.page
+                        vacanciesList += vacancy.result
+                        updateState(SearchFragmentState.SearchVacancy(vacanciesList, vacancy.foundVacancy))
                     } else if (vacancy.errorMessage!!.isNotEmpty()) {
                         updateState(SearchFragmentState.ServerError)
                     } else if (vacancy.errorMessage.isNullOrEmpty()) {
@@ -70,6 +73,8 @@ class SearchViewModel(
     }
 
     fun searchWithDebounce(text: String) {
+        currentPage = 0
+        vacanciesList.clear()
         latestSearchText = text
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
@@ -89,12 +94,11 @@ class SearchViewModel(
         }
         return current
     }
-    fun onLastItemReached(){
 
-
-
-
-
-
+    fun onLastItemReached() {
+        if (currentPage < maxPages) {
+            currentPage++
+            searchResult(latestSearchText!!)
+        }
     }
 }
