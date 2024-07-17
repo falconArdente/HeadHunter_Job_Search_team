@@ -9,6 +9,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.search.domain.api.GetSuggestionsForSearchUseCase
 import ru.practicum.android.diploma.search.domain.api.SearchInteractor
+import ru.practicum.android.diploma.search.domain.model.Vacancy
 import ru.practicum.android.diploma.search.presentation.state.SearchFragmentState
 
 private const val SEARCH_DEBOUNCE_DELAY = 2000L
@@ -26,9 +27,13 @@ class SearchViewModel(
     private var suggestionsList = MutableLiveData<List<String>>(emptyList())
     val suggestionsLivaData: LiveData<List<String>> = suggestionsList
 
+    private var currentPage = 1
+    private var maxPages = 0
+    private val vacanciesList = mutableListOf<Vacancy>()
+    private var totalFound = 0
+
     init {
         updateState(SearchFragmentState.NoTextInInputEditText)
-
     }
 
     fun getSuggestionsForSearch(textForSuggests: String) {
@@ -54,7 +59,16 @@ class SearchViewModel(
                 .searchVacancy(text)
                 .collect { vacancy ->
                     if (vacancy.result!!.isNotEmpty()) {
-                        updateState(SearchFragmentState.SearchVacancy(vacancy.result))
+                        maxPages = vacancy.pages
+                        if (currentPage == maxPages || vacanciesList.count() == vacancy.foundVacancy) {
+                            vacanciesList.addAll(vacancy.result)
+                            updateState(SearchFragmentState.SearchVacancy(vacanciesList, totalFound))
+                        }
+                        if (currentPage < maxPages) {
+                            vacanciesList += vacancy.result
+                        }
+                        totalFound = vacancy.foundVacancy
+                        updateState(SearchFragmentState.SearchVacancy(vacanciesList, totalFound))
                     } else if (vacancy.errorMessage!!.isNotEmpty()) {
                         updateState(SearchFragmentState.ServerError)
                     } else if (vacancy.errorMessage.isNullOrEmpty()) {
@@ -65,6 +79,8 @@ class SearchViewModel(
     }
 
     fun searchWithDebounce(text: String) {
+        //  currentPage = 0
+        vacanciesList.clear()
         latestSearchText = text
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
@@ -84,4 +100,16 @@ class SearchViewModel(
         }
         return current
     }
+
+    fun onLastItemReached() {
+        if (currentPage < maxPages) {
+            currentPage++
+            updateState(SearchFragmentState.Loading)
+            searchResult(latestSearchText!!)
+        }
+        if (currentPage == maxPages) {
+            updateState(SearchFragmentState.SearchVacancy(vacanciesList, totalFound))
+        }
+    }
 }
+

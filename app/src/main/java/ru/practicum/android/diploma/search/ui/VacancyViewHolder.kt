@@ -17,6 +17,7 @@ class VacancyViewHolder(private val binding: JobListItemBinding) : RecyclerView.
         if (vacancy.area == null) {
             allText = vacancy.name
         }
+        var salaryText = ""
         binding.jobTitle.text = allText
         binding.jobEmployer.text = vacancy.employer?.name ?: "ЗАМЕЩАЮЩИЙ ТЕКСТ?"
         binding.jobSalary.text = if (vacancy.salary == null) {

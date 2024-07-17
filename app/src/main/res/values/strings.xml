@@ -55,4 +55,13 @@
     <string name="phone_number">тел.:\u0020</string>
     <string name="no_such_vacancies">Таких вакансий нет</string>
 
+    <string name="found_x_vacancies">Найдено %1s</string>
+    <plurals name="plurals_vacancy">
+        <item quantity="zero">вакансий</item>
+        <item quantity="one"> вакансия</item>
+        <item quantity="two"> вакансии</item>
+        <item quantity="few"> вакансии</item>
+        <item quantity="many"> вакансий</item>
+        <item quantity="other"> вакансия</item>
+    </plurals>
 </resources>
