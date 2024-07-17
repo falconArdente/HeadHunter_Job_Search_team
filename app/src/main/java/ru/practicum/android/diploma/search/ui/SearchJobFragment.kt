@@ -174,6 +174,7 @@ class SearchJobFragment : Fragment() {
 
     }
 
+    // Фикс бага
     override fun onResume() {
         super.onResume()
         showView()
