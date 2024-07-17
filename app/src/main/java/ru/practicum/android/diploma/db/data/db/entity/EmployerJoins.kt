@@ -8,8 +8,8 @@ data class EmployerJoins(
     val employer: EmployerEntity,
 
     @Relation(
-        parentColumn = "id",
-        entityColumn = "employerId"
+        parentColumn = "areaId",
+        entityColumn = "id"
     )
     val areaRow: AreaEntity,
 

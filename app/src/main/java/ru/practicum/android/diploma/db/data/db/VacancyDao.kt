@@ -83,8 +83,7 @@ abstract class VacancyDao {
 
         val areaEntity = AreaEntity(
             id = employerJoins.areaRow.id,
-            name = employerJoins.areaRow.name,
-            employerId = employerId
+            name = employerJoins.areaRow.name
         )
         insertArea(areaEntity)
 
