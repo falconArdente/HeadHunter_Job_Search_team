@@ -62,7 +62,8 @@ class SearchJobFragment : Fragment() {
                     binding.recyclerViewSearch.visibility = View.VISIBLE
                     binding.searchJobsCountButton.visibility = View.VISIBLE
                     val pluralVacancy = resources.getQuantityString(
-                        R.plurals.plurals_vacancy, it.totalFoundVacancy
+                        R.plurals.plurals_vacancy,
+                        it.totalFoundVacancy
                     )
                     val foundVac =
                         requireActivity().getString(
