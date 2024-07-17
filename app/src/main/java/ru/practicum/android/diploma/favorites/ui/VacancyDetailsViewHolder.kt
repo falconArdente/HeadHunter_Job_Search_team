@@ -31,9 +31,11 @@ class VacancyDetailsViewHolder(private val binding: JobListItemBinding) : Recycl
                 R.string.salary_range,
                 vacancy.jobDetails.salary.from.toString(),
                 vacancy.jobDetails.salary,
-                if (vacancy.jobDetails.salary.currency != null)
+                if (vacancy.jobDetails.salary.currency != null) {
                     convertCurrencyToSymbol(vacancy.jobDetails.salary.currency)
-                else ""
+                } else {
+                    ""
+                }
             )
         }
         Glide.with(itemView)
@@ -52,5 +54,3 @@ class VacancyDetailsViewHolder(private val binding: JobListItemBinding) : Recycl
         return currency.symbol
     }
 }
-
-

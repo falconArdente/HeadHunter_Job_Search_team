@@ -62,7 +62,8 @@ class FavoritesJobsFragment : Fragment() {
                 FavoritesListState.Error -> {
                     favouritesPlaceholderImage.setImageDrawable(
                         AppCompatResources.getDrawable(
-                            requireContext(), R.drawable.picture_checking_phone
+                            requireContext(),
+                            R.drawable.picture_checking_phone
                         )
                     )
                     favouritesPlaceholderText.setText(R.string.failed_list_vacancy)
