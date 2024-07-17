@@ -100,7 +100,8 @@ class VacancyDbConvertor {
     private fun mapEmployer(employer: EmployerInfo): EmployerEntity {
         return EmployerEntity(
             id = 0,
-            name = employer.employerName
+            name = employer.employerName,
+            areaId = employer.area.id.toLong()
         )
     }
 
@@ -161,8 +162,7 @@ class VacancyDbConvertor {
     private fun mapArea(area: AreaDetails): AreaEntity {
         return AreaEntity(
             id = area.id,
-            name = area.name,
-            employerId = 0
+            name = area.name
         )
     }
 }
