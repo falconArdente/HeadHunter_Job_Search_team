@@ -34,7 +34,7 @@ class SearchVacancyConverter {
     fun mapToAreaModel(remote: Area?): AreaModel? {
         if (remote == null) return null
         return AreaModel(
-            subAreas = remote.subAreas?.map { mapToAreaModel(it) } ,
+            subAreas = remote.subAreas?.map { mapToAreaModel(it) },
             id = remote.id,
             name = remote.name,
             prepositional = remote.prepositional,
