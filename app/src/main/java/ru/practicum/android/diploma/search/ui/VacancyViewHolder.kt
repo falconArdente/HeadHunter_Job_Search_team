@@ -15,7 +15,6 @@ private const val CORNER = 12f
 
 class VacancyViewHolder(private val binding: JobListItemBinding) : RecyclerView.ViewHolder(binding.root) {
     fun bind(vacancy: Vacancy) {
-
         binding.jobTitle.text = jobTitleText(vacancy)
         binding.jobEmployer.text = vacancy.employer?.name ?: "ЗАМЕЩАЮЩИЙ ТЕКСТ?"
         binding.jobSalary.text = jobSalaryText(vacancy)
