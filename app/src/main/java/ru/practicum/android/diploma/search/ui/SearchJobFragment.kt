@@ -36,6 +36,7 @@ class SearchJobFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         viewHolderInit()
         showView()
         searchInputClick()
@@ -44,6 +45,32 @@ class SearchJobFragment : Fragment() {
         binding.searchFilterButton.setOnClickListener {
             findNavController().navigate(R.id.action_searchJobFragment_to_filterSettingsFragment)
         }
+
+        binding.searchInput.doOnTextChanged { text, _, _, _ ->
+            if (text.isNullOrEmpty()) {
+                binding.searchInputIcon.background = requireActivity().getDrawable(R.drawable.icon_search)
+            } else {
+                binding.searchInputIcon.background = requireActivity().getDrawable(R.drawable.icon_cross)
+                viewModel.getSuggestionsForSearch(text.toString())
+            }
+        }
+
+        binding.searchInputIcon.setOnClickListener {
+            binding.searchInput.setText(String())
+        }
+        binding.searchInput.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                binding.searchInput.showKeyboard(requireContext())
+                showView()
+            }
+        }
+        binding.searchInput.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                binding.searchInput.hideKeyboard(requireContext())
+            }
+            false
+        }
+
         suggestionsAdapter = VacancyPositionSuggestsAdapter(requireActivity(), binding.searchInput)
         binding.searchInput.setAdapter(suggestionsAdapter)
         viewModel.suggestionsLivaData.observe(viewLifecycleOwner) { renderSuggestions(it) }
@@ -51,6 +78,26 @@ class SearchJobFragment : Fragment() {
 
     private fun renderSuggestions(incomeSuggestions: List<String>) {
         suggestionsAdapter?.applyDataSet(incomeSuggestions)
+
+        binding.searchInput.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                showView()
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                showView()
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (!p0.isNullOrEmpty()) {
+                    viewModel.searchWithDebounce(p0.toString())
+                } else if (p0.isNullOrEmpty()) {
+                    adapter.updateList(emptyList())
+                    viewModel.updateState(SearchFragmentState.NoTextInInputEditText)
+                    showView()
+                }
+            }
+        })
     }
 
     private fun showView() {
@@ -80,7 +127,6 @@ class SearchJobFragment : Fragment() {
 
                 is SearchFragmentState.NoResult -> {
                     binding.searchJobsCountButton.visibility = View.VISIBLE
-
                     binding.searchJobsCountButton.text = requireActivity().getString(R.string.no_such_vacancies)
                     binding.noResultsSearchInclude.root.visibility = View.VISIBLE
                 }
@@ -93,8 +139,7 @@ class SearchJobFragment : Fragment() {
                     binding.searchPlaceholderImage.visibility = View.VISIBLE
                 }
 
-                else -> {
-                }
+                else -> {}
             }
         }
     }
@@ -106,7 +151,6 @@ class SearchJobFragment : Fragment() {
         binding.recyclerViewSearch.visibility = View.GONE
         binding.searchPlaceholderImage.visibility = View.GONE
         binding.searchJobsCountButton.visibility = View.GONE
-
     }
 
     private fun clickListenerFun() = object : SearchRecyclerViewEvent {
@@ -191,6 +235,10 @@ class SearchJobFragment : Fragment() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        showView()
+    }
     private fun onScrollListener() {
         binding.recyclerViewSearch.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {

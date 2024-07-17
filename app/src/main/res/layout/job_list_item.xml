@@ -15,18 +15,20 @@
         android:contentDescription="@null"
         app:layout_constraintEnd_toStartOf="@id/jobTitle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <TextView
         android:id="@+id/jobTitle"
         style="@style/MediumText.22size"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp12"
         android:layout_marginEnd="@dimen/dp16"
         android:ellipsize="end"
         android:maxLines="3"
         app:layout_constraintBottom_toTopOf="@id/jobEmployer"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/jobImage"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Android-разработчик, Москва" />

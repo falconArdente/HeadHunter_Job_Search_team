@@ -58,12 +58,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp16"
-        android:popupTheme="@style/SuggestionsStyle"
         android:completionThreshold="@integer/suggestions_drop_down_completion_threshold"
         android:dropDownAnchor="@id/searchInputBackground"
         android:hint="@string/search_hint"
         android:inputType="textAutoComplete"
         android:minHeight="@dimen/search_input_min_height"
+        android:popupTheme="@style/SuggestionsStyle"
         android:textColorHint="@color/search_hint_gray_to_white"
         android:textCursorDrawable="@drawable/cursor_drawable"
         app:layout_constraintBottom_toBottomOf="@id/searchInputBackground"
@@ -97,7 +97,6 @@
         android:minHeight="0dp"
         android:textAllCaps="false"
         android:textColor="@color/White"
-        android:visibility="gone"
         app:cornerRadius="@dimen/dp12"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -128,6 +127,7 @@
 
         app:layout_constraintTop_toBottomOf="@id/searchInputBackground"
         tools:ignore="ContentDescription" />
+
     <include
         android:id="@+id/no_results_search_include"
         layout="@layout/no_result_search_item"
@@ -136,9 +136,8 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:listitem="@layout/no_result_search_item"
         app:layout_constraintTop_toBottomOf="@id/searchInput"
-        />
+        tools:listitem="@layout/no_result_search_item" />
 
     <include
         android:id="@+id/server_error_include"
@@ -146,8 +145,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:visibility="gone"
-        tools:listitem="@layout/server_error_search_item"
-        app:layout_constraintTop_toBottomOf="@id/searchInputBackground"/>
+        app:layout_constraintTop_toBottomOf="@id/searchInputBackground"
+        tools:listitem="@layout/server_error_search_item" />
 
     <TextView
         android:id="@+id/searchPlaceholderText"
@@ -164,11 +163,12 @@
         android:id="@+id/searchJobsScrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="@dimen/dp8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="@dimen/dp38"
-        app:layout_constraintTop_toBottomOf="@id/searchInputBackground">
+        app:layout_constraintTop_toBottomOf="@id/searchJobsCountButton">
+
 
         <LinearLayout
             android:layout_width="match_parent"

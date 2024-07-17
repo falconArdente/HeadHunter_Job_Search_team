@@ -104,10 +104,10 @@
 
     <ImageView
         android:id="@+id/jobImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dp48"
+        android:layout_height="@dimen/dp48"
         android:layout_marginStart="@dimen/dp16"
-        android:background="@drawable/placeholder_logo"
+        tools:background="@drawable/placeholder_logo"
         app:layout_constraintBottom_toBottomOf="@id/jobCard"
         app:layout_constraintStart_toStartOf="@id/jobCard"
         app:layout_constraintTop_toTopOf="@id/jobCard" />
@@ -119,6 +119,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp8"
         android:textColor="@color/Black"
+        android:maxWidth="@dimen/dp250"
+        android:maxLines="2"
         app:layout_constraintBottom_toTopOf="@+id/jobCity"
         app:layout_constraintStart_toEndOf="@id/jobImage"
         app:layout_constraintTop_toTopOf="@id/jobImage"
