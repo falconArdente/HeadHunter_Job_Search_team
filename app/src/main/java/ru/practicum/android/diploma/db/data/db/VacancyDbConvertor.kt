@@ -50,7 +50,7 @@ class VacancyDbConvertor {
 
     private fun mapVacancyEntity(vacancy: VacancyDetails): VacancyEntity {
         return VacancyEntity(
-            id = 0,
+            id = vacancy.id.toLong(),
             jobInfoId = 0,
             employerId = 0,
             name = vacancy.name,
