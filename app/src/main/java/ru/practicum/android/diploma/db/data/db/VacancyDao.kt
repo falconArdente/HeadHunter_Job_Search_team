@@ -55,7 +55,7 @@ abstract class VacancyDao {
         val jobInfoId = insertJobInfoJoins(vacancy.jobInfoRow)
 
         val vacancyEntity = VacancyEntity(
-            id = 0,
+            id = vacancy.vacancy.id,
             jobInfoId = jobInfoId,
             employerId = employerId,
             name = vacancy.vacancy.name,
