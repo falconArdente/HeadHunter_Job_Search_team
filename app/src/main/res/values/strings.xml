@@ -52,5 +52,6 @@
     <string name="bullet_point">•\u0020</string>
     <string name="email">email:\u0020</string>
     <string name="phone_number">тел.:\u0020</string>
+    <string name="no_such_vacancies">Таких вакансий нет</string>
 
 </resources>

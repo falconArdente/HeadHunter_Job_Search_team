@@ -131,11 +131,13 @@
     <include
         android:id="@+id/no_results_search_include"
         layout="@layout/no_result_search_item"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         tools:listitem="@layout/no_result_search_item"
-        app:layout_constraintTop_toTopOf="@id/searchInputIcon"
+        app:layout_constraintTop_toBottomOf="@id/searchInput"
         />
 
     <include
