@@ -65,7 +65,10 @@ class SearchJobFragment : Fragment() {
                         R.plurals.plurals_vacancy, it.totalFoundVacancy
                     )
                     val foundVac =
-                        requireActivity().getString(R.string.found_x_vacancies, it.totalFoundVacancy.toString())
+                        requireActivity().getString(
+                            R.string.found_x_vacancies,
+                            it.totalFoundVacancy.toString()
+                        )
                     val text = " $foundVac $pluralVacancy"
                     binding.searchJobsCountButton.text = text
                 }
