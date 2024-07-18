@@ -6,9 +6,9 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 import ru.practicum.android.diploma.App
 import ru.practicum.android.diploma.BuildConfig
-import ru.practicum.android.diploma.network.data.dto.linked.Area
-import ru.practicum.android.diploma.network.data.dto.linked.Country
-import ru.practicum.android.diploma.network.data.dto.linked.Industry
+import ru.practicum.android.diploma.network.data.dto.linked.AreaDTO
+import ru.practicum.android.diploma.network.data.dto.linked.CountryDTO
+import ru.practicum.android.diploma.network.data.dto.linked.IndustryDTO
 import ru.practicum.android.diploma.network.data.dto.linked.Locale
 import ru.practicum.android.diploma.network.data.dto.responses.DictionariesResponse
 import ru.practicum.android.diploma.network.data.dto.responses.VacancyByIdResponse
@@ -42,7 +42,7 @@ interface HeadHunterApplicationApi {
     suspend fun getIndustries(
         @Query("locale") locale: String = App.LOCALE,
         @Query("host") host: String = App.HOST
-    ): List<Industry>
+    ): List<IndustryDTO>
 
     @Headers(
         "User-Agent: ${App.USER_AGENT}",
@@ -52,7 +52,7 @@ interface HeadHunterApplicationApi {
     suspend fun getAreas(
         @Query("locale") locale: String = App.LOCALE,
         @Query("host") host: String = App.HOST
-    ): List<Area>
+    ): List<AreaDTO>
 
     @Headers(
         "User-Agent: ${App.USER_AGENT}",
@@ -62,7 +62,7 @@ interface HeadHunterApplicationApi {
     suspend fun getCountries(
         @Query("locale") locale: String = App.LOCALE,
         @Query("host") host: String = App.HOST
-    ): List<Country>
+    ): List<CountryDTO>
 
     @Headers(
         "User-Agent: ${App.USER_AGENT}",

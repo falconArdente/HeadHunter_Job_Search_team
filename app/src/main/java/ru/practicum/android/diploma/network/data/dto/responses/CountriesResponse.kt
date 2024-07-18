@@ -1,7 +1,7 @@
 package ru.practicum.android.diploma.network.data.dto.responses
 
-import ru.practicum.android.diploma.network.data.dto.linked.Country
+import ru.practicum.android.diploma.network.data.dto.linked.CountryDTO
 
 class CountriesResponse(
-    val countriesList: List<Country>
+    val countriesList: List<CountryDTO>
 ) : Response()
