@@ -28,7 +28,7 @@ object VacancyDetailsMapper {
         return EmployerInfo(
             employerName = vacancyByIdResponse.employer?.name,
             contacts = vacancyByIdResponse.contacts?.mapToDomain(),
-            area = AreaDetails(name = vacancyByIdResponse.area.name, id = vacancyByIdResponse.area.id),
+            area = AreaDetails(name = vacancyByIdResponse.areaDTO.name, id = vacancyByIdResponse.areaDTO.id),
             logo = vacancyByIdResponse.employer?.logoUrls?.mapToDomain(),
         )
     }

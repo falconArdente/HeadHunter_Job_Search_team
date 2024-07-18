@@ -10,9 +10,9 @@ import ru.practicum.android.diploma.network.data.api.HeadHunterNetworkClient
 import ru.practicum.android.diploma.network.data.api.MAX_VACANCY_SUGGESTION_REQUEST_TEXT_LENGTH
 import ru.practicum.android.diploma.network.data.api.MIN_VACANCY_SUGGESTION_REQUEST_TEXT_LENGTH
 import ru.practicum.android.diploma.network.data.dto.HeadHunterRequest
-import ru.practicum.android.diploma.network.data.dto.linked.Area
-import ru.practicum.android.diploma.network.data.dto.linked.Country
-import ru.practicum.android.diploma.network.data.dto.linked.Industry
+import ru.practicum.android.diploma.network.data.dto.linked.AreaDTO
+import ru.practicum.android.diploma.network.data.dto.linked.CountryDTO
+import ru.practicum.android.diploma.network.data.dto.linked.IndustryDTO
 import ru.practicum.android.diploma.network.data.dto.linked.Locale
 import ru.practicum.android.diploma.network.data.dto.linked.VacancyFunctTitle
 import ru.practicum.android.diploma.network.data.dto.responses.AreasResponse
@@ -62,7 +62,7 @@ class HeadHunterRepository(private val client: HeadHunterNetworkClient, context:
             }
         }
 
-    override suspend fun getIndustries(): Flow<Resource<List<Industry>>> =
+    override suspend fun getIndustries(): Flow<Resource<List<IndustryDTO>>> =
         flow {
             val response = client.doRequest(HeadHunterRequest.Industries)
             if (response.resultCode == Response.SUCCESS) {
@@ -72,7 +72,7 @@ class HeadHunterRepository(private val client: HeadHunterNetworkClient, context:
             }
         }
 
-    override suspend fun getAreas(): Flow<Resource<List<Area>>> =
+    override suspend fun getAreas(): Flow<Resource<List<AreaDTO>>> =
         flow {
             val response = client.doRequest(HeadHunterRequest.Areas)
             if (response.resultCode == Response.SUCCESS) {
@@ -82,7 +82,7 @@ class HeadHunterRepository(private val client: HeadHunterNetworkClient, context:
             }
         }
 
-    override suspend fun getCountries(): Flow<Resource<List<Country>>> =
+    override suspend fun getCountries(): Flow<Resource<List<CountryDTO>>> =
         flow {
             val response = client.doRequest(HeadHunterRequest.Counties)
             if (response.resultCode == Response.SUCCESS) {

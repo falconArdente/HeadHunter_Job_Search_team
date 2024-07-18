@@ -8,5 +8,5 @@ class VacancyAtSearch(
     @SerializedName("salary") val salary: Salary?,
     @SerializedName("employer") val employer: Employer?,
     @SerializedName("brand_snippet") val brandSnippet: BrandSnippet?,
-    @SerializedName("area") val area: Area?,
+    @SerializedName("area") val areaDTO: AreaDTO?,
 )
