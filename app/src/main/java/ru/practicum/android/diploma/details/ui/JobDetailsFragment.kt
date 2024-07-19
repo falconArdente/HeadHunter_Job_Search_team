@@ -2,32 +2,23 @@ package ru.practicum.android.diploma.details.ui
 
 import android.os.Bundle
 import android.text.Html
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import org.koin.java.KoinJavaComponent.inject
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentJobDetailsBinding
 import ru.practicum.android.diploma.details.domain.model.VacancyDetails
 import ru.practicum.android.diploma.details.presentation.state.VacancyDetailsState
 import ru.practicum.android.diploma.details.presentation.viewmodel.VacancyDetailsViewModel
-import ru.practicum.android.diploma.network.data.HeadHunterRepository
-import ru.practicum.android.diploma.search.data.repository.SearchRepository
 import ru.practicum.android.diploma.utils.CurrencySymbol
-import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
-import java.util.Currency
-import java.util.Locale
+import ru.practicum.android.diploma.utils.formatSalaryAmount
 
 class JobDetailsFragment : Fragment() {
 
@@ -153,12 +144,6 @@ class JobDetailsFragment : Fragment() {
                 )
             }
         }
-    }
-
-    private fun formatSalaryAmount(salaryAmount: Int?): String {
-        val delimiterSymbol = DecimalFormatSymbols().apply { groupingSeparator = ' ' }
-        val numberFormat = DecimalFormat("###,###,###,###,###", delimiterSymbol)
-        return numberFormat.format(salaryAmount).toString()
     }
 
     private fun renderJobExperience(vacancyDetails: VacancyDetails) {

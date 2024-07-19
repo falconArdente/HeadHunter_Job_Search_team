@@ -8,6 +8,8 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.JobListItemBinding
 import ru.practicum.android.diploma.search.domain.model.Vacancy
+import ru.practicum.android.diploma.utils.CurrencySymbol
+import ru.practicum.android.diploma.utils.formatSalaryAmount
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 
@@ -41,7 +43,7 @@ class VacancyViewHolder(private val binding: JobListItemBinding) : RecyclerView.
                 binding.root.resources.getString(
                     R.string.salary_to,
                     formatSalaryAmount(vacancy.salary.to),
-                    convertCurrencyToSymbol(vacancy)
+                    CurrencySymbol.getCurrencySymbol(vacancy.salary.currency)
                 )
             }
 
@@ -49,7 +51,7 @@ class VacancyViewHolder(private val binding: JobListItemBinding) : RecyclerView.
                 binding.root.resources.getString(
                     R.string.salary_from,
                     formatSalaryAmount(vacancy.salary.from),
-                    convertCurrencyToSymbol(vacancy)
+                    CurrencySymbol.getCurrencySymbol(vacancy.salary.currency)
                 )
             }
 
@@ -58,24 +60,11 @@ class VacancyViewHolder(private val binding: JobListItemBinding) : RecyclerView.
                     R.string.salary_range,
                     formatSalaryAmount(vacancy.salary.from),
                     formatSalaryAmount(vacancy.salary.to),
-                    convertCurrencyToSymbol(vacancy)
+                    CurrencySymbol.getCurrencySymbol(vacancy.salary.currency)
                 )
             }
         }
         return text
-    }
-
-    private fun formatSalaryAmount(salaryAmount: Int?): String {
-        val delimiterSymbol = DecimalFormatSymbols().apply { groupingSeparator = ' ' }
-        val numberFormat = DecimalFormat("###,###,###,###,###", delimiterSymbol)
-        return numberFormat.format(salaryAmount).toString()
-    }
-
-    private fun convertCurrencyToSymbol(vacancy: Vacancy): String {
-        var currencyCode = vacancy.salary?.currency ?: "RUR"
-        if (currencyCode == "RUR") currencyCode = "RUB"
-        val currency = java.util.Currency.getInstance(currencyCode)
-        return currency.symbol
     }
 
     private fun dpToPx(view: View, dp: Float): Int {
