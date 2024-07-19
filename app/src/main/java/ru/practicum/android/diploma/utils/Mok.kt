@@ -7,6 +7,7 @@ import ru.practicum.android.diploma.details.domain.model.LogoUrlsDetails
 import ru.practicum.android.diploma.details.domain.model.SalaryDetails
 import ru.practicum.android.diploma.details.domain.model.VacancyDetails
 import ru.practicum.android.diploma.filter.domain.model.Area
+import ru.practicum.android.diploma.filter.domain.model.Country
 
 object Mok {
     val vacancyDetailsMok = VacancyDetails(
@@ -190,6 +191,48 @@ object Mok {
                     subAreas = null
                 )
             )
+        )
+    )
+    val countries = listOf(
+        Country(
+            id = "113",
+            name = "Россия",
+            url = "https://api.hh.ru/areas/113?locale=RU&host=hh.ru"
+        ),
+        Country(
+            id = "2112",
+            name = "Абхазия",
+            url = "https://api.hh.ru/areas/2112?locale=RU&host=hh.ru"
+        ),
+        Country(
+            id = "5",
+            name = "Украина",
+            url = "https://api.hh.ru/areas/5?locale=RU&host=hh.ru"
+        ),
+        Country(
+            id = "6",
+            name = "Австралия",
+            url = "https://api.hh.ru/areas/6?locale=RU&host=hh.ru"
+        ),
+        Country(
+            id = "40",
+            name = "Казахстан",
+            url = "https://api.hh.ru/areas/40?locale=RU&host=hh.ru"
+        ),
+        Country(
+            id = "6868",
+            name = "Другое",
+            url = "https://api.hh.ru/areas/6868?locale=RU&host=hh.ru"
+        ),
+        Country(
+            id = "2440",
+            name = "Ямайка",
+            url = "https://api.hh.ru/areas/2440?locale=RU&host=hh.ru"
+        ),
+        Country(
+            id = "111",
+            name = "Япония",
+            url = "https://api.hh.ru/areas/111?locale=RU&host=hh.ru"
         )
     )
 }
