@@ -45,7 +45,7 @@
         android:id="@+id/filterInput"
         android:layout_width="0dp"
         android:layout_height="@dimen/dp56"
-        android:layout_marginTop="@dimen/dp16"
+        android:layout_marginTop="@dimen/dp28"
         android:background="@drawable/search_bg"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="@id/filterRightGuideline"
