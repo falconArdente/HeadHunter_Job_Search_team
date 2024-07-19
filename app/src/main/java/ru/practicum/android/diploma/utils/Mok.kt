@@ -8,6 +8,8 @@ import ru.practicum.android.diploma.details.domain.model.SalaryDetails
 import ru.practicum.android.diploma.details.domain.model.VacancyDetails
 import ru.practicum.android.diploma.filter.domain.model.Area
 import ru.practicum.android.diploma.filter.domain.model.Country
+import ru.practicum.android.diploma.filter.domain.model.Industry
+import ru.practicum.android.diploma.filter.domain.model.SphereOfIndustry
 
 object Mok {
     val vacancyDetailsMok = VacancyDetails(
@@ -233,6 +235,192 @@ object Mok {
             id = "111",
             name = "Япония",
             url = "https://api.hh.ru/areas/111?locale=RU&host=hh.ru"
+        )
+    )
+    val industries = listOf(
+        Industry(
+            id = "5",
+            name = "Перевозки, логистика, склад, ВЭД",
+            industries = listOf(
+                SphereOfIndustry(
+                    id = "5.461",
+                    name = "Авиаперевозки"
+                ),
+                SphereOfIndustry(
+                    id = "5.462",
+                    name = "Автомобильные перевозки"
+                ),
+                SphereOfIndustry(
+                    id = "5.463",
+                    name = "Железнодорожные перевозки"
+                ),
+                SphereOfIndustry(
+                    id = "5.464",
+                    name = "Морские, речные перевозки"
+                ),
+                SphereOfIndustry(
+                    id = "5.465",
+                    name = "Транспортно-логистические комплексы, порты (воздушный, водный, железнодорожный)"
+                ),
+                SphereOfIndustry(
+                    id = "5.466",
+                    name = "Складские услуги"
+                ),
+                SphereOfIndustry(
+                    id = "5.467",
+                    name = "Курьерская, почтовая доставка"
+                ),
+                SphereOfIndustry(
+                    id = "5.468",
+                    name = "ВЭД, таможенное оформление"
+                )
+            )
+        ),
+        Industry(
+            id = "7",
+            name = "Информационные технологии, системная интеграция, интернет",
+            industries = listOf(
+                SphereOfIndustry(
+                    id = "7.538",
+                    name = "Интернет-провайдер"
+                ),
+                SphereOfIndustry(
+                    id = "7.539",
+                    name = "Системная интеграция,  автоматизации технологических и бизнес-процессов предприятия, ИТ-консалтинг"
+                ),
+                SphereOfIndustry(
+                    id = "7.540",
+                    name = "Разработка программного обеспечения"
+                ),
+                SphereOfIndustry(
+                    id = "7.541",
+                    name = "Интернет-компания (поисковики, платежные системы, соц.сети, информационно-познавательные и развлекательные ресурсы, продвижение сайтов и прочее)"
+                )
+            )
+        ),
+        Industry(
+            id = "9",
+            name = "Телекоммуникации, связь",
+            industries = listOf(
+                SphereOfIndustry(
+                    id = "9.399",
+                    name = "Мобильная связь"
+                ),
+                SphereOfIndustry(
+                    id = "9.400",
+                    name = "Фиксированная связь"
+                ),
+                SphereOfIndustry(
+                    id = "9.401",
+                    name = "Оптоволоконная связь"
+                ),
+                SphereOfIndustry(
+                    id = "9.402",
+                    name = "Спутниковая связь"
+                )
+            )
+        ),
+        Industry(
+            id = "11",
+            name = "СМИ, маркетинг, реклама, BTL, PR, дизайн, продюсирование",
+            industries = listOf(
+                SphereOfIndustry(
+                    id = "11.452",
+                    name = "Издательская деятельность"
+                ),
+                SphereOfIndustry(
+                    id = "11.453",
+                    name = "Производство мультимедиа, контента, редакторская деятельность"
+                ),
+                SphereOfIndustry(
+                    id = "11.454",
+                    name = "Распространение телепрограмм, кино (кабельное телевидение)"
+                ),
+                SphereOfIndustry(
+                    id = "11.455",
+                    name = "Киностудии и студии звукозаписи"
+                ),
+                SphereOfIndustry(
+                    id = "11.456",
+                    name = "Теле- и радиовещание"
+                ),
+                SphereOfIndustry(
+                    id = "11.457",
+                    name = "Продюсерский центр"
+                ),
+                SphereOfIndustry(
+                    id = "11.458",
+                    name = "Распространение мультимедиа и печатной продукции"
+                ),
+                SphereOfIndustry(
+                    id = "11.459",
+                    name = "Маркетинговые, рекламные, BTL, дизайнерские, Event-, PR-агентства, организация выставок"
+                ),
+                SphereOfIndustry(
+                    id = "11.460",
+                    name = "Производство печатной, полиграфической продукции"
+                ),
+                SphereOfIndustry(
+                    id = "11.685",
+                    name = "Производство и продажа рекламно-сувенирной продукции"
+                )
+            )
+        ),
+        Industry(
+            id = "43",
+            name = "Финансовый сектор",
+            industries = listOf(
+                SphereOfIndustry(
+                    id = "43.641",
+                    name = "Аудит, управленческий учет, финансово-юридический консалтинг"
+                ),
+                SphereOfIndustry(
+                    id = "43.642",
+                    name = "Услуги по ведению бухгалтерского и налогового учета, расчет заработной платы"
+                ),
+                SphereOfIndustry(
+                    id = "43.643",
+                    name = "Коллекторская деятельность"
+                ),
+                SphereOfIndustry(
+                    id = "43.644",
+                    name = "Лизинговые компании"
+                ),
+                SphereOfIndustry(
+                    id = "43.645",
+                    name = "НПФ"
+                ),
+                SphereOfIndustry(
+                    id = "43.646",
+                    name = "Страхование, перестрахование"
+                ),
+                SphereOfIndustry(
+                    id = "43.647",
+                    name = "Банк"
+                ),
+                SphereOfIndustry(
+                    id = "43.648",
+                    name = "Управляющая, инвестиционная компания (управление активами)"
+                ),
+                SphereOfIndustry(
+                    id = "43.649",
+                    name = "Факторинговые компании"
+                ),
+                SphereOfIndustry(
+                    id = "43.650",
+                    name = "Финансово-кредитное посредничество (биржа, брокерская деятельность, выпуск и обслуживание карт, оценка рисков, обменные пункты, агентства по кредитованию, инкассация, ломбард, платежные системы)"
+                )
+            )
+        ),
+        Industry(
+            id = "389",
+            name = "Управление многопрофильными активами",
+            industries = listOf(
+                SphereOfIndustry(
+                    id = "389.530",
+                    name = "Управляющая компания группы, холдинга, штаб-квартира"
+                )
+            )
         )
     )
 }
