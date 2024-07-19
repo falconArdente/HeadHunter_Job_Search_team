@@ -20,29 +20,33 @@ object CurrencySymbol {
 
     init {
         for (locale in Locale.getAvailableLocales()) {
-            try {
-                val currency = Currency.getInstance(locale)
-                if (currency !in currencyLocaleMap.keys) {
-                    currencyLocaleMap[currency] = locale
+            if (locale != null) {
+                try {
+                    val currency = Currency.getInstance(locale)
+                    if (currency !in currencyLocaleMap.keys) {
+                        currencyLocaleMap[currency] = locale
+                    }
+                } catch (e: IllegalArgumentException) {
+                    Log.d(CURRENCY_ERROR_TAG, "$CURRENCY_REFETENCE_MAP_EXCEPION_MESSAGE ${e.message}")
                 }
-            } catch (e: Exception) {
-                Log.d(CURRENCY_ERROR_TAG, "$CURRENCY_REFETENCE_MAP_EXCEPION_MESSAGE ${e.message}")
             }
         }
     }
 
     fun getCurrencySymbol(currencyCode: String?): String {
+        val currencySymbol: String
+
         if (currencyCode != null) {
             val currency = Currency.getInstance(currencyCode)
-            return try {
-                when (currencyCode) {
-                    CURRENCY_RUR -> Currency.getInstance(CURRENCY_RUB).symbol
-                    CURRENCY_BYR -> CURRENCY_BR
-                    else -> currency.getSymbol(currencyLocaleMap[currency])
-                }
-            } catch (e: NullPointerException) {
-                return currencyCode
+            currencySymbol = when (currencyCode) {
+                CURRENCY_RUR -> Currency.getInstance(CURRENCY_RUB).symbol
+                CURRENCY_BYR -> CURRENCY_BR
+                else -> currency.getSymbol(currencyLocaleMap[currency])
             }
-        } else return ""
+        } else {
+            currencySymbol = ""
+        }
+
+        return currencySymbol
     }
 }
