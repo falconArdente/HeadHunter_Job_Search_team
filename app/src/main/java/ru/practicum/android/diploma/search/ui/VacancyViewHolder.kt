@@ -10,8 +10,6 @@ import ru.practicum.android.diploma.databinding.JobListItemBinding
 import ru.practicum.android.diploma.search.domain.model.Vacancy
 import ru.practicum.android.diploma.utils.CurrencySymbol
 import ru.practicum.android.diploma.utils.formatSalaryAmount
-import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
 
 private const val CORNER = 12f
 
