@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recyclerFilterItem"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:paddingHorizontal="@dimen/dp16"
+    android:paddingVertical="@dimen/dp8">
+
+    <TextView
+        android:id="@+id/dark_theme_text_view"
+        style="@style/RegularText.16size"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:maxLines="2"
+        android:paddingTop="@dimen/dp6"
+        android:paddingEnd="@dimen/dp16"
+        android:paddingBottom="@dimen/dp6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/switherFilter"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="RtlSymmetry"
+        tools:text="Какой-то текст  проверка проверка проверка проверка проверка" />
+
+    <ImageButton
+        android:id="@+id/switherFilter"
+        android:layout_width="@dimen/dp18"
+        android:layout_height="@dimen/dp18"
+        android:background="@drawable/switch_filter"
+        app:layout_constraintBottom_toBottomOf="@id/dark_theme_text_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/dark_theme_text_view"
+        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+</androidx.constraintlayout.widget.ConstraintLayout>
