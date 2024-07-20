@@ -15,13 +15,13 @@ import ru.practicum.android.diploma.filter.data.repository.AreaFilterRepositoryI
 import ru.practicum.android.diploma.filter.data.repository.CountryFilterRepositoryImpl
 import ru.practicum.android.diploma.filter.data.repository.ExpectedSalaryRepositoryImpl
 import ru.practicum.android.diploma.filter.data.repository.HideNoSalaryItemsRepositoryImpl
-import ru.practicum.android.diploma.filter.data.repository.SphereOfIndustryRepositoryImpl
+import ru.practicum.android.diploma.filter.data.repository.IndustryRepositoryImpl
 import ru.practicum.android.diploma.filter.domain.impl.AllFilterParameterRepository
 import ru.practicum.android.diploma.filter.domain.impl.AreaFilterRepository
 import ru.practicum.android.diploma.filter.domain.impl.CountryFilterRepository
 import ru.practicum.android.diploma.filter.domain.impl.ExpectedSalaryRepository
 import ru.practicum.android.diploma.filter.domain.impl.HideNoSalaryItemsRepository
-import ru.practicum.android.diploma.filter.domain.impl.SphereOfIndustryRepository
+import ru.practicum.android.diploma.filter.domain.impl.IndustryRepository
 import ru.practicum.android.diploma.network.data.HeadHunterRepository
 import ru.practicum.android.diploma.search.data.repository.SearchRepository
 
@@ -68,8 +68,8 @@ val repositoryModule = module {
         HideNoSalaryItemsRepositoryImpl(filterStorage = get())
     }
 
-    single<SphereOfIndustryRepository> {
-        SphereOfIndustryRepositoryImpl(filterStorage = get())
+    single<IndustryRepository> {
+        IndustryRepositoryImpl(filterStorage = get())
     }
 
 }

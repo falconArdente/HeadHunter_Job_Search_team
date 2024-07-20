@@ -9,4 +9,6 @@ interface AllFilterParameterRepository {
 
     fun clearAllFilterParameters()
 
+    fun isFilterActive(): Boolean
+
 }
