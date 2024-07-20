@@ -22,7 +22,9 @@ class FilterSettingsFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentFilterSettingsBinding.inflate(inflater, container, false)
         return binding.root
@@ -44,7 +46,6 @@ class FilterSettingsFragment : Fragment() {
                 binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Black))
             }
         }
-
 
         viewModel.getState().observe(viewLifecycleOwner) { state ->
             render(state)
