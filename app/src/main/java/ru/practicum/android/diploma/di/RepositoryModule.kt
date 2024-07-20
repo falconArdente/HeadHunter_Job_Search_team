@@ -24,7 +24,6 @@ import ru.practicum.android.diploma.filter.domain.impl.HideNoSalaryItemsReposito
 import ru.practicum.android.diploma.filter.domain.impl.SphereOfIndustryRepository
 import ru.practicum.android.diploma.network.data.HeadHunterRepository
 import ru.practicum.android.diploma.search.data.repository.SearchRepository
-import kotlin.io.path.fileVisitor
 
 val repositoryModule = module {
     single<NavigatorRepository> {
