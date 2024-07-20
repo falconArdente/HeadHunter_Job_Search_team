@@ -46,7 +46,17 @@ class RetrofitBasedClient(retrofit: Retrofit, private val networkStatus: Network
                         ).vacancyPositionsList
                     )
 
-                    is HeadHunterRequest.VacancySearch -> serverService.searchVacancy(request.textForSearch)
+                    is HeadHunterRequest.VacancySearch -> serverService.searchVacancy(
+                        textForSearch = request.textForSearch,
+                        areaId = request.areaId,
+                        industryIds = request.industryIds,
+                        currencyCode = request.currencyCode,
+                        salary = request.salary,
+                        withSalaryOnly = request.withSalaryOnly,
+                        page = request.page,
+                        perPage = request.perPage
+                    )
+
                     is HeadHunterRequest.VacancyById -> serverService.getVacancyById(request.id)
                 }
                 response.apply { resultCode = Response.SUCCESS }
