@@ -17,9 +17,8 @@ import ru.practicum.android.diploma.databinding.FragmentJobDetailsBinding
 import ru.practicum.android.diploma.details.domain.model.VacancyDetails
 import ru.practicum.android.diploma.details.presentation.state.VacancyDetailsState
 import ru.practicum.android.diploma.details.presentation.viewmodel.VacancyDetailsViewModel
-import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
-import java.util.Locale
+import ru.practicum.android.diploma.utils.CurrencySymbol
+import ru.practicum.android.diploma.utils.formatSalaryAmount
 
 class JobDetailsFragment : Fragment() {
 
@@ -124,7 +123,7 @@ class JobDetailsFragment : Fragment() {
                 binding.root.resources.getString(
                     R.string.salary_to,
                     formatSalaryAmount(vacancyDetails.jobInfo.salary.to),
-                    convertCurrencyToSymbol(vacancyDetails)
+                    CurrencySymbol.getCurrencySymbol(vacancyDetails.jobInfo.salary.currency)
                 )
             }
 
@@ -132,7 +131,7 @@ class JobDetailsFragment : Fragment() {
                 binding.root.resources.getString(
                     R.string.salary_from,
                     formatSalaryAmount(vacancyDetails.jobInfo.salary.from),
-                    convertCurrencyToSymbol(vacancyDetails)
+                    CurrencySymbol.getCurrencySymbol(vacancyDetails.jobInfo.salary.currency)
                 )
             }
 
@@ -141,28 +140,10 @@ class JobDetailsFragment : Fragment() {
                     R.string.salary_range,
                     formatSalaryAmount(vacancyDetails.jobInfo.salary.from),
                     formatSalaryAmount(vacancyDetails.jobInfo.salary.to),
-                    convertCurrencyToSymbol(vacancyDetails)
+                    CurrencySymbol.getCurrencySymbol(vacancyDetails.jobInfo.salary.currency)
                 )
             }
         }
-    }
-
-    private fun formatSalaryAmount(salaryAmount: Int?): String {
-        val delimiterSymbol = DecimalFormatSymbols().apply { groupingSeparator = ' ' }
-        val numberFormat = DecimalFormat("###,###,###,###,###", delimiterSymbol)
-        return numberFormat.format(salaryAmount).toString()
-    }
-
-    private fun convertCurrencyToSymbol(vacancy: VacancyDetails): String { // в Utils?
-        var currencyCode = vacancy.jobInfo.salary?.currency
-        if (currencyCode == "RUR") currencyCode = "RUB"
-        if (currencyCode == "KZT") {
-            val kztLocale = Locale("kk", "KZ")
-            val currency = java.util.Currency.getInstance(currencyCode)
-            return currency.getSymbol(kztLocale)
-        }
-        val currency = java.util.Currency.getInstance(currencyCode)
-        return currency.symbol
     }
 
     private fun renderJobExperience(vacancyDetails: VacancyDetails) {
