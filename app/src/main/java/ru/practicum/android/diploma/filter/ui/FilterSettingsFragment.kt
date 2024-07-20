@@ -16,7 +16,7 @@ import ru.practicum.android.diploma.filter.presentation.viewmodel.FilterSettings
 class FilterSettingsFragment : Fragment() {
     private var _binding: FragmentFilterSettingsBinding? = null
     private val binding get() = _binding!!
-    private val viewModel by viewModel <FilterSettingsViewModel>()
+    private val viewModel by viewModel<FilterSettingsViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -38,19 +38,18 @@ class FilterSettingsFragment : Fragment() {
             findNavController().navigateUp()
         }
         binding.filterSalaryInput.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus){
+            if (hasFocus) {
                 binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Blue))
-            }
-            else{
+            } else {
                 if (binding.filterSalaryInput.text.isEmpty())
                     binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Gray_OR_White))
-                else{
+                else {
                     binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Black))
                 }
             }
         }
 
-        viewModel.getState().observe(viewLifecycleOwner){state ->
+        viewModel.getState().observe(viewLifecycleOwner) { state ->
             render(state)
 
         }
@@ -81,21 +80,19 @@ class FilterSettingsFragment : Fragment() {
 
     }
 
-    private fun render(state: FilterSettingsState){
-        if (state.workPlace.isEmpty()){
+    private fun render(state: FilterSettingsState) {
+        if (state.workPlace.isEmpty()) {
             binding.filterWorkPlaceInactive.visibility = View.VISIBLE
             binding.filterWorkPlaceActive.visibility = View.GONE
-        }
-        else{
+        } else {
             binding.filterWorkPlaceInactive.visibility = View.GONE
             binding.filterWorkPlaceActive.visibility = View.VISIBLE
         }
 
-        if (state.industry.isEmpty()){
+        if (state.industry.isEmpty()) {
             binding.filterIndustryInactive.visibility = View.VISIBLE
             binding.filterIndustryActive.visibility = View.GONE
-        }
-        else{
+        } else {
             binding.filterIndustryInactive.visibility = View.GONE
             binding.filterIndustryActive.visibility = View.VISIBLE
         }
