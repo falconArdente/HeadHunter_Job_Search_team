@@ -18,16 +18,29 @@
         android:maxLines="2"
         android:paddingEnd="@dimen/dp16"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/switherFilter"
+        app:layout_constraintEnd_toStartOf="@id/switcherFilter"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="RtlSymmetry"
         tools:text="Какой-то текст  проверка проверка проверка проверка проверка" />
 
-    <ImageButton
-        android:id="@+id/switherFilter"
+    <ToggleButton
+        android:textOff="@null"
+        android:textOn="@null"
+        android:id="@+id/switcherFilter"
         android:layout_width="@dimen/dp18"
         android:layout_height="@dimen/dp18"
         android:background="@drawable/switch_filter"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@id/textViewFilterItem"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/textViewFilterItem"
+        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+    <ImageButton
+        android:id="@+id/arrowFilterMini"
+        android:layout_width="@dimen/dp18"
+        android:layout_height="@dimen/dp18"
+        android:background="@drawable/icon_arrow_forward"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/textViewFilterItem"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/textViewFilterItem"
