@@ -18,6 +18,6 @@ class AllFilterParametersRepositoryImpl(private val filterStorage: FilterStorage
     override fun isFilterActive(): Boolean {
         val filter = filterStorage.getFilterParameters()
         return (filter.countryId != null || filter.areaId != null || filter.industryId != null
-                || filter.expectedSalary != null || filter.hideNoSalaryItems)
+            || filter.expectedSalary != null || filter.hideNoSalaryItems)
     }
 }
