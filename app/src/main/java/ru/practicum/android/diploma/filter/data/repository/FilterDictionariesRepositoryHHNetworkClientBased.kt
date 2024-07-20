@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.filter.data.repository
 
 import android.content.Context
-import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.R
@@ -75,7 +74,6 @@ class FilterDictionariesRepositoryHHNetworkClientBased(private val client: HeadH
         return flow {
             val response = client.doRequest(HeadHunterRequest.SubAreas(areaId))
             if (response.resultCode == Response.SUCCESS) {
-                Log.d("AAAAAAAAA",response.resultCode.toString())
                 emit(
                     Resource.Success((response as AreasResponse).areasList.map { areaDto ->
                         FilterMapper.toArea(areaDto)
