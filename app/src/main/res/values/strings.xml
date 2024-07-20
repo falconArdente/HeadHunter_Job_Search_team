@@ -69,5 +69,6 @@
     <string name="choice_region">Выбор региона</string>
     <string name="choice_industry">Выбор отрасли</string>
     <string name="choice_country">Выбор страны</string>
+    <string name="enter_region">Введите регион</string>
 
 </resources>
