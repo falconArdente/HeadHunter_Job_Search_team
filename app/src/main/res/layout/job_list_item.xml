@@ -28,7 +28,7 @@
         android:ellipsize="end"
         android:maxLines="3"
         app:layout_constraintBottom_toTopOf="@id/jobEmployer"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/listFavIcon"
         app:layout_constraintStart_toEndOf="@id/jobImage"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Android-разработчик, Москва" />
@@ -57,4 +57,18 @@
         app:layout_constraintStart_toEndOf="@id/jobImage"
         app:layout_constraintTop_toBottomOf="@id/jobEmployer"
         tools:text="от 100 000 Р" />
+
+    <ImageButton
+        android:id="@+id/listFavIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:background="@drawable/icon_heart"
+        android:contentDescription="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:background="@drawable/icon_heart"
+        tools:visibility="visible"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

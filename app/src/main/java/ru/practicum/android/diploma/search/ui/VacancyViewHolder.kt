@@ -1,19 +1,25 @@
 package ru.practicum.android.diploma.search.ui
 
+import android.annotation.SuppressLint
 import android.util.TypedValue
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.JobListItemBinding
 import ru.practicum.android.diploma.search.domain.model.Vacancy
+import ru.practicum.android.diploma.utils.OnSwipeTouchListener
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 
 private const val CORNER = 12f
 
-class VacancyViewHolder(private val binding: JobListItemBinding) : RecyclerView.ViewHolder(binding.root) {
+class VacancyViewHolder(private val binding: JobListItemBinding,
+                        private val onVacancyClickListener: SearchRecyclerViewEvent
+    ) : RecyclerView.ViewHolder(binding.root) {
+    @SuppressLint("ClickableViewAccessibility")
     fun bind(vacancy: Vacancy) {
         binding.jobTitle.text = jobTitleText(vacancy)
         binding.jobEmployer.text = vacancy.employer?.name ?: ""
@@ -24,6 +30,18 @@ class VacancyViewHolder(private val binding: JobListItemBinding) : RecyclerView.
             .centerCrop()
             .transform(RoundedCorners(dpToPx(itemView, CORNER)))
             .into(binding.jobImage)
+
+        binding.root.setOnTouchListener(object: OnSwipeTouchListener(binding.root.context) {
+            override fun onPress() {
+                onVacancyClickListener.onItemClick(vacancy)
+            }
+            override fun onSwipeLeft() {
+                binding.listFavIcon.isVisible = true
+            }
+            override fun onSwipeRight() {
+                binding.listFavIcon.isVisible = false
+            }
+        })
     }
 
     private fun jobTitleText(vacancy: Vacancy): String {

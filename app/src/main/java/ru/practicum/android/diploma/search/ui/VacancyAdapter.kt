@@ -8,7 +8,7 @@ import ru.practicum.android.diploma.search.domain.model.Vacancy
 
 class VacancyAdapter(
     vacancyList: List<Vacancy>,
-    private val onVacancyClickListener: SearchRecyclerViewEvent,
+    private val onVacancyClickListener: SearchRecyclerViewEvent
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var vacancyList = vacancyList
@@ -17,7 +17,7 @@ class VacancyAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val vacancyViewBinding = JobListItemBinding.inflate(inflater, parent, false)
-        return VacancyViewHolder(vacancyViewBinding)
+        return VacancyViewHolder(vacancyViewBinding, onVacancyClickListener)
     }
 
     override fun getItemCount(): Int = vacancyList.size
@@ -25,9 +25,6 @@ class VacancyAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is VacancyViewHolder) {
             holder.bind(vacancyList[position])
-            holder.itemView.setOnClickListener {
-                onVacancyClickListener.onItemClick(vacancyList[holder.adapterPosition])
-            }
         }
     }
 
