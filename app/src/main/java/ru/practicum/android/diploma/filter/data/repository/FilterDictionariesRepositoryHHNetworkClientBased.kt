@@ -93,9 +93,12 @@ class FilterDictionariesRepositoryHHNetworkClientBased(private val client: HeadH
                 )
                 when (response.resultCode) {
                     Response.SUCCESS -> {
-                        emit(Resource.Success((response as AreaSuggestionsResponse).suggestions.map { areaSuggestionDTO ->
-                            FilterMapper.toAreaSuggestion(areaSuggestionDTO)
-                        }))
+                        emit(
+                            Resource.Success((response as AreaSuggestionsResponse)
+                                .suggestions.map { areaSuggestionDTO ->
+                                    FilterMapper.toAreaSuggestion(areaSuggestionDTO)
+                                })
+                        )
                     }
 
                     Response.NOT_FOUND -> emit(Resource.NotFoundError(areasSuggestionsErrorMessage))
