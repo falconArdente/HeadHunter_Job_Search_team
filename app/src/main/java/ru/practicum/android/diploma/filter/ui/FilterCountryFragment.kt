@@ -14,7 +14,7 @@ class FilterCountryFragment : Fragment() {
     private val binding get() = _binding!!
     private val country = Country("р", "тестовый лист страна", "роп")
     val list = listOf(country)
-    private val adapter = FilterCountryAdapter(list, clickListenerFun())
+    private val adapter = FilterCountryAdapter(list, ::clickListenerFun)
     // заменить в адаптере на пустой лист потом
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -33,10 +33,9 @@ class FilterCountryFragment : Fragment() {
         _binding = null
     }
 
-    private fun clickListenerFun() = object : RVEvent {
-        override fun onItemClick(country: Country) {
-            //   реализовать клик
-        }
+    private fun clickListenerFun(country: Country) {
+
+        //   реализовать клик
     }
 
     private fun viewVisibility() {

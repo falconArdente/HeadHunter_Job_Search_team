@@ -18,7 +18,7 @@
         android:maxLines="2"
         android:paddingEnd="@dimen/dp16"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/switherFilter"
+        app:layout_constraintEnd_toStartOf="@id/switcherFilter"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="RtlSymmetry"
         tools:text="Какой-то текст  проверка проверка проверка проверка проверка" />
@@ -26,7 +26,7 @@
     <ToggleButton
         android:textOff="@null"
         android:textOn="@null"
-        android:id="@+id/switherFilter"
+        android:id="@+id/switcherFilter"
         android:layout_width="@dimen/dp18"
         android:layout_height="@dimen/dp18"
         android:background="@drawable/switch_filter"

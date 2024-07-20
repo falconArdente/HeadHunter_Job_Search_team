@@ -9,7 +9,7 @@ import ru.practicum.android.diploma.filter.domain.model.Area
 
 class FilterRegionAdapter(
     private var listArea: List<Area>,
-    private var clickListener: RVRegionClick
+    private var clickListener: (area: Area) -> Unit
 ) : RecyclerView.Adapter<FilterRegionAdapter.RegionFilterViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RegionFilterViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -23,7 +23,7 @@ class FilterRegionAdapter(
     ) {
         holder.bind(listArea[position])
         holder.itemView.setOnClickListener {
-            clickListener.onItemClick(listArea[position])
+            clickListener(listArea[position])
         }
     }
 
@@ -42,12 +42,8 @@ class FilterRegionAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Area) {
             binding.textViewFilterItem.text = item.name
-            binding.switherFilter.visibility = View.VISIBLE
-            binding.arrowFilterMini.visibility = View.GONE
+            binding.switcherFilter.visibility = View.GONE
+            binding.arrowFilterMini.visibility = View.VISIBLE
         }
     }
-}
-
-interface RVRegionClick {
-    fun onItemClick(area: Area)
 }

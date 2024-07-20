@@ -15,7 +15,7 @@ class FilterRegionFragment : Fragment() {
     private val binding get() = _binding!!
     val area = Area(null, "оо", "имя", "порп")
     val list = listOf(area)
-    private val adapter = FilterRegionAdapter(list, clickListenerFun())
+    private val adapter = FilterRegionAdapter(list, ::clickListenerFun)
     // заменить в адаптере на пустой лист потом
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -34,11 +34,10 @@ class FilterRegionFragment : Fragment() {
         _binding = null
     }
 
-    private fun clickListenerFun() = object : RVRegionClick {
-        override fun onItemClick(area: Area) {
-            //   реализовать клик
-        }
+    private fun clickListenerFun(area: Area) {
+        //   реализовать клик
     }
+
 
     private fun viewHolderInit() {
         binding.recyclerViewFilter.layoutManager =
