@@ -34,7 +34,6 @@ class FilterCountryFragment : Fragment() {
     }
 
     private fun clickListenerFun(country: Country) {
-
         //   реализовать клик
     }
 

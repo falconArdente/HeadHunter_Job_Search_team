@@ -38,7 +38,6 @@ class FilterRegionFragment : Fragment() {
         //   реализовать клик
     }
 
-
     private fun viewHolderInit() {
         binding.recyclerViewFilter.layoutManager =
             LinearLayoutManager(
