@@ -112,9 +112,27 @@ class HeadHunterRepository(private val client: HeadHunterNetworkClient, context:
             }
         }
 
-    override suspend fun searchVacancy(textForSearch: String): Flow<Resource<VacancyListResponse>> = flow {
+    override suspend fun searchVacancy(
+        textForSearch: String,
+        areaId: String?,
+        industryId: String?,
+        currencyCode: String?,
+        salary: Int?,
+        withSalaryOnly: Boolean,
+        page: Int?,
+        perPage: Int?,
+    ): Flow<Resource<VacancyListResponse>> = flow {
         val response = client.doRequest(
-            HeadHunterRequest.VacancySearch(textForSearch)
+            HeadHunterRequest.VacancySearch(
+                textForSearch = textForSearch,
+                areaId = areaId,
+                industryId = industryId,
+                currencyCode = currencyCode,
+                salary = salary,
+                withSalaryOnly = withSalaryOnly,
+                page = page,
+                perPage = perPage,
+            )
         )
         if (response.resultCode == Response.SUCCESS) {
             emit(Resource.Success(response as VacancyListResponse))
@@ -132,6 +150,7 @@ class HeadHunterRepository(private val client: HeadHunterNetworkClient, context:
                     val data: VacancyByIdResponse = response as VacancyByIdResponse
                     emit(Resource.Success(data.mapToDomain()))
                 }
+
                 -1 -> emit(Resource.InternetConnectionError(vacancyGetByIdErrorMessage))
                 Response.NOT_FOUND -> emit(Resource.NotFoundError(vacancyGetByIdErrorMessage))
                 else -> emit(Resource.Error(vacancyGetByIdErrorMessage))

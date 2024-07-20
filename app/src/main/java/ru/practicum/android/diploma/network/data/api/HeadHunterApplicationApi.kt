@@ -82,6 +82,13 @@ interface HeadHunterApplicationApi {
     @GET("/vacancies")
     suspend fun searchVacancy(
         @Query("text") textForSearch: String,
+        @Query("area") areaId: String? = null,
+        @Query("industry") industryId: String? = null,
+        @Query("currency") currencyCode: String? = null,
+        @Query("salary") salary: Number? = null,
+        @Query("only_with_salary") withSalaryOnly: Boolean = false,
+        @Query("page") page: Number? = null,
+        @Query("per_page") perPage: Number? = null, // <= 100
         @Query("locale") locale: String = App.LOCALE,
         @Query("host") host: String = App.HOST
     ): VacancyListResponse
