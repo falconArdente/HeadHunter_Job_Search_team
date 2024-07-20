@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.filter.data.repository
 
 import android.content.Context
+import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.R
@@ -74,6 +75,7 @@ class FilterDictionariesRepositoryHHNetworkClientBased(private val client: HeadH
         return flow {
             val response = client.doRequest(HeadHunterRequest.SubAreas(areaId))
             if (response.resultCode == Response.SUCCESS) {
+                Log.d("AAAAAAAAA",response.resultCode.toString())
                 emit(
                     Resource.Success((response as AreasResponse).areasList.map { areaDto ->
                         FilterMapper.toArea(areaDto)
@@ -91,12 +93,16 @@ class FilterDictionariesRepositoryHHNetworkClientBased(private val client: HeadH
                 val response = client.doRequest(
                     HeadHunterRequest.SearchInAreas(searchText, areaId)
                 )
-                if (response.resultCode == Response.SUCCESS) {
-                    emit(Resource.Success((response as AreaSuggestionsResponse).suggestions.map { areaSuggestionDTO ->
-                        FilterMapper.toAreaSuggestion(areaSuggestionDTO)
-                    }))
-                } else {
-                    emit(Resource.Error(areasSuggestionsErrorMessage))
+                when (response.resultCode) {
+                    Response.SUCCESS -> {
+                        emit(Resource.Success((response as AreaSuggestionsResponse).suggestions.map { areaSuggestionDTO ->
+                            FilterMapper.toAreaSuggestion(areaSuggestionDTO)
+                        }))
+                    }
+
+                    Response.NOT_FOUND -> emit(Resource.NotFoundError(areasSuggestionsErrorMessage))
+                    Response.NO_INTERNET -> emit(Resource.InternetConnectionError(areasSuggestionsErrorMessage))
+                    else -> emit(Resource.Error(areasSuggestionsErrorMessage))
                 }
             } else {
                 emit(Resource.Error(areaSuggestionsRequestLengthErrorMessage))

@@ -19,7 +19,7 @@ import java.io.UncheckedIOException
 class RetrofitBasedClient(retrofit: Retrofit, private val networkStatus: NetworkStatus) : HeadHunterNetworkClient {
     private val serverService = retrofit.create(HeadHunterApplicationApi::class.java)
     override suspend fun doRequest(request: HeadHunterRequest): Response {
-        if (!networkStatus.isConnected()) return Response().apply { resultCode = -1 }
+        if (!networkStatus.isConnected()) return Response().apply { resultCode = Response.NO_INTERNET }
         return withContext(Dispatchers.IO) {
             try {
                 val response = when (request) {
