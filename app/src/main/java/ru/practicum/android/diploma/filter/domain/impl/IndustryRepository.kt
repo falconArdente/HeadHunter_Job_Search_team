@@ -1,13 +1,12 @@
 package ru.practicum.android.diploma.filter.domain.impl
 
 import ru.practicum.android.diploma.filter.domain.model.IndustryDetailsFilterItem
+import ru.practicum.android.diploma.filter.domain.model.IndustryFilter
 
 interface IndustryRepository {
-    fun getSphereOfIndustryId(): String
+    fun getIndustry(): IndustryFilter
 
-    fun getSphereOfIndustryName(): String
+    fun saveIndustry(industry: IndustryDetailsFilterItem)
 
-    fun saveSphereOfIndustry(industry: IndustryDetailsFilterItem)
-
-    fun clearSphereOfIndustry()
+    fun clearIndustry()
 }

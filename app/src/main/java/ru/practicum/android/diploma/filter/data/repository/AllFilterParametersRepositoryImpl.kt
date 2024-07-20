@@ -2,14 +2,14 @@ package ru.practicum.android.diploma.filter.data.repository
 
 import ru.practicum.android.diploma.filter.data.storage.FilterStorage
 import ru.practicum.android.diploma.filter.domain.impl.AllFilterParameterRepository
-import ru.practicum.android.diploma.filter.domain.model.Filter
+import ru.practicum.android.diploma.filter.domain.model.FilterGeneral
 
 class AllFilterParametersRepositoryImpl(private val filterStorage: FilterStorage) : AllFilterParameterRepository {
-    override fun saveFilter(filter: Filter) {
+    override fun saveFilter(filter: FilterGeneral) {
         filterStorage.saveFilterParameters(filter)
     }
 
-    override fun getFilter(): Filter = filterStorage.getFilterParameters()
+    override fun getFilter(): FilterGeneral = filterStorage.getFilterParameters()
 
     override fun clearAllFilterParameters() {
         filterStorage.clearAllFilterParameters()
@@ -17,7 +17,7 @@ class AllFilterParametersRepositoryImpl(private val filterStorage: FilterStorage
 
     override fun isFilterActive(): Boolean {
         val filter = filterStorage.getFilterParameters()
-        return (filter.countryId != null || filter.areaId != null || filter.industryId != null
-            || filter.salaryInfo.expectedSalary != null || filter.salaryInfo.hideNoSalaryItems)
+        return (filter.country != null || filter.area != null || filter.industry != null
+            || filter.expectedSalary != null || filter.hideNoSalaryItems)
     }
 }

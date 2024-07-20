@@ -1,11 +1,11 @@
 package ru.practicum.android.diploma.filter.domain.impl
 
-import ru.practicum.android.diploma.filter.domain.model.Filter
+import ru.practicum.android.diploma.filter.domain.model.FilterGeneral
 
 interface AllFilterParameterRepository {
-    fun saveFilter(filter: Filter)
+    fun saveFilter(filter: FilterGeneral)
 
-    fun getFilter(): Filter
+    fun getFilter(): FilterGeneral
 
     fun clearAllFilterParameters()
 

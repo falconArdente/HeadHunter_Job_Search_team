@@ -6,18 +6,11 @@ import ru.practicum.android.diploma.filter.domain.impl.HideNoSalaryItemsReposito
 class HideNoSalaryItemsRepositoryImpl(private val filterStorage: FilterStorage) : HideNoSalaryItemsRepository {
     override fun getHideNoSalaryItems(): Boolean {
         val savedFilter = filterStorage.getFilterParameters()
-        return savedFilter.salaryInfo.hideNoSalaryItems
+        return savedFilter.hideNoSalaryItems
     }
 
     override fun saveHideNoSalaryItems(hideNoSalaryItems: Boolean) {
         val savedFilter = filterStorage.getFilterParameters()
-        val salaryInfoSaved = savedFilter.salaryInfo
-        filterStorage.saveFilterParameters(
-            savedFilter.copy(
-                salaryInfo = salaryInfoSaved.copy(
-                    hideNoSalaryItems = hideNoSalaryItems
-                )
-            )
-        )
+        filterStorage.saveFilterParameters(savedFilter.copy(hideNoSalaryItems = hideNoSalaryItems))
     }
 }

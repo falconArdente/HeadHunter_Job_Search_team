@@ -1,11 +1,10 @@
 package ru.practicum.android.diploma.filter.domain.impl
 
 import ru.practicum.android.diploma.filter.domain.model.Country
+import ru.practicum.android.diploma.filter.domain.model.CountryFilter
 
 interface CountryFilterRepository {
-    fun getCountryId(): String
-
-    fun getCountryName(): String
+    fun getCountry(): CountryFilter
 
     fun saveCountry(country: Country)
 
