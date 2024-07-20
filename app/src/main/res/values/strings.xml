@@ -64,4 +64,10 @@
         <item quantity="many"> вакансий</item>
         <item quantity="other"> вакансий</item>
     </plurals>
+
+    <string name="edit_hint">Задать нужный под фрагмент хинт</string>
+    <string name="choice_region">Выбор региона</string>
+    <string name="choice_industry">Выбор отрасли</string>
+    <string name="choice_country">Выбор страны</string>
+
 </resources>
