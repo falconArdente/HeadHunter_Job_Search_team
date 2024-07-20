@@ -52,7 +52,7 @@
         app:layout_constraintStart_toStartOf="@id/filterLeftGuideline"
         app:layout_constraintTop_toBottomOf="@id/searchTitle" />
 
-    <AutoCompleteTextView
+    <EditText
         android:id="@+id/searchInput"
         style="@style/EditTextStyle"
         android:layout_width="0dp"
