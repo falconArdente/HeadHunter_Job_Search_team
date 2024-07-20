@@ -9,7 +9,7 @@
     android:paddingVertical="@dimen/dp8">
 
     <TextView
-        android:id="@+id/dark_theme_text_view"
+        android:id="@+id/textViewFilterItem"
         style="@style/RegularText.16size"
         android:layout_width="0dp"
         android:layout_height="@dimen/dp48"
@@ -28,8 +28,8 @@
         android:layout_width="@dimen/dp18"
         android:layout_height="@dimen/dp18"
         android:background="@drawable/switch_filter"
-        app:layout_constraintBottom_toBottomOf="@id/dark_theme_text_view"
+        app:layout_constraintBottom_toBottomOf="@id/textViewFilterItem"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/dark_theme_text_view"
+        app:layout_constraintTop_toTopOf="@id/textViewFilterItem"
         tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 </androidx.constraintlayout.widget.ConstraintLayout>
