@@ -10,7 +10,7 @@ sealed class HeadHunterRequest {
     data class VacancySearch(
         val textForSearch: String,
         val areaId: String? = null,
-        val industryId: String? = null,
+        val industryIds: List<String>? = null,
         val currencyCode: String? = null,
         val salary: Int? = null,
         val withSalaryOnly: Boolean = false,

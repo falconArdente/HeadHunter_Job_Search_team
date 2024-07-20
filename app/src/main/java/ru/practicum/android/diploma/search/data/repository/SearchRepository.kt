@@ -20,7 +20,7 @@ interface SearchRepository {
     suspend fun searchVacancy(
         textForSearch: String,
         areaId: String? = null,
-        industryId: String? = null,
+        industryIds: List<String>? = null,
         currencyCode: String? = null,
         salary: Int? = null,
         withSalaryOnly: Boolean = false,

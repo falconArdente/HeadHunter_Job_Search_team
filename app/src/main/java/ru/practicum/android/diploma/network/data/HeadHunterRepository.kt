@@ -115,7 +115,7 @@ class HeadHunterRepository(private val client: HeadHunterNetworkClient, context:
     override suspend fun searchVacancy(
         textForSearch: String,
         areaId: String?,
-        industryId: String?,
+        industryIds: List<String>?,
         currencyCode: String?,
         salary: Int?,
         withSalaryOnly: Boolean,
@@ -126,7 +126,7 @@ class HeadHunterRepository(private val client: HeadHunterNetworkClient, context:
             HeadHunterRequest.VacancySearch(
                 textForSearch = textForSearch,
                 areaId = areaId,
-                industryId = industryId,
+                industryIds = industryIds,
                 currencyCode = currencyCode,
                 salary = salary,
                 withSalaryOnly = withSalaryOnly,

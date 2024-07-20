@@ -49,7 +49,7 @@ class RetrofitBasedClient(retrofit: Retrofit, private val networkStatus: Network
                     is HeadHunterRequest.VacancySearch -> serverService.searchVacancy(
                         textForSearch = request.textForSearch,
                         areaId = request.areaId,
-                        industryId = request.industryId,
+                        industryIds = request.industryIds,
                         currencyCode = request.currencyCode,
                         salary = request.salary,
                         withSalaryOnly = request.withSalaryOnly,
