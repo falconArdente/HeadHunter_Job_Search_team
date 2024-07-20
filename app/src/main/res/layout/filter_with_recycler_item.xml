@@ -5,7 +5,6 @@
     android:id="@+id/recyclerFilterItem"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp60"
-    android:background="?attr/selectableItemBackground"
     android:paddingHorizontal="@dimen/dp16"
     android:paddingVertical="@dimen/dp8">
 
