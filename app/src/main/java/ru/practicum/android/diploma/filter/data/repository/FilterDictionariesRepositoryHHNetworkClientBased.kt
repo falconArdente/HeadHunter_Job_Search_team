@@ -89,9 +89,7 @@ class FilterDictionariesRepositoryHHNetworkClientBased(private val client: HeadH
         return flow {
             if (searchText.length in MIN_AREA_SUGGESTION_REQUEST_TEXT_LENGTH..MAX_AREA_SUGGESTION_REQUEST_TEXT_LENGTH) {
                 val response = client.doRequest(
-                    HeadHunterRequest.SearchInAreas(
-                        searchText, areaId
-                    )
+                    HeadHunterRequest.SearchInAreas(searchText, areaId)
                 )
                 if (response.resultCode == Response.SUCCESS) {
                     emit(Resource.Success((response as AreaSuggestionsResponse).suggestions.map { areaSuggestionDTO ->
