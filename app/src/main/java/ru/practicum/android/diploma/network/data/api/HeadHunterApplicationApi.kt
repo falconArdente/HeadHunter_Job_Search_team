@@ -10,6 +10,7 @@ import ru.practicum.android.diploma.network.data.dto.linked.AreaDTO
 import ru.practicum.android.diploma.network.data.dto.linked.CountryDTO
 import ru.practicum.android.diploma.network.data.dto.linked.IndustryDTO
 import ru.practicum.android.diploma.network.data.dto.linked.Locale
+import ru.practicum.android.diploma.network.data.dto.responses.AreaSuggestionsResponse
 import ru.practicum.android.diploma.network.data.dto.responses.DictionariesResponse
 import ru.practicum.android.diploma.network.data.dto.responses.VacancyByIdResponse
 import ru.practicum.android.diploma.network.data.dto.responses.VacancyListResponse
@@ -96,4 +97,20 @@ interface HeadHunterApplicationApi {
         @Query("locale") locale: String = App.LOCALE,
         @Query("host") host: String = App.HOST
     ): VacancyByIdResponse
+
+    @GET("/areas/{area_id}")
+    suspend fun getSubAreas(
+        @Path("area_id") areaId: String,
+        @Query("locale") locale: String = App.LOCALE,
+        @Query("host") host: String = App.HOST
+    ): List<AreaDTO>
+
+    @GET("/suggests/areas")
+    suspend fun searchInAreas(
+        @Query("text") searchText: String,
+        @Query("area_id") areaId: String? = null,
+        @Query("include_parent") includeParent: Boolean = false,
+        @Query("locale") locale: String = App.LOCALE,
+        @Query("host") host: String = App.HOST
+    ): AreaSuggestionsResponse
 }

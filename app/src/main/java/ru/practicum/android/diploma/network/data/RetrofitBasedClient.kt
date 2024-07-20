@@ -48,6 +48,14 @@ class RetrofitBasedClient(retrofit: Retrofit, private val networkStatus: Network
 
                     is HeadHunterRequest.VacancySearch -> serverService.searchVacancy(request.textForSearch)
                     is HeadHunterRequest.VacancyById -> serverService.getVacancyById(request.id)
+                    is HeadHunterRequest.SubAreas -> AreasResponse(
+                        areasList = serverService.getSubAreas(request.areaId)
+                    )
+
+                    is HeadHunterRequest.SearchInAreas -> serverService.searchInAreas(
+                        request.searchText,
+                        request.areaId
+                    )
                 }
                 response.apply { resultCode = Response.SUCCESS }
             } catch (e: HttpException) {

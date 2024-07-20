@@ -10,7 +10,9 @@ import ru.practicum.android.diploma.details.domain.api.NavigatorRepository
 import ru.practicum.android.diploma.details.domain.impl.VacancyDetailsRepository
 import ru.practicum.android.diploma.favorites.data.repository.FavoritesRepositoryRoomBased
 import ru.practicum.android.diploma.favorites.domain.impl.LocalRepository
+import ru.practicum.android.diploma.filter.data.repository.FilterDictionariesRepositoryHHNetworkClientBased
 import ru.practicum.android.diploma.filter.data.repository.FilterStorageRepositoryImpl
+import ru.practicum.android.diploma.filter.domain.impl.FilterDictionariesRepository
 import ru.practicum.android.diploma.filter.domain.impl.FilterStorageRepository
 import ru.practicum.android.diploma.network.data.HeadHunterRepository
 import ru.practicum.android.diploma.search.data.repository.SearchRepository
@@ -39,5 +41,8 @@ val repositoryModule = module {
     }
     factory<LocalRepository> {
         FavoritesRepositoryRoomBased(appDatabase = get(), vacancyDbConvertor = get())
+    }
+    factory<FilterDictionariesRepository> {
+        FilterDictionariesRepositoryHHNetworkClientBased(client = get(), context = androidContext())
     }
 }

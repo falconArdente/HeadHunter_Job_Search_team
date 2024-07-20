@@ -132,6 +132,7 @@ class HeadHunterRepository(private val client: HeadHunterNetworkClient, context:
                     val data: VacancyByIdResponse = response as VacancyByIdResponse
                     emit(Resource.Success(data.mapToDomain()))
                 }
+
                 -1 -> emit(Resource.InternetConnectionError(vacancyGetByIdErrorMessage))
                 Response.NOT_FOUND -> emit(Resource.NotFoundError(vacancyGetByIdErrorMessage))
                 else -> emit(Resource.Error(vacancyGetByIdErrorMessage))
