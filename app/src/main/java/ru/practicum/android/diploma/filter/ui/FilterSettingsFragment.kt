@@ -22,9 +22,7 @@ class FilterSettingsFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentFilterSettingsBinding.inflate(inflater, container, false)
         return binding.root
@@ -40,14 +38,13 @@ class FilterSettingsFragment : Fragment() {
         binding.filterSalaryInput.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Blue))
+            } else if (binding.filterSalaryInput.text.isEmpty()) {
+                binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Gray_OR_White))
             } else {
-                if (binding.filterSalaryInput.text.isEmpty())
-                    binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Gray_OR_White))
-                else {
-                    binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Black))
-                }
+                binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Black))
             }
         }
+
 
         viewModel.getState().observe(viewLifecycleOwner) { state ->
             render(state)
