@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import ru.practicum.android.diploma.R
@@ -51,5 +52,12 @@ class FilterRegionFragment : Fragment() {
     private fun viewVisibility() {
         binding.filterInputET.hint =
             requireActivity().getString(R.string.enter_region)
+        binding.filterInputET.doOnTextChanged { text, _, _, _ ->
+            if (text.isNullOrEmpty()) {
+                binding.filterInputIcon.background = requireActivity().getDrawable(R.drawable.icon_search)
+            } else {
+                binding.filterInputIcon.background = requireActivity().getDrawable(R.drawable.icon_cross)
+            }
+        }
     }
 }
