@@ -13,7 +13,10 @@ import ru.practicum.android.diploma.filter.domain.model.Area
 class FilterRegionFragment : Fragment() {
     private var _binding: FragmentFilterWithRecyclerBinding? = null
     private val binding get() = _binding!!
-    private val adapter = FilterRegionAdapter(emptyList(), clickListenerFun())
+    val area=Area(null,"оо","имя","порп")
+    val list= listOf(area)
+    private val adapter = FilterRegionAdapter(list, clickListenerFun())
+    // заменить в адаптере на пустой лист потом
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentFilterWithRecyclerBinding.inflate(inflater, container, false)
