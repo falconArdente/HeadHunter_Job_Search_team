@@ -8,7 +8,8 @@ import ru.practicum.android.diploma.databinding.FilterWithRecyclerItemBinding
 import ru.practicum.android.diploma.filter.domain.model.Area
 
 class FilterRegionAdapter(
-    private var listArea: List<Area>, private var clickListener: RVRegionClick
+    private var listArea: List<Area>,
+    private var clickListener: RVRegionClick
 ) : RecyclerView.Adapter<FilterRegionAdapter.RegionFilterViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RegionFilterViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -16,7 +17,10 @@ class FilterRegionAdapter(
         return RegionFilterViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: RegionFilterViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: RegionFilterViewHolder,
+        position: Int
+    ) {
         holder.bind(listArea[position])
         holder.itemView.setOnClickListener {
             clickListener.onItemClick(listArea[position])

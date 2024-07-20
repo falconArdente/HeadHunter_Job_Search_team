@@ -38,15 +38,19 @@ class FilterCountryFragment : Fragment() {
             //   реализовать клик
         }
     }
-    private fun viewVisibility(){
-        binding.filterInput.visibility=View.GONE
-        binding.filterInputIcon.visibility=View.GONE
-    }
 
+    private fun viewVisibility() {
+        binding.filterInput.visibility = View.GONE
+        binding.filterInputIcon.visibility = View.GONE
+    }
 
     private fun viewHolderInit() {
         binding.recyclerViewFilter.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            LinearLayoutManager(
+                requireContext(),
+                LinearLayoutManager.VERTICAL,
+                false
+            )
         binding.recyclerViewFilter.adapter = adapter
     }
 }

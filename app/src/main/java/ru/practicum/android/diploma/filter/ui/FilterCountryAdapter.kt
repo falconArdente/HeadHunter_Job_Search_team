@@ -8,7 +8,8 @@ import ru.practicum.android.diploma.databinding.FilterWithRecyclerItemBinding
 import ru.practicum.android.diploma.filter.domain.model.Country
 
 class FilterCountryAdapter(
-    private var listCountry: List<Country>, private var clickListener: RVEvent
+    private var listCountry: List<Country>,
+    private var clickListener: RVEvent
 ) : RecyclerView.Adapter<FilterCountryAdapter.CountryFilterViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CountryFilterViewHolder {
         val inflater = LayoutInflater.from(parent.context)

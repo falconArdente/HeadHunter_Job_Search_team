@@ -37,16 +37,18 @@ class FilterRegionFragment : Fragment() {
         }
     }
 
-
     private fun viewHolderInit() {
         binding.recyclerViewFilter.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            LinearLayoutManager(
+                requireContext(),
+                LinearLayoutManager.VERTICAL,
+                false
+            )
         binding.recyclerViewFilter.adapter = adapter
     }
 
-    private fun viewVisibility(){
-       binding.filterInputET.hint=requireActivity().getString(R.string.enter_region)
+    private fun viewVisibility() {
+        binding.filterInputET.hint =
+            requireActivity().getString(R.string.enter_region)
     }
 }
-
-
