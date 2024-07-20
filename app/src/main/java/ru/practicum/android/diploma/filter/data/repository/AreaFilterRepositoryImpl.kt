@@ -10,13 +10,18 @@ class AreaFilterRepositoryImpl(private val filterStorage: FilterStorage) : AreaF
         return savedFilter.areaId ?: ""
     }
 
-    override fun saveArea(area: Area) {
+    override fun getAreaName(): String {
         val savedFilter = filterStorage.getFilterParameters()
-        filterStorage.saveFilterParameters(savedFilter.copy(areaId = area.id))
+        return savedFilter.areaName ?: ""
     }
 
-    override fun clearAreaId() {
+    override fun saveArea(area: Area) {
         val savedFilter = filterStorage.getFilterParameters()
-        filterStorage.saveFilterParameters(savedFilter.copy(areaId = null))
+        filterStorage.saveFilterParameters(savedFilter.copy(areaId = area.id, areaName = area.name))
+    }
+
+    override fun clearArea() {
+        val savedFilter = filterStorage.getFilterParameters()
+        filterStorage.saveFilterParameters(savedFilter.copy(areaId = null, areaName = null))
     }
 }

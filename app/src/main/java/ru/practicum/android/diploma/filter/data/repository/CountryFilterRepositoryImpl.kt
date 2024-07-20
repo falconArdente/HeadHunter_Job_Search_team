@@ -10,13 +10,18 @@ class CountryFilterRepositoryImpl(private val filterStorage: FilterStorage) : Co
         return savedFilter.countryId ?: ""
     }
 
-    override fun saveCountry(country: Country) {
+    override fun getCountryName(): String {
         val savedFilter = filterStorage.getFilterParameters()
-        filterStorage.saveFilterParameters(savedFilter.copy(countryId = country.id))
+        return savedFilter.countryName ?: ""
     }
 
-    override fun clearCountryId() {
+    override fun saveCountry(country: Country) {
         val savedFilter = filterStorage.getFilterParameters()
-        filterStorage.saveFilterParameters(savedFilter.copy(countryId = null))
+        filterStorage.saveFilterParameters(savedFilter.copy(countryId = country.id, countryName = country.name))
+    }
+
+    override fun clearCountry() {
+        val savedFilter = filterStorage.getFilterParameters()
+        filterStorage.saveFilterParameters(savedFilter.copy(countryId = null, countryName = null))
     }
 }
