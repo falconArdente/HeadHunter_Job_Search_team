@@ -19,4 +19,6 @@ sealed class HeadHunterRequest {
     ) : HeadHunterRequest()
 
     data class VacancyById(val id: String) : HeadHunterRequest()
+    data class SubAreas(val areaId: String) : HeadHunterRequest()
+    data class SearchInAreas(val searchText: String, val areaId: String?) : HeadHunterRequest()
 }

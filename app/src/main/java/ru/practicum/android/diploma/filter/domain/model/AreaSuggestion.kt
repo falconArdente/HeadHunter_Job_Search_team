@@ -1,7 +1,7 @@
 package ru.practicum.android.diploma.filter.domain.model
 
-open class Industry(
+class AreaSuggestion(
     val id: String,
-    val industries: List<SphereOfIndustry>,
     val name: String,
+    val url: String,
 )
