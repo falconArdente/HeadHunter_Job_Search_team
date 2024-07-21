@@ -27,7 +27,8 @@ class FilterStorageRepositoryImpl(private val filterStorage: FilterStorage) : Fi
     }
 
     override fun isFilterActive(): Boolean = (finalFilterSaved.country != null || finalFilterSaved.area != null
-        || finalFilterSaved.industry != null || finalFilterSaved.expectedSalary != null || finalFilterSaved.hideNoSalaryItems)
+        || finalFilterSaved.industry != null || finalFilterSaved.expectedSalary != null
+        || finalFilterSaved.hideNoSalaryItems)
 
     override fun saveArea(area: Area) {
         filterStorage.saveSpecificFilterParameters(
