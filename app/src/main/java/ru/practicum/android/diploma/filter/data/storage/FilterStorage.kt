@@ -1,9 +1,12 @@
 package ru.practicum.android.diploma.filter.data.storage
 
-import ru.practicum.android.diploma.filter.domain.model.Filter
+import ru.practicum.android.diploma.filter.domain.model.FilterGeneral
 
 interface FilterStorage {
-    fun saveFilter(filter: Filter)
+    fun saveFilterParameters(filter: FilterGeneral)
 
-    fun getFilter(): Filter
+    fun getFilterParameters(): FilterGeneral
+
+    fun clearAllFilterParameters()
+
 }
