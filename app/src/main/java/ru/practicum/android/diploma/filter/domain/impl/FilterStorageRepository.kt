@@ -8,6 +8,7 @@ import ru.practicum.android.diploma.filter.domain.model.FilterGeneral
 import ru.practicum.android.diploma.filter.domain.model.IndustryDetailsFilterItem
 import ru.practicum.android.diploma.filter.domain.model.IndustryFilter
 
+@Suppress("TooManyFunctions")
 interface FilterStorageRepository {
     fun saveAllFilterParameters(filter: FilterGeneral)
 
