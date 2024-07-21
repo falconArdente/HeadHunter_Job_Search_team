@@ -36,7 +36,7 @@ class FilterRegionFragment : Fragment() {
     }
 
     private fun clickListenerFun(area: Area) {
-        //   реализовать клик
+        //  реализовать клик
     }
 
     private fun viewHolderInit() {
