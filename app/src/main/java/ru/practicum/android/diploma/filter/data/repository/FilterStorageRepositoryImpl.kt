@@ -11,78 +11,49 @@ import ru.practicum.android.diploma.filter.domain.model.IndustryDetailsFilterIte
 import ru.practicum.android.diploma.filter.domain.model.IndustryFilter
 
 class FilterStorageRepositoryImpl(private val filterStorage: FilterStorage) : FilterStorageRepository {
-    private val savedFilter = filterStorage.getFilterParameters()
+    private val finalFilterSaved = filterStorage.getAllFinalFilterParameters()
+    private val specificFilterSaved = filterStorage.getAllSavedParameter()
 
     override fun saveAllFilterParameters(filter: FilterGeneral) {
-        filterStorage.saveFilterParameters(filter)
+        filterStorage.saveFinalFilterParameters(filter)
     }
 
-    override fun getAllFilterParameters(): FilterGeneral = filterStorage.getFilterParameters()
+    override fun getAllFilterParameters(): FilterGeneral = filterStorage.getAllFinalFilterParameters()
+
+    override fun getAllSavedParameters(): FilterGeneral = filterStorage.getAllSavedParameter()
 
     override fun clearAllFilterParameters() {
         filterStorage.clearAllFilterParameters()
     }
 
-    override fun isFilterActive(): Boolean = (savedFilter.country != null || savedFilter.area != null
-        || savedFilter.industry != null || savedFilter.expectedSalary != null || savedFilter.hideNoSalaryItems)
-
-    // ВАЖНО для дальнейшей обработки! если регион ранее не сохранялся в фильтре,
-    // т.е. area в Filter null, то вернет пустой объект AreaFilter(), где поля id == null и name == null
-    override fun getArea(): AreaFilter = savedFilter.area ?: AreaFilter()
+    override fun isFilterActive(): Boolean = (finalFilterSaved.country != null || finalFilterSaved.area != null
+        || finalFilterSaved.industry != null || finalFilterSaved.expectedSalary != null || finalFilterSaved.hideNoSalaryItems)
 
     override fun saveArea(area: Area) {
-        filterStorage.saveFilterParameters(
-            savedFilter.copy(area = AreaFilter(areaId = area.id, areaName = area.name))
+        filterStorage.saveSpecificFilterParameters(
+            specificFilterSaved.copy(area = AreaFilter(areaId = area.id, areaName = area.name))
         )
     }
-
-    override fun clearArea() {
-        filterStorage.saveFilterParameters(savedFilter.copy(area = null))
-    }
-
-    // ВАЖНО для дальнейшей обработки! если регион ранее не сохранялся в фильтре,т.е. area в Filter null,
-    // то вернет пустой объект CountryFilter(), где поля id == null и name == null
-    override fun getCountry(): CountryFilter = savedFilter.country ?: CountryFilter()
 
     override fun saveCountry(country: Country) {
-        filterStorage.saveFilterParameters(
-            savedFilter.copy(country = CountryFilter(countryId = country.id, countryName = country.name))
+        filterStorage.saveSpecificFilterParameters(
+            specificFilterSaved.copy(country = CountryFilter(countryId = country.id, countryName = country.name))
         )
     }
 
-    override fun clearCountry() {
-        filterStorage.saveFilterParameters(savedFilter.copy(country = null))
-    }
-
-    // ВАЖНО для дальнейшей обработки! если регион ранее не сохранялся в фильтре,т.е. area в Filter null,
-    // то вернет пустой объект IndustryFilter(), где поля id == null и name == null
-    override fun getIndustry(): IndustryFilter = savedFilter.industry ?: IndustryFilter()
-
     override fun saveIndustry(industry: IndustryDetailsFilterItem) {
-        filterStorage.saveFilterParameters(
-            savedFilter.copy(
+        filterStorage.saveSpecificFilterParameters(
+            specificFilterSaved.copy(
                 industry = IndustryFilter(industryId = industry.industryId, industryName = industry.industryName)
             )
         )
     }
 
-    override fun clearIndustry() {
-        filterStorage.saveFilterParameters(savedFilter.copy(industry = null))
-    }
-
-    override fun getExpectedSalary(): String = savedFilter.expectedSalary ?: ""
-
     override fun saveExpectedSalary(salaryAmount: String) {
-        filterStorage.saveFilterParameters(savedFilter.copy(expectedSalary = salaryAmount))
+        filterStorage.saveSpecificFilterParameters(specificFilterSaved.copy(expectedSalary = salaryAmount))
     }
-
-    override fun clearExpectedSalary() {
-        filterStorage.saveFilterParameters(savedFilter.copy(expectedSalary = null))
-    }
-
-    override fun getHideNoSalaryItems(): Boolean = savedFilter.hideNoSalaryItems
 
     override fun saveHideNoSalaryItems(hideNoSalaryItems: Boolean) {
-        filterStorage.saveFilterParameters(savedFilter.copy(hideNoSalaryItems = hideNoSalaryItems))
+        filterStorage.saveSpecificFilterParameters(specificFilterSaved.copy(hideNoSalaryItems = hideNoSalaryItems))
     }
 }
