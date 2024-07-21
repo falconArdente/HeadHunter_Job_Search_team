@@ -19,7 +19,7 @@ import java.io.UncheckedIOException
 class RetrofitBasedClient(retrofit: Retrofit, private val networkStatus: NetworkStatus) : HeadHunterNetworkClient {
     private val serverService = retrofit.create(HeadHunterApplicationApi::class.java)
     override suspend fun doRequest(request: HeadHunterRequest): Response {
-        if (!networkStatus.isConnected()) return Response().apply { resultCode = -1 }
+        if (!networkStatus.isConnected()) return Response().apply { resultCode = Response.NO_INTERNET }
         return withContext(Dispatchers.IO) {
             try {
                 val response = when (request) {
@@ -46,8 +46,24 @@ class RetrofitBasedClient(retrofit: Retrofit, private val networkStatus: Network
                         ).vacancyPositionsList
                     )
 
-                    is HeadHunterRequest.VacancySearch -> serverService.searchVacancy(request.textForSearch)
+                    is HeadHunterRequest.VacancySearch -> serverService.searchVacancy(
+                        textForSearch = request.textForSearch,
+                        areaId = request.areaId,
+                        industryIds = request.industryIds,
+                        currencyCode = request.currencyCode,
+                        salary = request.salary,
+                        withSalaryOnly = request.withSalaryOnly,
+                        page = request.page,
+                        perPage = request.perPage
+                    )
+
                     is HeadHunterRequest.VacancyById -> serverService.getVacancyById(request.id)
+                    is HeadHunterRequest.SubAreas -> serverService.getSubAreas(request.areaId)
+
+                    is HeadHunterRequest.SearchInAreas -> serverService.searchInAreas(
+                        request.searchText,
+                        request.areaId
+                    )
                 }
                 response.apply { resultCode = Response.SUCCESS }
             } catch (e: HttpException) {

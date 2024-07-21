@@ -15,7 +15,7 @@
     <string name="dev_team">Команда</string>
 
     <string name="net_common_dictionary_income_error_message">Общий словарь не получен</string>
-    <string name="net_locales_dictionary_income_error_message">Словарь отраслей не получен</string>
+    <string name="net_locales_dictionary_income_error_message">Словарь локалей не получен</string>
     <string name="net_industry_dictionary_income_error_message">Словарь отраслей не получен</string>
     <string name="net_areas_dictionary_income_error_message">Словарь регионов не полученr</string>
     <string name="net_countries_dictionary_income_error_message">Словарь стран не получен</string>
@@ -23,6 +23,8 @@
     <string name="net_vacancy_suggestions_request_text_length_error_message">Ожидаемая длина запроса подсказок должностей - от 2 до 3000 символов</string>
     <string name="net_vacancy_search_income_error_message">Список вакансий не получен</string>
     <string name="net_vacancy_get_by_id_income_error_message">Запрошенная  вакансия не получена</string>
+    <string name="net_area_suggestions_request_text_length_error_message">Ожидаемая длина запроса поиска в регионе - от 2 до 3000 символов</string>
+    <string name="net_area_suggestions_income_error_message">Список подсказок регионов не получен</string>
 
     <string name="search_title">Поиск вакансий</string>
     <string name="search_hint">Введите запрос</string>
@@ -38,7 +40,6 @@
     <string name="job_contacts">Контакты</string>
 
     <string name="net_vacancy">Вакансия не найдена или удалена</string>
-
 
     <string name="no_internet">Нет интернета</string>
     <string name="failed_list_vacancy">Не удалось получить\n список вакансий</string>
@@ -69,5 +70,6 @@
     <string name="choice_region">Выбор региона</string>
     <string name="choice_industry">Выбор отрасли</string>
     <string name="choice_country">Выбор страны</string>
+    <string name="enter_region">Введите регион</string>
 
 </resources>

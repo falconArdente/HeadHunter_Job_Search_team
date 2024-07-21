@@ -5,6 +5,7 @@ open class Response {
         const val SUCCESS = 200
         const val FAILURE = 500
         const val NOT_FOUND = 404
+        const val NO_INTERNET = -1
     }
 
     var resultCode = 0
