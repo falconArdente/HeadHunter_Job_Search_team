@@ -11,9 +11,7 @@ import ru.practicum.android.diploma.details.domain.impl.VacancyDetailsRepository
 import ru.practicum.android.diploma.favorites.data.repository.FavoritesRepositoryRoomBased
 import ru.practicum.android.diploma.favorites.domain.impl.LocalRepository
 import ru.practicum.android.diploma.filter.data.repository.FilterDictionariesRepositoryHHNetworkClientBased
-import ru.practicum.android.diploma.filter.data.repository.FilterStorageRepositoryImpl
 import ru.practicum.android.diploma.filter.domain.impl.FilterDictionariesRepository
-import ru.practicum.android.diploma.filter.domain.impl.FilterStorageRepository
 import ru.practicum.android.diploma.filter.data.repository.AllFilterParametersRepositoryImpl
 import ru.practicum.android.diploma.filter.data.repository.AreaFilterRepositoryImpl
 import ru.practicum.android.diploma.filter.data.repository.CountryFilterRepositoryImpl
@@ -55,7 +53,28 @@ val repositoryModule = module {
     factory<LocalRepository> {
         FavoritesRepositoryRoomBased(appDatabase = get(), vacancyDbConvertor = get())
     }
+
     factory<FilterDictionariesRepository> {
         FilterDictionariesRepositoryHHNetworkClientBased(client = get(), context = androidContext())
+    }
+
+    single<AreaFilterRepository> {
+        AreaFilterRepositoryImpl(filterStorage = get())
+    }
+
+    single<CountryFilterRepository> {
+        CountryFilterRepositoryImpl(filterStorage = get())
+    }
+
+    single<ExpectedSalaryRepository> {
+        ExpectedSalaryRepositoryImpl(filterStorage = get())
+    }
+
+    single<HideNoSalaryItemsRepository> {
+        HideNoSalaryItemsRepositoryImpl(filterStorage = get())
+    }
+
+    single<IndustryRepository> {
+        IndustryRepositoryImpl(filterStorage = get())
     }
 }
