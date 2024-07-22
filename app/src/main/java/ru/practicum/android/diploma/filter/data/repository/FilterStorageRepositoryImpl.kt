@@ -10,7 +10,8 @@ import ru.practicum.android.diploma.filter.domain.model.FilterGeneral
 import ru.practicum.android.diploma.filter.domain.model.IndustryDetailsFilterItem
 import ru.practicum.android.diploma.filter.domain.model.IndustryFilter
 
-class FilterStorageRepositoryImpl(private val filterStorage: FilterStorage) : FilterStorageRepository {
+class FilterStorageRepositoryImpl(private val filterStorage: FilterStorage) :
+    FilterStorageRepository {
     private val finalFilterSaved = filterStorage.getAllFinalFilterParameters()
     private val specificFilterSaved = filterStorage.getAllSavedParameter()
 
