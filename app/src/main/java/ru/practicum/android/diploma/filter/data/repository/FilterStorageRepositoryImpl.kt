@@ -36,7 +36,7 @@ class FilterStorageRepositoryImpl(private val filterStorage: FilterStorage) : Fi
         )
     }
 
-    override fun saveCountry(country: Country) {
+    override fun saveCountry(country: Area) {
         filterStorage.saveSpecificFilterParameters(
             specificFilterSaved.copy(country = CountryFilter(countryId = country.id, countryName = country.name))
         )

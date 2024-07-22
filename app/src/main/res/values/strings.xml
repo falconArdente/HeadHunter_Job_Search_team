@@ -55,6 +55,7 @@
     <string name="email">email:\u0020</string>
     <string name="phone_number">тел.:\u0020</string>
     <string name="no_such_vacancies">Таких вакансий нет</string>
+    <string name="server_error">Ошибка сервера</string>
 
     <string name="found_x_vacancies">Найдено %1s</string>
     <plurals name="plurals_vacancy">

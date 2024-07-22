@@ -18,7 +18,7 @@ interface FilterStorageRepository {
 
     fun saveArea(area: Area)
 
-    fun saveCountry(country: Country)
+    fun saveCountry(country: Area)
 
     fun saveIndustry(industry: IndustryDetailsFilterItem)
 

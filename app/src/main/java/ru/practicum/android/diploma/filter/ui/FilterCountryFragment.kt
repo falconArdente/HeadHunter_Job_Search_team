@@ -4,18 +4,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterWithRecyclerBinding
-import ru.practicum.android.diploma.filter.domain.model.Country
+import ru.practicum.android.diploma.filter.domain.model.Area
+import ru.practicum.android.diploma.filter.presentation.state.CountryFilterState
+import ru.practicum.android.diploma.filter.presentation.viewmodel.CountryFilterViewModel
 
-class FilterCountryFragment : Fragment() {
+open class FilterCountryFragment : Fragment() {
     private var _binding: FragmentFilterWithRecyclerBinding? = null
-    private val binding get() = _binding!!
-    private val country = Country("р", "тестовый лист страна", "роп")
-    val list = listOf(country)
-    private val adapter = FilterCountryAdapter(list, ::clickListenerFun)
-    // заменить в адаптере на пустой лист потом
+    protected val binding get() = _binding!!
+
+    protected open val viewModel: CountryFilterViewModel by viewModel<CountryFilterViewModel>()
+
+    protected open lateinit var adapter: FilterCountryAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentFilterWithRecyclerBinding.inflate(inflater, container, false)
@@ -24,8 +31,33 @@ class FilterCountryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewHolderInit()
+
+        binding.searchTitle.text = requireContext().getString(R.string.choice_country)
         viewVisibility()
+
+        binding.backButtonFilterWithRecycler.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+
+        viewModel.stateLiveData.observe(viewLifecycleOwner) {
+            binding.searchPlaceholderImage.isVisible = it is CountryFilterState.Error
+            binding.searchPlaceholderText.isVisible = it is CountryFilterState.Error
+            binding.loadingProgressBar.isVisible = it is CountryFilterState.Loading
+            binding.recyclerViewFilter.isVisible = it is CountryFilterState.CountryContent
+
+            when (it) {
+                is CountryFilterState.CountryContent -> {
+                    adapter = FilterCountryAdapter(it.listOfCountries, ::clickListenerFun)
+                    viewHolderInit()
+                }
+
+                is CountryFilterState.Error -> {
+                    binding.searchPlaceholderText.text = requireContext().getString(R.string.server_error)
+                }
+
+                CountryFilterState.Loading -> Unit
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -33,22 +65,19 @@ class FilterCountryFragment : Fragment() {
         _binding = null
     }
 
-    private fun clickListenerFun(country: Country) {
-        //   реализовать клик
+    protected open fun clickListenerFun(country: Area) {
+        viewModel.saveCountryChoiceToFilter(country)
+        requireActivity().onBackPressedDispatcher.onBackPressed()
     }
 
-    private fun viewVisibility() {
-        binding.filterInput.visibility = View.GONE
-        binding.filterInputIcon.visibility = View.GONE
+    protected open fun viewVisibility() {
+        binding.filterInput.isVisible = false
+        binding.filterInputIcon.isVisible = false
     }
 
-    private fun viewHolderInit() {
+    protected open fun viewHolderInit() {
         binding.recyclerViewFilter.layoutManager =
-            LinearLayoutManager(
-                requireContext(),
-                LinearLayoutManager.VERTICAL,
-                false
-            )
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.recyclerViewFilter.adapter = adapter
     }
 }
