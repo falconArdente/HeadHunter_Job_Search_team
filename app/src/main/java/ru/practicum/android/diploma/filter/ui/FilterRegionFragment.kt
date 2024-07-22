@@ -35,6 +35,7 @@ class FilterRegionFragment : Fragment() {
         }
         binding.filterApplyButton.setOnClickListener {
             findNavController().navigateUp()
+            findNavController().navigateUp()
             // Добавить запись настроек фильтра в Shared Prefs
         }
     }

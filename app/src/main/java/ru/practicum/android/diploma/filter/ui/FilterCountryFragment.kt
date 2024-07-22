@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterWithRecyclerBinding
 import ru.practicum.android.diploma.filter.domain.model.Country
 
@@ -32,7 +33,7 @@ class FilterCountryFragment : Fragment() {
             findNavController().navigateUp()
         }
         binding.filterApplyButton.setOnClickListener {
-            findNavController().navigateUp()
+            findNavController().navigate(R.id.action_filterCountryFragment_to_filterRegionFragment)
             // Добавить запись настроек фильтра в Shared Prefs
         }
     }
