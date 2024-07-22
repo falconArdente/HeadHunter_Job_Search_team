@@ -43,6 +43,7 @@ class FilterSettingsViewModel(
                 savedFilter = getSavedFilterSettings()
                 filterState.postValue(FilterSettingsState.Filter(savedFilter))
             } else {
+                resetFilter()
                 filterState.postValue(FilterSettingsState.Filter(FilterGeneral()))
             }
         }
@@ -57,11 +58,15 @@ class FilterSettingsViewModel(
         }
     }
 
+    private fun resetFilter() {
+        filterStorage.clearAllFilterParameters()
+    }
+
     fun resetFilterSettings() {
         jobStorage?.cancel()
 
         jobStorage = viewModelScope.launch(Dispatchers.IO) {
-            filterStorage.clearAllFilterParameters()
+            resetFilter()
             filterState.postValue(FilterSettingsState.SavedFilter())
         }
     }

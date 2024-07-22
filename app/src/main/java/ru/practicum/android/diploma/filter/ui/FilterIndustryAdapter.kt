@@ -37,18 +37,21 @@ class FilterIndustryAdapter(
 
     private fun resetChecks(selectedIndustry: IndustryWithCheck) {
         val newList: MutableList<IndustryWithCheck> = mutableListOf()
-        var savedIndex = 0
+        val savedIndex: MutableList<Int> = mutableListOf()
         listIndustry.forEachIndexed { index, industry ->
             if (industry.industry.id != selectedIndustry.industry.id && industry.isChecked) {
                 newList.add(IndustryWithCheck(industry = industry.industry))
-                savedIndex = index
+                savedIndex.add(index)
             } else if (industry.industry.id == selectedIndustry.industry.id) {
                 newList.add(IndustryWithCheck(industry = industry.industry, isChecked = true))
+                savedIndex.add(index)
             } else {
                 newList.add(industry)
             }
         }
-        updateListRenderByIndex(newList, savedIndex)
+        savedIndex.forEach { index ->
+            updateListRenderByIndex(newList, index)
+        }
     }
 
     private fun updateListRenderByIndex(updatedIndustryList: List<IndustryWithCheck>, index: Int) {
