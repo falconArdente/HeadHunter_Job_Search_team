@@ -47,15 +47,19 @@
         <action
             android:id="@+id/action_filterSettingsFragment_to_filterIndustryFragment"
             app:destination="@id/filterIndustryFragment" />
-        <action
-            android:id="@+id/action_filterSettingsFragment_to_filterCountryFragment"
-            app:destination="@id/filterCountryFragment" />
     </fragment>
     <fragment
         android:id="@+id/filterPlaceToWorkFragment"
         android:name="ru.practicum.android.diploma.filter.ui.FilterPlaceToWorkFragment"
         android:label="fragment_filter_place_to_work"
-        tools:layout="@layout/fragment_filter_place_to_work" />
+        tools:layout="@layout/fragment_filter_place_to_work" >
+        <action
+            android:id="@+id/action_filterPlaceToWorkFragment_to_filterCountryFragment"
+            app:destination="@id/filterCountryFragment" />
+        <action
+            android:id="@+id/action_filterPlaceToWorkFragment_to_filterRegionFragment"
+            app:destination="@id/filterRegionFragment" />
+    </fragment>
     <fragment
         android:id="@+id/filterRegionFragment"
         android:name="ru.practicum.android.diploma.filter.ui.FilterRegionFragment"
@@ -70,10 +74,6 @@
     <fragment
         android:id="@+id/filterCountryFragment"
         android:name="ru.practicum.android.diploma.filter.ui.FilterCountryFragment"
-        android:label="fragment_filter_country" >
-        <action
-            android:id="@+id/action_filterCountryFragment_to_filterRegionFragment"
-            app:destination="@id/filterRegionFragment" />
-    </fragment>
+        android:label="fragment_filter_country" />
 
 </navigation>

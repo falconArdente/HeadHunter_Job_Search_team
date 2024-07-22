@@ -33,7 +33,7 @@ class FilterCountryFragment : Fragment() {
             findNavController().navigateUp()
         }
         binding.filterApplyButton.setOnClickListener {
-            findNavController().navigate(R.id.action_filterCountryFragment_to_filterRegionFragment)
+            findNavController().navigateUp()
             // Добавить запись настроек фильтра в Shared Prefs
         }
     }
@@ -48,6 +48,7 @@ class FilterCountryFragment : Fragment() {
     }
 
     private fun viewVisibility() {
+        binding.searchTitle.text = requireActivity().getString(R.string.choice_country)
         binding.filterInput.visibility = View.GONE
         binding.filterInputIcon.visibility = View.GONE
     }

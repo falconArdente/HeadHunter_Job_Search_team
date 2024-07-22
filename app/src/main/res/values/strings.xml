@@ -72,6 +72,7 @@
     <string name="choice_country">Выбор страны</string>
     <string name="enter_region">Введите регион</string>
     <string name="enter_industry">Введите отрасль</string>
+    <string name="choice_place_to_work">Выбор места работы</string>
 
     <string name="select">Выбрать</string>
 
@@ -84,5 +85,8 @@
     <string name="back_button">Стрелка назад</string>
     <string name="apply">Применить</string>
     <string name="reset">Сбросить</string>
+
+    <string name="country">Страна</string>
+    <string name="region">Регион</string>
 
 </resources>

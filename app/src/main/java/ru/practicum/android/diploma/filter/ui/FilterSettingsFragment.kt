@@ -53,7 +53,7 @@ class FilterSettingsFragment : Fragment() {
         }
 
         binding.filterWorkPlaceInactive.setOnClickListener {
-            findNavController().navigate(R.id.action_filterSettingsFragment_to_filterCountryFragment)
+            findNavController().navigate(R.id.action_filterSettingsFragment_to_filterPlaceToWorkFragment)
         }
 
         binding.filterIndustryInactive.setOnClickListener {
