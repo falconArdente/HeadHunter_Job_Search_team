@@ -6,14 +6,14 @@ import androidx.lifecycle.ViewModel
 import org.koin.core.component.KoinComponent
 import ru.practicum.android.diploma.filter.presentation.state.FilterSettingsState
 
-class FilterSettingsViewModel : ViewModel(), KoinComponent {
+class FilterSettingsViewModel : ViewModel() {
 
     private val state = MutableLiveData<FilterSettingsState>()
 
     fun getState(): LiveData<FilterSettingsState> = state
 
     init {
-        state.value = FilterSettingsState("", "", "", false)
+        state.value = FilterSettingsState("", "", 0, false)
     }
 
     fun changeWorkPlace(newWorkPlace: String) {
@@ -24,7 +24,7 @@ class FilterSettingsViewModel : ViewModel(), KoinComponent {
         state.value = state.value?.copy(industry = newIndustry)
     }
 
-    fun changeSalary(newSalary: String) {
+    fun changeSalary(newSalary: Int) {
         state.value = state.value?.copy(salary = newSalary)
     }
 

@@ -69,7 +69,7 @@ class FilterSettingsFragment : Fragment() {
         }
 
         binding.filterSalaryInput.doOnTextChanged { text, _, _, _ ->
-            viewModel.changeSalary(newSalary = text.toString())
+            viewModel.changeSalary(newSalary = text.toString().toInt())
         }
 
         binding.filterDontShowWithoutSalaryCheckBox.setOnCheckedChangeListener { _, isChecked ->
