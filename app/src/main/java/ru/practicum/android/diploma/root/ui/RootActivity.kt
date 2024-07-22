@@ -22,27 +22,8 @@ class RootActivity : AppCompatActivity() {
         bottomNavigationView.setupWithNavController(navController)
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.filterRegionFragment -> {
-                    bottomNavigationView.visibility = View.GONE
-                }
-
-                R.id.filterCountryFragment -> {
-                    bottomNavigationView.visibility = View.GONE
-                }
-
-                R.id.filterIndustryFragment -> {
-                    bottomNavigationView.visibility = View.GONE
-                }
-
-                R.id.filterPlaceToWorkFragment -> {
-                    bottomNavigationView.visibility = View.GONE
-                }
-
-                R.id.filterPlaceToWorkFragment -> {
-                    bottomNavigationView.visibility = View.GONE
-                }
-
-                R.id.jobDetailsFragment -> {
+                R.id.filterRegionFragment, R.id.filterCountryFragment, R.id.filterDepartmentFragment,
+                R.id.filterPlaceToWorkFragment, R.id.jobDetailsFragment, R.id.filterSettingsFragment -> {
                     bottomNavigationView.visibility = View.GONE
                 }
 
