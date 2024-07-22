@@ -9,13 +9,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import ru.practicum.android.diploma.databinding.FragmentFilterWithRecyclerBinding
 import ru.practicum.android.diploma.filter.domain.model.Country
+import ru.practicum.android.diploma.utils.Mok
 
 class FilterCountryFragment : Fragment() {
     private var _binding: FragmentFilterWithRecyclerBinding? = null
     private val binding get() = _binding!!
-    private val country = Country("р", "тестовый лист страна", "роп")
-    val list = listOf(country)
-    private val adapter = FilterCountryAdapter(list, ::clickListenerFun)
+    private val adapter = FilterCountryAdapter(Mok.countries, ::clickListenerFun)
     // заменить в адаптере на пустой лист потом
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -27,10 +26,7 @@ class FilterCountryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewHolderInit()
         viewVisibility()
-
-        binding.backButtonFilterWithRecycler.setOnClickListener {
-            findNavController().navigateUp()
-        }
+        binding.backButtonFilterWithRecycler.setOnClickListener { findNavController().navigateUp() }
         binding.filterApplyButton.setOnClickListener {
             findNavController().navigateUp()
             // Добавить запись настроек фильтра в Shared Prefs
