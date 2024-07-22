@@ -73,4 +73,6 @@
     <string name="enter_region">Введите регион</string>
     <string name="enter_industry">Введите отрасль</string>
 
+    <string name="select">Выбрать</string>
+
 </resources>
