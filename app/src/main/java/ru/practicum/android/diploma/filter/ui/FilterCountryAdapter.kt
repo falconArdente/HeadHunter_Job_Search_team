@@ -6,11 +6,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.FilterWithRecyclerItemBinding
 import ru.practicum.android.diploma.filter.domain.model.Area
+import ru.practicum.android.diploma.filter.domain.model.AreaDetailsFilterItem
 import ru.practicum.android.diploma.filter.domain.model.Country
 
 class FilterCountryAdapter(
-    private var listCountry: List<Area>,
-    private var clickListener: (country: Area) -> Unit
+    private var listCountry: List<AreaDetailsFilterItem>,
+    private var clickListener: (country: AreaDetailsFilterItem) -> Unit
 ) : RecyclerView.Adapter<FilterCountryAdapter.CountryFilterViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CountryFilterViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -25,7 +26,7 @@ class FilterCountryAdapter(
         }
     }
 
-    fun updateList(updatedVacancyList: List<Area>) {
+    fun updateList(updatedVacancyList: List<AreaDetailsFilterItem>) {
         listCountry = updatedVacancyList
         notifyDataSetChanged()
     }
@@ -36,8 +37,8 @@ class FilterCountryAdapter(
 
     inner class CountryFilterViewHolder(private val binding: FilterWithRecyclerItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Area) {
-            binding.textViewFilterItem.text = item.name
+        fun bind(item: AreaDetailsFilterItem) {
+            binding.textViewFilterItem.text = item.areaName
             binding.switcherFilter.visibility = View.GONE
             binding.arrowFilterMini.visibility = View.VISIBLE
         }

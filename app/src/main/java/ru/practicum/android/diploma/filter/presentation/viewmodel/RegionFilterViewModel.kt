@@ -1,56 +1,81 @@
 package ru.practicum.android.diploma.filter.presentation.viewmodel
 
-import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filter.domain.api.CountryFilterInteractor
 import ru.practicum.android.diploma.filter.domain.api.RegionFilterInteractor
 import ru.practicum.android.diploma.filter.domain.model.Area
-import ru.practicum.android.diploma.filter.presentation.state.CountryFilterState
+import ru.practicum.android.diploma.filter.domain.model.AreaDetailsFilterItem
+import ru.practicum.android.diploma.filter.domain.model.AreaSuggestion
+import ru.practicum.android.diploma.filter.presentation.state.AreaFilterState
 import ru.practicum.android.diploma.utils.Resource
 
 class RegionFilterViewModel(
     private val regionFilterInteractor: RegionFilterInteractor,
-    countryFilterInteractor: CountryFilterInteractor,
-) : CountryFilterViewModel(countryFilterInteractor) {
+    private val countryFilterInteractor: CountryFilterInteractor,
+) : ViewModel() {
+
+    private val _stateLiveDataRegion = MutableLiveData<AreaFilterState>(AreaFilterState.Loading)
+    val stateLiveDataRegion: LiveData<AreaFilterState> = _stateLiveDataRegion
+
+    private var originalListBeforeSearching = emptyList<AreaDetailsFilterItem>()
 
     init {
         viewModelScope.launch {
-            doSearchNetworkRequest()
-        }
-    }
-
-    override suspend fun doSearchNetworkRequest() {
-        Log.e("CHECK", "${countryFilterInteractor.getAllSavedParameters()}")
-        val isCountrySavedInFilterStorage = countryFilterInteractor.getAllSavedParameters() != null
-        Log.e("CHECK2", "${countryFilterInteractor.getAllSavedParameters() != null}")
-        if (isCountrySavedInFilterStorage) {
-            val savedCountryId = countryFilterInteractor.getAllSavedParameters()?.countryId
-            val regionFilter = regionFilterInteractor
-            Log.e("CHECK3", "$savedCountryId")
-            Log.e("CHECK4", "${regionFilterInteractor != null}")
-            if (savedCountryId != null) {
-                regionFilterInteractor.getSubAreas(savedCountryId).collect {
-                    processSearchAreasListRequest(it)
+            val isCountrySavedInFilterStorage = countryFilterInteractor.getAllSavedParameters() != null
+            if (isCountrySavedInFilterStorage) {
+                val savedCountryId = countryFilterInteractor.getAllSavedParameters()!!.countryId
+                if (savedCountryId != null) {
+                    regionFilterInteractor.getSubAreas(savedCountryId).collect {
+                        processSearchAreasListResponse(it)
+                    }
+                }
+            } else {
+                regionFilterInteractor.getAreas().collect {
+                    processSearchAreasListResponse(it)
                 }
             }
+        }
+    }
+
+    private fun processSearchAreasListResponse(searchResult: Resource<List<Area>>) {
+        if (searchResult.data != null) {
+            val regionFilterState = AreaFilterState.AreaContent(searchResult.data)
+            originalListBeforeSearching = searchResult.data
+            _stateLiveDataRegion.value = regionFilterState
         } else {
-            regionFilterInteractor.getAreas().collect {
-                processSearchAreasListRequest(it)
+            _stateLiveDataRegion.value = AreaFilterState.Error(searchResult.message!!)
+        }
+    }
+
+    fun searchRegionByName(regionName: String) {
+        val savedCountryId = countryFilterInteractor.getAllSavedParameters()?.countryId
+        viewModelScope.launch {
+            regionFilterInteractor.searchInAreas(searchText = regionName, areaId = savedCountryId).collect {
+                processSearchRegionByNameResponse(it)
             }
         }
     }
 
-    private fun processSearchAreasListRequest(searchResult: Resource<List<Area>>) {
+    private fun processSearchRegionByNameResponse(searchResult: Resource<List<AreaSuggestion>>) {
         if (searchResult.data != null) {
-            val regionFilterState = CountryFilterState.CountryContent(searchResult.data)
-            _stateLiveData.value = regionFilterState
+            val regionListReceived = searchResult.data
+            if (!regionListReceived.isNullOrEmpty()) {
+                _stateLiveDataRegion.value = AreaFilterState.AreaContent(searchResult.data)
+            } else _stateLiveDataRegion.value = AreaFilterState.Empty
         } else {
-            _stateLiveData.value = CountryFilterState.Error(searchResult.message!!)
+            _stateLiveDataRegion.value = AreaFilterState.Error(searchResult.message!!)
         }
     }
 
-    fun saveRegionChoiceToFilter(region: Area) {
+    fun saveRegionChoiceToFilter(region: AreaDetailsFilterItem) {
         regionFilterInteractor.saveRegion(region)
+    }
+
+    fun getOriginalListBeforeSearching() {
+        _stateLiveDataRegion.value = AreaFilterState.AreaContent(originalListBeforeSearching)
     }
 }

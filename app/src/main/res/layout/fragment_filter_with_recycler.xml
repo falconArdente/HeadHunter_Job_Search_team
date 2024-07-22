@@ -112,7 +112,7 @@
         android:layout_height="0dp"
         android:layout_marginBottom="@dimen/dp56"
         android:visibility="gone"
-        android:background="@drawable/picture_crying_phone"
+        android:background="@drawable/picture_flying_men"
         app:layout_constraintDimensionRatio="328:223"
         app:layout_constraintEnd_toEndOf="@id/filterRightGuideline"
         app:layout_constraintStart_toStartOf="@id/filterLeftGuideline"

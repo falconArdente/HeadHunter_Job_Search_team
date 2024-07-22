@@ -2,12 +2,13 @@ package ru.practicum.android.diploma.filter.domain.api
 
 import kotlinx.coroutines.flow.Flow
 import ru.practicum.android.diploma.filter.domain.model.Area
+import ru.practicum.android.diploma.filter.domain.model.AreaDetailsFilterItem
 import ru.practicum.android.diploma.filter.domain.model.AreaFilter
 import ru.practicum.android.diploma.filter.domain.model.AreaSuggestion
 import ru.practicum.android.diploma.utils.Resource
 
 interface RegionFilterInteractor {
-    fun saveRegion(area: Area)
+    fun saveRegion(area: AreaDetailsFilterItem)
 
     fun getAllSavedParameters(): AreaFilter?
 

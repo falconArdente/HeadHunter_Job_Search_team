@@ -1,18 +1,35 @@
 package ru.practicum.android.diploma.filter.ui
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.filter.domain.model.Area
-import ru.practicum.android.diploma.filter.presentation.state.CountryFilterState
+import ru.practicum.android.diploma.databinding.FragmentFilterWithRecyclerBinding
+import ru.practicum.android.diploma.filter.domain.model.AreaDetailsFilterItem
+import ru.practicum.android.diploma.filter.presentation.state.AreaFilterState
 import ru.practicum.android.diploma.filter.presentation.viewmodel.RegionFilterViewModel
 
-class FilterRegionFragment : FilterCountryFragment() {
+class FilterRegionFragment : Fragment() {
+    private var _binding: FragmentFilterWithRecyclerBinding? = null
+    private val binding get() = _binding!!
 
-    override val viewModel: RegionFilterViewModel by viewModel<RegionFilterViewModel>()
+    private val viewModelRegion: RegionFilterViewModel by viewModel<RegionFilterViewModel>()
+
+    private lateinit var adapter: FilterCountryAdapter
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = FragmentFilterWithRecyclerBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -24,42 +41,77 @@ class FilterRegionFragment : FilterCountryFragment() {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
 
-        viewModel.stateLiveData.observe(viewLifecycleOwner) {
-            binding.searchPlaceholderImage.isVisible = it is CountryFilterState.Error
-            binding.searchPlaceholderText.isVisible = it is CountryFilterState.Error
-            binding.loadingProgressBar.isVisible = it is CountryFilterState.Loading
-            binding.recyclerViewFilter.isVisible = it is CountryFilterState.CountryContent
+        binding.recyclerViewFilter.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
-            when (it) {
-                is CountryFilterState.CountryContent -> {
-                    adapter = FilterCountryAdapter(it.listOfCountries, ::clickListenerFun)
-                    viewHolderInit()
-                }
-                is CountryFilterState.Error -> {
-                    binding.searchPlaceholderText.text = requireContext().getString(R.string.server_error)
-                }
+        binding.filterInputET.doOnTextChanged { text, _, _, _ ->
+            val iconResId = if (text.isNullOrEmpty()) R.drawable.icon_search else R.drawable.icon_cross
+            binding.filterInputIcon.background = requireActivity().getDrawable(iconResId)
+            if (!text.isNullOrEmpty()) {
+                viewModelRegion.searchRegionByName(text.toString())
+            } else {
+                viewModelRegion.getOriginalListBeforeSearching()
+            }
+        }
 
-                CountryFilterState.Loading -> Unit
+        binding.filterInputIcon.setOnClickListener {
+            viewModelRegion.getOriginalListBeforeSearching()
+            binding.filterInputET.setText("")
+            val imm: InputMethodManager =
+                requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(binding.filterInputET.windowToken, 0)
+        }
+
+        viewModelRegion.stateLiveDataRegion.observe(viewLifecycleOwner) {
+            renderStateLiveData(it)
+        }
+    }
+
+    private fun renderStateLiveData(state: AreaFilterState) {
+        binding.searchPlaceholderImage.isVisible = state is AreaFilterState.Error || state is AreaFilterState.Empty
+        binding.searchPlaceholderText.isVisible = state is AreaFilterState.Error || state is AreaFilterState.Empty
+        binding.loadingProgressBar.isVisible = state is AreaFilterState.Loading
+        binding.recyclerViewFilter.isVisible = state is AreaFilterState.AreaContent
+
+        when (state) {
+            is AreaFilterState.AreaContent -> {
+                adapter = FilterCountryAdapter(state.listOfAreas, ::clickListenerFun)
+                binding.recyclerViewFilter.adapter = adapter
+                adapter.updateList(state.listOfAreas)
+            }
+
+            is AreaFilterState.Error -> {
+                binding.searchPlaceholderText.text =
+                    requireContext().getString(R.string.failed_to_receive_region_list)
+                binding.searchPlaceholderImage.setImageResource(R.drawable.picture_flying_men)
+            }
+
+            is AreaFilterState.Empty -> {
+                binding.searchPlaceholderText.text =
+                    requireContext().getString(R.string.no_such_region)
+                binding.searchPlaceholderImage.setImageResource(R.drawable.picture_angry_cat)
+            }
+
+            is AreaFilterState.Loading -> {
+                Unit
             }
         }
     }
 
-    override fun clickListenerFun(area: Area) {
-        viewModel.saveRegionChoiceToFilter(area)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun clickListenerFun(area: AreaDetailsFilterItem) {
+        viewModelRegion.saveRegionChoiceToFilter(area)
         requireActivity().onBackPressedDispatcher.onBackPressed()
     }
 
-    override fun viewVisibility() {
+    private fun viewVisibility() {
         binding.filterInput.isVisible = true
         binding.filterInputIcon.isVisible = true
         binding.filterInputET.hint = requireActivity().getString(R.string.enter_region)
-        binding.filterInputET.doOnTextChanged { text, _, _, _ ->
-            if (text.isNullOrEmpty()) {
-                binding.filterInputIcon.background = requireActivity().getDrawable(R.drawable.icon_search)
-            } else {
-                binding.filterInputIcon.background = requireActivity().getDrawable(R.drawable.icon_cross)
-            }
-        }
     }
 
 }

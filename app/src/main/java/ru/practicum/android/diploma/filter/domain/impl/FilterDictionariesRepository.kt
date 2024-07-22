@@ -9,7 +9,9 @@ import ru.practicum.android.diploma.utils.Resource
 
 interface FilterDictionariesRepository {
     suspend fun getAreas(): Flow<Resource<List<Area>>>
+    suspend fun getDetailedAreas(): Flow<Resource<List<Area>>>
     suspend fun getCountries(): Flow<Resource<List<Country>>>
+    suspend fun getCountriesByAreas(): Flow<Resource<List<Area>>>
     suspend fun getSubAreas(areaId: String): Flow<Resource<List<Area>>>
     suspend fun searchInAreas(
         searchText: String,
