@@ -43,7 +43,7 @@ class FilterCountryFragment : Fragment() {
     }
 
     private fun clickListenerFun(country: Country) {
-        //   реализовать клик
+        //   реализовать клик?
     }
 
     private fun viewVisibility() {
