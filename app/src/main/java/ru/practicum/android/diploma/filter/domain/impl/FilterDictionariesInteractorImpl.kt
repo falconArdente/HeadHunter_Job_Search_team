@@ -8,7 +8,9 @@ import ru.practicum.android.diploma.filter.domain.model.Country
 import ru.practicum.android.diploma.filter.domain.model.Industry
 import ru.practicum.android.diploma.utils.Resource
 
-class FilterDictionariesInteractorImpl(private val repository: FilterDictionariesRepository): FilterDictionariesInteractor {
+class FilterDictionariesInteractorImpl(
+    private val repository: FilterDictionariesRepository
+) : FilterDictionariesInteractor {
 
     override suspend fun getAreas(): Flow<Resource<List<Area>>> {
         return repository.getAreas()
