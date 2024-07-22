@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
@@ -32,6 +34,13 @@ class FilterCountryFragment : Fragment() {
 
         binding.searchTitle.text = requireContext().getString(R.string.choice_country)
         viewVisibility()
+
+        // новый код
+        binding.backButtonFilterWithRecycler.setOnClickListener { findNavController().navigateUp() }
+        binding.filterApplyButton.setOnClickListener {
+            findNavController().navigateUp()
+            // Добавить запись настроек фильтра в Shared Prefs
+        }
 
         binding.backButtonFilterWithRecycler.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()

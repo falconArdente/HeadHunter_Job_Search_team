@@ -133,4 +133,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/searchPlaceholderImage" />
 
+    <Button
+        android:id="@+id/filterApplyButton"
+        style="@style/RegularText.16size"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp60"
+        android:layout_marginBottom="@dimen/dp24"
+        android:backgroundTint="@color/Blue"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:letterSpacing="0"
+        android:minHeight="0dp"
+        android:text="@string/select"
+        android:textAllCaps="false"
+        android:textColor="@color/White"
+        app:cornerRadius="@dimen/dp12"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/filterRightGuideline"
+        app:layout_constraintStart_toStartOf="@id/filterLeftGuideline"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,VisualLintOverlap" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
