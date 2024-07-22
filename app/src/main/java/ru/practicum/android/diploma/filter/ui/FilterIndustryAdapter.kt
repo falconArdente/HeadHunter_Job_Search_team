@@ -5,16 +5,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.FilterWithRecyclerItemBinding
-import ru.practicum.android.diploma.filter.domain.model.Industry
+import ru.practicum.android.diploma.filter.presentation.model.IndustryWithCheck
 
 class FilterIndustryAdapter(
-    private var listIndustry: List<Industry>,
-    private var clickListener: (industry: Industry) -> Unit
+    private var listIndustry: List<IndustryWithCheck>,
+    private var clickListener: (industry: IndustryWithCheck) -> Unit
 ) : RecyclerView.Adapter<FilterIndustryAdapter.IndustryFilterViewHolder>() {
+    private var notFilteredList: List<IndustryWithCheck> = emptyList()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IndustryFilterViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = FilterWithRecyclerItemBinding.inflate(inflater, parent, false)
-        return IndustryFilterViewHolder(binding)
+        return IndustryFilterViewHolder(binding, ::updateCheck)
     }
 
     override fun onBindViewHolder(
@@ -23,12 +25,48 @@ class FilterIndustryAdapter(
     ) {
         holder.bind(listIndustry[position])
         holder.itemView.setOnClickListener {
-            clickListener(listIndustry[position])
+            updateCheck(listIndustry[position])
         }
     }
 
-    fun updateList(updatedVacancyList: List<Industry>) {
-        listIndustry = updatedVacancyList
+    fun updateCheck(selectedIndustry: IndustryWithCheck) {
+        val index = listIndustry.indexOf(selectedIndustry)
+        clickListener(listIndustry[index])
+        resetChecks(listIndustry[index])
+    }
+
+    private fun resetChecks(selectedIndustry: IndustryWithCheck) {
+        val newList: MutableList<IndustryWithCheck> = mutableListOf()
+        var savedIndex = 0
+        listIndustry.forEachIndexed { index, industry ->
+            if (industry.industry.id != selectedIndustry.industry.id && industry.isChecked) {
+                newList.add(IndustryWithCheck(industry = industry.industry))
+                savedIndex = index
+            } else if (industry.industry.id == selectedIndustry.industry.id) {
+                newList.add(IndustryWithCheck(industry = industry.industry, isChecked = true))
+            } else {
+                newList.add(industry)
+            }
+        }
+        updateListRenderByIndex(newList, savedIndex)
+    }
+
+    private fun updateListRenderByIndex(updatedIndustryList: List<IndustryWithCheck>, index: Int) {
+        listIndustry = updatedIndustryList
+        notFilteredList = updatedIndustryList
+        notifyItemChanged(index)
+    }
+
+    fun updateList(updatedIndustryList: List<IndustryWithCheck>) {
+        listIndustry = updatedIndustryList
+        notFilteredList = updatedIndustryList
+        notifyDataSetChanged()
+    }
+
+    fun updateListByFilter(filter: String) {
+        listIndustry = notFilteredList.filter { industry ->
+            industry.industry.name.uppercase().contains(filter.uppercase()) || filter.isEmpty()
+        }
         notifyDataSetChanged()
     }
 
@@ -37,13 +75,18 @@ class FilterIndustryAdapter(
     }
 
     inner class IndustryFilterViewHolder(
-        private val binding: FilterWithRecyclerItemBinding
+        private val binding: FilterWithRecyclerItemBinding,
+        private var updateCheck: (selectedIndustry: IndustryWithCheck) -> Unit
     ) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Industry) {
-            binding.textViewFilterItem.text = item.name
+        fun bind(item: IndustryWithCheck) {
+            binding.textViewFilterItem.text = item.industry.name
+            binding.switcherFilter.isChecked = item.isChecked
             binding.switcherFilter.visibility = View.VISIBLE
             binding.arrowFilterMini.visibility = View.GONE
+            binding.switcherFilter.setOnClickListener {
+                updateCheck(item)
+            }
         }
     }
 }

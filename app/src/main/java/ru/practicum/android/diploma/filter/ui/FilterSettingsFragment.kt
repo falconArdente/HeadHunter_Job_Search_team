@@ -17,18 +17,20 @@ class FilterSettingsFragment : Fragment() {
     private var _binding: FragmentFilterSettingsBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModel<FilterSettingsViewModel>()
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentFilterSettingsBinding.inflate(inflater, container, false)
         return binding.root
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadConfiguredFilterSettings()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -49,7 +51,6 @@ class FilterSettingsFragment : Fragment() {
 
         viewModel.getState().observe(viewLifecycleOwner) { state ->
             render(state)
-
         }
 
         binding.filterWorkPlaceInactive.setOnClickListener {
@@ -59,7 +60,7 @@ class FilterSettingsFragment : Fragment() {
         binding.filterIndustryInactive.setOnClickListener {
             findNavController().navigate(R.id.action_filterSettingsFragment_to_filterIndustryFragment)
         }
-
+        /* пока не понял зачем они нужны
         binding.filterWorkPlaceCross.setOnClickListener {
             viewModel.changeWorkPlace(newWorkPlace = "")
         }
@@ -67,42 +68,62 @@ class FilterSettingsFragment : Fragment() {
         binding.filterIndustryCross.setOnClickListener {
             viewModel.changeIndustry(newIndustry = "")
         }
-
+        */
         binding.filterSalaryInput.doOnTextChanged { text, _, _, _ ->
             if (text?.isNotEmpty() == true) {
                 viewModel.changeSalary(
-                    newSalary = text.toString().toInt()
+                    newSalary = binding.filterSalaryInput.text.toString()
                 )
             }
         }
 
         binding.filterDontShowWithoutSalaryCheckBox.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.changeDontShowWithoutSalary(newDontShow = isChecked)
+            viewModel.changeHideNoSalary(noSalary = isChecked)
         }
 
         binding.filterApplyButton.setOnClickListener {
+            viewModel.saveFilterSettings()
             findNavController().navigateUp()
-            // Добавить сохранение настроек фильтра в Shared Prefs
+
         }
 
+        viewModel.loadSavedFilterSettings()
     }
 
     private fun render(state: FilterSettingsState) {
-        if (state.workPlace.isEmpty()) {
-            binding.filterWorkPlaceInactive.visibility = View.VISIBLE
-            binding.filterWorkPlaceActive.visibility = View.GONE
-        } else {
-            binding.filterWorkPlaceInactive.visibility = View.GONE
-            binding.filterWorkPlaceActive.visibility = View.VISIBLE
+        when (state) {
+            is FilterSettingsState.Filter -> {
+                binding.filterDontShowWithoutSalaryCheckBox.isChecked = state.filter.hideNoSalaryItems
+                if (state.filter.expectedSalary.isNullOrEmpty()) {
+                    binding.filterSalaryInput.text.clear()
+                } else {
+                    binding.filterSalaryInput.setText(state.filter.expectedSalary.toInt())
+                }
+
+                if (state.filter.area?.areaName.isNullOrEmpty()) {
+                    binding.filterWorkPlaceInactive.visibility = View.VISIBLE
+                    binding.filterWorkPlaceActive.visibility = View.GONE
+                } else {
+                    binding.filterWorkPlaceInactive.visibility = View.GONE
+                    binding.filterWorkPlaceActive.visibility = View.VISIBLE
+                    binding.filterWorkPlaceValue.text = state.filter.area!!.areaName
+                }
+
+                if (state.filter.industry?.industryName.isNullOrEmpty()) {
+                    binding.filterIndustryInactive.visibility = View.VISIBLE
+                    binding.filterIndustryActive.visibility = View.GONE
+                } else {
+                    binding.filterIndustryInactive.visibility = View.GONE
+                    binding.filterIndustryActive.visibility = View.VISIBLE
+                    binding.filterIndustryValue.text = state.filter.industry!!.industryName
+                }
+            }
+
+            else -> {
+                findNavController().navigateUp()
+            }
         }
 
-        if (state.industry.isEmpty()) {
-            binding.filterIndustryInactive.visibility = View.VISIBLE
-            binding.filterIndustryActive.visibility = View.GONE
-        } else {
-            binding.filterIndustryInactive.visibility = View.GONE
-            binding.filterIndustryActive.visibility = View.VISIBLE
-        }
     }
 
 }
