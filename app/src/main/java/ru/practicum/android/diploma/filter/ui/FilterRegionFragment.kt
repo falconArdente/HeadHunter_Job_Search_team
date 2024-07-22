@@ -29,6 +29,10 @@ class FilterRegionFragment : Fragment() {
         viewHolderInit()
         viewVisibility()
         binding.backButtonFilterWithRecycler.setOnClickListener { findNavController().navigateUp() }
+        binding.filterApplyButton.setOnClickListener {
+            findNavController().navigateUp()
+            // Добавить запись настроек фильтра в Shared Prefs
+        }
     }
 
     override fun onDestroyView() {
@@ -37,7 +41,7 @@ class FilterRegionFragment : Fragment() {
     }
 
     private fun clickListenerFun(area: Area) {
-        //   реализовать клик
+        //  реализовать клик
     }
 
     private fun viewHolderInit() {
