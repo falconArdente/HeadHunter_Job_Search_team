@@ -6,17 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterWithRecyclerBinding
 import ru.practicum.android.diploma.filter.domain.model.Area
+import ru.practicum.android.diploma.utils.Mok
 
 class FilterRegionFragment : Fragment() {
     private var _binding: FragmentFilterWithRecyclerBinding? = null
     private val binding get() = _binding!!
-    val area = Area(null, "оо", "имя", "порп")
-    val list = listOf(area)
-    private val adapter = FilterRegionAdapter(list, ::clickListenerFun)
+    private val adapter = FilterRegionAdapter(Mok.areas, ::clickListenerFun)
     // заменить в адаптере на пустой лист потом
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -28,6 +28,7 @@ class FilterRegionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewHolderInit()
         viewVisibility()
+        binding.backButtonFilterWithRecycler.setOnClickListener { findNavController().navigateUp() }
     }
 
     override fun onDestroyView() {
