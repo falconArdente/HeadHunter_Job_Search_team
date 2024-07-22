@@ -53,11 +53,11 @@ class FilterSettingsFragment : Fragment() {
         }
 
         binding.filterWorkPlaceInactive.setOnClickListener {
-            viewModel.changeWorkPlace(newWorkPlace = "Москва, Россия")
+            findNavController().navigate(R.id.action_filterSettingsFragment_to_filterPlaceToWorkFragment)
         }
 
         binding.filterIndustryInactive.setOnClickListener {
-            viewModel.changeIndustry(newIndustry = "IT")
+            findNavController().navigate(R.id.action_filterSettingsFragment_to_filterIndustryFragment)
         }
 
         binding.filterWorkPlaceCross.setOnClickListener {
@@ -69,11 +69,20 @@ class FilterSettingsFragment : Fragment() {
         }
 
         binding.filterSalaryInput.doOnTextChanged { text, _, _, _ ->
-            viewModel.changeSalary(newSalary = text.toString().toInt())
+            if (text?.isNotEmpty() == true) {
+                viewModel.changeSalary(
+                    newSalary = text.toString().toInt()
+                )
+            }
         }
 
         binding.filterDontShowWithoutSalaryCheckBox.setOnCheckedChangeListener { _, isChecked ->
             viewModel.changeDontShowWithoutSalary(newDontShow = isChecked)
+        }
+
+        binding.filterApplyButton.setOnClickListener {
+            findNavController().navigateUp()
+            // Добавить сохранение настроек фильтра в Shared Prefs
         }
 
     }

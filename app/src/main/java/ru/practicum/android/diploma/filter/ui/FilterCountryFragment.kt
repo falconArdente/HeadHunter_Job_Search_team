@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterWithRecyclerBinding
 import ru.practicum.android.diploma.filter.domain.model.Country
 import ru.practicum.android.diploma.utils.Mok
@@ -43,6 +44,7 @@ class FilterCountryFragment : Fragment() {
     }
 
     private fun viewVisibility() {
+        binding.searchTitle.text = requireActivity().getString(R.string.choice_country)
         binding.filterInput.visibility = View.GONE
         binding.filterInputIcon.visibility = View.GONE
     }
