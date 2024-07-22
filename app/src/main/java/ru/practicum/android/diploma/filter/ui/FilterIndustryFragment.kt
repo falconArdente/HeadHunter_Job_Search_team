@@ -10,14 +10,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterWithRecyclerBinding
-import ru.practicum.android.diploma.filter.domain.model.Area
+import ru.practicum.android.diploma.filter.domain.model.Industry
 
-class FilterRegionFragment : Fragment() {
+class FilterIndustryFragment : Fragment() {
     private var _binding: FragmentFilterWithRecyclerBinding? = null
     private val binding get() = _binding!!
-    val area = Area(null, "оо", "имя", "порп")
-    val list = listOf(area)
-    private val adapter = FilterRegionAdapter(list, ::clickListenerFun)
+    val industry1 = Industry("1", listOf(), "IT")
+    val industry2 = Industry("2", listOf(), "Стропальщики")
+    val list = listOf(industry1, industry2)
+    private val adapter = FilterIndustryAdapter(list, ::clickListenerFun)
     // заменить в адаптере на пустой лист потом
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -44,8 +45,8 @@ class FilterRegionFragment : Fragment() {
         _binding = null
     }
 
-    private fun clickListenerFun(area: Area) {
-        //  реализовать клик
+    private fun clickListenerFun(industry: Industry) {
+        //   реализовать клик
     }
 
     private fun viewHolderInit() {
@@ -60,7 +61,7 @@ class FilterRegionFragment : Fragment() {
 
     private fun viewVisibility() {
         binding.filterInputET.hint =
-            requireActivity().getString(R.string.enter_region)
+            requireActivity().getString(R.string.enter_industry)
         binding.filterInputET.doOnTextChanged { text, _, _, _ ->
             if (text.isNullOrEmpty()) {
                 binding.filterInputIcon.background = requireActivity().getDrawable(R.drawable.icon_search)

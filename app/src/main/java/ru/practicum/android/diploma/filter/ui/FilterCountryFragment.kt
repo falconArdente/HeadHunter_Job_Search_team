@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import ru.practicum.android.diploma.databinding.FragmentFilterWithRecyclerBinding
 import ru.practicum.android.diploma.filter.domain.model.Country
@@ -26,6 +27,14 @@ class FilterCountryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewHolderInit()
         viewVisibility()
+
+        binding.backButtonFilterWithRecycler.setOnClickListener {
+            findNavController().navigateUp()
+        }
+        binding.filterApplyButton.setOnClickListener {
+            findNavController().navigateUp()
+            // Добавить запись настроек фильтра в Shared Prefs
+        }
     }
 
     override fun onDestroyView() {
@@ -34,7 +43,7 @@ class FilterCountryFragment : Fragment() {
     }
 
     private fun clickListenerFun(country: Country) {
-        //   реализовать клик
+        //   реализовать клик?
     }
 
     private fun viewVisibility() {
