@@ -3,7 +3,6 @@ package ru.practicum.android.diploma.filter.presentation.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import org.koin.core.component.KoinComponent
 import ru.practicum.android.diploma.filter.presentation.state.FilterSettingsState
 
 class FilterSettingsViewModel : ViewModel() {
