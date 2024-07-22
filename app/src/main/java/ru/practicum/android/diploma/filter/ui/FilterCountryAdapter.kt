@@ -5,9 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.FilterWithRecyclerItemBinding
-import ru.practicum.android.diploma.filter.domain.model.Area
 import ru.practicum.android.diploma.filter.domain.model.AreaDetailsFilterItem
-import ru.practicum.android.diploma.filter.domain.model.Country
 
 class FilterCountryAdapter(
     private var listCountry: List<AreaDetailsFilterItem>,

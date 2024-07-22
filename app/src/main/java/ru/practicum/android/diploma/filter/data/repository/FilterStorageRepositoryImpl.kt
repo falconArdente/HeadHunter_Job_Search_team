@@ -2,10 +2,8 @@ package ru.practicum.android.diploma.filter.data.repository
 
 import ru.practicum.android.diploma.filter.data.storage.FilterStorage
 import ru.practicum.android.diploma.filter.domain.impl.FilterStorageRepository
-import ru.practicum.android.diploma.filter.domain.model.Area
 import ru.practicum.android.diploma.filter.domain.model.AreaDetailsFilterItem
 import ru.practicum.android.diploma.filter.domain.model.AreaFilter
-import ru.practicum.android.diploma.filter.domain.model.Country
 import ru.practicum.android.diploma.filter.domain.model.CountryFilter
 import ru.practicum.android.diploma.filter.domain.model.FilterGeneral
 import ru.practicum.android.diploma.filter.domain.model.IndustryDetailsFilterItem

@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.filter.domain.impl
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.filter.domain.api.RegionFilterInteractor
 import ru.practicum.android.diploma.filter.domain.model.Area
 import ru.practicum.android.diploma.filter.domain.model.AreaDetailsFilterItem
