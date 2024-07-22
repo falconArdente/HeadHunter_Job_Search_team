@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.filter.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +9,6 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -35,14 +35,9 @@ class FilterRegionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.searchTitle.text = requireContext().getString(R.string.choice_region)
-        viewVisibility()
+        setViewVisibility()
 
-        // новый код
         binding.backButtonFilterWithRecycler.setOnClickListener { findNavController().navigateUp() }
-        binding.filterApplyButton.setOnClickListener {
-            findNavController().navigateUp()
-            // Добавить запись настроек фильтра в Shared Prefs
-        }
 
         binding.backButtonFilterWithRecycler.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
@@ -115,7 +110,8 @@ class FilterRegionFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.onBackPressed()
     }
 
-    private fun viewVisibility() {
+    private fun setViewVisibility() {
+        binding.filterApplyButton.isVisible = false
         binding.filterInput.isVisible = true
         binding.filterInputIcon.isVisible = true
         binding.filterInputET.hint = requireActivity().getString(R.string.enter_region)
