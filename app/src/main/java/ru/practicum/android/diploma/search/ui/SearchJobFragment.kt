@@ -209,26 +209,6 @@ class SearchJobFragment : Fragment() {
                 viewModel.getSuggestionsForSearch(text.toString())
             }
         }
-
-        binding.searchInput.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                //  для детекта
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-                // detect
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (!p0.isNullOrEmpty()) {
-                    viewModel.searchWithDebounce(p0.toString())
-                } else if (p0.isNullOrEmpty()) {
-                    adapter.updateList(emptyList())
-                    viewModel.updateState(SearchFragmentState.NoTextInInputEditText)
-                    showView()
-                }
-            }
-        })
         binding.searchInputIcon.setOnClickListener {
             binding.searchInput.setText(String())
         }
