@@ -19,5 +19,4 @@ interface SearchRepository {
     suspend fun getCountries(): Flow<Resource<List<Country>>>
     suspend fun getVacancySuggestions(textForSuggestions: String): Flow<Resource<List<VacancyFunctTitle>>>
     suspend fun searchVacancy(textForSearch: String): Flow<Resource<VacancyListResponse>>
-    suspend fun getVacancyById(id: String): Flow<Resource<VacancyByIdResponse>>
 }

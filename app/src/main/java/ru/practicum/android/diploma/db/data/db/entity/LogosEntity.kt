@@ -6,9 +6,9 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "Logos")
 data class LogosEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
-    val size90: String,
-    val size240: String,
-    val raw: String,
-    val employerId: Int
+    val id: Long,
+    val size90: String?,
+    val size240: String?,
+    val raw: String?,
+    val employerId: Long
 )
