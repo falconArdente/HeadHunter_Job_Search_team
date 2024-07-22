@@ -6,7 +6,9 @@ import ru.practicum.android.diploma.filter.domain.model.Country
 import ru.practicum.android.diploma.filter.domain.model.FilterGeneral
 import ru.practicum.android.diploma.filter.domain.model.IndustryDetailsFilterItem
 
-class FilterStorageInteractorImpl(private val repository: FilterStorageRepository) : FilterStorageInteractor {
+class FilterStorageInteractorImpl(
+    private val repository: FilterStorageRepository
+) : FilterStorageInteractor {
     override fun clearAllFilterParameters() {
         repository.clearAllFilterParameters()
     }

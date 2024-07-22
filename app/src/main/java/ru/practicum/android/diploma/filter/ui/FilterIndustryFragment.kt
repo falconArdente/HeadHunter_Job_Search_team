@@ -53,7 +53,6 @@ class FilterIndustryFragment : Fragment() {
     }
 
     private fun render(state: FilterIndustryState) {
-
         when (state) {
             is FilterIndustryState.SavedFilter -> {
                 findNavController().navigateUp()

@@ -19,11 +19,9 @@ class FilterIndustryViewModel(
     private val filterDictionaries: FilterDictionariesRepository,
     private val networkStatus: NetworkStatus
 ) : ViewModel() {
-
     private var jobStorage: Job? = null
     private var jobDictionaries: Job? = null
     private var savedIndustry: Industry? = null
-
 
     private val filterState = MutableLiveData<FilterIndustryState>()
     fun getState(): LiveData<FilterIndustryState> = filterState
@@ -32,7 +30,7 @@ class FilterIndustryViewModel(
         jobDictionaries?.cancel()
 
         jobDictionaries = viewModelScope.launch(Dispatchers.IO) {
-            if (networkStatus.isConnected())
+            if (networkStatus.isConnected()) {
                 filterDictionaries.getIndustries().collect { industries ->
                     if (industries.data.isNullOrEmpty()) {
                         filterState.postValue(FilterIndustryState.EmptyList())
@@ -41,6 +39,7 @@ class FilterIndustryViewModel(
                         filterState.postValue(FilterIndustryState.LoadedList(listIndustries))
                     }
                 }
+            }
         }
     }
 
@@ -51,15 +50,16 @@ class FilterIndustryViewModel(
             finalList.add(IndustryWithCheck(industry = industry))
 
             if (industry.industries.isNotEmpty()) {
-                finalList.addAll(industry.industries.map {
-                    IndustryWithCheck(
-                        industry = Industry(
-                            id = it.id,
-                            industries = emptyList(),
-                            name = it.name
+                finalList.addAll(
+                    industry.industries.map {
+                        IndustryWithCheck(
+                            industry = Industry(
+                                id = it.id,
+                                industries = emptyList(),
+                                name = it.name
+                            )
                         )
-                    )
-                }
+                    }
                 )
             }
         }
@@ -82,5 +82,4 @@ class FilterIndustryViewModel(
             filterState.postValue(FilterIndustryState.SavedFilter())
         }
     }
-
 }
