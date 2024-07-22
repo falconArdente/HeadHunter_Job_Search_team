@@ -8,7 +8,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filter.domain.impl.FilterStorageRepository
+import ru.practicum.android.diploma.filter.domain.model.Area
 import ru.practicum.android.diploma.filter.domain.model.FilterGeneral
+import ru.practicum.android.diploma.filter.domain.model.Industry
 import ru.practicum.android.diploma.filter.presentation.state.FilterSettingsState
 
 class FilterSettingsViewModel(
@@ -26,8 +28,10 @@ class FilterSettingsViewModel(
         jobStorage?.cancel()
 
         jobStorage = viewModelScope.launch(Dispatchers.IO) {
-            savedFilter = getConfiguredFilterSettings()
-            filterState.postValue(FilterSettingsState.Filter(savedFilter))
+            if (!filterStorage.isFilterActive()) {
+                savedFilter = getConfiguredFilterSettings()
+                filterState.postValue(FilterSettingsState.Filter(savedFilter))
+            }
         }
     }
 
@@ -63,19 +67,47 @@ class FilterSettingsViewModel(
     }
 
     private fun getConfiguredFilterSettings(): FilterGeneral {
-        return filterStorage.getAllFilterParameters()
+        return filterStorage.getAllSavedParameters()
     }
 
     private fun getSavedFilterSettings(): FilterGeneral {
-        return filterStorage.getAllSavedParameters()
+        return filterStorage.getAllFilterParameters()
     }
 
     fun changeSalary(newSalary: String) {
         filterStorage.saveExpectedSalary(newSalary)
     }
 
+    fun resetSalary() {
+        filterStorage.saveExpectedSalary(String())
+    }
+
     fun changeHideNoSalary(noSalary: Boolean) {
         filterStorage.saveHideNoSalaryItems(noSalary)
     }
+
+    fun resetArea() {
+        filterStorage.saveArea(
+            Area(
+                id = String(),
+                subAreas = emptyList(),
+                name = String(),
+                parentId = String()
+            )
+        )
+        loadConfiguredFilterSettings()
+    }
+
+    fun resetIndustry() {
+        filterStorage.saveIndustry(
+            Industry(
+                id = String(),
+                industries = emptyList(),
+                name = String()
+            )
+        )
+        loadConfiguredFilterSettings()
+    }
+
 
 }

@@ -28,8 +28,8 @@ class FilterSettingsFragment : Fragment() {
 
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
         viewModel.loadConfiguredFilterSettings()
     }
 
@@ -60,15 +60,14 @@ class FilterSettingsFragment : Fragment() {
         binding.filterIndustryInactive.setOnClickListener {
             findNavController().navigate(R.id.action_filterSettingsFragment_to_filterIndustryFragment)
         }
-        /* пока не понял зачем они нужны
+
         binding.filterWorkPlaceCross.setOnClickListener {
-            viewModel.changeWorkPlace(newWorkPlace = "")
+            viewModel.resetArea()
         }
 
         binding.filterIndustryCross.setOnClickListener {
-            viewModel.changeIndustry(newIndustry = "")
+            viewModel.resetIndustry()
         }
-        */
         binding.filterSalaryInput.doOnTextChanged { text, _, _, _ ->
             if (text?.isNotEmpty() == true) {
                 viewModel.changeSalary(
@@ -81,10 +80,13 @@ class FilterSettingsFragment : Fragment() {
             viewModel.changeHideNoSalary(noSalary = isChecked)
         }
 
+        binding.filterResetButton.setOnClickListener {
+            viewModel.resetFilterSettings()
+        }
+
         binding.filterApplyButton.setOnClickListener {
             viewModel.saveFilterSettings()
             findNavController().navigateUp()
-
         }
 
         viewModel.loadSavedFilterSettings()
