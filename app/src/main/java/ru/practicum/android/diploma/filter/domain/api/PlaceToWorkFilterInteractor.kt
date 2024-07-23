@@ -18,7 +18,5 @@ interface PlaceToWorkFilterInteractor {
 
     fun isRegionInCurrentCountry(): Boolean
 
-    suspend fun getActualCountryForRegion(areaId: String): CountryFilter
-
     suspend fun getCountryForRegion(areaId: String): CountryFilter?
 }

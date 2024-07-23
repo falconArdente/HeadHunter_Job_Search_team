@@ -59,6 +59,10 @@ class FilterCountryFragment : Fragment() {
                 is AreaFilterState.Loading -> Unit
             }
         }
+
+        viewModelCountry.backEvent.observe(viewLifecycleOwner) {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
     }
 
     override fun onDestroyView() {
@@ -68,7 +72,6 @@ class FilterCountryFragment : Fragment() {
 
     private fun clickListenerFun(country: AreaDetailsFilterItem) {
         viewModelCountry.saveCountryChoiceToFilter(country)
-        requireActivity().onBackPressedDispatcher.onBackPressed()
     }
 
     private fun setViewVisibility() {

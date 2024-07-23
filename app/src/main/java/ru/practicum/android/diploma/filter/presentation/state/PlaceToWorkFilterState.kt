@@ -6,5 +6,6 @@ sealed class PlaceToWorkFilterState {
         val countryName: String? = null,
         val areaId: String? = null,
         val areaName: String? = null,
+        val isRegionInCountry: Boolean = true,
     ) : PlaceToWorkFilterState()
 }

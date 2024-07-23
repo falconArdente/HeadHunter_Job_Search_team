@@ -60,6 +60,17 @@ class FilterDictionariesRepositoryHHNetworkClientBased(private val client: HeadH
         }
     }
 
+    override suspend fun getAreasNormally(): Resource<List<Area>> {
+        val response = client.doRequest(HeadHunterRequest.Areas)
+        return if (response.resultCode == Response.SUCCESS) {
+            Resource.Success((response as AreasResponse).areasList.map { areaDto ->
+                FilterMapper.toArea(areaDto)
+            })
+        } else {
+            Resource.Error(areasErrorMessage)
+        }
+    }
+
     override suspend fun getDetailedAreas(): Flow<Resource<List<Area>>> = flow {
         val response = client.doRequest(HeadHunterRequest.Areas)
         if (response.resultCode == Response.SUCCESS) {

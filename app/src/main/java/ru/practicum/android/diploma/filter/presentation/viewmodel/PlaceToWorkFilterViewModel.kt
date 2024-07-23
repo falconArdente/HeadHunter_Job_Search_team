@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filter.domain.api.PlaceToWorkFilterInteractor
+import ru.practicum.android.diploma.filter.domain.model.AreaFilter
+import ru.practicum.android.diploma.filter.domain.model.CountryFilter
 import ru.practicum.android.diploma.filter.presentation.state.PlaceToWorkFilterState
 
 class PlaceToWorkFilterViewModel(private val placeToWorkFilterInteractor: PlaceToWorkFilterInteractor) : ViewModel() {
@@ -25,6 +27,20 @@ class PlaceToWorkFilterViewModel(private val placeToWorkFilterInteractor: PlaceT
         )
     }
 
+    suspend fun isCurrentRegionInCurrentCountry(): Boolean {
+        var isCurrentRegionInCurrentCountry = false
+        val currentCountry = placeToWorkFilterInteractor.getCurrentCountryChoice()
+        val currentArea = placeToWorkFilterInteractor.getCurrentAreaChoice()
+
+        if (!currentArea?.areaId.isNullOrEmpty()) {
+            val parentOfRegionById =
+                placeToWorkFilterInteractor.getCountryForRegion(currentArea?.areaId!!)
+            val currentCountryId = currentCountry?.countryId
+            isCurrentRegionInCurrentCountry = currentCountryId == parentOfRegionById?.countryId
+        }
+        return isCurrentRegionInCurrentCountry
+    }
+
     fun clearCountry() {
         placeToWorkFilterInteractor.clearCountry()
         updateCurrentFilterAreaParameters()
@@ -41,38 +57,42 @@ class PlaceToWorkFilterViewModel(private val placeToWorkFilterInteractor: PlaceT
             val currentArea = placeToWorkFilterInteractor.getCurrentAreaChoice()
 
             if (!currentArea?.areaName.isNullOrEmpty() && currentCountry?.countryName.isNullOrEmpty()) {
-                try {
-                    val parentOfRegionById =
-                        placeToWorkFilterInteractor.getCountryForRegion(currentArea?.areaId!!)
-                    _stateLiveData.value = PlaceToWorkFilterState.AreaFilter(
-                        countryId = parentOfRegionById?.countryId,
-                        countryName = parentOfRegionById?.countryName,
-                        areaId = currentArea.areaId,
-                        areaName = currentArea.areaName
-                    )
-                } catch (e: IllegalStateException) {
-                    _stateLiveData.value = PlaceToWorkFilterState.AreaFilter(
-                        countryId = currentCountry?.countryId,
-                        countryName = currentCountry?.countryName,
-                        areaId = currentArea?.areaId,
-                        areaName = currentArea?.areaName
-                    )
-                    Log.e("ERROR", "${e.message}")
-                }
+                val parentOfRegionById =
+                    placeToWorkFilterInteractor.getCountryForRegion(currentArea?.areaId!!)
+                setLiveDataValue(parentOfRegionById, currentArea)
             } else {
+                setLiveDataValue(currentCountry, currentArea)
+            }
+        }
+    }
+
+    fun checkIfRegionIsInCountry() {
+        viewModelScope.launch {
+            val currentCountry = placeToWorkFilterInteractor.getCurrentCountryChoice()
+            val currentArea = placeToWorkFilterInteractor.getCurrentAreaChoice()
+
+            if (!currentArea?.areaName.isNullOrEmpty() && !currentCountry?.countryName.isNullOrEmpty()
+                && !isCurrentRegionInCurrentCountry()
+            ) {
                 _stateLiveData.value = PlaceToWorkFilterState.AreaFilter(
                     countryId = currentCountry?.countryId,
                     countryName = currentCountry?.countryName,
-                    areaId = currentArea?.areaId,
-                    areaName = currentArea?.areaName
+                    areaId = null,
+                    areaName = null,
+                    isRegionInCountry = false
                 )
             }
+            updateCurrentFilterAreaParameters()
         }
     }
 
     fun updateCurrentFilterAreaParameters() {
         val currentCountry = placeToWorkFilterInteractor.getCurrentCountryChoice()
         val currentArea = placeToWorkFilterInteractor.getCurrentAreaChoice()
+        setLiveDataValue(currentCountry, currentArea)
+    }
+
+    private fun setLiveDataValue(currentCountry: CountryFilter?, currentArea: AreaFilter?) {
         _stateLiveData.value = PlaceToWorkFilterState.AreaFilter(
             countryId = currentCountry?.countryId,
             countryName = currentCountry?.countryName,

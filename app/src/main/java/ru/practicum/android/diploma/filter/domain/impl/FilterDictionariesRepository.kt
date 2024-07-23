@@ -20,4 +20,5 @@ interface FilterDictionariesRepository {
     ): Flow<Resource<List<AreaSuggestion>>> // searchText.length = 2..3000
 
     suspend fun getIndustries(): Flow<Resource<List<Industry>>>
+    suspend fun getAreasNormally(): Resource<List<Area>>
 }

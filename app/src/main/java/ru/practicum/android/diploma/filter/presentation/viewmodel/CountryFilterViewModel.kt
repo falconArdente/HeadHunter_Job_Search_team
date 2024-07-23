@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.filter.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,10 +11,12 @@ import ru.practicum.android.diploma.filter.domain.model.AreaDetailsFilterItem
 import ru.practicum.android.diploma.filter.domain.model.CountryFilter
 import ru.practicum.android.diploma.filter.presentation.state.AreaFilterState
 import ru.practicum.android.diploma.utils.Resource
+import ru.practicum.android.diploma.utils.SingleLiveEvent
 
 class CountryFilterViewModel(private val countryFilterInteractor: CountryFilterInteractor) : ViewModel() {
     private val _stateLiveDataCountry = MutableLiveData<AreaFilterState>(AreaFilterState.Loading)
     val stateLiveDataCountry: LiveData<AreaFilterState> = _stateLiveDataCountry
+    val backEvent = SingleLiveEvent<Unit>()
 
     init {
         viewModelScope.launch {
@@ -35,10 +36,11 @@ class CountryFilterViewModel(private val countryFilterInteractor: CountryFilterI
     }
 
     fun saveCountryChoiceToFilter(country: AreaDetailsFilterItem) {
-        countryFilterInteractor.saveCountry(
-            CountryFilter(countryId = country.areaId, countryName = country.areaName)
-        )
-        val savedCountry = countryFilterInteractor.getAllSavedParameters()?.countryName
-        Log.e("TEST7", "$savedCountry")
+        viewModelScope.launch {
+            countryFilterInteractor.saveCountry(
+                CountryFilter(countryId = country.areaId, countryName = country.areaName)
+            )
+            backEvent.value = Unit
+        }
     }
 }

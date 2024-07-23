@@ -39,27 +39,9 @@ class PlaceToWorkFilterInteractorImpl(
         TODO("Not yet implemented")
     }
 
-    override suspend fun getActualCountryForRegion(areaId: String): CountryFilter {
-        val result = filterDictionariesRepository.getAreas().first()
-        if (result !is Resource.Success) throw IllegalStateException()
-
-        val areaById = result.data!!.associateBy { it.id }
-        Log.e("MAP", "${areaById}")
-
-        var area = areaById[areaId] ?: error("Area not found with id $areaId")
-        Log.e("MAP", "${area}")
-
-        while (area.parentId != null) {
-            area = areaById[area.parentId] ?: error("Parent area by id ${area.parentId} not found")
-            Log.e("MAP2", "${area}")
-        }
-
-        return CountryFilter(countryId = area.id, countryName = area.name)
-    }
-
     override suspend fun getCountryForRegion(areaId: String): CountryFilter? {
         val result = filterDictionariesRepository.getAreas().first()
-        if (result !is Resource.Success) throw IllegalStateException()
+        if (result !is Resource.Success) error("Search result failed")
         val resultList = result.data!!
 
         val areaById = findAreaById(areaId, resultList) ?: return null
@@ -72,15 +54,17 @@ class PlaceToWorkFilterInteractorImpl(
 
     private fun findAreaById(areaId: String, generalListOfAreas: List<Area>?): Area? {
         generalListOfAreas?.forEach { area ->
-            if(area.id == areaId) {
-                return area
-            }
-            val subAreaResult = findAreaById(areaId, area.subAreas)
-            if (subAreaResult != null) {
-                return subAreaResult
-            }
+            findAreaBySubArea(areaId, area)?.let { return it }
         }
         return null
+    }
+
+    private fun findAreaBySubArea(areaId: String, area: Area): Area? {
+        if(area.id == areaId) {
+            return area
+        }
+        return findAreaById(areaId, area.subAreas)
+
     }
 
     private fun findParentArea(area: Area, areasList: List<Area>): Area? {

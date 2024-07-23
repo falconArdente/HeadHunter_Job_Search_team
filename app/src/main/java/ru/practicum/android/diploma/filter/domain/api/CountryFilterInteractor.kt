@@ -6,7 +6,7 @@ import ru.practicum.android.diploma.filter.domain.model.CountryFilter
 import ru.practicum.android.diploma.utils.Resource
 
 interface CountryFilterInteractor {
-    fun saveCountry(country: CountryFilter)
+    suspend fun saveCountry(country: CountryFilter)
 
     fun getAllSavedParameters(): CountryFilter?
 

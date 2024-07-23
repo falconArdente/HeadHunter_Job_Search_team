@@ -50,7 +50,11 @@ val interactorModule = module {
     }
 
     factory<CountryFilterInteractor> {
-        CountryFilterInteractorImpl(filterStorageRepository = get(), filterDictionariesRepository = get())
+        CountryFilterInteractorImpl(
+            filterStorageRepository = get(),
+            filterDictionariesRepository = get(),
+            placeToWorkFilterInteractor = get()
+        )
     }
 
     factory<RegionFilterInteractor> {

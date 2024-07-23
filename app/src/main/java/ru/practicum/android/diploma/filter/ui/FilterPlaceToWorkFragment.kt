@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -56,6 +57,24 @@ class FilterPlaceToWorkFragment : Fragment() {
 
         binding.filterWorkPlaceCross.setOnClickListener { viewModel.clearCountry() }
         binding.filterIndustryCross.setOnClickListener { viewModel.clearArea() }
+
+        binding.filterApplyButton.setOnClickListener {
+            viewModel.saveFilterAreaParameters()
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+
+//            viewModel.isCurrentRegionInCurrentCountry()
+//            if (isRegionInCountry && !binding.filterWorkPlaceValue.text.isNullOrEmpty()
+//                && !binding.filterIndustryValue.text.isNullOrEmpty()) {
+//                viewModel.saveFilterAreaParameters()
+//                requireActivity().onBackPressedDispatcher.onBackPressed()
+//            } else {
+//                Toast.makeText(
+//                    requireContext(),
+//                    R.string.toast_region_notification,
+//                    Toast.LENGTH_LONG
+//                ).show()
+//            }
+        }
     }
 
     private fun renderFilterFields(filterParamsState: PlaceToWorkFilterState?) {
@@ -82,15 +101,11 @@ class FilterPlaceToWorkFragment : Fragment() {
             }
 
             if (binding.filterIndustryValue.text != requireActivity().getString(R.string.region) ||
-                binding.filterWorkPlaceValue.text != requireActivity().getString(R.string.country)) {
+                binding.filterWorkPlaceValue.text != requireActivity().getString(R.string.country)
+            ) {
                 binding.filterApplyButton.isVisible = true
             } else {
                 binding.filterApplyButton.isVisible = false
-            }
-
-            binding.filterApplyButton.setOnClickListener {
-                viewModel.saveFilterAreaParameters()
-                requireActivity().onBackPressedDispatcher.onBackPressed()
             }
         }
     }
