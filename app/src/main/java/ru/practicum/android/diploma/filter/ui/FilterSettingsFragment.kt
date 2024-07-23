@@ -107,7 +107,6 @@ class FilterSettingsFragment : Fragment() {
     private fun render(state: FilterSettingsState) {
         when (state) {
             is FilterSettingsState.Filter -> {
-
                 binding.filterDontShowWithoutSalaryCheckBox.isChecked = state.filter.hideNoSalaryItems
 
                 if (state.filter.expectedSalary.isNullOrEmpty()) {

@@ -84,12 +84,7 @@ class FilterSettingsViewModel(
                 )
             )
         } else {
-            filterStorage.saveArea(
-                AreaFilter(
-                    areaId = String(),
-                    areaName = String()
-                )
-            )
+            resetArea()
         }
         if (filter.country != null) {
             filterStorage.saveCountry(
@@ -98,14 +93,8 @@ class FilterSettingsViewModel(
                     countryName = filter.country.countryName.toString()
                 )
             )
-        } else {
-            filterStorage.saveCountry(
-                CountryFilter(
-                    countryId = String(),
-                    countryName = String()
-                )
-            )
         }
+
         if (filter.industry != null) {
             filterStorage.saveIndustry(
                 Industry(
@@ -115,20 +104,14 @@ class FilterSettingsViewModel(
                 )
             )
         } else {
-            filterStorage.saveIndustry(
-                Industry(
-                    id = String(),
-                    industries = emptyList(),
-                    name = String()
-                )
-            )
+            resetIndustry()
         }
 
         filterStorage.saveHideNoSalaryItems(filter.hideNoSalaryItems)
         if (filter.expectedSalary != null) {
             filterStorage.saveExpectedSalary(filter.expectedSalary.toString())
         } else {
-            filterStorage.saveExpectedSalary(String())
+            resetSalary()
         }
 
 
