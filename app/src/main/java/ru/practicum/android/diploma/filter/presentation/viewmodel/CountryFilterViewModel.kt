@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.filter.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +9,7 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filter.domain.api.CountryFilterInteractor
 import ru.practicum.android.diploma.filter.domain.model.Area
 import ru.practicum.android.diploma.filter.domain.model.AreaDetailsFilterItem
+import ru.practicum.android.diploma.filter.domain.model.CountryFilter
 import ru.practicum.android.diploma.filter.presentation.state.AreaFilterState
 import ru.practicum.android.diploma.utils.Resource
 
@@ -33,6 +35,10 @@ class CountryFilterViewModel(private val countryFilterInteractor: CountryFilterI
     }
 
     fun saveCountryChoiceToFilter(country: AreaDetailsFilterItem) {
-        countryFilterInteractor.saveCountry(country)
+        countryFilterInteractor.saveCountry(
+            CountryFilter(countryId = country.areaId, countryName = country.areaName)
+        )
+        val savedCountry = countryFilterInteractor.getAllSavedParameters()?.countryName
+        Log.e("TEST7","$savedCountry")
     }
 }

@@ -12,8 +12,10 @@ import ru.practicum.android.diploma.favorites.domain.impl.GetFavoritesListImpl
 import ru.practicum.android.diploma.favorites.domain.api.FavoriteDbInteractor
 import ru.practicum.android.diploma.favorites.domain.impl.FavoriteDbInteractorImpl
 import ru.practicum.android.diploma.filter.domain.api.CountryFilterInteractor
+import ru.practicum.android.diploma.filter.domain.api.PlaceToWorkFilterInteractor
 import ru.practicum.android.diploma.filter.domain.api.RegionFilterInteractor
 import ru.practicum.android.diploma.filter.domain.impl.CountryFilterInteractorImpl
+import ru.practicum.android.diploma.filter.domain.impl.PlaceToWorkFilterInteractorImpl
 import ru.practicum.android.diploma.filter.domain.impl.RegionFilterInteractorImpl
 import ru.practicum.android.diploma.search.data.repository.GetSuggestionsForSearchUseCaseImpl
 import ru.practicum.android.diploma.search.data.repository.SearchInteractorImpl
@@ -53,5 +55,9 @@ val interactorModule = module {
 
     factory<RegionFilterInteractor> {
         RegionFilterInteractorImpl(filterStorageRepository = get(), filterDictionariesRepository = get())
+    }
+
+    factory<PlaceToWorkFilterInteractor> {
+        PlaceToWorkFilterInteractorImpl(filterStorageRepository = get(), filterDictionariesRepository = get())
     }
 }

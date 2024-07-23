@@ -1,6 +1,9 @@
 package ru.practicum.android.diploma.filter.domain.impl
 
-import ru.practicum.android.diploma.filter.domain.model.AreaDetailsFilterItem
+import ru.practicum.android.diploma.filter.domain.model.Area
+import ru.practicum.android.diploma.filter.domain.model.AreaFilter
+import ru.practicum.android.diploma.filter.domain.model.Country
+import ru.practicum.android.diploma.filter.domain.model.CountryFilter
 import ru.practicum.android.diploma.filter.domain.model.FilterGeneral
 import ru.practicum.android.diploma.filter.domain.model.IndustryDetailsFilterItem
 
@@ -23,10 +26,10 @@ interface FilterStorageRepository {
     fun isFilterActive(): Boolean
 
     // сохранение параметра региона для параметров промежуточного фильтра на экранах выбора отрасли/региона/места работы
-    fun saveArea(area: AreaDetailsFilterItem)
+    fun saveArea(area: AreaFilter)
 
     // сохранение параметра страны для параметров промежуточного фильтра на экранах выбора отрасли/региона/места работы
-    fun saveCountry(country: AreaDetailsFilterItem)
+    fun saveCountry(country: CountryFilter)
 
     // сохранение параметра отрасли для параметров промежуточного фильтра на экранах выбора отрасли/региона/места работы
     fun saveIndustry(industry: IndustryDetailsFilterItem)

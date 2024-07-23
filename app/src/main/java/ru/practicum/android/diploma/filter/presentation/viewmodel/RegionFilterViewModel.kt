@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.filter.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +10,7 @@ import ru.practicum.android.diploma.filter.domain.api.CountryFilterInteractor
 import ru.practicum.android.diploma.filter.domain.api.RegionFilterInteractor
 import ru.practicum.android.diploma.filter.domain.model.Area
 import ru.practicum.android.diploma.filter.domain.model.AreaDetailsFilterItem
+import ru.practicum.android.diploma.filter.domain.model.AreaFilter
 import ru.practicum.android.diploma.filter.domain.model.AreaSuggestion
 import ru.practicum.android.diploma.filter.presentation.state.AreaFilterState
 import ru.practicum.android.diploma.utils.Resource
@@ -25,8 +27,9 @@ class RegionFilterViewModel(
 
     init {
         viewModelScope.launch {
-            val isCountrySavedInFilterStorage = countryFilterInteractor.getAllSavedParameters() != null
-            if (isCountrySavedInFilterStorage) {
+            val isCountrySavedInFilterStorage =
+                countryFilterInteractor.getAllSavedParameters()?.countryId.isNullOrEmpty()
+            if (!isCountrySavedInFilterStorage) {
                 val savedCountryId = countryFilterInteractor.getAllSavedParameters()!!.countryId
                 if (savedCountryId != null) {
                     regionFilterInteractor.getSubAreas(savedCountryId).collect {
@@ -72,7 +75,16 @@ class RegionFilterViewModel(
     }
 
     fun saveRegionChoiceToFilter(region: AreaDetailsFilterItem) {
-        regionFilterInteractor.saveRegion(region)
+        Log.e("TEST8.1", "${region.areaName}")
+        val savedCountry = countryFilterInteractor.getAllSavedParameters()?.countryName
+        Log.e("TEST8", "$savedCountry")
+        regionFilterInteractor.saveRegion(AreaFilter(areaId = region.areaId, areaName = region.areaName))
+        val savedCountry2 = countryFilterInteractor.getAllSavedParameters()?.countryName
+        Log.e("TEST9.1", "$savedCountry2")
+        val savedArea = regionFilterInteractor.getAllSavedParameters()?.areaName
+        Log.e("TEST9", "$savedArea")
+        Log.e("TEST10", "$savedCountry")
+
     }
 
     fun getOriginalListBeforeSearching() {

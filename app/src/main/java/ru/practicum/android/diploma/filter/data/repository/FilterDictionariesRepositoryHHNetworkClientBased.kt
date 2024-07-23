@@ -61,37 +61,40 @@ class FilterDictionariesRepositoryHHNetworkClientBased(private val client: HeadH
     }
 
     override suspend fun getDetailedAreas(): Flow<Resource<List<Area>>> = flow {
-        getAreas().collect { result ->
-            when (result) {
-                is Resource.Success -> {
-                    val areasWithoutParentId = result.data!!.filter { area ->
-                        area.parentId != null
-                    }
-                    val sortedAreaList = areasWithoutParentId.sortedBy { it.name }
-                    emit(Resource.Success(sortedAreaList))
-                }
-
-                is Resource.Error -> emit(Resource.Error(result.message!!))
-
-                is Resource.InternetConnectionError -> emit(Resource.InternetConnectionError(result.message!!))
-
-                is Resource.NotFoundError -> emit(Resource.NotFoundError(result.message!!))
+        val response = client.doRequest(HeadHunterRequest.Areas)
+        if (response.resultCode == Response.SUCCESS) {
+            val subAreasListOriginal = (response as AreasResponse).areasList.map { areaDto ->
+                FilterMapper.toArea(areaDto)
             }
+            val detailedAreaList = getMaximumDetailedArea(subAreasListOriginal)
+            val regionList = getRegionList(subAreasListOriginal)
+            val finalRegionList = regionList + detailedAreaList
+            val collator = Collator.getInstance()
+            val sortedDetailedList = finalRegionList.sortedWith(compareBy(collator) { it.name })
+            emit(Resource.Success(sortedDetailedList))
+        } else {
+            emit(Resource.Error(areasErrorMessage))
         }
+//        getAreas().collect { result ->
+//            when (result) {
+//                is Resource.Success -> {
+//                    val areasWithoutParentId = result.data!!.filter { area ->
+//                        area.parentId != null
+//                    }
+//                    val sortedAreaList = areasWithoutParentId.sortedBy { it.name }
+//                    emit(Resource.Success(sortedAreaList))
+//                }
+//
+//                is Resource.Error -> emit(Resource.Error(result.message!!))
+//
+//                is Resource.InternetConnectionError -> emit(Resource.InternetConnectionError(result.message!!))
+//
+//                is Resource.NotFoundError -> emit(Resource.NotFoundError(result.message!!))
+//            }
+//        }
     }
 
 
-    private fun getMaximumDetailedArea(originalList: List<Area>): List<Area> {
-        val detailedAreaList = mutableListOf<Area>()
-        originalList.forEach { area ->
-            if (area.subAreas.isNullOrEmpty()) {
-                detailedAreaList.add(area)
-            } else {
-                detailedAreaList.addAll(getMaximumDetailedArea(area.subAreas))
-            }
-        }
-        return detailedAreaList
-    }
 
     override suspend fun getCountries(): Flow<Resource<List<Country>>> = flow {
         val response = client.doRequest(HeadHunterRequest.Counties)
@@ -130,7 +133,7 @@ class FilterDictionariesRepositoryHHNetworkClientBased(private val client: HeadH
         }
     }
 
-    override suspend fun getSubAreas(areaId: String): Flow<Resource<List<Area>>> {
+    override suspend fun getDetailedSubAreas(areaId: String): Flow<Resource<List<Area>>> {
         return flow {
             val response = client.doRequest(HeadHunterRequest.SubAreas(areaId))
             if (response.resultCode == Response.SUCCESS) {
@@ -138,9 +141,49 @@ class FilterDictionariesRepositoryHHNetworkClientBased(private val client: HeadH
                     FilterMapper.toArea(areaDto)
                 }
                 val detailedAreaList = getMaximumDetailedArea(subAreasListOriginal)
+                val regionList = getRegionList(subAreasListOriginal)
+                val finalRegionList = regionList + detailedAreaList
                 val collator = Collator.getInstance()
-                val sortedDetailedList = detailedAreaList.sortedWith(compareBy(collator) { it.name })
+                val sortedDetailedList = finalRegionList.sortedWith(compareBy(collator) { it.name })
                 emit(Resource.Success(sortedDetailedList))
+            } else {
+                emit(Resource.Error(areasErrorMessage))
+            }
+        }
+    }
+
+    private fun getRegionList(originalAreaList: List<Area>): List<Area> {
+        val regionList = mutableListOf<Area>()
+        originalAreaList.forEach { area ->
+            if (area.parentId != null && !area.subAreas.isNullOrEmpty()) {
+                regionList.add(area)
+            } else {
+                regionList.addAll(getRegionList(area.subAreas!!))
+            }
+        }
+        return regionList
+    }
+
+    private fun getMaximumDetailedArea(originalList: List<Area>): List<Area> {
+        val detailedAreaList = mutableListOf<Area>()
+        originalList.forEach { area ->
+            if (area.subAreas.isNullOrEmpty()) {
+                detailedAreaList.add(area)
+            } else {
+                detailedAreaList.addAll(getMaximumDetailedArea(area.subAreas))
+            }
+        }
+        return detailedAreaList
+    }
+
+    override suspend fun getSubAreas(areaId: String): Flow<Resource<List<Area>>> {
+        return flow {
+            val response = client.doRequest(HeadHunterRequest.SubAreas(areaId))
+            if (response.resultCode == Response.SUCCESS) {
+                val subAreasListOriginal = (response as AreasResponse).areasList.map { areaDto ->
+                    FilterMapper.toArea(areaDto)
+                }
+                emit(Resource.Success(subAreasListOriginal))
             } else {
                 emit(Resource.Error(areasErrorMessage))
             }

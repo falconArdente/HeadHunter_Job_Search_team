@@ -12,6 +12,7 @@ interface FilterDictionariesRepository {
     suspend fun getDetailedAreas(): Flow<Resource<List<Area>>>
     suspend fun getCountries(): Flow<Resource<List<Country>>>
     suspend fun getCountriesByAreas(): Flow<Resource<List<Area>>>
+    suspend fun getDetailedSubAreas(areaId: String): Flow<Resource<List<Area>>>
     suspend fun getSubAreas(areaId: String): Flow<Resource<List<Area>>>
     suspend fun searchInAreas(
         searchText: String,
