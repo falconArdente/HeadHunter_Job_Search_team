@@ -207,6 +207,7 @@ class SearchJobFragment : Fragment() {
             } else {
                 binding.searchInputIcon.background = requireActivity().getDrawable(R.drawable.icon_cross)
                 viewModel.getSuggestionsForSearch(text.toString())
+                viewModel.currentPage=0
             }
         }
         binding.searchInputIcon.setOnClickListener {

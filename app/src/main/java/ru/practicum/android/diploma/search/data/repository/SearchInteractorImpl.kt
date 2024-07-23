@@ -8,9 +8,9 @@ import ru.practicum.android.diploma.search.domain.model.VacancyListResult
 import ru.practicum.android.diploma.utils.Resource
 
 class SearchInteractorImpl(val repository: SearchRepository, val converter: SearchVacancyConverter) : SearchInteractor {
-    override fun searchVacancy(expression: String): Flow<VacancyListResult> = flow {
+    override fun searchVacancy(expression: String, perPage: Int, currentPage: Int): Flow<VacancyListResult> = flow {
         repository
-            .searchVacancy(expression)
+            .searchVacancy(expression, perPage = perPage, page = currentPage)
             .collect { vacancyListResponse ->
                 when (vacancyListResponse) {
                     is Resource.Success -> {
@@ -23,7 +23,7 @@ class SearchInteractorImpl(val repository: SearchRepository, val converter: Sear
                                 result = vacancyList,
                                 errorMessage = "",
                                 foundVacancy = foundVacancy.toInt(),
-                                page = 0,
+                                page = currentPage,
                                 pages = pagesTotal.toInt(),
                             )
                         )

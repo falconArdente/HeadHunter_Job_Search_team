@@ -14,6 +14,7 @@ import ru.practicum.android.diploma.search.presentation.state.SearchFragmentStat
 
 private const val SEARCH_DEBOUNCE_DELAY = 2000L
 private const val CLICK_DEBOUNCE_DELAY = 1000L
+private const val PER_PAGE = 20
 
 class SearchViewModel(
     private val interactor: SearchInteractor,
@@ -26,10 +27,9 @@ class SearchViewModel(
     private var isClickAllowed = true
     private var suggestionsList = MutableLiveData<List<String>>(emptyList())
     val suggestionsLivaData: LiveData<List<String>> = suggestionsList
-
-    private var currentPage = 1
+    var currentPage = 0
     private var maxPages = 0
-    private val vacanciesList = mutableListOf<Vacancy>()
+    private var vacanciesList = mutableListOf<Vacancy>()
     private var totalFound = 0
 
     init {
@@ -55,8 +55,9 @@ class SearchViewModel(
         searchJobDetails?.cancel()
         updateState(SearchFragmentState.Loading)
         searchJobDetails != viewModelScope.launch {
+
             interactor
-                .searchVacancy(text)
+                .searchVacancy(text, PER_PAGE, currentPage)
                 .collect { vacancy ->
                     if (vacancy.result!!.isNotEmpty()) {
                         maxPages = vacancy.pages
@@ -102,14 +103,14 @@ class SearchViewModel(
     }
 
     fun onLastItemReached() {
-        if (currentPage < maxPages) {
-            currentPage++
-            updateState(SearchFragmentState.Loading)
-            searchResult(latestSearchText!!)
-        }
+        currentPage++
         if (currentPage == maxPages) {
             updateState(SearchFragmentState.SearchVacancy(vacanciesList, totalFound))
         }
+        if (currentPage < maxPages) {
+            //  currentPage++
+            updateState(SearchFragmentState.Loading)
+            searchResult(latestSearchText!!)
+        }
     }
 }
-
