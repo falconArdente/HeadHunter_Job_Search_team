@@ -16,6 +16,7 @@ import ru.practicum.android.diploma.search.presentation.state.SearchFragmentStat
 
 private const val SEARCH_DEBOUNCE_DELAY = 2000L
 private const val CLICK_DEBOUNCE_DELAY = 1000L
+private const val PER_PAGE = 20
 
 class SearchViewModel(
     private val interactor: SearchInteractor,
@@ -33,7 +34,7 @@ class SearchViewModel(
     val filterStateToObserve: LiveData<Boolean> = filterIsOn
     private var parametersForSearch: SearchParameters? = null
 
-    private var currentPage = 1
+    var currentPage = 0
     private var maxPages = 0
     private val vacanciesList = mutableListOf<Vacancy>()
     private var totalFound = 0
@@ -85,7 +86,7 @@ class SearchViewModel(
         updateState(SearchFragmentState.Loading)
         searchJobDetails != viewModelScope.launch {
             interactor
-                .searchVacancy(text, parametersForSearch)
+                .searchVacancy(text, parametersForSearch, PER_PAGE, currentPage)
                 .collect { vacancy ->
                     if (vacancy.result!!.isNotEmpty()) {
                         maxPages = vacancy.pages
@@ -131,16 +132,20 @@ class SearchViewModel(
     }
 
     fun onLastItemReached() {
+        if (currentPage == maxPages) {
+                updateState(
+                   (searchLiveData.value as SearchFragmentState.SearchVacancy)
+                       .copy(searchVacancy = vacanciesList, totalFoundVacancy = totalFound)
+              )
+        //   updateState(SearchFragmentState.SearchVacancy(vacanciesList, totalFound))
+       // с закомиченым не вылетает
+        }
         if (currentPage < maxPages) {
             currentPage++
+        }
+        if (currentPage < maxPages) {
             updateState(SearchFragmentState.Loading)
             searchResult(latestSearchText!!)
-        }
-        if (currentPage == maxPages) {
-            updateState(
-                (searchLiveData.value as SearchFragmentState.SearchVacancy)
-                    .copy(searchVacancy = vacanciesList, totalFoundVacancy = totalFound)
-            )
         }
     }
 }
