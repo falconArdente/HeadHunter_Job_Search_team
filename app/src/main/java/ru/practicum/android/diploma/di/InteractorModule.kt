@@ -21,7 +21,6 @@ import ru.practicum.android.diploma.filter.domain.impl.FilterDictionariesInterac
 import ru.practicum.android.diploma.filter.domain.impl.FilterStorageInteractorImpl
 import ru.practicum.android.diploma.filter.domain.impl.PlaceToWorkFilterInteractorImpl
 import ru.practicum.android.diploma.filter.domain.impl.RegionFilterInteractorImpl
-import ru.practicum.android.diploma.favorites.domain.impl.GetFavoritesListImpl
 import ru.practicum.android.diploma.search.data.repository.GetFilterUseCaseImpl
 import ru.practicum.android.diploma.search.data.repository.GetSuggestionsForSearchUseCaseImpl
 import ru.practicum.android.diploma.search.data.repository.SearchInteractorImpl
