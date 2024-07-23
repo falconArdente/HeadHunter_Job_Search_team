@@ -75,26 +75,7 @@ class FilterDictionariesRepositoryHHNetworkClientBased(private val client: HeadH
         } else {
             emit(Resource.Error(areasErrorMessage))
         }
-//        getAreas().collect { result ->
-//            when (result) {
-//                is Resource.Success -> {
-//                    val areasWithoutParentId = result.data!!.filter { area ->
-//                        area.parentId != null
-//                    }
-//                    val sortedAreaList = areasWithoutParentId.sortedBy { it.name }
-//                    emit(Resource.Success(sortedAreaList))
-//                }
-//
-//                is Resource.Error -> emit(Resource.Error(result.message!!))
-//
-//                is Resource.InternetConnectionError -> emit(Resource.InternetConnectionError(result.message!!))
-//
-//                is Resource.NotFoundError -> emit(Resource.NotFoundError(result.message!!))
-//            }
-//        }
     }
-
-
 
     override suspend fun getCountries(): Flow<Resource<List<Country>>> = flow {
         val response = client.doRequest(HeadHunterRequest.Counties)
@@ -121,7 +102,9 @@ class FilterDictionariesRepositoryHHNetworkClientBased(private val client: HeadH
                         val filteredCountriesList = areasWithParentId - otherRegionsItem
                         val updatedCountriesList = filteredCountriesList + otherRegionsItem
                         emit(Resource.Success(updatedCountriesList))
-                    } else emit(Resource.Success(areasWithParentId))
+                    } else {
+                        emit(Resource.Success(areasWithParentId))
+                    }
                 }
 
                 is Resource.Error -> emit(Resource.Error(result.message!!))

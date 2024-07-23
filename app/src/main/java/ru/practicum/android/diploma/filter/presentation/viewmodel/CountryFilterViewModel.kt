@@ -39,6 +39,6 @@ class CountryFilterViewModel(private val countryFilterInteractor: CountryFilterI
             CountryFilter(countryId = country.areaId, countryName = country.areaName)
         )
         val savedCountry = countryFilterInteractor.getAllSavedParameters()?.countryName
-        Log.e("TEST7","$savedCountry")
+        Log.e("TEST7", "$savedCountry")
     }
 }

@@ -24,7 +24,7 @@ class FilterRegionFragment : Fragment() {
 
     private val viewModelRegion: RegionFilterViewModel by viewModel<RegionFilterViewModel>()
 
-    private lateinit var adapter: FilterCountryAdapter
+    private var adapter = FilterCountryAdapter(emptyList(), ::clickListenerFun)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentFilterWithRecyclerBinding.inflate(inflater, container, false)
@@ -77,7 +77,6 @@ class FilterRegionFragment : Fragment() {
 
         when (state) {
             is AreaFilterState.AreaContent -> {
-                adapter = FilterCountryAdapter(state.listOfAreas, ::clickListenerFun)
                 binding.recyclerViewFilter.adapter = adapter
                 adapter.updateList(state.listOfAreas)
             }

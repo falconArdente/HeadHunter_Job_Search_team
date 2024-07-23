@@ -37,7 +37,6 @@ class PlaceToWorkFilterInteractorImpl(
     }
 
     override suspend fun getActualCountryForRegion(areaId: String): Pair<String, String> {
-
         var country: Pair<String, String> = Pair(first = "", second = "")
         filterDictionariesRepository.getAreas().collect { result ->
             when (result) {
@@ -55,20 +54,20 @@ class PlaceToWorkFilterInteractorImpl(
     }
 
     private fun getParent(areaIdChild: String, generalList: List<Area>): Pair<String, String> {
-        for (parent in generalList) {
-            if (parent.subAreas?.isNotEmpty() == true) {
-                Log.e("NO_INTER","${parent.subAreas}")
-                if (parent.subAreas?.any { it.id == areaIdChild } == true) {
-                    return Pair(first = parent.parentId!!, second = parent.name)
-                }
-            }
-            val parentArea = parent.subAreas?.let {
-                getParent(areaIdChild, it)
-            }
-            if (parentArea != null) {
-                return parentArea
-            }
-        }
+//        for (parent in generalList) {
+//            if (parent.subAreas?.isNotEmpty() == true) {
+//                Log.e("NO_INTER", "${parent.subAreas}")
+//                if (parent.subAreas?.any { it.id == areaIdChild } == true) {
+//                    return Pair(first = parent.parentId!!, second = parent.name)
+//                }
+//            }
+//            val parentArea = parent.subAreas?.let {
+//                getParent(areaIdChild, it)
+//            }
+//            if (parentArea != null) {
+//                return parentArea
+//            }
+//        }
         return Pair(first = "", second = "")
     }
 //            when (result) {

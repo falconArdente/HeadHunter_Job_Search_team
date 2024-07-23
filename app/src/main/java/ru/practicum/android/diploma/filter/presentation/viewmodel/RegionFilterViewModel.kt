@@ -68,7 +68,9 @@ class RegionFilterViewModel(
             val regionListReceived = searchResult.data
             if (!regionListReceived.isNullOrEmpty()) {
                 _stateLiveDataRegion.value = AreaFilterState.AreaContent(searchResult.data)
-            } else _stateLiveDataRegion.value = AreaFilterState.Empty
+            } else {
+                _stateLiveDataRegion.value = AreaFilterState.Empty
+            }
         } else {
             _stateLiveDataRegion.value = AreaFilterState.Error(searchResult.message!!)
         }

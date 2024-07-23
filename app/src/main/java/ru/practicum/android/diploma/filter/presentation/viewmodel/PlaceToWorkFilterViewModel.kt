@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.di.viewModelModule
 import ru.practicum.android.diploma.filter.domain.api.PlaceToWorkFilterInteractor
 import ru.practicum.android.diploma.filter.presentation.state.PlaceToWorkFilterState
 
@@ -48,9 +47,7 @@ class PlaceToWorkFilterViewModel(private val placeToWorkFilterInteractor: PlaceT
 //            if (!currentArea?.areaName.isNullOrEmpty() && currentCountry?.countryName.isNullOrEmpty()) {
 //                val currentCountry: Pair<String, String> =
 //                    placeToWorkFilterInteractor.getActualCountryForRegion(currentArea?.areaId!!)
-//
 //                Log.e("NO_RESULT", "${currentCountry.second}")
-//
 //                _stateLiveData.value = PlaceToWorkFilterState.AreaFilter(
 //                    countryId = currentCountry.first,
 //                    countryName = currentCountry.second,
@@ -58,12 +55,12 @@ class PlaceToWorkFilterViewModel(private val placeToWorkFilterInteractor: PlaceT
 //                    areaName = currentArea.areaName
 //                )
 //            } else {
-                _stateLiveData.value = PlaceToWorkFilterState.AreaFilter(
-                    countryId = currentCountry?.countryId,
-                    countryName = currentCountry?.countryName,
-                    areaId = currentArea?.areaId,
-                    areaName = currentArea?.areaName
-                )
+            _stateLiveData.value = PlaceToWorkFilterState.AreaFilter(
+                countryId = currentCountry?.countryId,
+                countryName = currentCountry?.countryName,
+                areaId = currentArea?.areaId,
+                areaName = currentArea?.areaName
+            )
 //            }
         }
     }
@@ -78,7 +75,6 @@ class PlaceToWorkFilterViewModel(private val placeToWorkFilterInteractor: PlaceT
             areaName = currentArea?.areaName
         )
     }
-
 }
 
 
