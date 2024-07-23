@@ -4,19 +4,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterWithRecyclerBinding
-import ru.practicum.android.diploma.filter.domain.model.Country
-import ru.practicum.android.diploma.utils.Mok
+import ru.practicum.android.diploma.filter.domain.model.AreaDetailsFilterItem
+import ru.practicum.android.diploma.filter.presentation.state.AreaFilterState
+import ru.practicum.android.diploma.filter.presentation.viewmodel.CountryFilterViewModel
 
 class FilterCountryFragment : Fragment() {
     private var _binding: FragmentFilterWithRecyclerBinding? = null
     private val binding get() = _binding!!
-    private val adapter = FilterCountryAdapter(Mok.countries, ::clickListenerFun)
-    // заменить в адаптере на пустой лист потом
+
+    private val viewModelCountry: CountryFilterViewModel by viewModel<CountryFilterViewModel>()
+
+    private var adapter = FilterCountryAdapter(emptyList(), ::clickListenerFun)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentFilterWithRecyclerBinding.inflate(inflater, container, false)
@@ -25,12 +30,38 @@ class FilterCountryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewHolderInit()
-        viewVisibility()
-        binding.backButtonFilterWithRecycler.setOnClickListener { findNavController().navigateUp() }
-        binding.filterApplyButton.setOnClickListener {
-            findNavController().navigateUp()
-            // Добавить запись настроек фильтра в Shared Prefs
+
+        binding.searchTitle.text = requireContext().getString(R.string.choice_country)
+        setViewVisibility()
+
+        binding.backButtonFilterWithRecycler.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+
+        viewModelCountry.stateLiveDataCountry.observe(viewLifecycleOwner) {
+            binding.searchPlaceholderImage.isVisible = it is AreaFilterState.Error
+            binding.searchPlaceholderText.isVisible = it is AreaFilterState.Error
+            binding.loadingProgressBar.isVisible = it is AreaFilterState.Loading
+            binding.recyclerViewFilter.isVisible = it is AreaFilterState.AreaContent
+
+            when (it) {
+                is AreaFilterState.AreaContent -> {
+                    adapter.updateList(it.listOfAreas)
+                    binding.recyclerViewFilter.layoutManager =
+                        LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                    binding.recyclerViewFilter.adapter = adapter
+                }
+
+                is AreaFilterState.Error, is AreaFilterState.Empty -> {
+                    binding.searchPlaceholderText.text = requireContext().getString(R.string.server_error)
+                }
+
+                is AreaFilterState.Loading -> Unit
+            }
+        }
+
+        viewModelCountry.backEvent.observe(viewLifecycleOwner) {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
         }
     }
 
@@ -39,23 +70,13 @@ class FilterCountryFragment : Fragment() {
         _binding = null
     }
 
-    private fun clickListenerFun(country: Country) {
-        //   реализовать клик?
+    private fun clickListenerFun(country: AreaDetailsFilterItem) {
+        viewModelCountry.saveCountryChoiceToFilter(country)
     }
 
-    private fun viewVisibility() {
-        binding.searchTitle.text = requireActivity().getString(R.string.choice_country)
-        binding.filterInput.visibility = View.GONE
-        binding.filterInputIcon.visibility = View.GONE
-    }
-
-    private fun viewHolderInit() {
-        binding.recyclerViewFilter.layoutManager =
-            LinearLayoutManager(
-                requireContext(),
-                LinearLayoutManager.VERTICAL,
-                false
-            )
-        binding.recyclerViewFilter.adapter = adapter
+    private fun setViewVisibility() {
+        binding.filterApplyButton.isVisible = false
+        binding.filterInput.isVisible = false
+        binding.filterInputIcon.isVisible = false
     }
 }

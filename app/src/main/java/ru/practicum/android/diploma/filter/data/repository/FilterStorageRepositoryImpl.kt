@@ -13,6 +13,7 @@ class FilterStorageRepositoryImpl(private val filterStorage: FilterStorage) :
     private val finalFilterSaved = filterStorage.getAllFinalFilterParameters()
     private var specificFilterSaved = filterStorage.getAllSavedParameter()
 
+
     override fun saveAllFilterParameters(filter: FilterGeneral) {
         filterStorage.saveFinalFilterParameters(filter)
     }
@@ -25,9 +26,12 @@ class FilterStorageRepositoryImpl(private val filterStorage: FilterStorage) :
         filterStorage.clearAllFilterParameters()
     }
 
-    override fun isFilterActive(): Boolean = (finalFilterSaved.country != null || finalFilterSaved.area != null
-        || finalFilterSaved.industry != null || finalFilterSaved.expectedSalary != null
-        || finalFilterSaved.hideNoSalaryItems)
+    override fun isFilterActive(): Boolean {
+        val finalFilterSaved = filterStorage.getAllFinalFilterParameters()
+        return (finalFilterSaved.country != null || finalFilterSaved.area != null
+            || finalFilterSaved.industry != null || finalFilterSaved.expectedSalary != null
+            || finalFilterSaved.hideNoSalaryItems)
+    }
 
     override fun saveArea(area: AreaFilter) {
         specificFilterSaved = specificFilterSaved.copy(area = area)
@@ -54,5 +58,6 @@ class FilterStorageRepositoryImpl(private val filterStorage: FilterStorage) :
     override fun saveHideNoSalaryItems(hideNoSalaryItems: Boolean) {
         specificFilterSaved = specificFilterSaved.copy(hideNoSalaryItems = hideNoSalaryItems)
         filterStorage.saveSpecificFilterParameters(specificFilterSaved)
+
     }
 }
