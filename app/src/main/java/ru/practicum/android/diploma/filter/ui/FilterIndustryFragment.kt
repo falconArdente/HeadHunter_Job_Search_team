@@ -21,8 +21,6 @@ class FilterIndustryFragment : Fragment() {
     private val binding get() = _binding!!
     private val adapter = FilterIndustryAdapter(emptyList(), ::clickListenerFun)
     private val viewModel by viewModel<FilterIndustryViewModel>()
-
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentFilterWithRecyclerBinding.inflate(inflater, container, false)
         return binding.root
