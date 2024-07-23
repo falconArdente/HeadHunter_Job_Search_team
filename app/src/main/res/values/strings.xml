@@ -40,9 +40,11 @@
     <string name="job_contacts">Контакты</string>
 
     <string name="net_vacancy">Вакансия не найдена или удалена</string>
+    <string name="no_such_region">Такого региона нет</string>
 
     <string name="no_internet">Нет интернета</string>
     <string name="failed_list_vacancy">Не удалось получить\n список вакансий</string>
+    <string name="failed_to_receive_region_list">Не удалось получить\n список</string>
     <string name="favourites_title">Избранное</string>
 
     <string name="list_is_empty">Cписок пуст</string>
@@ -55,6 +57,7 @@
     <string name="email">email:\u0020</string>
     <string name="phone_number">тел.:\u0020</string>
     <string name="no_such_vacancies">Таких вакансий нет</string>
+    <string name="server_error">Ошибка сервера</string>
 
     <string name="found_x_vacancies">Найдено %1s</string>
     <plurals name="plurals_vacancy">
@@ -88,5 +91,7 @@
 
     <string name="country">Страна</string>
     <string name="region">Регион</string>
+    <string name="toast_region_notification">Выбранный регион не относится к выбранной стране</string>
+    <string name="filter_region">%s, %s</string>
 
 </resources>

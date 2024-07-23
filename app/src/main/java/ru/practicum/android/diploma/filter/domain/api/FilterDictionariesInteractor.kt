@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.filter.domain.impl
+package ru.practicum.android.diploma.filter.domain.api
 
 import kotlinx.coroutines.flow.Flow
 import ru.practicum.android.diploma.filter.domain.model.Area
@@ -7,18 +7,17 @@ import ru.practicum.android.diploma.filter.domain.model.Country
 import ru.practicum.android.diploma.filter.domain.model.Industry
 import ru.practicum.android.diploma.utils.Resource
 
-interface FilterDictionariesRepository {
+interface FilterDictionariesInteractor {
     suspend fun getAreas(): Flow<Resource<List<Area>>>
-    suspend fun getDetailedAreas(): Flow<Resource<List<Area>>>
+
     suspend fun getCountries(): Flow<Resource<List<Country>>>
-    suspend fun getCountriesByAreas(): Flow<Resource<List<Area>>>
-    suspend fun getDetailedSubAreas(areaId: String): Flow<Resource<List<Area>>>
+
     suspend fun getSubAreas(areaId: String): Flow<Resource<List<Area>>>
+
     suspend fun searchInAreas(
         searchText: String,
         areaId: String? = null
-    ): Flow<Resource<List<AreaSuggestion>>> // searchText.length = 2..3000
+    ): Flow<Resource<List<AreaSuggestion>>>
 
     suspend fun getIndustries(): Flow<Resource<List<Industry>>>
-    suspend fun getAreasNormally(): Resource<List<Area>>
 }
