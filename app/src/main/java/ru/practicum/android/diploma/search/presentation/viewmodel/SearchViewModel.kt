@@ -133,12 +133,7 @@ class SearchViewModel(
 
     fun onLastItemReached() {
         if (currentPage == maxPages) {
-                updateState(
-                   (searchLiveData.value as SearchFragmentState.SearchVacancy)
-                       .copy(searchVacancy = vacanciesList, totalFoundVacancy = totalFound)
-              )
-        //   updateState(SearchFragmentState.SearchVacancy(vacanciesList, totalFound))
-       // с закомиченым не вылетает
+            updateState(SearchFragmentState.SearchVacancy(vacanciesList, totalFound))
         }
         if (currentPage < maxPages) {
             currentPage++
