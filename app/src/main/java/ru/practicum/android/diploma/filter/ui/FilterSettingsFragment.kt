@@ -70,7 +70,7 @@ class FilterSettingsFragment : Fragment() {
         }
 
         binding.filterWorkPlaceCross.setOnClickListener {
-            viewModel.resetArea()
+            viewModel.resetRegion()
         }
 
         binding.filterIndustryCross.setOnClickListener {

@@ -95,6 +95,8 @@ class FilterSettingsViewModel(
                     countryName = filter.country.countryName.toString()
                 )
             )
+        } else {
+            resetCountry()
         }
 
         if (filter.industry != null) {
@@ -121,28 +123,36 @@ class FilterSettingsViewModel(
         savedFilter = savedFilter.copy(expectedSalary = newSalary)
     }
 
-    fun resetSalary() {
-        savedFilter = savedFilter.copy(expectedSalary = String())
-    }
-
     fun changeHideNoSalary(noSalary: Boolean) {
         savedFilter = savedFilter.copy(hideNoSalaryItems = noSalary)
     }
 
-    fun resetArea() {
+    private fun resetSalary() {
+        savedFilter = savedFilter.copy(expectedSalary = String())
+    }
+
+    fun resetRegion() {
+        resetArea()
+        resetCountry()
+        loadConfiguredFilterSettings()
+    }
+
+    private fun resetArea() {
         filterStorage.saveArea(
             AreaFilter(
                 areaId = String(),
                 areaName = String()
             )
         )
+    }
+
+    private fun resetCountry() {
         filterStorage.saveCountry(
             CountryFilter(
                 countryId = String(),
                 countryName = String()
             )
         )
-        loadConfiguredFilterSettings()
     }
 
     fun resetIndustry() {

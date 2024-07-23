@@ -29,7 +29,7 @@ class FilterIndustryAdapter(
         }
     }
 
-    fun updateCheck(selectedIndustry: IndustryWithCheck) {
+    private fun updateCheck(selectedIndustry: IndustryWithCheck) {
         val index = listIndustry.indexOf(selectedIndustry)
         clickListener(listIndustry[index])
         resetChecks(listIndustry[index])
