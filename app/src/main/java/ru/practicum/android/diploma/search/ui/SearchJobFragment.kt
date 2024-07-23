@@ -42,6 +42,7 @@ class SearchJobFragment : Fragment() {
         showView()
         searchInputClick()
         onScrollListener()
+        viewModel.filterStateToObserve.observe(viewLifecycleOwner) { setFilterIcon(it) }
 
         binding.searchFilterButton.setOnClickListener {
             findNavController().navigate(R.id.action_searchJobFragment_to_filterSettingsFragment)
@@ -174,6 +175,13 @@ class SearchJobFragment : Fragment() {
                 else -> {}
             }
         }
+    }
+
+    private fun setFilterIcon(filterIsActive: Boolean) {
+        binding.searchFilterButton.setImageDrawable(
+            if (filterIsActive) requireActivity().getDrawable(R.drawable.icon_filter_active)
+            else requireActivity().getDrawable(R.drawable.icon_filter)
+        )
     }
 
     private fun allViewGone() {
