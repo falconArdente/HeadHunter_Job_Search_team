@@ -113,6 +113,10 @@ class JobDetailsFragment : Fragment() {
         binding.jobPlaceholderImage.isVisible = vacancyDetailsState is VacancyDetailsState.Error
         binding.jobPlaceholderText.isVisible = vacancyDetailsState is VacancyDetailsState.Error
         binding.loadingProgressBar.isVisible = vacancyDetailsState is VacancyDetailsState.Loading
+        if (vacancyDetailsState is VacancyDetailsState.Error){
+            renderErrorPlaceholder(vacancyDetailsState.message)
+        }
+
     }
 
     private fun renderJobSalary(vacancyDetails: VacancyDetails) {
@@ -202,6 +206,14 @@ class JobDetailsFragment : Fragment() {
                 "${binding.jobContactsPhone.text} " +
                 "${vacancyDetails.employerInfo.contacts.phones?.joinToString(separator = "\n")}"
         }
+    }
+
+    private fun renderErrorPlaceholder(errorMessage: String){
+        if (errorMessage.isNotEmpty()){
+            binding.jobPlaceholderText.text = requireActivity().getString(R.string.no_internet)
+            binding.jobPlaceholderImage.background = requireActivity().getDrawable(R.drawable.picture_funny_head)
+        }
+
     }
 
     companion object {

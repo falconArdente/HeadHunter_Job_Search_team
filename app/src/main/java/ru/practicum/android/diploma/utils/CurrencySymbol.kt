@@ -34,7 +34,7 @@ object CurrencySymbol {
     }
 
     fun getCurrencySymbol(currencyCode: String?): String {
-        val currencySymbol: String
+        var currencySymbol: String
 
         if (currencyCode != null) {
             val currency = Currency.getInstance(currencyCode)
@@ -42,6 +42,9 @@ object CurrencySymbol {
                 CURRENCY_RUR -> Currency.getInstance(CURRENCY_RUB).symbol
                 CURRENCY_BYR -> CURRENCY_BR
                 else -> currency.getSymbol(currencyLocaleMap[currency])
+            }
+            if (currencySymbol == "RUB"){
+                currencySymbol = "₽"
             }
         } else {
             currencySymbol = ""

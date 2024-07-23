@@ -75,11 +75,13 @@
     <TextView
         android:id="@+id/jobTitle"
         style="@style/BoldText.32size"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp44"
         app:layout_constraintStart_toStartOf="@id/jobLeftGuideline"
+        app:layout_constraintEnd_toEndOf="@id/jobRightGuideline"
         app:layout_constraintTop_toBottomOf="@id/jobPageTitle"
+        android:textAlignment="textStart"
         tools:text="Android-разработчик" />
 
     <TextView
@@ -273,6 +275,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp16"
         android:visibility="gone"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/jobPlaceholderImage"
