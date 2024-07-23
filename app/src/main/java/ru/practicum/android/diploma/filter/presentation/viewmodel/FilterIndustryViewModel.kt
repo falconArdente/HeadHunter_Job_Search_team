@@ -83,7 +83,14 @@ class FilterIndustryViewModel(
         jobStorage = viewModelScope.launch(Dispatchers.IO) {
             if (savedIndustry != null) {
                 filterStorage.saveIndustry(savedIndustry!!)
-                filterState.postValue(FilterIndustryState.SavedFilter())
+            } else {
+                filterStorage.saveIndustry(
+                    Industry(
+                        id = String(),
+                        industries = emptyList(),
+                        name = String()
+                    )
+                )
             }
 
             filterState.postValue(FilterIndustryState.SavedFilter())

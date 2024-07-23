@@ -41,8 +41,6 @@ class FilterSettingsViewModel(
             if (filterStorage.isFilterActive()) {
                 savedFilter = getSavedFilterSettings()
                 savedFilterToConfigured(savedFilter)
-            } else {
-                resetFilter()
             }
         }
     }
@@ -56,7 +54,7 @@ class FilterSettingsViewModel(
         }
     }
 
-    private fun resetFilter() {
+    fun resetFilter() {
         filterStorage.clearAllFilterParameters()
     }
 
@@ -103,7 +101,7 @@ class FilterSettingsViewModel(
     }
 
     fun changeSalary(newSalary: String) {
-        filterStorage.saveExpectedSalary(newSalary)
+        savedFilter = savedFilter.copy(expectedSalary = newSalary)
     }
 
     fun resetSalary() {

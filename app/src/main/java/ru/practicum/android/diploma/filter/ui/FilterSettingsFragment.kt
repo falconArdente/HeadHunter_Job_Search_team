@@ -36,6 +36,14 @@ class FilterSettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val isFromSearch = if (arguments != null) {
+            requireArguments().getBoolean(PATH_FROM_SEARCH)
+        } else {
+            false
+        }
+
+        arguments?.clear()
+
         binding.filterArrowBack.setOnClickListener {
             findNavController().navigateUp()
         }
@@ -89,17 +97,23 @@ class FilterSettingsFragment : Fragment() {
             findNavController().navigateUp()
         }
 
+        if (isFromSearch) {
+            viewModel.resetFilter()
+        }
+
         viewModel.loadSavedFilterSettings()
     }
 
     private fun render(state: FilterSettingsState) {
         when (state) {
             is FilterSettingsState.Filter -> {
+
                 binding.filterDontShowWithoutSalaryCheckBox.isChecked = state.filter.hideNoSalaryItems
+
                 if (state.filter.expectedSalary.isNullOrEmpty()) {
                     binding.filterSalaryInput.text.clear()
                 } else {
-                    binding.filterSalaryInput.setText(state.filter.expectedSalary.toInt())
+                    binding.filterSalaryInput.setText(state.filter.expectedSalary)
                 }
 
                 if (state.filter.area?.areaName.isNullOrEmpty()) {
@@ -128,4 +142,7 @@ class FilterSettingsFragment : Fragment() {
 
     }
 
+    companion object {
+        const val PATH_FROM_SEARCH = "PATH_FROM_SEARCH"
+    }
 }
