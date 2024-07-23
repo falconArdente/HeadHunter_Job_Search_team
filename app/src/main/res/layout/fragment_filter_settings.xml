@@ -7,7 +7,7 @@
     android:fadingEdge="none"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context="ru.practicum.android.diploma.filter.ui.FilterSettingsFragment">
+    tools:context="ru.practicum.android.diploma.filter.presentation.FilterSettingsFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/filterLeftGuideline"

@@ -13,8 +13,8 @@ import ru.practicum.android.diploma.db.data.db.AppDatabase
 import ru.practicum.android.diploma.details.data.externalnavigator.ExternalNavigator
 import ru.practicum.android.diploma.filter.data.storage.FilterStorage
 import ru.practicum.android.diploma.filter.data.storage.SharedPrefsStorage
-import ru.practicum.android.diploma.network.data.RetrofitBasedClient
-import ru.practicum.android.diploma.network.data.api.HeadHunterNetworkClient
+import ru.practicum.android.diploma.network.data.repository.RetrofitBasedClient
+import ru.practicum.android.diploma.network.data.netapi.HeadHunterNetworkClient
 import ru.practicum.android.diploma.search.data.mapper.SearchVacancyConverter
 import ru.practicum.android.diploma.utils.NetworkStatus
 
