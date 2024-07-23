@@ -60,17 +60,11 @@ class PlaceToWorkFilterInteractorImpl(
 
     }
 
-    private fun findParentArea(area: Area, areasList: List<Area>): Area? {
-        areasList.forEach { topArea ->
-            findParentIdBySubArea(topArea, area).let { return it }
-        }
-        return null
-    }
+    private fun findParentArea(area: Area, areaList: List<Area>) =
+        areaList.asFlatSequence().find { it.id == area.parentId }
 
-    private fun findParentIdBySubArea(topArea: Area, area: Area): Area? {
-        if (topArea.id == area.parentId) {
-            return topArea
+    private fun List<Area>.asFlatSequence(): Sequence<Area> = asSequence()
+        .flatMap {
+            sequenceOf(it) + it.subAreas?.asFlatSequence().orEmpty()
         }
-        return findParentArea(area, topArea.subAreas ?: emptyList())
-    }
 }
