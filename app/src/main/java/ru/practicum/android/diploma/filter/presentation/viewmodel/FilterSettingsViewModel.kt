@@ -77,9 +77,8 @@ class FilterSettingsViewModel(
     }
 
     private fun savedFilterToConfigured(filter: FilterGeneral) {
-
-        //filterStorage.saveArea(filter.area?)}
-        //filterStorage.saveCountry(filter.country)
+        // filterStorage.saveArea(filter.area?)}
+        // filterStorage.saveCountry(filter.country)
         filterStorage.saveIndustry(
             Industry(
                 id = filter.industry?.industryId.toString(),
