@@ -6,11 +6,11 @@ import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
 import ru.practicum.android.diploma.details.presentation.viewmodel.VacancyDetailsViewModel
 import ru.practicum.android.diploma.favorites.presentation.viewmodel.FavoritesViewModel
-import ru.practicum.android.diploma.filter.presentation.viewmodel.FilterIndustryViewModel
 import ru.practicum.android.diploma.filter.presentation.viewmodel.CountryFilterViewModel
-import ru.practicum.android.diploma.filter.presentation.viewmodel.RegionFilterViewModel
+import ru.practicum.android.diploma.filter.presentation.viewmodel.FilterIndustryViewModel
 import ru.practicum.android.diploma.filter.presentation.viewmodel.FilterSettingsViewModel
 import ru.practicum.android.diploma.filter.presentation.viewmodel.PlaceToWorkFilterViewModel
+import ru.practicum.android.diploma.filter.presentation.viewmodel.RegionFilterViewModel
 import ru.practicum.android.diploma.search.presentation.viewmodel.SearchViewModel
 
 val viewModelModule = module {
@@ -53,7 +53,7 @@ val viewModelModule = module {
             networkStatus = get()
         )
     }
-    
+
     viewModel<PlaceToWorkFilterViewModel> {
         PlaceToWorkFilterViewModel(placeToWorkFilterInteractor = get())
     }
