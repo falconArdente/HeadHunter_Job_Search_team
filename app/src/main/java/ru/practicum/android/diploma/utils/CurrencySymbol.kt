@@ -43,7 +43,7 @@ object CurrencySymbol {
                 CURRENCY_BYR -> CURRENCY_BR
                 else -> currency.getSymbol(currencyLocaleMap[currency])
             }
-            if (currencySymbol == "RUB"){
+            if (currencySymbol == "RUB") {
                 currencySymbol = "₽"
             }
         } else {
