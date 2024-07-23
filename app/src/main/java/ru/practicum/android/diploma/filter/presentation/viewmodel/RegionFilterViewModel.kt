@@ -85,7 +85,6 @@ class RegionFilterViewModel(
         Log.e("TEST9.1", "$savedCountry2")
         val savedArea = regionFilterInteractor.getAllSavedParameters()?.areaName
         Log.e("TEST9", "$savedArea")
-        Log.e("TEST10", "$savedCountry")
 
     }
 

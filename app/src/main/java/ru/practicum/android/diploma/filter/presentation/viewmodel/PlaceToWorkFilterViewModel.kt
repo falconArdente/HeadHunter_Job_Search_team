@@ -36,31 +36,37 @@ class PlaceToWorkFilterViewModel(private val placeToWorkFilterInteractor: PlaceT
     }
 
     fun getCurrentFilterAreaParameters() {
-        val currentCountry = placeToWorkFilterInteractor.getCurrentCountryChoice()
-        Log.e("TEST_PLACE", "${currentCountry?.countryName}")
-        val currentArea = placeToWorkFilterInteractor.getCurrentAreaChoice()
-
         viewModelScope.launch {
-//            val check = !currentArea?.areaName.isNullOrEmpty() && currentCountry?.countryName.isNullOrEmpty()
-//            Log.e("NO","$check")
-//            if (!currentArea?.areaName.isNullOrEmpty() && currentCountry?.countryName.isNullOrEmpty()) {
-//                val currentCountry: Pair<String, String> =
-//                    placeToWorkFilterInteractor.getActualCountryForRegion(currentArea?.areaId!!)
-//                Log.e("NO_RESULT", "${currentCountry.second}")
-//                _stateLiveData.value = PlaceToWorkFilterState.AreaFilter(
-//                    countryId = currentCountry.first,
-//                    countryName = currentCountry.second,
-//                    areaId = currentArea.areaId,
-//                    areaName = currentArea.areaName
-//                )
-//            } else {
-            _stateLiveData.value = PlaceToWorkFilterState.AreaFilter(
-                countryId = currentCountry?.countryId,
-                countryName = currentCountry?.countryName,
-                areaId = currentArea?.areaId,
-                areaName = currentArea?.areaName
-            )
-//            }
+            val currentCountry = placeToWorkFilterInteractor.getCurrentCountryChoice()
+            val currentArea = placeToWorkFilterInteractor.getCurrentAreaChoice()
+
+            if (!currentArea?.areaName.isNullOrEmpty() && currentCountry?.countryName.isNullOrEmpty()) {
+                try {
+                    val parentOfRegionById =
+                        placeToWorkFilterInteractor.getCountryForRegion(currentArea?.areaId!!)
+                    _stateLiveData.value = PlaceToWorkFilterState.AreaFilter(
+                        countryId = parentOfRegionById?.countryId,
+                        countryName = parentOfRegionById?.countryName,
+                        areaId = currentArea.areaId,
+                        areaName = currentArea.areaName
+                    )
+                } catch (e: IllegalStateException) {
+                    _stateLiveData.value = PlaceToWorkFilterState.AreaFilter(
+                        countryId = currentCountry?.countryId,
+                        countryName = currentCountry?.countryName,
+                        areaId = currentArea?.areaId,
+                        areaName = currentArea?.areaName
+                    )
+                    Log.e("ERROR", "${e.message}")
+                }
+            } else {
+                _stateLiveData.value = PlaceToWorkFilterState.AreaFilter(
+                    countryId = currentCountry?.countryId,
+                    countryName = currentCountry?.countryName,
+                    areaId = currentArea?.areaId,
+                    areaName = currentArea?.areaName
+                )
+            }
         }
     }
 

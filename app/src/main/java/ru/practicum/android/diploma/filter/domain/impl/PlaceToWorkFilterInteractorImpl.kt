@@ -1,8 +1,12 @@
 package ru.practicum.android.diploma.filter.domain.impl
 
+import android.util.Log
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import ru.practicum.android.diploma.filter.domain.api.PlaceToWorkFilterInteractor
 import ru.practicum.android.diploma.filter.domain.model.Area
 import ru.practicum.android.diploma.filter.domain.model.AreaFilter
+import ru.practicum.android.diploma.filter.domain.model.Country
 import ru.practicum.android.diploma.filter.domain.model.CountryFilter
 import ru.practicum.android.diploma.utils.Resource
 
@@ -35,60 +39,60 @@ class PlaceToWorkFilterInteractorImpl(
         TODO("Not yet implemented")
     }
 
-    override suspend fun getActualCountryForRegion(areaId: String): Pair<String, String> {
-        var country: Pair<String, String> = Pair(first = "", second = "")
-        filterDictionariesRepository.getAreas().collect { result ->
-            when (result) {
-                is Resource.Success -> {
-                    val listOfAreas = result.data!!
-                    val parent = getParent(areaId, listOfAreas)
-                    country = parent
-                }
+    override suspend fun getActualCountryForRegion(areaId: String): CountryFilter {
+        val result = filterDictionariesRepository.getAreas().first()
+        if (result !is Resource.Success) throw IllegalStateException()
 
-                is Resource.Error, is Resource.InternetConnectionError, is Resource.NotFoundError -> country =
-                    Pair(first = "", second = "")
+        val areaById = result.data!!.associateBy { it.id }
+        Log.e("MAP", "${areaById}")
+
+        var area = areaById[areaId] ?: error("Area not found with id $areaId")
+        Log.e("MAP", "${area}")
+
+        while (area.parentId != null) {
+            area = areaById[area.parentId] ?: error("Parent area by id ${area.parentId} not found")
+            Log.e("MAP2", "${area}")
+        }
+
+        return CountryFilter(countryId = area.id, countryName = area.name)
+    }
+
+    override suspend fun getCountryForRegion(areaId: String): CountryFilter? {
+        val result = filterDictionariesRepository.getAreas().first()
+        if (result !is Resource.Success) throw IllegalStateException()
+        val resultList = result.data!!
+
+        val areaById = findAreaById(areaId, resultList) ?: return null
+        var currentArea: Area? = areaById
+        while(currentArea?.parentId != null) {
+            currentArea = findParentArea(currentArea, resultList)
+        }
+        return CountryFilter(countryId = currentArea?.id, countryName = currentArea?.name)
+    }
+
+    private fun findAreaById(areaId: String, generalListOfAreas: List<Area>?): Area? {
+        generalListOfAreas?.forEach { area ->
+            if(area.id == areaId) {
+                return area
+            }
+            val subAreaResult = findAreaById(areaId, area.subAreas)
+            if (subAreaResult != null) {
+                return subAreaResult
             }
         }
-        return country
+        return null
     }
 
-    private fun getParent(areaIdChild: String, generalList: List<Area>): Pair<String, String> {
-//        for (parent in generalList) {
-//            if (parent.subAreas?.isNotEmpty() == true) {
-//                Log.e("NO_INTER", "${parent.subAreas}")
-//                if (parent.subAreas?.any { it.id == areaIdChild } == true) {
-//                    return Pair(first = parent.parentId!!, second = parent.name)
-//                }
-//            }
-//            val parentArea = parent.subAreas?.let {
-//                getParent(areaIdChild, it)
-//            }
-//            if (parentArea != null) {
-//                return parentArea
-//            }
-//        }
-        return Pair(first = "", second = "")
+    private fun findParentArea(area: Area, areasList: List<Area>): Area? {
+        areasList.forEach { topArea ->
+            if (topArea.id == area.parentId) {
+                return topArea
+            }
+            val subAreaResult = findParentArea(area, topArea.subAreas ?: emptyList())
+            if (subAreaResult != null) {
+                return subAreaResult
+            }
+        }
+        return null
     }
-//            when (result) {
-//                is Resource.Success -> {
-//                    val listOfAreas = result.data!!
-//                    if (l)
-//                    }
-//                    val otherRegionsItem = areasWithParentId.find { it.name == OTHER_REGIONS }
-//                    if (otherRegionsItem != null) {
-//                        val filteredCountriesList = areasWithParentId - otherRegionsItem
-//                        val updatedCountriesList = filteredCountriesList + otherRegionsItem
-//                        emit(Resource.Success(updatedCountriesList))
-//                    } else emit(Resource.Success(areasWithParentId))
-//                }
-//
-//                is Resource.Error -> emit(Resource.Error(result.message!!))
-//
-//                is Resource.InternetConnectionError -> emit(Resource.InternetConnectionError(result.message!!))
-//
-//                is Resource.NotFoundError -> emit(Resource.NotFoundError(result.message!!))
-//            }
-
-//        }
-//    }
 }
