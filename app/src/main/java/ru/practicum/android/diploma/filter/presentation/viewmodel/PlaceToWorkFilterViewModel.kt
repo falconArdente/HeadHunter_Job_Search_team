@@ -26,20 +26,6 @@ class PlaceToWorkFilterViewModel(private val placeToWorkFilterInteractor: PlaceT
         )
     }
 
-    suspend fun isCurrentRegionInCurrentCountry(): Boolean {
-        var isCurrentRegionInCurrentCountry = false
-        val currentCountry = placeToWorkFilterInteractor.getCurrentCountryChoice()
-        val currentArea = placeToWorkFilterInteractor.getCurrentAreaChoice()
-
-        if (!currentArea?.areaId.isNullOrEmpty()) {
-            val parentOfRegionById =
-                placeToWorkFilterInteractor.getCountryForRegion(currentArea?.areaId!!)
-            val currentCountryId = currentCountry?.countryId
-            isCurrentRegionInCurrentCountry = currentCountryId == parentOfRegionById?.countryId
-        }
-        return isCurrentRegionInCurrentCountry
-    }
-
     fun clearCountry() {
         placeToWorkFilterInteractor.clearCountry()
         updateCurrentFilterAreaParameters()
@@ -62,26 +48,6 @@ class PlaceToWorkFilterViewModel(private val placeToWorkFilterInteractor: PlaceT
             } else {
                 setLiveDataValue(currentCountry, currentArea)
             }
-        }
-    }
-
-    fun checkIfRegionIsInCountry() {
-        viewModelScope.launch {
-            val currentCountry = placeToWorkFilterInteractor.getCurrentCountryChoice()
-            val currentArea = placeToWorkFilterInteractor.getCurrentAreaChoice()
-
-            if (!currentArea?.areaName.isNullOrEmpty() && !currentCountry?.countryName.isNullOrEmpty()
-                && !isCurrentRegionInCurrentCountry()
-            ) {
-                _stateLiveData.value = PlaceToWorkFilterState.AreaFilter(
-                    countryId = currentCountry?.countryId,
-                    countryName = currentCountry?.countryName,
-                    areaId = null,
-                    areaName = null,
-                    isRegionInCountry = false
-                )
-            }
-            updateCurrentFilterAreaParameters()
         }
     }
 

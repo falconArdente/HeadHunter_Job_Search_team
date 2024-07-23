@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.filter.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -77,15 +76,7 @@ class RegionFilterViewModel(
     }
 
     fun saveRegionChoiceToFilter(region: AreaDetailsFilterItem) {
-        Log.e("TEST8.1", "${region.areaName}")
-        val savedCountry = countryFilterInteractor.getAllSavedParameters()?.countryName
-        Log.e("TEST8", "$savedCountry")
         regionFilterInteractor.saveRegion(AreaFilter(areaId = region.areaId, areaName = region.areaName))
-        val savedCountry2 = countryFilterInteractor.getAllSavedParameters()?.countryName
-        Log.e("TEST9.1", "$savedCountry2")
-        val savedArea = regionFilterInteractor.getAllSavedParameters()?.areaName
-        Log.e("TEST9", "$savedArea")
-
     }
 
     fun getOriginalListBeforeSearching() {
