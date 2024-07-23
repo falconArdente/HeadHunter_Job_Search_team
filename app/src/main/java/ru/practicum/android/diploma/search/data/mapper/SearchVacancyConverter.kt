@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.search.data.mapper
 
+import ru.practicum.android.diploma.filter.domain.model.FilterGeneral
 import ru.practicum.android.diploma.network.data.dto.linked.AreaDTO
 import ru.practicum.android.diploma.network.data.dto.linked.BrandSnippet
 import ru.practicum.android.diploma.network.data.dto.linked.Employer
@@ -11,6 +12,7 @@ import ru.practicum.android.diploma.search.domain.model.BrandSnippetModel
 import ru.practicum.android.diploma.search.domain.model.EmployerModel
 import ru.practicum.android.diploma.search.domain.model.LogoUrlsModel
 import ru.practicum.android.diploma.search.domain.model.SalaryModel
+import ru.practicum.android.diploma.search.domain.model.SearchParameters
 import ru.practicum.android.diploma.search.domain.model.Vacancy
 
 class SearchVacancyConverter {
@@ -82,5 +84,33 @@ class SearchVacancyConverter {
             size240 = logosDTO.size240,
             raw = logosDTO.raw.orEmpty(),
         )
+    }
+
+    fun toSearchParameters(filter: FilterGeneral): SearchParameters? {
+        if (
+            !filter.hideNoSalaryItems &&
+            filter.area == null &&
+            filter.country == null &&
+            filter.industry == null &&
+            filter.expectedSalary == null
+        ) {
+            return null
+        } else {
+            var areaToGo: String?
+            var industryList: List<String>?
+            with(filter) {
+                areaToGo = if (area?.areaId == null) country?.countryId else area.areaId
+                industryList = if (industry == null) null else listOf(industry.industryId ?: "")
+                return SearchParameters(
+                    areaId = areaToGo,
+                    industryIds = industryList,
+                    salary = expectedSalary?.toIntOrNull(),
+                    withSalaryOnly = filter.hideNoSalaryItems,
+                    page = null,
+                    perPage = null,
+                    currencyCode = null
+                )
+            }
+        }
     }
 }

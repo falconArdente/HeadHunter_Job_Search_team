@@ -7,12 +7,14 @@ import ru.practicum.android.diploma.details.domain.api.NavigatorInteractor
 import ru.practicum.android.diploma.details.domain.impl.DetailsDbInteractorImpl
 import ru.practicum.android.diploma.details.domain.impl.GetVacancyDetailsUseCaseImpl
 import ru.practicum.android.diploma.details.domain.impl.NavigatorInteractorImpl
-import ru.practicum.android.diploma.favorites.domain.api.GetFavoritesListUseCase
-import ru.practicum.android.diploma.favorites.domain.impl.GetFavoritesListImpl
 import ru.practicum.android.diploma.favorites.domain.api.FavoriteDbInteractor
+import ru.practicum.android.diploma.favorites.domain.api.GetFavoritesListUseCase
 import ru.practicum.android.diploma.favorites.domain.impl.FavoriteDbInteractorImpl
+import ru.practicum.android.diploma.favorites.domain.impl.GetFavoritesListImpl
+import ru.practicum.android.diploma.search.data.repository.GetFilterUseCaseImpl
 import ru.practicum.android.diploma.search.data.repository.GetSuggestionsForSearchUseCaseImpl
 import ru.practicum.android.diploma.search.data.repository.SearchInteractorImpl
+import ru.practicum.android.diploma.search.domain.api.GetFilterUseCase
 import ru.practicum.android.diploma.search.domain.api.GetSuggestionsForSearchUseCase
 import ru.practicum.android.diploma.search.domain.api.SearchInteractor
 
@@ -41,5 +43,8 @@ val interactorModule = module {
     }
     factory<GetFavoritesListUseCase> {
         GetFavoritesListImpl(repository = get())
+    }
+    factory<GetFilterUseCase> {
+        GetFilterUseCaseImpl(filterRepository = get())
     }
 }

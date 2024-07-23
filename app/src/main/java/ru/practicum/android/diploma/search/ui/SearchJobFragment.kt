@@ -247,6 +247,7 @@ class SearchJobFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        viewModel.checkFilterStatus()
         showView()
     }
 

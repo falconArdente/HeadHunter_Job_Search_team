@@ -4,13 +4,32 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.search.data.mapper.SearchVacancyConverter
 import ru.practicum.android.diploma.search.domain.api.SearchInteractor
+import ru.practicum.android.diploma.search.domain.model.SearchParameters
 import ru.practicum.android.diploma.search.domain.model.VacancyListResult
 import ru.practicum.android.diploma.utils.Resource
 
 class SearchInteractorImpl(val repository: SearchRepository, val converter: SearchVacancyConverter) : SearchInteractor {
-    override fun searchVacancy(expression: String): Flow<VacancyListResult> = flow {
+    override fun searchVacancy(expression: String, parameters: SearchParameters?): Flow<VacancyListResult> = flow {
+        var area: String? = null
+        var industry: List<String>? = null
+        var salary_: Int? = null
+        var salaryOnly = false
+        if (parameters != null) {
+            with(parameters) {
+                area = areaId
+                industry = industryIds
+                salary_ = salary
+                salaryOnly = withSalaryOnly
+            }
+        }
         repository
-            .searchVacancy(expression)
+            .searchVacancy(
+                textForSearch = expression,
+                areaId = area,
+                industryIds = industry,
+                salary = salary_,
+                withSalaryOnly = salaryOnly,
+            )
             .collect { vacancyListResponse ->
                 when (vacancyListResponse) {
                     is Resource.Success -> {
