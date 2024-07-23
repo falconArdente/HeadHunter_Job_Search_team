@@ -1,12 +1,9 @@
 package ru.practicum.android.diploma.filter.domain.impl
 
-import android.util.Log
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import ru.practicum.android.diploma.filter.domain.api.PlaceToWorkFilterInteractor
 import ru.practicum.android.diploma.filter.domain.model.Area
 import ru.practicum.android.diploma.filter.domain.model.AreaFilter
-import ru.practicum.android.diploma.filter.domain.model.Country
 import ru.practicum.android.diploma.filter.domain.model.CountryFilter
 import ru.practicum.android.diploma.utils.Resource
 
@@ -35,10 +32,6 @@ class PlaceToWorkFilterInteractorImpl(
 
     override fun getCurrentAreaChoice(): AreaFilter? = filterStorageRepository.getAllSavedParameters().area
 
-    override fun isRegionInCurrentCountry(): Boolean {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun getCountryForRegion(areaId: String): CountryFilter? {
         val result = filterDictionariesRepository.getAreas().first()
         if (result !is Resource.Success) error("Search result failed")
@@ -46,7 +39,7 @@ class PlaceToWorkFilterInteractorImpl(
 
         val areaById = findAreaById(areaId, resultList) ?: return null
         var currentArea: Area? = areaById
-        while(currentArea?.parentId != null) {
+        while (currentArea?.parentId != null) {
             currentArea = findParentArea(currentArea, resultList)
         }
         return CountryFilter(countryId = currentArea?.id, countryName = currentArea?.name)
@@ -60,7 +53,7 @@ class PlaceToWorkFilterInteractorImpl(
     }
 
     private fun findAreaBySubArea(areaId: String, area: Area): Area? {
-        if(area.id == areaId) {
+        if (area.id == areaId) {
             return area
         }
         return findAreaById(areaId, area.subAreas)
