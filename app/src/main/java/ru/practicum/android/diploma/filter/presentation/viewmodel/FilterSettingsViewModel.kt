@@ -28,10 +28,8 @@ class FilterSettingsViewModel(
         jobStorage?.cancel()
 
         jobStorage = viewModelScope.launch(Dispatchers.IO) {
-            if (!filterStorage.isFilterActive()) {
-                savedFilter = getConfiguredFilterSettings()
-                filterState.postValue(FilterSettingsState.Filter(savedFilter))
-            }
+            savedFilter = getConfiguredFilterSettings()
+            filterState.postValue(FilterSettingsState.Filter(savedFilter))
         }
     }
 
@@ -41,10 +39,9 @@ class FilterSettingsViewModel(
         jobStorage = viewModelScope.launch(Dispatchers.IO) {
             if (filterStorage.isFilterActive()) {
                 savedFilter = getSavedFilterSettings()
-                filterState.postValue(FilterSettingsState.Filter(savedFilter))
+                savedFilterToConfigured(savedFilter)
             } else {
                 resetFilter()
-                filterState.postValue(FilterSettingsState.Filter(FilterGeneral()))
             }
         }
     }
@@ -77,6 +74,21 @@ class FilterSettingsViewModel(
 
     private fun getSavedFilterSettings(): FilterGeneral {
         return filterStorage.getAllFilterParameters()
+    }
+
+    private fun savedFilterToConfigured(filter: FilterGeneral) {
+
+        //filterStorage.saveArea(filter.area?)}
+        //filterStorage.saveCountry(filter.country)
+        filterStorage.saveIndustry(
+            Industry(
+                id = filter.industry?.industryId.toString(),
+                industries = emptyList(),
+                name = filter.industry?.industryName.toString()
+            )
+        )
+        filterStorage.saveHideNoSalaryItems(filter.hideNoSalaryItems)
+        filterStorage.saveExpectedSalary(filter.expectedSalary.toString())
     }
 
     fun changeSalary(newSalary: String) {

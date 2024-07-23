@@ -13,6 +13,7 @@ import ru.practicum.android.diploma.filter.domain.model.Industry
 import ru.practicum.android.diploma.filter.presentation.model.IndustryWithCheck
 import ru.practicum.android.diploma.filter.presentation.state.FilterIndustryState
 import ru.practicum.android.diploma.utils.NetworkStatus
+import ru.practicum.android.diploma.utils.Resource
 
 class FilterIndustryViewModel(
     private val filterStorage: FilterStorageRepository,
@@ -31,12 +32,18 @@ class FilterIndustryViewModel(
 
         jobDictionaries = viewModelScope.launch(Dispatchers.IO) {
             if (networkStatus.isConnected()) {
-                filterDictionaries.getIndustries().collect { industries ->
-                    if (industries.data.isNullOrEmpty()) {
-                        filterState.postValue(FilterIndustryState.EmptyList())
-                    } else {
-                        val listIndustries = getSingleList(industries.data)
-                        filterState.postValue(FilterIndustryState.LoadedList(listIndustries))
+                filterDictionaries.getIndustries().collect { response ->
+                    when (response) {
+                        is Resource.Success<*> -> {
+                            if (response.data.isNullOrEmpty()) {
+                                filterState.postValue(FilterIndustryState.EmptyList())
+                            } else {
+                                val listIndustries = getSingleList(response.data)
+                                filterState.postValue(FilterIndustryState.LoadedList(listIndustries))
+                            }
+                        }
+
+                        else -> filterState.postValue(FilterIndustryState.EmptyList())
                     }
                 }
             }
