@@ -34,7 +34,9 @@ class FilterSettingsViewModel(
         }
     }
 
-    fun loadSavedFilterSettings() {
+    fun loadSavedFilterSettings(isFirstLoad: Boolean) {
+        if (!isFirstLoad) return
+
         jobStorage?.cancel()
 
         jobStorage = viewModelScope.launch(Dispatchers.IO) {

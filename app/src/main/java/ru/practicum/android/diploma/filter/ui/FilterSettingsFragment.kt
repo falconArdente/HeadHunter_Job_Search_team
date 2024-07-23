@@ -101,7 +101,7 @@ class FilterSettingsFragment : Fragment() {
             viewModel.resetFilter()
         }
 
-        viewModel.loadSavedFilterSettings()
+        viewModel.loadSavedFilterSettings(isFromSearch)
     }
 
     private fun render(state: FilterSettingsState) {
