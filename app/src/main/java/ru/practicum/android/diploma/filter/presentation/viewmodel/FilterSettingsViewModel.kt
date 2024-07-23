@@ -120,7 +120,7 @@ class FilterSettingsViewModel(
     }
 
     fun resetSalary() {
-        filterStorage.saveExpectedSalary(String())
+        savedFilter = savedFilter.copy(expectedSalary = String())
     }
 
     fun changeHideNoSalary(noSalary: Boolean) {
