@@ -125,7 +125,13 @@ class FilterSettingsViewModel(
         }
 
         filterStorage.saveHideNoSalaryItems(filter.hideNoSalaryItems)
-        filterStorage.saveExpectedSalary(filter.expectedSalary.toString())
+        if (filter.expectedSalary != null) {
+            filterStorage.saveExpectedSalary(filter.expectedSalary.toString())
+        } else {
+            filterStorage.saveExpectedSalary(String())
+        }
+
+
     }
 
     fun changeSalary(newSalary: String) {
