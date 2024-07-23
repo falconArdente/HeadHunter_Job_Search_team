@@ -32,6 +32,6 @@ class SharedPrefsStorage(private val sharedPreferences: SharedPreferences, priva
 
     override fun clearAllFilterParameters() {
         val editor = sharedPreferences.edit()
-        editor.remove(SPECIFIC_FILTER_KEY).apply()
+        editor.remove(FINAL_FILTER_KEY).apply()
     }
 }
