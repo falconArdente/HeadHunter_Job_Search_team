@@ -21,8 +21,10 @@ import ru.practicum.android.diploma.filter.domain.impl.FilterDictionariesInterac
 import ru.practicum.android.diploma.filter.domain.impl.FilterStorageInteractorImpl
 import ru.practicum.android.diploma.filter.domain.impl.PlaceToWorkFilterInteractorImpl
 import ru.practicum.android.diploma.filter.domain.impl.RegionFilterInteractorImpl
+import ru.practicum.android.diploma.search.data.repository.GetFilterUseCaseImpl
 import ru.practicum.android.diploma.search.data.repository.GetSuggestionsForSearchUseCaseImpl
 import ru.practicum.android.diploma.search.data.repository.SearchInteractorImpl
+import ru.practicum.android.diploma.search.domain.api.GetFilterUseCase
 import ru.practicum.android.diploma.search.domain.api.GetSuggestionsForSearchUseCase
 import ru.practicum.android.diploma.search.domain.api.SearchInteractor
 
@@ -77,5 +79,8 @@ val interactorModule = module {
 
     factory<PlaceToWorkFilterInteractor> {
         PlaceToWorkFilterInteractorImpl(filterStorageRepository = get(), filterDictionariesRepository = get())
+    }
+    factory<GetFilterUseCase> {
+        GetFilterUseCaseImpl(filterRepository = get())
     }
 }

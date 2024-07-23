@@ -5,7 +5,7 @@ import ru.practicum.android.diploma.search.domain.model.Vacancy
 sealed class SearchFragmentState {
     data class SearchVacancy(
         val searchVacancy: List<Vacancy>,
-        val totalFoundVacancy: Int
+        val totalFoundVacancy: Int,
     ) : SearchFragmentState()
 
     data object ServerError : SearchFragmentState()

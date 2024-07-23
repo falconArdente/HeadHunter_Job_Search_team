@@ -27,7 +27,8 @@ val viewModelModule = module {
     viewModel<SearchViewModel> {
         SearchViewModel(
             interactor = get(),
-            getSuggestsUseCase = get()
+            getSuggestsUseCase = get(),
+            getFilterUseCase = get(),
         )
     }
     viewModel<FavoritesViewModel> {

@@ -7,8 +7,10 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.search.domain.api.GetFilterUseCase
 import ru.practicum.android.diploma.search.domain.api.GetSuggestionsForSearchUseCase
 import ru.practicum.android.diploma.search.domain.api.SearchInteractor
+import ru.practicum.android.diploma.search.domain.model.SearchParameters
 import ru.practicum.android.diploma.search.domain.model.Vacancy
 import ru.practicum.android.diploma.search.presentation.state.SearchFragmentState
 
@@ -17,7 +19,8 @@ private const val CLICK_DEBOUNCE_DELAY = 1000L
 
 class SearchViewModel(
     private val interactor: SearchInteractor,
-    private val getSuggestsUseCase: GetSuggestionsForSearchUseCase
+    private val getSuggestsUseCase: GetSuggestionsForSearchUseCase,
+    private val getFilterUseCase: GetFilterUseCase,
 ) : ViewModel() {
     private val searchLiveData =
         MutableLiveData<SearchFragmentState>(SearchFragmentState.NoTextInInputEditText)
@@ -26,6 +29,9 @@ class SearchViewModel(
     private var isClickAllowed = true
     private var suggestionsList = MutableLiveData<List<String>>(emptyList())
     val suggestionsLivaData: LiveData<List<String>> = suggestionsList
+    private val filterIsOn = MutableLiveData(false)
+    val filterStateToObserve: LiveData<Boolean> = filterIsOn
+    private var parametersForSearch: SearchParameters? = null
 
     private var currentPage = 1
     private var maxPages = 0
@@ -34,6 +40,11 @@ class SearchViewModel(
 
     init {
         updateState(SearchFragmentState.NoTextInInputEditText)
+    }
+
+    fun checkFilterStatus() {
+        parametersForSearch = getFilterUseCase.execute()
+        filterIsOn.postValue(parametersForSearch != null)
     }
 
     fun getSuggestionsForSearch(textForSuggests: String) {
@@ -50,25 +61,43 @@ class SearchViewModel(
         searchLiveData.postValue(state)
     }
 
+    private fun updateState(searchVacancy: List<Vacancy>, totalFoundVacancy: Int) {
+        searchLiveData.postValue(
+            when (searchLiveData.value) {
+                is SearchFragmentState.SearchVacancy -> {
+                    (searchLiveData.value as SearchFragmentState.SearchVacancy)
+                        .copy(searchVacancy = searchVacancy, totalFoundVacancy = totalFoundVacancy)
+                }
+
+                else -> {
+                    SearchFragmentState.SearchVacancy(
+                        searchVacancy = searchVacancy,
+                        totalFoundVacancy = totalFoundVacancy
+                    )
+                }
+            }
+        )
+    }
+
     private val searchJobDetails: Job? = null
     private fun searchResult(text: String) {
         searchJobDetails?.cancel()
         updateState(SearchFragmentState.Loading)
         searchJobDetails != viewModelScope.launch {
             interactor
-                .searchVacancy(text)
+                .searchVacancy(text, parametersForSearch)
                 .collect { vacancy ->
                     if (vacancy.result!!.isNotEmpty()) {
                         maxPages = vacancy.pages
                         if (currentPage == maxPages || vacanciesList.count() == vacancy.foundVacancy) {
                             vacanciesList.addAll(vacancy.result)
-                            updateState(SearchFragmentState.SearchVacancy(vacanciesList, totalFound))
+                            updateState(searchVacancy = vacanciesList, totalFoundVacancy = totalFound)
                         }
                         if (currentPage < maxPages) {
                             vacanciesList += vacancy.result
                         }
                         totalFound = vacancy.foundVacancy
-                        updateState(SearchFragmentState.SearchVacancy(vacanciesList, totalFound))
+                        updateState(searchVacancy = vacanciesList, totalFoundVacancy = totalFound)
                     } else if (vacancy.errorMessage!!.isNotEmpty()) {
                         updateState(SearchFragmentState.ServerError)
                     } else if (vacancy.errorMessage.isNullOrEmpty()) {
@@ -108,7 +137,10 @@ class SearchViewModel(
             searchResult(latestSearchText!!)
         }
         if (currentPage == maxPages) {
-            updateState(SearchFragmentState.SearchVacancy(vacanciesList, totalFound))
+            updateState(
+                (searchLiveData.value as SearchFragmentState.SearchVacancy)
+                    .copy(searchVacancy = vacanciesList, totalFoundVacancy = totalFound)
+            )
         }
     }
 }

@@ -43,6 +43,7 @@ class SearchJobFragment : Fragment() {
         showView()
         searchInputClick()
         onScrollListener()
+        viewModel.filterStateToObserve.observe(viewLifecycleOwner) { setFilterIcon(it) }
 
         binding.searchFilterButton.setOnClickListener {
             val args = Bundle()
@@ -179,6 +180,16 @@ class SearchJobFragment : Fragment() {
         }
     }
 
+    private fun setFilterIcon(filterIsActive: Boolean) {
+        binding.searchFilterButton.setImageDrawable(
+            if (filterIsActive) {
+                requireActivity().getDrawable(R.drawable.icon_filter_active)
+            } else {
+                requireActivity().getDrawable(R.drawable.icon_filter)
+            }
+        )
+    }
+
     private fun allViewGone() {
         binding.searchProgressBar.visibility = View.GONE
         binding.recyclerViewSearch.visibility = View.GONE
@@ -250,6 +261,7 @@ class SearchJobFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        viewModel.checkFilterStatus()
         showView()
     }
 
