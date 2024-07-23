@@ -102,12 +102,13 @@ class SearchViewModel(
     }
 
     fun onLastItemReached() {
-        currentPage++
         if (currentPage == maxPages) {
             updateState(SearchFragmentState.SearchVacancy(vacanciesList, totalFound))
         }
         if (currentPage < maxPages) {
-            //  currentPage++
+            currentPage++
+        }
+        if (currentPage < maxPages) {
             updateState(SearchFragmentState.Loading)
             searchResult(latestSearchText!!)
         }
