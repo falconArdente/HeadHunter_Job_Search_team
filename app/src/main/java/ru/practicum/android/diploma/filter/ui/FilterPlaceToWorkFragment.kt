@@ -61,6 +61,7 @@ class FilterPlaceToWorkFragment : Fragment() {
             viewModel.saveFilterAreaParameters()
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
+
     }
 
     private fun renderFilterFields(filterParamsState: PlaceToWorkFilterState?) {

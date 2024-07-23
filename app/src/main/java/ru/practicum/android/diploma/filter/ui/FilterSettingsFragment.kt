@@ -102,6 +102,18 @@ class FilterSettingsFragment : Fragment() {
         }
 
         viewModel.loadSavedFilterSettings(isFromSearch)
+
+        binding.filterSalaryInput.doOnTextChanged { text, _, _, _ ->
+            if (text.isNullOrEmpty()) {
+                binding.filterSalaryCross.visibility = View.GONE
+            } else {
+                binding.filterSalaryCross.visibility = View.VISIBLE
+            }
+        }
+
+        binding.filterSalaryCross.setOnClickListener {
+            binding.filterSalaryInput.setText("")
+        }
     }
 
     private fun render(state: FilterSettingsState) {
