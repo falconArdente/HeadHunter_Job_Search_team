@@ -8,7 +8,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filter.domain.impl.FilterStorageRepository
-import ru.practicum.android.diploma.filter.domain.model.Area
+import ru.practicum.android.diploma.filter.domain.model.AreaFilter
+import ru.practicum.android.diploma.filter.domain.model.CountryFilter
 import ru.practicum.android.diploma.filter.domain.model.FilterGeneral
 import ru.practicum.android.diploma.filter.domain.model.Industry
 import ru.practicum.android.diploma.filter.presentation.state.FilterSettingsState
@@ -77,8 +78,19 @@ class FilterSettingsViewModel(
     }
 
     private fun savedFilterToConfigured(filter: FilterGeneral) {
-        // filterStorage.saveArea(filter.area?)}
-        // filterStorage.saveCountry(filter.country)
+        filterStorage.saveArea(
+            AreaFilter(
+                areaId = filter.area?.areaId.toString(),
+                areaName = filter.area?.areaName.toString()
+            )
+        )
+
+        filterStorage.saveCountry(
+            CountryFilter(
+                countryId = filter.country?.countryId.toString(),
+                countryName = filter.country?.countryName.toString()
+            )
+        )
         filterStorage.saveIndustry(
             Industry(
                 id = filter.industry?.industryId.toString(),
@@ -104,11 +116,15 @@ class FilterSettingsViewModel(
 
     fun resetArea() {
         filterStorage.saveArea(
-            Area(
-                id = String(),
-                subAreas = emptyList(),
-                name = String(),
-                parentId = String()
+            AreaFilter(
+                areaId = String(),
+                areaName = String()
+            )
+        )
+        filterStorage.saveCountry(
+            CountryFilter(
+                countryId = String(),
+                countryName = String()
             )
         )
         loadConfiguredFilterSettings()

@@ -2,9 +2,7 @@ package ru.practicum.android.diploma.filter.data.repository
 
 import ru.practicum.android.diploma.filter.data.storage.FilterStorage
 import ru.practicum.android.diploma.filter.domain.impl.FilterStorageRepository
-import ru.practicum.android.diploma.filter.domain.model.Area
 import ru.practicum.android.diploma.filter.domain.model.AreaFilter
-import ru.practicum.android.diploma.filter.domain.model.Country
 import ru.practicum.android.diploma.filter.domain.model.CountryFilter
 import ru.practicum.android.diploma.filter.domain.model.FilterGeneral
 import ru.practicum.android.diploma.filter.domain.model.IndustryDetailsFilterItem
@@ -31,15 +29,15 @@ class FilterStorageRepositoryImpl(private val filterStorage: FilterStorage) :
         || finalFilterSaved.industry != null || finalFilterSaved.expectedSalary != null
         || finalFilterSaved.hideNoSalaryItems)
 
-    override fun saveArea(area: Area) {
+    override fun saveArea(area: AreaFilter) {
         filterStorage.saveSpecificFilterParameters(
-            specificFilterSaved.copy(area = AreaFilter(areaId = area.id, areaName = area.name))
+            specificFilterSaved.copy(area = area)
         )
     }
 
-    override fun saveCountry(country: Country) {
+    override fun saveCountry(country: CountryFilter) {
         filterStorage.saveSpecificFilterParameters(
-            specificFilterSaved.copy(country = CountryFilter(countryId = country.id, countryName = country.name))
+            specificFilterSaved.copy(country = country)
         )
     }
 

@@ -1,8 +1,8 @@
 package ru.practicum.android.diploma.filter.domain.impl
 
 import ru.practicum.android.diploma.filter.domain.api.FilterStorageInteractor
-import ru.practicum.android.diploma.filter.domain.model.Area
-import ru.practicum.android.diploma.filter.domain.model.Country
+import ru.practicum.android.diploma.filter.domain.model.AreaFilter
+import ru.practicum.android.diploma.filter.domain.model.CountryFilter
 import ru.practicum.android.diploma.filter.domain.model.FilterGeneral
 import ru.practicum.android.diploma.filter.domain.model.IndustryDetailsFilterItem
 
@@ -17,11 +17,11 @@ class FilterStorageInteractorImpl(
         return repository.isFilterActive()
     }
 
-    override fun saveArea(area: Area) {
+    override fun saveArea(area: AreaFilter) {
         repository.saveArea(area)
     }
 
-    override fun saveCountry(country: Country) {
+    override fun saveCountry(country: CountryFilter) {
         repository.saveCountry(country)
     }
 
