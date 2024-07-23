@@ -28,7 +28,6 @@ class PlaceToWorkFilterViewModel(private val placeToWorkFilterInteractor: PlaceT
     fun clearCountry() {
         placeToWorkFilterInteractor.clearCountry()
         updateCurrentFilterAreaParameters()
-
     }
 
     fun clearArea() {
@@ -40,7 +39,6 @@ class PlaceToWorkFilterViewModel(private val placeToWorkFilterInteractor: PlaceT
         val currentCountry = placeToWorkFilterInteractor.getCurrentCountryChoice()
         Log.e("TEST_PLACE", "${currentCountry?.countryName}")
         val currentArea = placeToWorkFilterInteractor.getCurrentAreaChoice()
-
         viewModelScope.launch {
 //            val check = !currentArea?.areaName.isNullOrEmpty() && currentCountry?.countryName.isNullOrEmpty()
 //            Log.e("NO","$check")
@@ -76,6 +74,3 @@ class PlaceToWorkFilterViewModel(private val placeToWorkFilterInteractor: PlaceT
         )
     }
 }
-
-
-

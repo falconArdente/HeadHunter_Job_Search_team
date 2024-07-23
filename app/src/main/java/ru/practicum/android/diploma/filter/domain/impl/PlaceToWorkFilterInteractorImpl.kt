@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.filter.domain.impl
 
-import android.util.Log
 import ru.practicum.android.diploma.filter.domain.api.PlaceToWorkFilterInteractor
 import ru.practicum.android.diploma.filter.domain.model.Area
 import ru.practicum.android.diploma.filter.domain.model.AreaFilter
