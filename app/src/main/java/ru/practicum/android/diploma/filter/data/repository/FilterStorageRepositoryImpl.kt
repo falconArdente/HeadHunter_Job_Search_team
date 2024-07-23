@@ -12,8 +12,6 @@ class FilterStorageRepositoryImpl(private val filterStorage: FilterStorage) :
     FilterStorageRepository {
     private val finalFilterSaved = filterStorage.getAllFinalFilterParameters()
     private var specificFilterSaved = filterStorage.getAllSavedParameter()
-
-
     override fun saveAllFilterParameters(filter: FilterGeneral) {
         filterStorage.saveFinalFilterParameters(filter)
     }
