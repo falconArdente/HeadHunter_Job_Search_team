@@ -10,24 +10,13 @@ import ru.practicum.android.diploma.utils.Resource
 
 class SearchInteractorImpl(val repository: SearchRepository, val converter: SearchVacancyConverter) : SearchInteractor {
     override fun searchVacancy(expression: String, parameters: SearchParameters?): Flow<VacancyListResult> = flow {
-        var area: String? = null
-        var industry: List<String>? = null
-        var salary_: Int? = null
-        var salaryOnly = false
-        if (parameters != null) {
-            with(parameters) {
-                area = areaId
-                industry = industryIds
-                salary_ = salary
-                salaryOnly = withSalaryOnly
-            }
-        }
+        val salaryOnly = parameters?.withSalaryOnly ?: false
         repository
             .searchVacancy(
                 textForSearch = expression,
-                areaId = area,
-                industryIds = industry,
-                salary = salary_,
+                areaId = parameters?.areaId,
+                industryIds = parameters?.industryIds,
+                salary = parameters?.salary,
                 withSalaryOnly = salaryOnly,
             )
             .collect { vacancyListResponse ->

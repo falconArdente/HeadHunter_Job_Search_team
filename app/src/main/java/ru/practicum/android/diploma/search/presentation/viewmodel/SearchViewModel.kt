@@ -29,7 +29,7 @@ class SearchViewModel(
     private var isClickAllowed = true
     private var suggestionsList = MutableLiveData<List<String>>(emptyList())
     val suggestionsLivaData: LiveData<List<String>> = suggestionsList
-    private val filterIsOn = MutableLiveData<Boolean>(false)
+    private val filterIsOn = MutableLiveData(false)
     val filterStateToObserve: LiveData<Boolean> = filterIsOn
     private var parametersForSearch: SearchParameters? = null
 
@@ -65,14 +65,14 @@ class SearchViewModel(
         searchLiveData.postValue(
             when (searchLiveData.value) {
                 is SearchFragmentState.SearchVacancy -> {
-                    (searchLiveData.value as SearchFragmentState.SearchVacancy).copy(
-                        searchVacancy = searchVacancy, totalFoundVacancy = totalFoundVacancy
-                    )
+                    (searchLiveData.value as SearchFragmentState.SearchVacancy)
+                        .copy(searchVacancy = searchVacancy, totalFoundVacancy = totalFoundVacancy)
                 }
 
                 else -> {
                     SearchFragmentState.SearchVacancy(
-                        searchVacancy = searchVacancy, totalFoundVacancy = totalFoundVacancy
+                        searchVacancy = searchVacancy,
+                        totalFoundVacancy = totalFoundVacancy
                     )
                 }
             }
@@ -85,7 +85,7 @@ class SearchViewModel(
         updateState(SearchFragmentState.Loading)
         searchJobDetails != viewModelScope.launch {
             interactor
-                .searchVacancy(text,parametersForSearch)
+                .searchVacancy(text, parametersForSearch)
                 .collect { vacancy ->
                     if (vacancy.result!!.isNotEmpty()) {
                         maxPages = vacancy.pages

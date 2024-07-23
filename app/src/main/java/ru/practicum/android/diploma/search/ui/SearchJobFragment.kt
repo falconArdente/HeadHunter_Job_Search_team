@@ -182,8 +182,11 @@ class SearchJobFragment : Fragment() {
 
     private fun setFilterIcon(filterIsActive: Boolean) {
         binding.searchFilterButton.setImageDrawable(
-            if (filterIsActive) requireActivity().getDrawable(R.drawable.icon_filter_active)
-            else requireActivity().getDrawable(R.drawable.icon_filter)
+            if (filterIsActive) {
+                requireActivity().getDrawable(R.drawable.icon_filter_active)
+            } else {
+                requireActivity().getDrawable(R.drawable.icon_filter)
+            }
         )
     }
 

@@ -86,12 +86,16 @@ class SearchVacancyConverter {
         )
     }
 
+    private fun checkAreaAndIndustryAbsence(filter: FilterGeneral): Boolean {
+        return filter.area == null &&
+            filter.country == null &&
+            filter.industry == null
+    }
+
     fun toSearchParameters(filter: FilterGeneral): SearchParameters? {
         if (
             !filter.hideNoSalaryItems &&
-            filter.area == null &&
-            filter.country == null &&
-            filter.industry == null &&
+            checkAreaAndIndustryAbsence(filter) &&
             filter.expectedSalary == null
         ) {
             return null
