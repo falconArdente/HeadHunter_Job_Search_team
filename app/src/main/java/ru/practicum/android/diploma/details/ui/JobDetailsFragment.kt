@@ -113,7 +113,7 @@ class JobDetailsFragment : Fragment() {
         binding.jobPlaceholderImage.isVisible = vacancyDetailsState is VacancyDetailsState.Error
         binding.jobPlaceholderText.isVisible = vacancyDetailsState is VacancyDetailsState.Error
         binding.loadingProgressBar.isVisible = vacancyDetailsState is VacancyDetailsState.Loading
-        if (vacancyDetailsState is VacancyDetailsState.Error){
+        if (vacancyDetailsState is VacancyDetailsState.Error) {
             renderErrorPlaceholder(vacancyDetailsState.message)
         }
 
@@ -204,12 +204,12 @@ class JobDetailsFragment : Fragment() {
                 "${binding.jobContactsEmail.text} ${vacancyDetails.employerInfo.contacts.email}"
             binding.jobContactsPhone.text =
                 "${binding.jobContactsPhone.text} " +
-                "${vacancyDetails.employerInfo.contacts.phones?.joinToString(separator = "\n")}"
+                    "${vacancyDetails.employerInfo.contacts.phones?.joinToString(separator = "\n")}"
         }
     }
 
-    private fun renderErrorPlaceholder(errorMessage: String){
-        if (errorMessage.isNotEmpty()){
+    private fun renderErrorPlaceholder(errorMessage: String) {
+        if (errorMessage.isNotEmpty()) {
             binding.jobPlaceholderText.text = requireActivity().getString(R.string.no_internet)
             binding.jobPlaceholderImage.background = requireActivity().getDrawable(R.drawable.picture_funny_head)
         }
