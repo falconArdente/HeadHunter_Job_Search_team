@@ -60,19 +60,6 @@ class FilterPlaceToWorkFragment : Fragment() {
         binding.filterApplyButton.setOnClickListener {
             viewModel.saveFilterAreaParameters()
             requireActivity().onBackPressedDispatcher.onBackPressed()
-
-//            viewModel.isCurrentRegionInCurrentCountry()
-//            if (isRegionInCountry && !binding.filterWorkPlaceValue.text.isNullOrEmpty()
-//                && !binding.filterIndustryValue.text.isNullOrEmpty()) {
-//                viewModel.saveFilterAreaParameters()
-//                requireActivity().onBackPressedDispatcher.onBackPressed()
-//            } else {
-//                Toast.makeText(
-//                    requireContext(),
-//                    R.string.toast_region_notification,
-//                    Toast.LENGTH_LONG
-//                ).show()
-//            }
         }
     }
 
