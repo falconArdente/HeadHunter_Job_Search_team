@@ -22,7 +22,7 @@ val repositoryModule = module {
         NavigatorRepositoryImpl(externalNavigator = get())
     }
 
-    factory<FilterStorageRepository> {
+    single<FilterStorageRepository> {
         FilterStorageRepositoryImpl(filterStorage = get())
     }
 
