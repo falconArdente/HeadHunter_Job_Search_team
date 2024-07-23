@@ -11,7 +11,7 @@ import ru.practicum.android.diploma.db.data.db.entity.SkillsEntity
 import ru.practicum.android.diploma.db.data.db.entity.VacancyEntity
 
 @Database(
-    version = 2,
+    version = 1,
     entities = [
         AreaEntity::class,
         EmployerEntity::class,
