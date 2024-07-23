@@ -204,7 +204,7 @@ class JobDetailsFragment : Fragment() {
                 "${binding.jobContactsEmail.text} ${vacancyDetails.employerInfo.contacts.email}"
             binding.jobContactsPhone.text =
                 "${binding.jobContactsPhone.text} " +
-                    "${vacancyDetails.employerInfo.contacts.phones?.joinToString(separator = "\n")}"
+                "${vacancyDetails.employerInfo.contacts.phones?.joinToString(separator = "\n")}"
         }
     }
 
