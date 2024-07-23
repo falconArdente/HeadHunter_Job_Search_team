@@ -114,6 +114,7 @@
         android:layout_height="@dimen/dp60"
         android:layout_marginTop="@dimen/dp36"
         android:visibility="gone"
+        tools:visibility="visible"
         app:layout_constraintTop_toBottomOf="@+id/filterTitle">
 
         <TextView
@@ -160,6 +161,7 @@
         android:layout_height="@dimen/dp60"
         android:layout_marginTop="@dimen/dp96"
         android:visibility="gone"
+        tools:visibility="visible"
         app:layout_constraintTop_toBottomOf="@+id/filterTitle">
 
         <TextView
