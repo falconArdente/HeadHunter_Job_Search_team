@@ -121,7 +121,11 @@ class FilterSettingsFragment : Fragment() {
                 } else {
                     binding.filterWorkPlaceInactive.visibility = View.GONE
                     binding.filterWorkPlaceActive.visibility = View.VISIBLE
-                    binding.filterWorkPlaceValue.text = state.filter.area!!.areaName
+                    binding.filterWorkPlaceValue.text = requireActivity().getString(
+                        R.string.filter_region,
+                        state.filter.country?.countryName,
+                        state.filter.area?.areaName
+                    )
                 }
 
                 if (state.filter.industry?.industryName.isNullOrEmpty()) {

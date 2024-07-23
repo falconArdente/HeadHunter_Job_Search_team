@@ -92,5 +92,6 @@
     <string name="country">Страна</string>
     <string name="region">Регион</string>
     <string name="toast_region_notification">Выбранный регион не относится к выбранной стране</string>
+    <string name="filter_region">%s, %s</string>
 
 </resources>
