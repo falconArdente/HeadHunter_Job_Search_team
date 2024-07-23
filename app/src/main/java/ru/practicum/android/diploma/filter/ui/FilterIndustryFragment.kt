@@ -4,22 +4,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterWithRecyclerBinding
-import ru.practicum.android.diploma.filter.domain.model.Industry
+import ru.practicum.android.diploma.filter.presentation.model.IndustryWithCheck
+import ru.practicum.android.diploma.filter.presentation.state.FilterIndustryState
+import ru.practicum.android.diploma.filter.presentation.viewmodel.FilterIndustryViewModel
 
 class FilterIndustryFragment : Fragment() {
     private var _binding: FragmentFilterWithRecyclerBinding? = null
     private val binding get() = _binding!!
-    val industry1 = Industry("1", listOf(), "IT")
-    val industry2 = Industry("2", listOf(), "Стропальщики")
-    val list = listOf(industry1, industry2)
-    private val adapter = FilterIndustryAdapter(list, ::clickListenerFun)
-    // заменить в адаптере на пустой лист потом
+    private val adapter = FilterIndustryAdapter(emptyList(), ::clickListenerFun)
+    private val viewModel by viewModel<FilterIndustryViewModel>()
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentFilterWithRecyclerBinding.inflate(inflater, container, false)
@@ -35,9 +37,14 @@ class FilterIndustryFragment : Fragment() {
             findNavController().navigateUp()
         }
         binding.filterApplyButton.setOnClickListener {
-            findNavController().navigateUp()
-            // Добавить запись настроек фильтра в Shared Prefs
+            viewModel.saveIndustry()
         }
+
+        viewModel.getState().observe(viewLifecycleOwner) { state ->
+            render(state)
+        }
+
+        viewModel.loadIndustryList()
     }
 
     override fun onDestroyView() {
@@ -45,8 +52,25 @@ class FilterIndustryFragment : Fragment() {
         _binding = null
     }
 
-    private fun clickListenerFun(industry: Industry) {
-        //   реализовать клик
+    private fun render(state: FilterIndustryState) {
+        when (state) {
+            is FilterIndustryState.SavedFilter -> {
+                findNavController().navigateUp()
+            }
+
+            is FilterIndustryState.EmptyList -> {
+                binding.recyclerViewFilter.isVisible = false
+            }
+
+            is FilterIndustryState.LoadedList -> {
+                adapter.updateList(state.industry)
+                binding.recyclerViewFilter.isVisible = true
+            }
+        }
+    }
+
+    private fun clickListenerFun(industry: IndustryWithCheck) {
+        viewModel.saveSelectedIndustry(industry.industry)
     }
 
     private fun viewHolderInit() {
@@ -66,6 +90,7 @@ class FilterIndustryFragment : Fragment() {
             if (text.isNullOrEmpty()) {
                 binding.filterInputIcon.background = requireActivity().getDrawable(R.drawable.icon_search)
             } else {
+                adapter.updateListByFilter(text.toString())
                 binding.filterInputIcon.background = requireActivity().getDrawable(R.drawable.icon_cross)
             }
         }

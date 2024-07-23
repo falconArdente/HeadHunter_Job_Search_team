@@ -1,9 +1,11 @@
 package ru.practicum.android.diploma.filter.presentation.state
 
-data class FilterSettingsState(
-    val workPlace: String,
-    val industry: String,
-    val salary: Int,
-    val dontShowWithoutSalary: Boolean
-)
+import ru.practicum.android.diploma.filter.domain.model.FilterGeneral
+
+interface FilterSettingsState {
+    data class Filter(val filter: FilterGeneral) : FilterSettingsState
+
+    data class SavedFilter(val isSaved: Boolean = true) : FilterSettingsState
+
+}
 
