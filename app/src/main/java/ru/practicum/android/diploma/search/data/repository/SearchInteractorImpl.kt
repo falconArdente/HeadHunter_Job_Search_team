@@ -9,7 +9,12 @@ import ru.practicum.android.diploma.search.domain.model.VacancyListResult
 import ru.practicum.android.diploma.utils.Resource
 
 class SearchInteractorImpl(val repository: SearchRepository, val converter: SearchVacancyConverter) : SearchInteractor {
-    override fun searchVacancy(expression: String, parameters: SearchParameters?): Flow<VacancyListResult> = flow {
+    override fun searchVacancy(
+        expression: String,
+        parameters: SearchParameters?,
+        perPage: Int,
+        currentPage: Int
+    ): Flow<VacancyListResult> = flow {
         val salaryOnly = parameters?.withSalaryOnly ?: false
         repository
             .searchVacancy(
@@ -18,6 +23,8 @@ class SearchInteractorImpl(val repository: SearchRepository, val converter: Sear
                 industryIds = parameters?.industryIds,
                 salary = parameters?.salary,
                 withSalaryOnly = salaryOnly,
+                perPage = perPage,
+                page = currentPage
             )
             .collect { vacancyListResponse ->
                 when (vacancyListResponse) {
@@ -31,7 +38,7 @@ class SearchInteractorImpl(val repository: SearchRepository, val converter: Sear
                                 result = vacancyList,
                                 errorMessage = "",
                                 foundVacancy = foundVacancy.toInt(),
-                                page = 0,
+                                page = currentPage,
                                 pages = pagesTotal.toInt(),
                             )
                         )
