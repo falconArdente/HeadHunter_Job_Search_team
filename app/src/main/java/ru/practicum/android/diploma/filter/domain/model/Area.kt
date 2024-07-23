@@ -5,4 +5,4 @@ data class Area(
     val id: String,
     val name: String,
     val parentId: String?
-)
+) : AreaDetailsFilterItem(areaId = id, areaName = name)

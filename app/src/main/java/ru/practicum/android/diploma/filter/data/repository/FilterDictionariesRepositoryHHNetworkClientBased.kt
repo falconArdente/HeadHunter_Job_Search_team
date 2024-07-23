@@ -20,6 +20,9 @@ import ru.practicum.android.diploma.network.data.dto.responses.CountriesResponse
 import ru.practicum.android.diploma.network.data.dto.responses.IndustryResponse
 import ru.practicum.android.diploma.network.data.dto.responses.Response
 import ru.practicum.android.diploma.utils.Resource
+import java.text.Collator
+
+private const val OTHER_REGIONS = "Другие регионы"
 
 class FilterDictionariesRepositoryHHNetworkClientBased(private val client: HeadHunterNetworkClient, context: Context) :
     FilterDictionariesRepository {
@@ -57,6 +60,34 @@ class FilterDictionariesRepositoryHHNetworkClientBased(private val client: HeadH
         }
     }
 
+    override suspend fun getAreasNormally(): Resource<List<Area>> {
+        val response = client.doRequest(HeadHunterRequest.Areas)
+        return if (response.resultCode == Response.SUCCESS) {
+            Resource.Success((response as AreasResponse).areasList.map { areaDto ->
+                FilterMapper.toArea(areaDto)
+            })
+        } else {
+            Resource.Error(areasErrorMessage)
+        }
+    }
+
+    override suspend fun getDetailedAreas(): Flow<Resource<List<Area>>> = flow {
+        val response = client.doRequest(HeadHunterRequest.Areas)
+        if (response.resultCode == Response.SUCCESS) {
+            val subAreasListOriginal = (response as AreasResponse).areasList.map { areaDto ->
+                FilterMapper.toArea(areaDto)
+            }
+            val detailedAreaList = getMaximumDetailedArea(subAreasListOriginal)
+            val regionList = getRegionList(subAreasListOriginal)
+            val finalRegionList = regionList + detailedAreaList
+            val collator = Collator.getInstance()
+            val sortedDetailedList = finalRegionList.sortedWith(compareBy(collator) { it.name })
+            emit(Resource.Success(sortedDetailedList))
+        } else {
+            emit(Resource.Error(areasErrorMessage))
+        }
+    }
+
     override suspend fun getCountries(): Flow<Resource<List<Country>>> = flow {
         val response = client.doRequest(HeadHunterRequest.Counties)
         if (response.resultCode == Response.SUCCESS) {
@@ -70,15 +101,83 @@ class FilterDictionariesRepositoryHHNetworkClientBased(private val client: HeadH
         }
     }
 
+    override suspend fun getCountriesByAreas(): Flow<Resource<List<Area>>> = flow {
+        getAreas().collect { result ->
+            when (result) {
+                is Resource.Success -> {
+                    val areasWithParentId = result.data!!.filter { area ->
+                        area.parentId == null
+                    }
+                    val otherRegionsItem = areasWithParentId.find { it.name == OTHER_REGIONS }
+                    if (otherRegionsItem != null) {
+                        val filteredCountriesList = areasWithParentId - otherRegionsItem
+                        val updatedCountriesList = filteredCountriesList + otherRegionsItem
+                        emit(Resource.Success(updatedCountriesList))
+                    } else {
+                        emit(Resource.Success(areasWithParentId))
+                    }
+                }
+
+                is Resource.Error -> emit(Resource.Error(result.message!!))
+
+                is Resource.InternetConnectionError -> emit(Resource.InternetConnectionError(result.message!!))
+
+                is Resource.NotFoundError -> emit(Resource.NotFoundError(result.message!!))
+            }
+        }
+    }
+
+    override suspend fun getDetailedSubAreas(areaId: String): Flow<Resource<List<Area>>> {
+        return flow {
+            val response = client.doRequest(HeadHunterRequest.SubAreas(areaId))
+            if (response.resultCode == Response.SUCCESS) {
+                val subAreasListOriginal = (response as AreasResponse).areasList.map { areaDto ->
+                    FilterMapper.toArea(areaDto)
+                }
+                val detailedAreaList = getMaximumDetailedArea(subAreasListOriginal)
+                val regionList = getRegionList(subAreasListOriginal)
+                val finalRegionList = regionList + detailedAreaList
+                val collator = Collator.getInstance()
+                val sortedDetailedList = finalRegionList.sortedWith(compareBy(collator) { it.name })
+                emit(Resource.Success(sortedDetailedList))
+            } else {
+                emit(Resource.Error(areasErrorMessage))
+            }
+        }
+    }
+
+    private fun getRegionList(originalAreaList: List<Area>): List<Area> {
+        val regionList = mutableListOf<Area>()
+        originalAreaList.forEach { area ->
+            if (area.parentId != null && !area.subAreas.isNullOrEmpty()) {
+                regionList.add(area)
+            } else {
+                regionList.addAll(getRegionList(area.subAreas!!))
+            }
+        }
+        return regionList
+    }
+
+    private fun getMaximumDetailedArea(originalList: List<Area>): List<Area> {
+        val detailedAreaList = mutableListOf<Area>()
+        originalList.forEach { area ->
+            if (area.subAreas.isNullOrEmpty()) {
+                detailedAreaList.add(area)
+            } else {
+                detailedAreaList.addAll(getMaximumDetailedArea(area.subAreas))
+            }
+        }
+        return detailedAreaList
+    }
+
     override suspend fun getSubAreas(areaId: String): Flow<Resource<List<Area>>> {
         return flow {
             val response = client.doRequest(HeadHunterRequest.SubAreas(areaId))
             if (response.resultCode == Response.SUCCESS) {
-                emit(
-                    Resource.Success((response as AreasResponse).areasList.map { areaDto ->
-                        FilterMapper.toArea(areaDto)
-                    })
-                )
+                val subAreasListOriginal = (response as AreasResponse).areasList.map { areaDto ->
+                    FilterMapper.toArea(areaDto)
+                }
+                emit(Resource.Success(subAreasListOriginal))
             } else {
                 emit(Resource.Error(areasErrorMessage))
             }
