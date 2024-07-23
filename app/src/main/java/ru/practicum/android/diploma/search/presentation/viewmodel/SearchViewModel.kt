@@ -55,7 +55,6 @@ class SearchViewModel(
         searchJobDetails?.cancel()
         updateState(SearchFragmentState.Loading)
         searchJobDetails != viewModelScope.launch {
-
             interactor
                 .searchVacancy(text, PER_PAGE, currentPage)
                 .collect { vacancy ->
