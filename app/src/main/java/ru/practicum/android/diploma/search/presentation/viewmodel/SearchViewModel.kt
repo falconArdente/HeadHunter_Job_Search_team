@@ -138,9 +138,8 @@ class SearchViewModel(
         }
         if (currentPage == maxPages) {
             updateState(
-                (searchLiveData.value as SearchFragmentState.SearchVacancy).copy(
-                    searchVacancy = vacanciesList, totalFoundVacancy = totalFound
-                )
+                (searchLiveData.value as SearchFragmentState.SearchVacancy)
+                    .copy(searchVacancy = vacanciesList, totalFoundVacancy = totalFound)
             )
         }
     }
