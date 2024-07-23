@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.favorites.ui
+package ru.practicum.android.diploma.favorites.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,6 +14,8 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFavoritesJobsBinding
 import ru.practicum.android.diploma.favorites.presentation.state.FavoritesListState
 import ru.practicum.android.diploma.favorites.presentation.viewmodel.FavoritesViewModel
+import ru.practicum.android.diploma.favorites.ui.ClickerForVacancyDetail
+import ru.practicum.android.diploma.favorites.ui.VacancyDetailsRecyclerAdapter
 
 class FavoritesJobsFragment : Fragment() {
     private val viewModel by viewModel<FavoritesViewModel>()

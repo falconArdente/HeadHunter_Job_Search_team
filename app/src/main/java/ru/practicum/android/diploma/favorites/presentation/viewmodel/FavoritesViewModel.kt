@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.details.domain.model.VacancyDetails
-import ru.practicum.android.diploma.details.ui.JobDetailsFragment
+import ru.practicum.android.diploma.details.presentation.JobDetailsFragment
 import ru.practicum.android.diploma.favorites.domain.api.GetFavoritesListUseCase
 import ru.practicum.android.diploma.favorites.presentation.state.FavoritesListState
 import ru.practicum.android.diploma.utils.Resource

@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.filter.ui
+package ru.practicum.android.diploma.filter.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,6 +13,7 @@ import ru.practicum.android.diploma.databinding.FragmentFilterWithRecyclerBindin
 import ru.practicum.android.diploma.filter.domain.model.AreaDetailsFilterItem
 import ru.practicum.android.diploma.filter.presentation.state.AreaFilterState
 import ru.practicum.android.diploma.filter.presentation.viewmodel.CountryFilterViewModel
+import ru.practicum.android.diploma.filter.ui.FilterCountryAdapter
 
 class FilterCountryFragment : Fragment() {
     private var _binding: FragmentFilterWithRecyclerBinding? = null
