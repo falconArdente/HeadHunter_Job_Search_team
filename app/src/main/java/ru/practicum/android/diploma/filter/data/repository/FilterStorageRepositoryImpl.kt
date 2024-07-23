@@ -11,7 +11,7 @@ import ru.practicum.android.diploma.filter.domain.model.IndustryFilter
 class FilterStorageRepositoryImpl(private val filterStorage: FilterStorage) :
     FilterStorageRepository {
     private val finalFilterSaved = filterStorage.getAllFinalFilterParameters()
-    private val specificFilterSaved = filterStorage.getAllSavedParameter()
+    private var specificFilterSaved = filterStorage.getAllSavedParameter()
 
     override fun saveAllFilterParameters(filter: FilterGeneral) {
         filterStorage.saveFinalFilterParameters(filter)
@@ -30,30 +30,29 @@ class FilterStorageRepositoryImpl(private val filterStorage: FilterStorage) :
         || finalFilterSaved.hideNoSalaryItems)
 
     override fun saveArea(area: AreaFilter) {
-        filterStorage.saveSpecificFilterParameters(
-            specificFilterSaved.copy(area = area)
-        )
+        specificFilterSaved = specificFilterSaved.copy(area = area)
+        filterStorage.saveSpecificFilterParameters(specificFilterSaved)
     }
 
     override fun saveCountry(country: CountryFilter) {
-        filterStorage.saveSpecificFilterParameters(
-            specificFilterSaved.copy(country = country)
-        )
+        specificFilterSaved = specificFilterSaved.copy(country = country)
+        filterStorage.saveSpecificFilterParameters(specificFilterSaved)
     }
 
     override fun saveIndustry(industry: IndustryDetailsFilterItem) {
-        filterStorage.saveSpecificFilterParameters(
-            specificFilterSaved.copy(
-                industry = IndustryFilter(industryId = industry.industryId, industryName = industry.industryName)
-            )
+        specificFilterSaved = specificFilterSaved.copy(
+            industry = IndustryFilter(industryId = industry.industryId, industryName = industry.industryName)
         )
+        filterStorage.saveSpecificFilterParameters(specificFilterSaved)
     }
 
     override fun saveExpectedSalary(salaryAmount: String) {
-        filterStorage.saveSpecificFilterParameters(specificFilterSaved.copy(expectedSalary = salaryAmount))
+        specificFilterSaved = specificFilterSaved.copy(expectedSalary = salaryAmount)
+        filterStorage.saveSpecificFilterParameters(specificFilterSaved)
     }
 
     override fun saveHideNoSalaryItems(hideNoSalaryItems: Boolean) {
-        filterStorage.saveSpecificFilterParameters(specificFilterSaved.copy(hideNoSalaryItems = hideNoSalaryItems))
+        specificFilterSaved = specificFilterSaved.copy(hideNoSalaryItems = hideNoSalaryItems)
+        filterStorage.saveSpecificFilterParameters(specificFilterSaved)
     }
 }

@@ -76,26 +76,54 @@ class FilterSettingsViewModel(
     }
 
     private fun savedFilterToConfigured(filter: FilterGeneral) {
-        filterStorage.saveArea(
-            AreaFilter(
-                areaId = filter.area?.areaId.toString(),
-                areaName = filter.area?.areaName.toString()
+        if (filter.area != null) {
+            filterStorage.saveArea(
+                AreaFilter(
+                    areaId = filter.area.areaId.toString(),
+                    areaName = filter.area.areaName.toString()
+                )
             )
-        )
+        } else {
+            filterStorage.saveArea(
+                AreaFilter(
+                    areaId = String(),
+                    areaName = String()
+                )
+            )
+        }
+        if (filter.country != null) {
+            filterStorage.saveCountry(
+                CountryFilter(
+                    countryId = filter.country.countryId.toString(),
+                    countryName = filter.country.countryName.toString()
+                )
+            )
+        } else {
+            filterStorage.saveCountry(
+                CountryFilter(
+                    countryId = String(),
+                    countryName = String()
+                )
+            )
+        }
+        if (filter.industry != null) {
+            filterStorage.saveIndustry(
+                Industry(
+                    id = filter.industry.industryId.toString(),
+                    industries = emptyList(),
+                    name = filter.industry.industryName.toString()
+                )
+            )
+        } else {
+            filterStorage.saveIndustry(
+                Industry(
+                    id = String(),
+                    industries = emptyList(),
+                    name = String()
+                )
+            )
+        }
 
-        filterStorage.saveCountry(
-            CountryFilter(
-                countryId = filter.country?.countryId.toString(),
-                countryName = filter.country?.countryName.toString()
-            )
-        )
-        filterStorage.saveIndustry(
-            Industry(
-                id = filter.industry?.industryId.toString(),
-                industries = emptyList(),
-                name = filter.industry?.industryName.toString()
-            )
-        )
         filterStorage.saveHideNoSalaryItems(filter.hideNoSalaryItems)
         filterStorage.saveExpectedSalary(filter.expectedSalary.toString())
     }
@@ -109,7 +137,7 @@ class FilterSettingsViewModel(
     }
 
     fun changeHideNoSalary(noSalary: Boolean) {
-        filterStorage.saveHideNoSalaryItems(noSalary)
+        savedFilter = savedFilter.copy(hideNoSalaryItems = noSalary)
     }
 
     fun resetArea() {
