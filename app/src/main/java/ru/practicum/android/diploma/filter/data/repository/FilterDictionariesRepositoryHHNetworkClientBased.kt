@@ -36,27 +36,35 @@ class FilterDictionariesRepositoryHHNetworkClientBased(private val client: HeadH
 
     override suspend fun getIndustries(): Flow<Resource<List<Industry>>> = flow {
         val response = client.doRequest(HeadHunterRequest.Industries)
-        if (response.resultCode == Response.SUCCESS) {
-            emit(
-                Resource.Success((response as IndustryResponse).industriesList.map { industryDTO ->
-                    FilterMapper.toIndustry(industryDTO)
-                })
-            )
-        } else {
-            emit(Resource.Error(industriesErrorMessage))
+        when (response.resultCode) {
+            Response.SUCCESS -> {
+                emit(
+                    Resource.Success((response as IndustryResponse).industriesList.map { industryDTO ->
+                        FilterMapper.toIndustry(industryDTO)
+                    })
+                )
+            }
+
+            Response.NOT_FOUND -> emit(Resource.NotFoundError(industriesErrorMessage))
+            Response.NO_INTERNET -> emit(Resource.InternetConnectionError(industriesErrorMessage))
+            else -> emit(Resource.Error(industriesErrorMessage))
         }
     }
 
     override suspend fun getAreas(): Flow<Resource<List<Area>>> = flow {
         val response = client.doRequest(HeadHunterRequest.Areas)
-        if (response.resultCode == Response.SUCCESS) {
-            emit(
-                Resource.Success((response as AreasResponse).areasList.map { areaDto ->
-                    FilterMapper.toArea(areaDto)
-                })
-            )
-        } else {
-            emit(Resource.Error(areasErrorMessage))
+        when (response.resultCode) {
+            Response.SUCCESS -> {
+                emit(
+                    Resource.Success((response as AreasResponse).areasList.map { areaDto ->
+                        FilterMapper.toArea(areaDto)
+                    })
+                )
+            }
+
+            Response.NOT_FOUND -> emit(Resource.NotFoundError(areasErrorMessage))
+            Response.NO_INTERNET -> emit(Resource.InternetConnectionError(areasErrorMessage))
+            else -> emit(Resource.Error(areasErrorMessage))
         }
     }
 
@@ -90,14 +98,18 @@ class FilterDictionariesRepositoryHHNetworkClientBased(private val client: HeadH
 
     override suspend fun getCountries(): Flow<Resource<List<Country>>> = flow {
         val response = client.doRequest(HeadHunterRequest.Counties)
-        if (response.resultCode == Response.SUCCESS) {
-            emit(
-                Resource.Success((response as CountriesResponse).countriesList.map { countryDto ->
-                    FilterMapper.toCountry(countryDto)
-                })
-            )
-        } else {
-            emit(Resource.Error(countriesErrorMessage))
+        when (response.resultCode) {
+            Response.SUCCESS -> {
+                emit(
+                    Resource.Success((response as CountriesResponse).countriesList.map { countryDto ->
+                        FilterMapper.toCountry(countryDto)
+                    })
+                )
+            }
+
+            Response.NOT_FOUND -> emit(Resource.NotFoundError(countriesErrorMessage))
+            Response.NO_INTERNET -> emit(Resource.InternetConnectionError(countriesErrorMessage))
+            else -> emit(Resource.Error(countriesErrorMessage))
         }
     }
 
@@ -173,13 +185,18 @@ class FilterDictionariesRepositoryHHNetworkClientBased(private val client: HeadH
     override suspend fun getSubAreas(areaId: String): Flow<Resource<List<Area>>> {
         return flow {
             val response = client.doRequest(HeadHunterRequest.SubAreas(areaId))
-            if (response.resultCode == Response.SUCCESS) {
-                val subAreasListOriginal = (response as AreasResponse).areasList.map { areaDto ->
-                    FilterMapper.toArea(areaDto)
+            when (response.resultCode) {
+                Response.SUCCESS -> {
+                    emit(
+                        Resource.Success((response as AreasResponse).areasList.map { areaDto ->
+                            FilterMapper.toArea(areaDto)
+                        })
+                    )
                 }
-                emit(Resource.Success(subAreasListOriginal))
-            } else {
-                emit(Resource.Error(areasErrorMessage))
+
+                Response.NOT_FOUND -> emit(Resource.NotFoundError(areasErrorMessage))
+                Response.NO_INTERNET -> emit(Resource.InternetConnectionError(areasErrorMessage))
+                else -> emit(Resource.Error(areasErrorMessage))
             }
         }
     }
