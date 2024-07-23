@@ -113,8 +113,6 @@ class FilterSettingsViewModel(
         } else {
             resetSalary()
         }
-
-
     }
 
     fun changeSalary(newSalary: String) {
