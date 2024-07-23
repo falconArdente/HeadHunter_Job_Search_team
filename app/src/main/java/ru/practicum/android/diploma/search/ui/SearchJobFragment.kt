@@ -158,7 +158,7 @@ class SearchJobFragment : Fragment() {
                     binding.searchJobsCountButton.text = requireActivity().getString(R.string.no_such_vacancies)
                     binding.searchPlaceholderText.text =
                         requireActivity().getString(R.string.failed_list_vacancy)
-                    setVisible(placeholder = true, list = false, blueButton = false, progress = false)
+                    setVisible(placeholder = true, list = false, blueButton = true, progress = false)
                 }
 
                 is SearchFragmentState.ServerError -> {
