@@ -87,24 +87,25 @@ class SearchVacancyConverter {
     }
 
     private fun checkAreaAndIndustryAbsence(filter: FilterGeneral): Boolean {
-        return filter.area == null &&
-            filter.country == null &&
-            filter.industry == null
+        return filter.area?.areaId.isNullOrEmpty() &&
+            filter.country?.countryId.isNullOrEmpty() &&
+            filter.industry?.industryId.isNullOrEmpty()
     }
 
     fun toSearchParameters(filter: FilterGeneral): SearchParameters? {
         if (
             !filter.hideNoSalaryItems &&
             checkAreaAndIndustryAbsence(filter) &&
-            filter.expectedSalary == null
+            filter.expectedSalary.isNullOrEmpty()
         ) {
             return null
         } else {
             var areaToGo: String?
             var industryList: List<String>?
             with(filter) {
-                areaToGo = if (area?.areaId == null) country?.countryId else area.areaId
-                industryList = if (industry == null) null else listOf(industry.industryId ?: "")
+                areaToGo = if (area?.areaId.isNullOrEmpty()) country?.countryId else area?.areaId
+                if (areaToGo == "") areaToGo = null
+                industryList = if (industry?.industryId.isNullOrEmpty()) null else listOf(industry?.industryId!!)
                 return SearchParameters(
                     areaId = areaToGo,
                     industryIds = industryList,
