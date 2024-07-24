@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -148,7 +149,10 @@ class FilterSettingsFragment : Fragment() {
                     binding.filterIndustryValue.text = state.filter.industry!!.industryName
                 }
             }
-
+            is FilterSettingsState.InterfaceActivate -> {
+                binding.filterApplyButton.isVisible = state.isActiveApply
+                binding.filterResetButton.isVisible = state.isActiveReset
+            }
             else -> {
                 findNavController().navigateUp()
             }

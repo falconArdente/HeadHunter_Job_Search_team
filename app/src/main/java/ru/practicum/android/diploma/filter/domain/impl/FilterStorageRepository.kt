@@ -3,7 +3,7 @@ package ru.practicum.android.diploma.filter.domain.impl
 import ru.practicum.android.diploma.filter.domain.model.AreaFilter
 import ru.practicum.android.diploma.filter.domain.model.CountryFilter
 import ru.practicum.android.diploma.filter.domain.model.FilterGeneral
-import ru.practicum.android.diploma.filter.domain.model.IndustryDetailsFilterItem
+import ru.practicum.android.diploma.filter.domain.model.IndustryFilter
 
 interface FilterStorageRepository {
     // сохранение параметров для финального фильтра на базовом экране с кнопкой "Применить".
@@ -24,13 +24,13 @@ interface FilterStorageRepository {
     fun isFilterActive(): Boolean
 
     // сохранение параметра региона для параметров промежуточного фильтра на экранах выбора отрасли/региона/места работы
-    fun saveArea(area: AreaFilter)
+    fun saveArea(area: AreaFilter?)
 
     // сохранение параметра страны для параметров промежуточного фильтра на экранах выбора отрасли/региона/места работы
-    fun saveCountry(country: CountryFilter)
+    fun saveCountry(country: CountryFilter?)
 
     // сохранение параметра отрасли для параметров промежуточного фильтра на экранах выбора отрасли/региона/места работы
-    fun saveIndustry(industry: IndustryDetailsFilterItem)
+    fun saveIndustry(industry: IndustryFilter?)
 
     // сохранение параметра зп для на экране базового фильтра (если "применить" не было нажато)
     fun saveExpectedSalary(salaryAmount: String)

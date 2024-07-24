@@ -3,7 +3,7 @@ package ru.practicum.android.diploma.filter.domain.api
 import ru.practicum.android.diploma.filter.domain.model.AreaFilter
 import ru.practicum.android.diploma.filter.domain.model.CountryFilter
 import ru.practicum.android.diploma.filter.domain.model.FilterGeneral
-import ru.practicum.android.diploma.filter.domain.model.IndustryDetailsFilterItem
+import ru.practicum.android.diploma.filter.domain.model.IndustryFilter
 
 interface FilterStorageInteractor {
     fun saveAllFilterParameters(filter: FilterGeneral)
@@ -16,11 +16,11 @@ interface FilterStorageInteractor {
 
     fun isFilterActive(): Boolean
 
-    fun saveArea(area: AreaFilter)
+    fun saveArea(area: AreaFilter?)
 
-    fun saveCountry(country: CountryFilter)
+    fun saveCountry(country: CountryFilter?)
 
-    fun saveIndustry(industry: IndustryDetailsFilterItem)
+    fun saveIndustry(industry: IndustryFilter?)
 
     fun saveExpectedSalary(salaryAmount: String)
 
