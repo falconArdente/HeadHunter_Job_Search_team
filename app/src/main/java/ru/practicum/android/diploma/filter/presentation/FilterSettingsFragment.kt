@@ -86,6 +86,7 @@ class FilterSettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val isFromSearch = if (arguments != null) {
             requireArguments().getBoolean(PATH_FROM_SEARCH)
         } else {

@@ -21,11 +21,10 @@ class VacancyDetailsViewModel(
     private val detailsDbInteractor: DetailsDbInteractor,
     private val vacancyId: String,
 ) : AndroidViewModel(application) {
-    private val _stateLiveData = MutableLiveData<VacancyDetailsState>(VacancyDetailsState.Loading)
-    val stateLiveData: LiveData<VacancyDetailsState> = _stateLiveData
+    private val _stateLiveData = MutableLiveData<VacancyDetailsState>()
+    fun getState(): LiveData<VacancyDetailsState> = _stateLiveData
 
-    private val _isFavorite = MutableLiveData<Boolean>()
-    val isFavorite: LiveData<Boolean> = _isFavorite
+
 
     private var vacancyDetails: VacancyDetails? = null
     private var isFavoriteJob: Job? = null
@@ -36,7 +35,7 @@ class VacancyDetailsViewModel(
                 processSearchVacancyResponse(it)
             }
             detailsDbInteractor.isExistsVacancy(vacancyId.toInt()).collect {
-                _isFavorite.value = it
+                _stateLiveData.postValue(VacancyDetailsState.Favorite(it))
             }
         }
     }
@@ -45,7 +44,7 @@ class VacancyDetailsViewModel(
         if (searchResult.data != null) {
             val vacancyDetailsState = VacancyDetailsState.Content(searchResult.data)
             vacancyDetails = vacancyDetailsState.data
-            _stateLiveData.value = vacancyDetailsState
+            _stateLiveData.postValue(vacancyDetailsState)
         } else {
             when (searchResult) {
                 is Resource.InternetConnectionError -> {
@@ -55,10 +54,10 @@ class VacancyDetailsViewModel(
                     }
                     if (isVacancyInFavorites) {
                         detailsDbInteractor.getVacancyById(vacancyId.toInt()).collect { vacancyDetails ->
-                            _stateLiveData.value = VacancyDetailsState.Content(vacancyDetails!!)
+                            _stateLiveData.postValue(VacancyDetailsState.Content(vacancyDetails!!))
                         }
                     } else {
-                        _stateLiveData.value = VacancyDetailsState.Error(searchResult.message!!)
+                        _stateLiveData.postValue(VacancyDetailsState.Error(searchResult.message!!))
                     }
                 }
 
@@ -70,10 +69,10 @@ class VacancyDetailsViewModel(
                     if (isVacancyInFavorites) {
                         detailsDbInteractor.deleteVacancy(vacancyId.toInt())
                     }
-                    _stateLiveData.value = VacancyDetailsState.Error(searchResult.message!!)
+                    _stateLiveData.postValue(VacancyDetailsState.Error(searchResult.message!!))
                 }
 
-                else -> _stateLiveData.value = VacancyDetailsState.Error(searchResult.message!!)
+                else -> _stateLiveData.postValue(VacancyDetailsState.Error(searchResult.message!!))
             }
         }
     }
@@ -82,21 +81,19 @@ class VacancyDetailsViewModel(
         if (isFavoriteJob?.isActive == true) return
 
         isFavoriteJob = viewModelScope.launch {
-            if (_stateLiveData.value is VacancyDetailsState.Content) {
                 var isInFavoriteList = false
                 detailsDbInteractor.isExistsVacancy(vacancyId.toInt()).collect {
                     isInFavoriteList = it
                 }
                 if (isInFavoriteList) {
                     detailsDbInteractor.deleteVacancy(vacancyId.toInt())
-                    _isFavorite.value = false
+                    _stateLiveData.postValue(VacancyDetailsState.Favorite(false))
                 } else {
-                    detailsDbInteractor.insertVacancy((_stateLiveData.value as VacancyDetailsState.Content).data)
-                    _isFavorite.value = true
+                    if (vacancyDetails != null) {
+                        detailsDbInteractor.insertVacancy(vacancyDetails!!)
+                        _stateLiveData.postValue(VacancyDetailsState.Favorite(true))
+                    }
                 }
-            } else {
-                Unit
-            }
         }
     }
 
