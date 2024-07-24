@@ -19,14 +19,14 @@ class FilterSettingsViewModel(
 ) : ViewModel() {
 
     private var jobStorage: Job? = null
+    private var jobLoad: Job? = null
     private var savedFilter: FilterGeneral = FilterGeneral()
     private val filterState = MutableLiveData<FilterSettingsState>()
     fun getState(): LiveData<FilterSettingsState> = filterState
 
     fun loadConfiguredFilterSettings() {
-        jobStorage?.cancel()
-
-        jobStorage = viewModelScope.launch(Dispatchers.IO) {
+        jobLoad?.cancel()
+        jobLoad = viewModelScope.launch(Dispatchers.IO) {
             savedFilter = getConfiguredFilterSettings()
             filterState.postValue(FilterSettingsState.Filter(savedFilter))
         }
@@ -38,10 +38,7 @@ class FilterSettingsViewModel(
         jobStorage?.cancel()
 
         jobStorage = viewModelScope.launch(Dispatchers.IO) {
-            if (filterStorage.isFilterActive()) {
-                savedFilter = getSavedFilterSettings()
-                savedFilterToConfigured(savedFilter)
-            }
+            resetFilter()
         }
     }
 
@@ -55,13 +52,15 @@ class FilterSettingsViewModel(
     }
 
     fun resetFilter() {
-        filterStorage.clearAllFilterParameters()
+        savedFilter = getSavedFilterSettings()
+        savedFilterToConfigured(savedFilter)
     }
 
     fun resetFilterSettings() {
         jobStorage?.cancel()
 
         jobStorage = viewModelScope.launch(Dispatchers.IO) {
+            filterStorage.clearAllFilterParameters()
             resetFilter()
             filterState.postValue(FilterSettingsState.SavedFilter())
         }
@@ -113,7 +112,7 @@ class FilterSettingsViewModel(
         if (filter.expectedSalary != null) {
             filterStorage.saveExpectedSalary(filter.expectedSalary.toString())
         } else {
-            resetSalary()
+            filterStorage.saveExpectedSalary(String())
         }
     }
 
@@ -123,10 +122,6 @@ class FilterSettingsViewModel(
 
     fun changeHideNoSalary(noSalary: Boolean) {
         savedFilter = savedFilter.copy(hideNoSalaryItems = noSalary)
-    }
-
-    private fun resetSalary() {
-        savedFilter = savedFilter.copy(expectedSalary = String())
     }
 
     fun resetRegion() {

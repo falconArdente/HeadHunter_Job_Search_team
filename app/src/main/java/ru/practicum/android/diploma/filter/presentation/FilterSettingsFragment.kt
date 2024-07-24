@@ -61,7 +61,8 @@ class FilterSettingsFragment : Fragment() {
             findNavController().navigateUp()
         }
         binding.filterSalaryCross.setOnClickListener {
-            binding.filterSalaryInput.setText("")
+            binding.filterSalaryInput.setText(String())
+            viewModel.changeSalary(String())
         }
     }
 
