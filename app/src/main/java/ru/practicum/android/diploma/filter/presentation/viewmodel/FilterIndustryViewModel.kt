@@ -43,9 +43,13 @@ class FilterIndustryViewModel(
                             }
                         }
 
-                        else -> filterState.postValue(FilterIndustryState.EmptyList())
+                        else -> {
+                            filterState.postValue(FilterIndustryState.EmptyList())
+                        }
                     }
                 }
+            } else {
+                filterState.postValue(FilterIndustryState.EmptyList())
             }
         }
     }
@@ -95,5 +99,9 @@ class FilterIndustryViewModel(
 
             filterState.postValue(FilterIndustryState.SavedFilter())
         }
+    }
+
+    fun setVisibleApply(isChecked: Boolean) {
+        filterState.postValue(FilterIndustryState.ApplyVisible(isChecked))
     }
 }

@@ -56,20 +56,25 @@ class FilterIndustryFragment : Fragment() {
             is FilterIndustryState.SavedFilter -> {
                 findNavController().navigateUp()
             }
-
+            is FilterIndustryState.ApplyVisible -> {
+                binding.filterApplyButton.isVisible = state.isVisible
+            }
             is FilterIndustryState.EmptyList -> {
                 binding.recyclerViewFilter.isVisible = false
+                binding.filterApplyButton.isVisible = false
             }
 
             is FilterIndustryState.LoadedList -> {
                 adapter.updateList(state.industry)
                 binding.recyclerViewFilter.isVisible = true
+                binding.filterApplyButton.isVisible = false
             }
         }
     }
 
     private fun clickListenerFun(industry: IndustryWithCheck) {
         viewModel.saveSelectedIndustry(industry.industry)
+        viewModel.setVisibleApply(true)
     }
 
     private fun viewHolderInit() {
