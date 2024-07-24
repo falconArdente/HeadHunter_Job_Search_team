@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.filter.ui
+package ru.practicum.android.diploma.filter.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,14 +15,13 @@ import ru.practicum.android.diploma.databinding.FragmentFilterWithRecyclerBindin
 import ru.practicum.android.diploma.filter.presentation.model.IndustryWithCheck
 import ru.practicum.android.diploma.filter.presentation.state.FilterIndustryState
 import ru.practicum.android.diploma.filter.presentation.viewmodel.FilterIndustryViewModel
+import ru.practicum.android.diploma.filter.ui.FilterIndustryAdapter
 
 class FilterIndustryFragment : Fragment() {
     private var _binding: FragmentFilterWithRecyclerBinding? = null
     private val binding get() = _binding!!
     private val adapter = FilterIndustryAdapter(emptyList(), ::clickListenerFun)
     private val viewModel by viewModel<FilterIndustryViewModel>()
-
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentFilterWithRecyclerBinding.inflate(inflater, container, false)
         return binding.root

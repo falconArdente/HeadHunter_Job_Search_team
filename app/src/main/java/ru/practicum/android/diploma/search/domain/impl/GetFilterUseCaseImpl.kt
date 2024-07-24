@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.search.data.repository
+package ru.practicum.android.diploma.search.domain.impl
 
 import ru.practicum.android.diploma.filter.domain.impl.FilterStorageRepository
 import ru.practicum.android.diploma.search.data.mapper.SearchVacancyConverter

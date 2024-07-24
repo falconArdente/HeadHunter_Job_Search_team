@@ -20,8 +20,6 @@ class FilterSettingsViewModel(
 
     private var jobStorage: Job? = null
     private var savedFilter: FilterGeneral = FilterGeneral()
-
-
     private val filterState = MutableLiveData<FilterSettingsState>()
     fun getState(): LiveData<FilterSettingsState> = filterState
 

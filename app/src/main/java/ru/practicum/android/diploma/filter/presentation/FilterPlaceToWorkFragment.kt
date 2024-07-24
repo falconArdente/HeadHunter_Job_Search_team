@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.filter.ui
+package ru.practicum.android.diploma.filter.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -61,6 +61,7 @@ class FilterPlaceToWorkFragment : Fragment() {
             viewModel.saveFilterAreaParameters()
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
+
     }
 
     private fun renderFilterFields(filterParamsState: PlaceToWorkFilterState?) {

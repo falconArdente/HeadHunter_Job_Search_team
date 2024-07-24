@@ -7,7 +7,7 @@
     android:fadingEdge="none"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context="ru.practicum.android.diploma.filter.ui.FilterSettingsFragment">
+    tools:context="ru.practicum.android.diploma.filter.presentation.FilterSettingsFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/filterLeftGuideline"
@@ -120,8 +120,8 @@
         android:layout_height="@dimen/dp60"
         android:layout_marginTop="@dimen/dp36"
         android:visibility="gone"
-        tools:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@+id/filterTitle">
+        app:layout_constraintTop_toBottomOf="@+id/filterTitle"
+        tools:visibility="visible">
 
         <TextView
             android:id="@+id/filterWorkPlaceTitle"
@@ -167,8 +167,8 @@
         android:layout_height="@dimen/dp60"
         android:layout_marginTop="@dimen/dp96"
         android:visibility="gone"
-        tools:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@+id/filterTitle">
+        app:layout_constraintTop_toBottomOf="@+id/filterTitle"
+        tools:visibility="visible">
 
         <TextView
             android:id="@+id/filterIndustryTitle"
@@ -241,13 +241,25 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp16"
         android:hint="@string/enter_amount"
-        android:inputType="numberDecimal"
+        android:inputType="number"
         android:maxLength="12"
         android:textColorHint="@color/search_hint_gray_to_white"
         android:textCursorDrawable="@drawable/cursor_drawable"
         app:layout_constraintBottom_toBottomOf="@id/filterSalaryInputBackground"
         app:layout_constraintStart_toStartOf="@id/filterSalaryInputBackground"
         app:layout_constraintTop_toBottomOf="@id/filterSalaryInputTitle" />
+
+    <ImageView
+        android:id="@+id/filterSalaryCross"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp16"
+        android:background="@drawable/icon_cross"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/filterSalaryInputBackground"
+        app:layout_constraintEnd_toEndOf="@id/filterSalaryInputBackground"
+        app:layout_constraintTop_toTopOf="@id/filterSalaryInputBackground"
+        app:layout_goneMarginEnd="@dimen/dp16" />
 
     <TextView
         android:id="@+id/filterDontShowWithoutSalaryTitle"

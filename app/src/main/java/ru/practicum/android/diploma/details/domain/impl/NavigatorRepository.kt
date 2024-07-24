@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.details.domain.api
+package ru.practicum.android.diploma.details.domain.impl
 
 interface NavigatorRepository {
     fun shareLink(link: String)

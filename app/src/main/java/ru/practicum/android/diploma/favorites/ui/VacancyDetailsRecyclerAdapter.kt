@@ -31,7 +31,3 @@ class VacancyDetailsRecyclerAdapter(
 
     override fun getItemCount(): Int = vacancies.size
 }
-
-fun interface ClickerForVacancyDetail {
-    fun onItemClick(vacancy: VacancyDetails)
-}

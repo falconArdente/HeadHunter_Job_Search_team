@@ -1,11 +1,11 @@
-package ru.practicum.android.diploma.network.data
+package ru.practicum.android.diploma.network.data.repository
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import retrofit2.Retrofit
-import ru.practicum.android.diploma.network.data.api.HeadHunterApplicationApi
-import ru.practicum.android.diploma.network.data.api.HeadHunterNetworkClient
+import ru.practicum.android.diploma.network.data.netapi.HeadHunterApplicationApi
+import ru.practicum.android.diploma.network.data.netapi.HeadHunterNetworkClient
 import ru.practicum.android.diploma.network.data.dto.HeadHunterRequest
 import ru.practicum.android.diploma.network.data.dto.responses.AreasResponse
 import ru.practicum.android.diploma.network.data.dto.responses.CountriesResponse

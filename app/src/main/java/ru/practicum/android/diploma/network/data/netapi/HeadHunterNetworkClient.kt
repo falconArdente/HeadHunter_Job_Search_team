@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.network.data.api
+package ru.practicum.android.diploma.network.data.netapi
 
 import ru.practicum.android.diploma.network.data.dto.HeadHunterRequest
 import ru.practicum.android.diploma.network.data.dto.responses.Response

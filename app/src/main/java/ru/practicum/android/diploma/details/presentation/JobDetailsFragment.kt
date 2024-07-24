@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.details.ui
+package ru.practicum.android.diploma.details.presentation
 
 import android.os.Bundle
 import android.text.Html
@@ -31,8 +31,8 @@ class JobDetailsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
+        savedInstanceState: Bundle?
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentJobDetailsBinding.inflate(inflater, container, false)
         return binding.root
@@ -213,12 +213,16 @@ class JobDetailsFragment : Fragment() {
             binding.jobPlaceholderText.text = requireActivity().getString(R.string.no_internet)
             binding.jobPlaceholderImage.background = requireActivity().getDrawable(R.drawable.picture_funny_head)
         }
+    }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {
         private const val VACANCY_ID = "vacancy_id"
         private const val ROUNDED_CORNERS_SIZE = 12
-        fun createArgs(vacancyID: String): Bundle = bundleOf(VACANCY_ID to vacancyID)
+        fun createArgs(vacancyId: String): Bundle = bundleOf(VACANCY_ID to vacancyId)
     }
 }

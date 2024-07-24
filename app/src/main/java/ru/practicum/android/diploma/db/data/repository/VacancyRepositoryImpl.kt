@@ -1,11 +1,11 @@
-package ru.practicum.android.diploma.db.data.impl
+package ru.practicum.android.diploma.db.data.repository
 
 import androidx.room.withTransaction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.db.data.db.AppDatabase
 import ru.practicum.android.diploma.db.data.db.VacancyDbConvertor
-import ru.practicum.android.diploma.db.domain.api.VacancyRepository
+import ru.practicum.android.diploma.search.domain.impl.VacancyRepository
 import ru.practicum.android.diploma.details.domain.model.VacancyDetails
 
 class VacancyRepositoryImpl(

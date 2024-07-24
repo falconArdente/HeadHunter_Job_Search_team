@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.network.data
+package ru.practicum.android.diploma.network.data.repository
 
 import android.content.Context
 import kotlinx.coroutines.flow.Flow
@@ -6,9 +6,9 @@ import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.details.domain.impl.VacancyDetailsRepository
 import ru.practicum.android.diploma.details.domain.model.VacancyDetails
-import ru.practicum.android.diploma.network.data.api.HeadHunterNetworkClient
-import ru.practicum.android.diploma.network.data.api.MAX_VACANCY_SUGGESTION_REQUEST_TEXT_LENGTH
-import ru.practicum.android.diploma.network.data.api.MIN_VACANCY_SUGGESTION_REQUEST_TEXT_LENGTH
+import ru.practicum.android.diploma.network.data.netapi.HeadHunterNetworkClient
+import ru.practicum.android.diploma.network.data.netapi.MAX_VACANCY_SUGGESTION_REQUEST_TEXT_LENGTH
+import ru.practicum.android.diploma.network.data.netapi.MIN_VACANCY_SUGGESTION_REQUEST_TEXT_LENGTH
 import ru.practicum.android.diploma.network.data.dto.HeadHunterRequest
 import ru.practicum.android.diploma.network.data.dto.linked.AreaDTO
 import ru.practicum.android.diploma.network.data.dto.linked.CountryDTO
@@ -25,7 +25,7 @@ import ru.practicum.android.diploma.network.data.dto.responses.VacancyByIdRespon
 import ru.practicum.android.diploma.network.data.dto.responses.VacancyListResponse
 import ru.practicum.android.diploma.network.data.dto.responses.VacancySuggestionsResponse
 import ru.practicum.android.diploma.network.data.mapper.VacancyDetailsMapper.mapToDomain
-import ru.practicum.android.diploma.search.data.repository.SearchRepository
+import ru.practicum.android.diploma.search.domain.impl.SearchRepository
 import ru.practicum.android.diploma.utils.Resource
 
 class HeadHunterRepository(private val client: HeadHunterNetworkClient, context: Context) : SearchRepository,

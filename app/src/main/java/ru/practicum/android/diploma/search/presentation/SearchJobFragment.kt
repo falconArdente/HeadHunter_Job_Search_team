@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.search.ui
+package ru.practicum.android.diploma.search.presentation
 
 import android.content.Context
 import android.os.Bundle
@@ -18,11 +18,14 @@ import androidx.recyclerview.widget.RecyclerView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchJobBinding
-import ru.practicum.android.diploma.details.ui.JobDetailsFragment
-import ru.practicum.android.diploma.filter.ui.FilterSettingsFragment
+import ru.practicum.android.diploma.details.presentation.JobDetailsFragment
+import ru.practicum.android.diploma.filter.presentation.FilterSettingsFragment
 import ru.practicum.android.diploma.search.domain.model.Vacancy
 import ru.practicum.android.diploma.search.presentation.state.SearchFragmentState
 import ru.practicum.android.diploma.search.presentation.viewmodel.SearchViewModel
+import ru.practicum.android.diploma.search.ui.SearchRecyclerViewEvent
+import ru.practicum.android.diploma.search.ui.VacancyAdapter
+import ru.practicum.android.diploma.search.ui.VacancyPositionSuggestsAdapter
 
 class SearchJobFragment : Fragment() {
     private var _binding: FragmentSearchJobBinding? = null

@@ -1,9 +1,10 @@
 package ru.practicum.android.diploma.details.data.repository
 
 import ru.practicum.android.diploma.details.data.externalnavigator.ExternalNavigator
-import ru.practicum.android.diploma.details.domain.api.NavigatorRepository
+import ru.practicum.android.diploma.details.domain.impl.NavigatorRepository
 
-class NavigatorRepositoryImpl(private val externalNavigator: ExternalNavigator) : NavigatorRepository {
+class NavigatorRepositoryImpl(private val externalNavigator: ExternalNavigator) :
+    NavigatorRepository {
     override fun shareLink(link: String) {
         externalNavigator.shareLink(link)
     }

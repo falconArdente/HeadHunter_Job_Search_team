@@ -45,6 +45,10 @@ class PlaceToWorkFilterViewModel(private val placeToWorkFilterInteractor: PlaceT
                 val parentOfRegionById =
                     placeToWorkFilterInteractor.getCountryForRegion(currentArea?.areaId!!)
                 setLiveDataValue(parentOfRegionById, currentArea)
+                placeToWorkFilterInteractor.saveCountry(
+                    countryId = parentOfRegionById?.countryId,
+                    countryName = parentOfRegionById?.countryName
+                )
             } else {
                 setLiveDataValue(currentCountry, currentArea)
             }
