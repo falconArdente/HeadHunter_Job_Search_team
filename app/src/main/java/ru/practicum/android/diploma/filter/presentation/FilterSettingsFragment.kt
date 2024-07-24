@@ -34,6 +34,9 @@ class FilterSettingsFragment : Fragment() {
     }
 
     private fun setClicks() {
+        binding.filterArrowBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
         binding.filterWorkPlaceInactive.setOnClickListener {
             findNavController().navigate(R.id.action_filterSettingsFragment_to_filterPlaceToWorkFragment)
         }
@@ -62,6 +65,23 @@ class FilterSettingsFragment : Fragment() {
         }
     }
 
+    private fun setTextActions() {
+        binding.filterSalaryInput.doOnTextChanged { text, _, _, _ ->
+            if (text?.isNotEmpty() == true) {
+                viewModel.changeSalary(
+                    newSalary = binding.filterSalaryInput.text.toString()
+                )
+            }
+        }
+        binding.filterSalaryInput.doOnTextChanged { text, _, _, _ ->
+            if (text.isNullOrEmpty()) {
+                binding.filterSalaryCross.visibility = View.GONE
+            } else {
+                binding.filterSalaryCross.visibility = View.VISIBLE
+            }
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val isFromSearch = if (arguments != null) {
@@ -70,9 +90,7 @@ class FilterSettingsFragment : Fragment() {
             false
         }
         arguments?.clear()
-        binding.filterArrowBack.setOnClickListener {
-            findNavController().navigateUp()
-        }
+
         binding.filterSalaryInput.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Blue))
@@ -86,13 +104,7 @@ class FilterSettingsFragment : Fragment() {
             render(state)
         }
         setClicks()
-        binding.filterSalaryInput.doOnTextChanged { text, _, _, _ ->
-            if (text?.isNotEmpty() == true) {
-                viewModel.changeSalary(
-                    newSalary = binding.filterSalaryInput.text.toString()
-                )
-            }
-        }
+        setTextActions()
         binding.filterDontShowWithoutSalaryCheckBox.setOnCheckedChangeListener { _, isChecked ->
             viewModel.changeHideNoSalary(noSalary = isChecked)
         }
@@ -100,13 +112,6 @@ class FilterSettingsFragment : Fragment() {
             viewModel.resetFilter()
         }
         viewModel.loadSavedFilterSettings(isFromSearch)
-        binding.filterSalaryInput.doOnTextChanged { text, _, _, _ ->
-            if (text.isNullOrEmpty()) {
-                binding.filterSalaryCross.visibility = View.GONE
-            } else {
-                binding.filterSalaryCross.visibility = View.VISIBLE
-            }
-        }
     }
 
     private fun render(state: FilterSettingsState) {
