@@ -10,15 +10,15 @@ import ru.practicum.android.diploma.filter.domain.model.Area
 import ru.practicum.android.diploma.filter.domain.model.AreaSuggestion
 import ru.practicum.android.diploma.filter.domain.model.Country
 import ru.practicum.android.diploma.filter.domain.model.Industry
-import ru.practicum.android.diploma.network.data.netapi.HeadHunterNetworkClient
-import ru.practicum.android.diploma.network.data.netapi.MAX_AREA_SUGGESTION_REQUEST_TEXT_LENGTH
-import ru.practicum.android.diploma.network.data.netapi.MIN_AREA_SUGGESTION_REQUEST_TEXT_LENGTH
 import ru.practicum.android.diploma.network.data.dto.HeadHunterRequest
 import ru.practicum.android.diploma.network.data.dto.responses.AreaSuggestionsResponse
 import ru.practicum.android.diploma.network.data.dto.responses.AreasResponse
 import ru.practicum.android.diploma.network.data.dto.responses.CountriesResponse
 import ru.practicum.android.diploma.network.data.dto.responses.IndustryResponse
 import ru.practicum.android.diploma.network.data.dto.responses.Response
+import ru.practicum.android.diploma.network.data.netapi.HeadHunterNetworkClient
+import ru.practicum.android.diploma.network.data.netapi.MAX_AREA_SUGGESTION_REQUEST_TEXT_LENGTH
+import ru.practicum.android.diploma.network.data.netapi.MIN_AREA_SUGGESTION_REQUEST_TEXT_LENGTH
 import ru.practicum.android.diploma.utils.Resource
 import java.text.Collator
 
