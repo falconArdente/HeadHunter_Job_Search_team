@@ -157,6 +157,11 @@ class FilterSettingsFragment : Fragment() {
 
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     companion object {
         const val PATH_FROM_SEARCH = "PATH_FROM_SEARCH"
     }

@@ -16,8 +16,6 @@ class RootActivity : AppCompatActivity() {
         setContentView(binding.root)
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment
         val navController = navHostFragment.navController
-        // Пример использования access token для HeadHunter API
-        // networkRequestExample(accessToken = BuildConfig.HH_ACCESS_TOKEN)
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.btm_nav_view)
         bottomNavigationView.setupWithNavController(navController)
         navController.addOnDestinationChangedListener { _, destination, _ ->
