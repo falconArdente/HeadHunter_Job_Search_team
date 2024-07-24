@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.filter.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -76,7 +75,6 @@ class RegionFilterViewModel(
     }
 
     private fun processSearchRegionByNameResponse(searchResult: Resource<List<AreaSuggestion>>) {
-        Log.e("ERROR", "$searchResult")
         when (searchResult) {
             is Resource.Success -> {
                 val regionListReceived = searchResult.data

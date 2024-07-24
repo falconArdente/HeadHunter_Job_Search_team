@@ -53,7 +53,9 @@ class FilterRegionFragment : Fragment() {
             if (!text.isNullOrEmpty()) {
                 if (text.length > 1) {
                     viewModelRegion.searchRegionByName(text.toString())
-                } else viewModelRegion.getOriginalListBeforeSearching()
+                } else {
+                    viewModelRegion.getOriginalListBeforeSearching()
+                }
             } else {
                 viewModelRegion.getOriginalListBeforeSearching()
             }

@@ -52,7 +52,7 @@ class FilterCountryFragment : Fragment() {
 
     private fun renderUiElements(state: AreaFilterState) {
         binding.searchPlaceholderImage.isVisible = state is AreaFilterState.Error ||
-        state is AreaFilterState.InternetConnectionError || state is AreaFilterState.Empty
+            state is AreaFilterState.InternetConnectionError || state is AreaFilterState.Empty
         binding.searchPlaceholderText.isVisible = state is AreaFilterState.Error ||
             state is AreaFilterState.InternetConnectionError || state is AreaFilterState.Empty
         binding.loadingProgressBar.isVisible = state is AreaFilterState.Loading
