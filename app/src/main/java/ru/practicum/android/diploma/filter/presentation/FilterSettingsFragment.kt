@@ -167,5 +167,6 @@ class FilterSettingsFragment : Fragment() {
 
     companion object {
         const val PATH_FROM_SEARCH = "PATH_FROM_SEARCH"
+        const val DELAY_FILTER_LOAD = 100L
     }
 }
