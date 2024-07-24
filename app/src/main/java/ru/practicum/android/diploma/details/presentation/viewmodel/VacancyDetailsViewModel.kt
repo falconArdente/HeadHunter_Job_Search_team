@@ -50,10 +50,12 @@ class VacancyDetailsViewModel(
             when (searchResult) {
                 is Resource.InternetConnectionError -> {
                     var isVacancyInFavorites = false
-                    detailsDbInteractor.isExistsVacancy(vacancyId.toInt()).collect { isVacancyInFavorites = it }
+                    detailsDbInteractor.isExistsVacancy(vacancyId.toInt()).collect { isExists ->
+                        isVacancyInFavorites = isExists
+                    }
                     if (isVacancyInFavorites) {
-                        detailsDbInteractor.getVacancyById(vacancyId.toInt()).collect {
-                            _stateLiveData.value = VacancyDetailsState.Content(it!!)
+                        detailsDbInteractor.getVacancyById(vacancyId.toInt()).collect { vacancyDetails ->
+                            _stateLiveData.value = VacancyDetailsState.Content(vacancyDetails!!)
                         }
                     } else {
                         _stateLiveData.value = VacancyDetailsState.Error(searchResult.message!!)
@@ -62,7 +64,9 @@ class VacancyDetailsViewModel(
 
                 is Resource.NotFoundError -> {
                     var isVacancyInFavorites = false
-                    detailsDbInteractor.isExistsVacancy(vacancyId.toInt()).collect { isVacancyInFavorites = it }
+                    detailsDbInteractor.isExistsVacancy(vacancyId.toInt()).collect { isExists ->
+                        isVacancyInFavorites = isExists
+                    }
                     if (isVacancyInFavorites) {
                         detailsDbInteractor.deleteVacancy(vacancyId.toInt())
                     }

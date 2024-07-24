@@ -31,8 +31,8 @@ class JobDetailsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
+        savedInstanceState: Bundle?
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentJobDetailsBinding.inflate(inflater, container, false)
         return binding.root
@@ -204,7 +204,7 @@ class JobDetailsFragment : Fragment() {
                 "${binding.jobContactsEmail.text} ${vacancyDetails.employerInfo.contacts.email}"
             binding.jobContactsPhone.text =
                 "${binding.jobContactsPhone.text} " +
-                "${vacancyDetails.employerInfo.contacts.phones?.joinToString(separator = "\n")}"
+                    "${vacancyDetails.employerInfo.contacts.phones?.joinToString(separator = "\n")}"
         }
     }
 
@@ -216,9 +216,14 @@ class JobDetailsFragment : Fragment() {
 
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     companion object {
         private const val VACANCY_ID = "vacancy_id"
         private const val ROUNDED_CORNERS_SIZE = 12
-        fun createArgs(vacancyID: String): Bundle = bundleOf(VACANCY_ID to vacancyID)
+        fun createArgs(vacancyId: String): Bundle = bundleOf(VACANCY_ID to vacancyId)
     }
 }
