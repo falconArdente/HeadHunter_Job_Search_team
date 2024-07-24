@@ -68,31 +68,23 @@ class FilterDictionariesRepositoryHHNetworkClientBased(private val client: HeadH
         }
     }
 
-    override suspend fun getAreasNormally(): Resource<List<Area>> {
-        val response = client.doRequest(HeadHunterRequest.Areas)
-        return if (response.resultCode == Response.SUCCESS) {
-            Resource.Success((response as AreasResponse).areasList.map { areaDto ->
-                FilterMapper.toArea(areaDto)
-            })
-        } else {
-            Resource.Error(areasErrorMessage)
-        }
-    }
-
     override suspend fun getDetailedAreas(): Flow<Resource<List<Area>>> = flow {
         val response = client.doRequest(HeadHunterRequest.Areas)
-        if (response.resultCode == Response.SUCCESS) {
-            val subAreasListOriginal = (response as AreasResponse).areasList.map { areaDto ->
-                FilterMapper.toArea(areaDto)
+        when (response.resultCode) {
+            Response.SUCCESS -> {
+                val subAreasListOriginal = (response as AreasResponse).areasList.map { areaDto ->
+                    FilterMapper.toArea(areaDto)
+                }
+                val detailedAreaList = getMaximumDetailedArea(subAreasListOriginal)
+                val regionList = getRegionList(subAreasListOriginal)
+                val finalRegionList = regionList + detailedAreaList
+                val collator = Collator.getInstance()
+                val sortedDetailedList = finalRegionList.sortedWith(compareBy(collator) { it.name })
+                emit(Resource.Success(sortedDetailedList))
             }
-            val detailedAreaList = getMaximumDetailedArea(subAreasListOriginal)
-            val regionList = getRegionList(subAreasListOriginal)
-            val finalRegionList = regionList + detailedAreaList
-            val collator = Collator.getInstance()
-            val sortedDetailedList = finalRegionList.sortedWith(compareBy(collator) { it.name })
-            emit(Resource.Success(sortedDetailedList))
-        } else {
-            emit(Resource.Error(areasErrorMessage))
+            Response.NOT_FOUND -> emit(Resource.NotFoundError(areasErrorMessage))
+            Response.NO_INTERNET -> emit(Resource.InternetConnectionError(areasErrorMessage))
+            else -> emit(Resource.Error(areasErrorMessage))
         }
     }
 

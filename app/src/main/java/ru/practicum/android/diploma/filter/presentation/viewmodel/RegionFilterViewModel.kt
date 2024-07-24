@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.filter.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -44,12 +45,24 @@ class RegionFilterViewModel(
     }
 
     private fun processSearchAreasListResponse(searchResult: Resource<List<Area>>) {
-        if (searchResult.data != null) {
-            val regionFilterState = AreaFilterState.AreaContent(searchResult.data)
-            originalListBeforeSearching = searchResult.data
-            _stateLiveDataRegion.value = regionFilterState
-        } else {
-            _stateLiveDataRegion.value = AreaFilterState.Error(searchResult.message!!)
+        when (searchResult) {
+            is Resource.Success -> {
+                originalListBeforeSearching = searchResult.data!!
+                if (originalListBeforeSearching.isNotEmpty()) {
+                    _stateLiveDataRegion.value = AreaFilterState.AreaContent(searchResult.data!!)
+                } else {
+                    _stateLiveDataRegion.value = AreaFilterState.Empty
+                }
+            }
+
+            is Resource.Error, is Resource.NotFoundError -> {
+                _stateLiveDataRegion.value = AreaFilterState.Error(searchResult.message!!)
+            }
+
+            is Resource.InternetConnectionError -> {
+                _stateLiveDataRegion.value =
+                    AreaFilterState.InternetConnectionError(searchResult.message!!)
+            }
         }
     }
 
@@ -63,15 +76,25 @@ class RegionFilterViewModel(
     }
 
     private fun processSearchRegionByNameResponse(searchResult: Resource<List<AreaSuggestion>>) {
-        if (searchResult.data != null) {
-            val regionListReceived = searchResult.data
-            if (!regionListReceived.isNullOrEmpty()) {
-                _stateLiveDataRegion.value = AreaFilterState.AreaContent(searchResult.data)
-            } else {
-                _stateLiveDataRegion.value = AreaFilterState.Empty
+        Log.e("ERROR", "$searchResult")
+        when (searchResult) {
+            is Resource.Success -> {
+                val regionListReceived = searchResult.data
+                if (!regionListReceived.isNullOrEmpty()) {
+                    _stateLiveDataRegion.value = AreaFilterState.AreaContent(searchResult.data)
+                } else {
+                    _stateLiveDataRegion.value = AreaFilterState.Empty
+                }
             }
-        } else {
-            _stateLiveDataRegion.value = AreaFilterState.Error(searchResult.message!!)
+
+            is Resource.Error, is Resource.NotFoundError -> {
+                _stateLiveDataRegion.value = AreaFilterState.Error(searchResult.message!!)
+            }
+
+            is Resource.InternetConnectionError -> {
+                _stateLiveDataRegion.value =
+                    AreaFilterState.InternetConnectionError(searchResult.message!!)
+            }
         }
     }
 

@@ -33,6 +33,22 @@ class CountryFilterViewModel(private val countryFilterInteractor: CountryFilterI
         } else {
             _stateLiveDataCountry.value = AreaFilterState.Error(searchCountriesResult.message!!)
         }
+
+        when (searchCountriesResult) {
+            is Resource.Success -> {
+                if (searchCountriesResult.data!!.isNotEmpty()) {
+                    _stateLiveDataCountry.value = AreaFilterState.AreaContent(searchCountriesResult.data)
+                } else {
+                    _stateLiveDataCountry.value = AreaFilterState.Empty
+                }
+            }
+            is Resource.Error, is Resource.NotFoundError -> {
+                _stateLiveDataCountry.value =
+                    AreaFilterState.Error(searchCountriesResult.message!!)
+            }
+            is Resource.InternetConnectionError -> _stateLiveDataCountry.value =
+                AreaFilterState.InternetConnectionError(searchCountriesResult.message!!)
+        }
     }
 
     fun saveCountryChoiceToFilter(country: AreaDetailsFilterItem) {

@@ -51,7 +51,9 @@ class FilterRegionFragment : Fragment() {
             val iconResId = if (text.isNullOrEmpty()) R.drawable.icon_search else R.drawable.icon_cross
             binding.filterInputIcon.background = requireActivity().getDrawable(iconResId)
             if (!text.isNullOrEmpty()) {
-                viewModelRegion.searchRegionByName(text.toString())
+                if (text.length > 1) {
+                    viewModelRegion.searchRegionByName(text.toString())
+                } else viewModelRegion.getOriginalListBeforeSearching()
             } else {
                 viewModelRegion.getOriginalListBeforeSearching()
             }
@@ -71,8 +73,10 @@ class FilterRegionFragment : Fragment() {
     }
 
     private fun renderStateLiveData(state: AreaFilterState) {
-        binding.searchPlaceholderImage.isVisible = state is AreaFilterState.Error || state is AreaFilterState.Empty
-        binding.searchPlaceholderText.isVisible = state is AreaFilterState.Error || state is AreaFilterState.Empty
+        binding.searchPlaceholderImage.isVisible = state is AreaFilterState.Error ||
+            state is AreaFilterState.InternetConnectionError || state is AreaFilterState.Empty
+        binding.searchPlaceholderText.isVisible = state is AreaFilterState.Error ||
+            state is AreaFilterState.InternetConnectionError || state is AreaFilterState.Empty
         binding.loadingProgressBar.isVisible = state is AreaFilterState.Loading
         binding.recyclerViewFilter.isVisible = state is AreaFilterState.AreaContent
 
@@ -91,11 +95,18 @@ class FilterRegionFragment : Fragment() {
             is AreaFilterState.Empty -> {
                 binding.searchPlaceholderText.text =
                     requireContext().getString(R.string.no_such_region)
+                binding.searchPlaceholderImage.setBackgroundResource(0)
                 binding.searchPlaceholderImage.setImageResource(R.drawable.picture_angry_cat)
             }
 
             is AreaFilterState.Loading -> {
                 Unit
+            }
+
+            is AreaFilterState.InternetConnectionError -> {
+                binding.searchPlaceholderImage.setBackgroundResource(0)
+                binding.searchPlaceholderImage.setImageResource(R.drawable.picture_funny_head)
+                binding.searchPlaceholderText.text = requireContext().getString(R.string.no_internet)
             }
         }
     }
