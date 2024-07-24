@@ -81,19 +81,19 @@ class VacancyDetailsViewModel(
         if (isFavoriteJob?.isActive == true) return
 
         isFavoriteJob = viewModelScope.launch {
-                var isInFavoriteList = false
-                detailsDbInteractor.isExistsVacancy(vacancyId.toInt()).collect {
-                    isInFavoriteList = it
+            var isInFavoriteList = false
+            detailsDbInteractor.isExistsVacancy(vacancyId.toInt()).collect {
+                isInFavoriteList = it
+            }
+            if (isInFavoriteList) {
+                detailsDbInteractor.deleteVacancy(vacancyId.toInt())
+                _stateLiveData.postValue(VacancyDetailsState.Favorite(false))
+            } else {
+                if (vacancyDetails != null) {
+                    detailsDbInteractor.insertVacancy(vacancyDetails!!)
+                    _stateLiveData.postValue(VacancyDetailsState.Favorite(true))
                 }
-                if (isInFavoriteList) {
-                    detailsDbInteractor.deleteVacancy(vacancyId.toInt())
-                    _stateLiveData.postValue(VacancyDetailsState.Favorite(false))
-                } else {
-                    if (vacancyDetails != null) {
-                        detailsDbInteractor.insertVacancy(vacancyDetails!!)
-                        _stateLiveData.postValue(VacancyDetailsState.Favorite(true))
-                    }
-                }
+            }
         }
     }
 
