@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -61,7 +62,8 @@ class FilterSettingsFragment : Fragment() {
             findNavController().navigateUp()
         }
         binding.filterSalaryCross.setOnClickListener {
-            binding.filterSalaryInput.setText("")
+            binding.filterSalaryInput.setText(String())
+            viewModel.changeSalary(String())
         }
     }
 
@@ -84,6 +86,7 @@ class FilterSettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val isFromSearch = if (arguments != null) {
             requireArguments().getBoolean(PATH_FROM_SEARCH)
         } else {
@@ -147,7 +150,10 @@ class FilterSettingsFragment : Fragment() {
                     binding.filterIndustryValue.text = state.filter.industry!!.industryName
                 }
             }
-
+            is FilterSettingsState.InterfaceActivate -> {
+                binding.filterApplyButton.isVisible = state.isActiveApply
+                binding.filterResetButton.isVisible = state.isActiveReset
+            }
             else -> {
                 findNavController().navigateUp()
             }
@@ -162,5 +168,6 @@ class FilterSettingsFragment : Fragment() {
 
     companion object {
         const val PATH_FROM_SEARCH = "PATH_FROM_SEARCH"
+        const val DELAY_FILTER_LOAD = 100L
     }
 }

@@ -6,4 +6,5 @@ sealed class FilterIndustryState {
     data class LoadedList(val industry: List<IndustryWithCheck>) : FilterIndustryState()
     data class EmptyList(val isEmpty: Boolean = true) : FilterIndustryState()
     data class SavedFilter(val isSaved: Boolean = true) : FilterIndustryState()
+    data class ApplyVisible(val isVisible: Boolean) : FilterIndustryState()
 }

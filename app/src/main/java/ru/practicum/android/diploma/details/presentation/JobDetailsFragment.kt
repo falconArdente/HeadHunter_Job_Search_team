@@ -41,15 +41,8 @@ class JobDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.stateLiveData.observe(viewLifecycleOwner) {
+        viewModel.getState().observe(viewLifecycleOwner) {
             initializeJobDetailsFragment(it)
-        }
-        viewModel.isFavorite.observe(viewLifecycleOwner) {
-            if (it) {
-                binding.jobHeartIcon.setImageResource(R.drawable.icon_heart_active)
-            } else {
-                binding.jobHeartIcon.setImageResource(R.drawable.icon_heart)
-            }
         }
 
         binding.jobShareIcon.setOnClickListener {
@@ -74,31 +67,45 @@ class JobDetailsFragment : Fragment() {
     }
 
     private fun initializeJobDetailsFragment(vacancyDetailsState: VacancyDetailsState) {
-        setVisibilityOfMainElements(vacancyDetailsState)
+        when (vacancyDetailsState) {
+            is VacancyDetailsState.Content -> {
+                setVisibilityOfMainElements(vacancyDetailsState)
 
-        if (vacancyDetailsState is VacancyDetailsState.Content) {
-            val vacancyDetails: VacancyDetails = vacancyDetailsState.data
+                val vacancyDetails: VacancyDetails = vacancyDetailsState.data
 
-            binding.jobTitle.text = vacancyDetails.name
+                binding.jobTitle.text = vacancyDetails.name
 
-            renderJobSalary(vacancyDetails)
+                renderJobSalary(vacancyDetails)
 
-            binding.jobCompany.text = vacancyDetails.employerInfo.employerName
-            binding.jobCity.text = vacancyDetails.employerInfo.area.name
+                binding.jobCompany.text = vacancyDetails.employerInfo.employerName
+                binding.jobCity.text = vacancyDetails.employerInfo.area.name
 
-            renderJobExperience(vacancyDetails)
+                renderJobExperience(vacancyDetails)
 
-            renderJobDetails(vacancyDetails)
+                renderJobDetails(vacancyDetails)
 
-            renderKeySkills(vacancyDetails)
+                renderKeySkills(vacancyDetails)
 
-            renderContacts(vacancyDetails)
+                renderContacts(vacancyDetails)
 
-            Glide.with(binding.jobImage)
-                .load(vacancyDetails.employerInfo.logo?.size240)
-                .transform(RoundedCorners(ROUNDED_CORNERS_SIZE))
-                .placeholder(R.drawable.placeholder_logo)
-                .into(binding.jobImage)
+                Glide.with(binding.jobImage)
+                    .load(vacancyDetails.employerInfo.logo?.size240)
+                    .transform(RoundedCorners(ROUNDED_CORNERS_SIZE))
+                    .placeholder(R.drawable.placeholder_logo)
+                    .into(binding.jobImage)
+            }
+
+            is VacancyDetailsState.Favorite -> {
+                if (vacancyDetailsState.isFavorite) {
+                    binding.jobHeartIcon.setImageResource(R.drawable.icon_heart_active)
+                } else {
+                    binding.jobHeartIcon.setImageResource(R.drawable.icon_heart)
+                }
+            }
+
+            else -> {
+                setVisibilityOfMainElements(vacancyDetailsState)
+            }
         }
     }
 
