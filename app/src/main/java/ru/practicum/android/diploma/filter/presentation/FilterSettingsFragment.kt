@@ -150,10 +150,13 @@ class FilterSettingsFragment : Fragment() {
                     binding.filterIndustryValue.text = state.filter.industry!!.industryName
                 }
             }
+
             is FilterSettingsState.InterfaceActivate -> {
-                binding.filterApplyButton.isVisible = state.isActiveApply
-                binding.filterResetButton.isVisible = state.isActiveReset
+                val isActive = state.isActiveReset || state.isActiveApply
+                binding.filterApplyButton.isVisible = isActive
+                binding.filterResetButton.isVisible = isActive
             }
+
             else -> {
                 findNavController().navigateUp()
             }
