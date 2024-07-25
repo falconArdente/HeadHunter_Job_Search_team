@@ -4,8 +4,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import retrofit2.Retrofit
-import ru.practicum.android.diploma.network.data.netapi.HeadHunterApplicationApi
-import ru.practicum.android.diploma.network.data.netapi.HeadHunterNetworkClient
 import ru.practicum.android.diploma.network.data.dto.HeadHunterRequest
 import ru.practicum.android.diploma.network.data.dto.responses.AreasResponse
 import ru.practicum.android.diploma.network.data.dto.responses.CountriesResponse
@@ -13,6 +11,8 @@ import ru.practicum.android.diploma.network.data.dto.responses.IndustryResponse
 import ru.practicum.android.diploma.network.data.dto.responses.LocalesResponse
 import ru.practicum.android.diploma.network.data.dto.responses.Response
 import ru.practicum.android.diploma.network.data.dto.responses.VacancySuggestionsResponse
+import ru.practicum.android.diploma.network.data.netapi.HeadHunterApplicationApi
+import ru.practicum.android.diploma.network.data.netapi.HeadHunterNetworkClient
 import ru.practicum.android.diploma.utils.NetworkStatus
 import java.io.UncheckedIOException
 
@@ -82,6 +82,11 @@ class RetrofitBasedClient(retrofit: Retrofit, private val networkStatus: Network
                 Response().apply {
                     errorMessage = e.message
                     resultCode = Response.FAILURE
+                }
+            } catch (e: IllegalStateException) {
+                Response().apply {
+                    errorMessage = e.message
+                    resultCode = Response.ILLEGAL_STATE
                 }
             }
         }
