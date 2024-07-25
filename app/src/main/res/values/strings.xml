@@ -95,4 +95,7 @@
     <string name="toast_region_notification">Выбранный регион не относится к выбранной стране</string>
     <string name="filter_region">%s, %s</string>
 
+    <string name="filter_industry_title">Выбор отрасли</string>
+    <string name="filter_industry_empty_error">Отрасли не найдены</string>
+
 </resources>

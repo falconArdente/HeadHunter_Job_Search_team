@@ -30,7 +30,11 @@ class FilterIndustryViewModel(
     fun loadIndustryList() {
         jobDictionaries?.cancel()
 
+        filterState.postValue(FilterIndustryState.Loading)
+
         jobDictionaries = viewModelScope.launch(Dispatchers.IO) {
+
+
             if (networkStatus.isConnected()) {
                 filterDictionaries.getIndustries().collect { response ->
                     when (response) {
@@ -46,6 +50,8 @@ class FilterIndustryViewModel(
                         else -> filterState.postValue(FilterIndustryState.EmptyList())
                     }
                 }
+            } else {
+                filterState.postValue(FilterIndustryState.NoInternetConnection)
             }
         }
     }
@@ -75,6 +81,14 @@ class FilterIndustryViewModel(
 
     fun saveSelectedIndustry(industry: Industry) {
         savedIndustry = industry
+    }
+
+    fun checkListIndustry(count: Int) {
+        if (count == 0) {
+            filterState.postValue(FilterIndustryState.EmptyList())
+        } else {
+            filterState.postValue(FilterIndustryState.Filtered)
+        }
     }
 
     fun saveIndustry() {

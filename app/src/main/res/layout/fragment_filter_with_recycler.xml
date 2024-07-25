@@ -37,6 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp16"
         android:layout_marginTop="@dimen/dp20"
+        android:text="@string/filter_industry_title"
         app:layout_constraintLeft_toRightOf="@id/backButtonFilterWithRecycler"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Задать шапку фрагмента" />
