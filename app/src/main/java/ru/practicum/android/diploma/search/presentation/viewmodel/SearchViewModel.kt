@@ -39,6 +39,9 @@ class SearchViewModel(
     private val vacanciesList = mutableListOf<Vacancy>()
     private var totalFound = 0
 
+    private val _isLastPage = MutableLiveData<Boolean>(false)
+    val isLastPage: LiveData<Boolean> = _isLastPage
+
     init {
         updateState(SearchFragmentState.NoTextInInputEditText)
     }
@@ -83,7 +86,7 @@ class SearchViewModel(
     private val searchJobDetails: Job? = null
     private fun searchResult(text: String) {
         searchJobDetails?.cancel()
-        updateState(SearchFragmentState.Loading)
+        if (currentPage == 0) updateState(SearchFragmentState.Loading)
         searchJobDetails != viewModelScope.launch {
             interactor
                 .searchVacancy(text, parametersForSearch, PER_PAGE, currentPage)
@@ -93,9 +96,11 @@ class SearchViewModel(
                         if (currentPage == maxPages || vacanciesList.count() == vacancy.foundVacancy) {
                             vacanciesList.addAll(vacancy.result)
                             updateState(searchVacancy = vacanciesList, totalFoundVacancy = totalFound)
+                            _isLastPage.value = true
                         }
                         if (currentPage < maxPages) {
                             vacanciesList += vacancy.result
+                            _isLastPage.value = maxPages == 1
                         }
                         totalFound = vacancy.foundVacancy
                         updateState(searchVacancy = vacanciesList, totalFoundVacancy = totalFound)
@@ -139,7 +144,7 @@ class SearchViewModel(
             currentPage++
         }
         if (currentPage < maxPages) {
-            updateState(SearchFragmentState.Loading)
+//            updateState(SearchFragmentState.Loading)
             searchResult(latestSearchText!!)
         }
     }
