@@ -96,12 +96,12 @@ class SearchViewModel(
                 .collect { vacancy ->
                     if (vacancy.result!!.isNotEmpty()) {
                         maxPages = vacancy.pages
-                        if (currentPage == maxPages || vacanciesList.count() == vacancy.foundVacancy) {
+                        if (currentPage == maxPages - 1 || vacanciesList.count() == vacancy.foundVacancy) {
                             vacanciesList.addAll(vacancy.result)
                             updateState(searchVacancy = vacanciesList, totalFoundVacancy = totalFound)
                             _isLastPage.value = true
                         }
-                        if (currentPage < maxPages) {
+                        if (currentPage < maxPages - 1) {
                             vacanciesList += vacancy.result
                             _isLastPage.value = maxPages == 1
                         }
@@ -141,10 +141,10 @@ class SearchViewModel(
     }
 
     fun onLastItemReached() {
-        if (currentPage == maxPages) {
+        if (currentPage == maxPages - 1) {
             updateState(SearchFragmentState.SearchVacancy(vacanciesList, totalFound))
         }
-        if (currentPage < maxPages) {
+        if (currentPage < maxPages - 1) {
             if (!searchInProcess) {
                 currentPage++
                 searchResult(latestSearchText!!)
