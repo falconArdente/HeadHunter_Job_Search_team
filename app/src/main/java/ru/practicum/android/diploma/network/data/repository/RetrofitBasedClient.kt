@@ -15,6 +15,7 @@ import ru.practicum.android.diploma.network.data.netapi.HeadHunterApplicationApi
 import ru.practicum.android.diploma.network.data.netapi.HeadHunterNetworkClient
 import ru.practicum.android.diploma.utils.NetworkStatus
 import java.io.UncheckedIOException
+import java.net.SocketTimeoutException
 
 class RetrofitBasedClient(retrofit: Retrofit, private val networkStatus: NetworkStatus) : HeadHunterNetworkClient {
     private val serverService = retrofit.create(HeadHunterApplicationApi::class.java)
@@ -87,6 +88,11 @@ class RetrofitBasedClient(retrofit: Retrofit, private val networkStatus: Network
                 Response().apply {
                     errorMessage = e.message
                     resultCode = Response.ILLEGAL_STATE
+                }
+            }catch (e: SocketTimeoutException) {
+                Response().apply {
+                    errorMessage = e.message
+                    resultCode = Response.FAILURE
                 }
             }
         }
