@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -16,6 +17,7 @@ import ru.practicum.android.diploma.filter.presentation.viewmodel.PlaceToWorkFil
 class FilterPlaceToWorkFragment : Fragment() {
     private var _binding: FragmentFilterSettingsBinding? = null
     private val binding get() = _binding!!
+    private var applyButtonWasClicked = false
 
     private val viewModel: PlaceToWorkFilterViewModel by viewModel<PlaceToWorkFilterViewModel>()
 
@@ -35,6 +37,16 @@ class FilterPlaceToWorkFragment : Fragment() {
         }
 
         binding.filterArrowBack.setOnClickListener {
+            viewModel.clearArea()
+            viewModel.clearCountry()
+            findNavController().navigateUp()
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            if (!applyButtonWasClicked) {
+                viewModel.clearArea()
+                viewModel.clearCountry()
+            }
             findNavController().navigateUp()
         }
 
@@ -59,6 +71,7 @@ class FilterPlaceToWorkFragment : Fragment() {
 
         binding.filterApplyButton.setOnClickListener {
             viewModel.saveFilterAreaParameters()
+            applyButtonWasClicked = true
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
 

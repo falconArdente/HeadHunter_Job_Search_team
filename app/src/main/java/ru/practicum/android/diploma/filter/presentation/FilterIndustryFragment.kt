@@ -74,7 +74,9 @@ class FilterIndustryFragment : Fragment() {
             is FilterIndustryState.SavedFilter -> {
                 findNavController().navigateUp()
             }
-
+            is FilterIndustryState.ApplyVisible -> {
+                binding.filterApplyButton.isVisible = state.isVisible
+            }
             is FilterIndustryState.EmptyList -> {
                 binding.searchPlaceholderImage.isVisible = true
                 binding.searchPlaceholderText.isVisible = true
@@ -107,6 +109,7 @@ class FilterIndustryFragment : Fragment() {
             is FilterIndustryState.LoadedList -> {
                 adapter.updateList(state.industry)
                 binding.recyclerViewFilter.isVisible = true
+                binding.filterApplyButton.isVisible = false
             }
             else -> {}
         }
@@ -114,6 +117,7 @@ class FilterIndustryFragment : Fragment() {
 
     private fun clickListenerFun(industry: IndustryWithCheck) {
         viewModel.saveSelectedIndustry(industry.industry)
+        viewModel.setVisibleApply(true)
     }
 
     private fun viewHolderInit() {

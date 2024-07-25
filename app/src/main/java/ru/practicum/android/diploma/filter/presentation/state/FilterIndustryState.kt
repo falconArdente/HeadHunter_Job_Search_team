@@ -10,4 +10,5 @@ sealed class FilterIndustryState {
     data object Filtered : FilterIndustryState()
     data class EmptyList(val isEmpty: Boolean = true) : FilterIndustryState()
     data class SavedFilter(val isSaved: Boolean = true) : FilterIndustryState()
+    data class ApplyVisible(val isVisible: Boolean) : FilterIndustryState()
 }
