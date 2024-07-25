@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.search.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -96,6 +97,7 @@ class SearchViewModel(
                 .collect { vacancy ->
                     if (vacancy.result!!.isNotEmpty()) {
                         maxPages = vacancy.pages
+                        Log.d("LIST", "${vacancy.result!!}")
                         if (currentPage == maxPages - 1 || vacanciesList.count() == vacancy.foundVacancy) {
                             vacanciesList.addAll(vacancy.result)
                             updateState(searchVacancy = vacanciesList, totalFoundVacancy = totalFound)

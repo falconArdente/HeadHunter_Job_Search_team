@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.search.ui
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -37,7 +38,7 @@ class VacancyAdapter(
         }
     }
 
-    override fun getItemCount(): Int = vacancyList.size
+    override fun getItemCount(): Int = vacancyList.size + 1
 
     override fun getItemViewType(position: Int): Int {
         return if (position == itemCount - 1) TYPE_PROGRESS_BAR else TYPE_VACANCY
@@ -45,6 +46,7 @@ class VacancyAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is VacancyViewHolder) {
+            Log.d("LIST_ADAPTER", "${vacancyList.size}")
             holder.bind(vacancyList[position])
             holder.itemView.setOnClickListener {
                 onVacancyClickListener.onItemClick(vacancyList[holder.adapterPosition])

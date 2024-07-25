@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -152,7 +153,9 @@ class SearchJobFragment : Fragment() {
             allViewGone()
             when (it) {
                 is SearchFragmentState.SearchVacancy -> {
+                    Log.d("LIST_SEARCH_1", "${it.searchVacancy}")
                     adapter.updateList(it.searchVacancy)
+                    Log.d("LIST_SEARCH_1", "${adapter.vacancyList}")
                     setVisible(placeholder = false, list = true, blueButton = true, progress = false)
                     setBlueButtonText(it)
                 }
