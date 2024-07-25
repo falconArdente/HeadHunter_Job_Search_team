@@ -4,11 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filter.domain.api.PlaceToWorkFilterInteractor
 import ru.practicum.android.diploma.filter.domain.model.AreaFilter
 import ru.practicum.android.diploma.filter.domain.model.CountryFilter
 import ru.practicum.android.diploma.filter.presentation.state.PlaceToWorkFilterState
+
+const val TIMES_TO_TRY = 3
+const val DELAY_FOR_PARENT_ID_TRIES = 300L
 
 class PlaceToWorkFilterViewModel(private val placeToWorkFilterInteractor: PlaceToWorkFilterInteractor) : ViewModel() {
     private val _stateLiveData = MutableLiveData<PlaceToWorkFilterState>()
@@ -40,19 +44,29 @@ class PlaceToWorkFilterViewModel(private val placeToWorkFilterInteractor: PlaceT
         viewModelScope.launch {
             val currentCountry = placeToWorkFilterInteractor.getCurrentCountryChoice()
             val currentArea = placeToWorkFilterInteractor.getCurrentAreaChoice()
-
             if (!currentArea?.areaName.isNullOrEmpty() && currentCountry?.countryName.isNullOrEmpty()) {
-                val parentOfRegionById =
-                    placeToWorkFilterInteractor.getCountryForRegion(currentArea?.areaId!!)
-                setLiveDataValue(parentOfRegionById, currentArea)
-                placeToWorkFilterInteractor.saveCountry(
-                    countryId = parentOfRegionById?.countryId,
-                    countryName = parentOfRegionById?.countryName
-                )
+                getCountryAsParent(currentArea!!)
             } else {
                 setLiveDataValue(currentCountry, currentArea)
             }
         }
+    }
+
+    private suspend fun getCountryAsParent(area: AreaFilter) {
+        var triesLeft: Int = TIMES_TO_TRY
+        do {
+            val parentOfRegionById =
+                placeToWorkFilterInteractor.getCountryForRegion(area.areaId!!)
+            if (parentOfRegionById?.countryId != null) {
+                setLiveDataValue(parentOfRegionById, area)
+                placeToWorkFilterInteractor.saveCountry(
+                    countryId = parentOfRegionById.countryId,
+                    countryName = parentOfRegionById.countryName
+                )
+            }
+            if (triesLeft < TIMES_TO_TRY) delay(DELAY_FOR_PARENT_ID_TRIES)
+            triesLeft--
+        } while (parentOfRegionById?.countryId == null && triesLeft >= 0)
     }
 
     fun updateCurrentFilterAreaParameters() {

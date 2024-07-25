@@ -34,15 +34,18 @@ class PlaceToWorkFilterInteractorImpl(
 
     override suspend fun getCountryForRegion(areaId: String): CountryFilter? {
         val result = filterDictionariesRepository.getAreas().first()
-        if (result !is Resource.Success) error("Search result failed")
-        val resultList = result.data!!
-
-        val areaById = findAreaById(areaId, resultList) ?: return null
-        var currentArea: Area? = areaById
-        while (currentArea?.parentId != null) {
-            currentArea = findParentArea(currentArea, resultList)
+        if (result is Resource.Success) {
+            val resultList = result.data!!
+            val areaById = findAreaById(areaId, resultList) ?: return null
+            var currentArea: Area? = areaById
+            while (currentArea?.parentId != null) {
+                currentArea = findParentArea(currentArea, resultList)
+            }
+            if (currentArea?.areaId != null) {
+                return CountryFilter(countryId = currentArea.id, countryName = currentArea.name)
+            }
         }
-        return CountryFilter(countryId = currentArea?.id, countryName = currentArea?.name)
+        return null
     }
 
     private fun findAreaById(areaId: String, generalListOfAreas: List<Area>?): Area? {
