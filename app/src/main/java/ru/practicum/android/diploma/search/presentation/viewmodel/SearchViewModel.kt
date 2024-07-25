@@ -86,7 +86,6 @@ class SearchViewModel(
 
     private val searchJobDetails: Job? = null
     private fun searchResult(text: String) {
-
         searchJobDetails?.cancel()
         if (currentPage == 0) updateState(SearchFragmentState.Loading)
         searchJobDetails != viewModelScope.launch {
@@ -144,11 +143,9 @@ class SearchViewModel(
         if (currentPage == maxPages - 1) {
             updateState(SearchFragmentState.SearchVacancy(vacanciesList, totalFound))
         }
-        if (currentPage < maxPages - 1) {
-            if (!searchInProcess) {
-                currentPage++
-                searchResult(latestSearchText!!)
-            }
+        if (currentPage < maxPages - 1 && !searchInProcess) {
+            currentPage++
+            searchResult(latestSearchText!!)
         }
     }
 }
