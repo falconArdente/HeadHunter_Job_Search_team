@@ -34,8 +34,6 @@ class FilterIndustryViewModel(
         filterState.postValue(FilterIndustryState.Loading)
 
         jobDictionaries = viewModelScope.launch(Dispatchers.IO) {
-
-
             if (networkStatus.isConnected()) {
                 filterDictionaries.getIndustries().collect { response ->
                     when (response) {
