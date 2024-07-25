@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +33,8 @@ class SearchJobFragment : Fragment() {
     private var suggestionsAdapter: VacancyPositionSuggestsAdapter? = null
     private val viewModel by viewModel<SearchViewModel>()
     private val adapter = VacancyAdapter(emptyList(), clickListenerFun())
+    private var isFirstTimeCall = true
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentSearchJobBinding.inflate(inflater, container, false)
@@ -87,9 +88,7 @@ class SearchJobFragment : Fragment() {
         viewModel.suggestionsLivaData.observe(viewLifecycleOwner) { renderSuggestions(it) }
 
         viewModel.isLastPage.observe(viewLifecycleOwner) {
-            Log.d("PROGRESS_FRAGMENT_1", "$it")
             adapter.isLastPage = it
-            Log.d("PROGRESS_FRAGMENT_2", "${adapter.isLastPage}")
         }
     }
 

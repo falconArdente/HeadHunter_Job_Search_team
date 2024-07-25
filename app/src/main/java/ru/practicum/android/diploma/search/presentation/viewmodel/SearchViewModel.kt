@@ -33,6 +33,7 @@ class SearchViewModel(
     private val filterIsOn = MutableLiveData(false)
     val filterStateToObserve: LiveData<Boolean> = filterIsOn
     private var parametersForSearch: SearchParameters? = null
+    private var searchInProcess = false
 
     var currentPage = 0
     private var maxPages = 0
@@ -85,9 +86,11 @@ class SearchViewModel(
 
     private val searchJobDetails: Job? = null
     private fun searchResult(text: String) {
+
         searchJobDetails?.cancel()
         if (currentPage == 0) updateState(SearchFragmentState.Loading)
         searchJobDetails != viewModelScope.launch {
+            searchInProcess = true
             interactor
                 .searchVacancy(text, parametersForSearch, PER_PAGE, currentPage)
                 .collect { vacancy ->
@@ -110,6 +113,7 @@ class SearchViewModel(
                         updateState(SearchFragmentState.NoResult)
                     }
                 }
+            searchInProcess = false
         }
     }
 
@@ -141,11 +145,10 @@ class SearchViewModel(
             updateState(SearchFragmentState.SearchVacancy(vacanciesList, totalFound))
         }
         if (currentPage < maxPages) {
-            currentPage++
-        }
-        if (currentPage < maxPages) {
-//            updateState(SearchFragmentState.Loading)
-            searchResult(latestSearchText!!)
+            if (!searchInProcess) {
+                currentPage++
+                searchResult(latestSearchText!!)
+            }
         }
     }
 }
