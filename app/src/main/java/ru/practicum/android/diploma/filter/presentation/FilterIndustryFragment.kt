@@ -75,6 +75,7 @@ class FilterIndustryFragment : Fragment() {
                 findNavController().navigateUp()
             }
             is FilterIndustryState.ApplyVisible -> {
+                binding.recyclerViewFilter.isVisible = true
                 binding.filterApplyButton.isVisible = state.isVisible
             }
             is FilterIndustryState.EmptyList -> {
