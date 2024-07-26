@@ -117,8 +117,8 @@ class SearchViewModel(
     }
 
     fun searchWithDebounce(text: String) {
-        //  currentPage = 0
         vacanciesList.clear()
+        updateState(SearchFragmentState.Loading)
         latestSearchText = text
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
