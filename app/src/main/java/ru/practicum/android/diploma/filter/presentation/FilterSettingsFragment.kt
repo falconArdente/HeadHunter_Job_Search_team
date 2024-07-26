@@ -22,7 +22,7 @@ class FilterSettingsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentFilterSettingsBinding.inflate(inflater, container, false)
         return binding.root
@@ -128,17 +128,21 @@ class FilterSettingsFragment : Fragment() {
                     binding.filterSalaryInput.setText(state.filter.expectedSalary)
                 }
 
-                if (state.filter.area?.areaName.isNullOrEmpty()) {
+                if (state.filter.country?.countryName.isNullOrEmpty()) {
                     binding.filterWorkPlaceInactive.visibility = View.VISIBLE
                     binding.filterWorkPlaceActive.visibility = View.GONE
                 } else {
                     binding.filterWorkPlaceInactive.visibility = View.GONE
                     binding.filterWorkPlaceActive.visibility = View.VISIBLE
-                    binding.filterWorkPlaceValue.text = requireActivity().getString(
-                        R.string.filter_region,
-                        state.filter.country?.countryName,
-                        state.filter.area?.areaName
-                    )
+                    binding.filterWorkPlaceValue.text = if (state.filter.area?.areaName == null) {
+                        state.filter.country?.countryName
+                    } else {
+                        requireActivity().getString(
+                            R.string.filter_region,
+                            state.filter.country?.countryName,
+                            state.filter.area?.areaName
+                        )
+                    }
                 }
 
                 if (state.filter.industry?.industryName.isNullOrEmpty()) {
