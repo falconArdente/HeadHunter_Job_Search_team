@@ -99,14 +99,7 @@ class FilterPlaceToWorkFragment : Fragment() {
                 binding.filterIndustryInactive.isVisible = true
                 binding.filterIndustryActive.isVisible = false
             }
-
-            if (binding.filterIndustryValue.text != requireActivity().getString(R.string.region) ||
-                binding.filterWorkPlaceValue.text != requireActivity().getString(R.string.country)
-            ) {
-                binding.filterApplyButton.isVisible = true
-            } else {
-                binding.filterApplyButton.isVisible = false
-            }
+            binding.filterApplyButton.isVisible = !binding.filterWorkPlaceInactive.isVisible
         }
     }
 
@@ -116,6 +109,7 @@ class FilterPlaceToWorkFragment : Fragment() {
     }
 
     private fun inflateFragment() {
+        binding.filterApplyButton.text = activity?.getString(R.string.select)
         binding.filterSalaryInput.visibility = View.GONE
         binding.filterSalaryInputTitle.visibility = View.GONE
         binding.filterSalaryInputBackground.visibility = View.GONE
