@@ -37,6 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp16"
         android:layout_marginTop="@dimen/dp20"
+        android:text="@string/filter_industry_title"
         app:layout_constraintLeft_toRightOf="@id/backButtonFilterWithRecycler"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Задать шапку фрагмента" />
@@ -85,11 +86,12 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewFilter"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="@dimen/dp16"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/filterInput"
+        app:layout_constraintBottom_toTopOf="@id/filterApplyButton"
         tools:listitem="@layout/filter_with_recycler_item"
         tools:visibility="visible"
         />
