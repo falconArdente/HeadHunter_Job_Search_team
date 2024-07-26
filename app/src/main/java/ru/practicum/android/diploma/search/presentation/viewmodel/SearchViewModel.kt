@@ -99,29 +99,31 @@ class SearchViewModel(
             interactor
                 .searchVacancy(text, parametersForSearch, PER_PAGE, currentPage)
                 .collect { vacancy ->
-                    if (vacancy.result!!.isNotEmpty()) {
-                        maxPages = vacancy.pages
-                        totalFound = vacancy.foundVacancy
-                        if (currentPage == maxPages - 1 || vacanciesList.count() == vacancy.foundVacancy) {
-                            vacanciesList.addAll(vacancy.result)
-                            updateState(
-                                searchVacancy = vacanciesList,
-                                totalFoundVacancy = vacancy.foundVacancy,
-                                isLastPage = true
-                            )
+                    when {
+                        vacancy.result!!.isNotEmpty() -> {
+                            maxPages = vacancy.pages
+                            totalFound = vacancy.foundVacancy
+                            if (currentPage == maxPages - 1 || vacanciesList.count() == vacancy.foundVacancy) {
+                                vacanciesList.addAll(vacancy.result)
+                                updateState(
+                                    searchVacancy = vacanciesList,
+                                    totalFoundVacancy = vacancy.foundVacancy,
+                                    isLastPage = true
+                                )
+                            }
+                            if (currentPage < maxPages - 1) {
+                                vacanciesList += vacancy.result
+                                updateState(
+                                    searchVacancy = vacanciesList,
+                                    totalFoundVacancy = vacancy.foundVacancy,
+                                    isLastPage = maxPages == 1
+                                )
+                            }
                         }
-                        if (currentPage < maxPages - 1) {
-                            vacanciesList += vacancy.result
-                            updateState(
-                                searchVacancy = vacanciesList,
-                                totalFoundVacancy = vacancy.foundVacancy,
-                                isLastPage = maxPages == 1
-                            )
+                        vacancy.errorMessage!!.isNotEmpty() -> {
+                            updateState(SearchFragmentState.ServerError)
                         }
-                    } else if (vacancy.errorMessage!!.isNotEmpty()) {
-                        updateState(SearchFragmentState.ServerError)
-                    } else {
-                        updateState(SearchFragmentState.NoResult)
+                        else -> updateState(SearchFragmentState.NoResult)
                     }
                 }
             searchInProcess = false
