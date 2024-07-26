@@ -39,9 +39,7 @@ class SearchViewModel(
     private var maxPages = 0
     private val vacanciesList = mutableListOf<Vacancy>()
     private var totalFound = 0
-
-    private val _isLastPage = MutableLiveData<Boolean>(false)
-    val isLastPage: LiveData<Boolean> = _isLastPage
+    private var isLastCapitalOfInputSearched = false
 
     init {
         updateState(SearchFragmentState.NoTextInInputEditText)
@@ -66,18 +64,23 @@ class SearchViewModel(
         searchLiveData.postValue(state)
     }
 
-    private fun updateState(searchVacancy: List<Vacancy>, totalFoundVacancy: Int) {
+    private fun updateState(searchVacancy: List<Vacancy>, totalFoundVacancy: Int, isLastPage: Boolean) {
         searchLiveData.postValue(
             when (searchLiveData.value) {
                 is SearchFragmentState.SearchVacancy -> {
                     (searchLiveData.value as SearchFragmentState.SearchVacancy)
-                        .copy(searchVacancy = searchVacancy, totalFoundVacancy = totalFoundVacancy)
+                        .copy(
+                            searchVacancy = searchVacancy,
+                            totalFoundVacancy = totalFoundVacancy,
+                            isLastPage = isLastPage
+                        )
                 }
 
                 else -> {
                     SearchFragmentState.SearchVacancy(
                         searchVacancy = searchVacancy,
-                        totalFoundVacancy = totalFoundVacancy
+                        totalFoundVacancy = totalFoundVacancy,
+                        isLastPage = isLastPage
                     )
                 }
             }
@@ -85,8 +88,16 @@ class SearchViewModel(
     }
 
     private val searchJobDetails: Job? = null
-    private fun searchResult(text: String) {
+    private fun searchResult(text: String?) {
         searchJobDetails?.cancel()
+
+        if (text?.isBlank() != false) {
+            latestSearchText = text
+            return
+        }
+
+        if (isLastCapitalOfInputSearched) return
+
         if (currentPage == 0) updateState(SearchFragmentState.Loading)
         searchJobDetails != viewModelScope.launch {
             searchInProcess = true
@@ -98,13 +109,19 @@ class SearchViewModel(
                         totalFound = vacancy.foundVacancy
                         if (currentPage == maxPages - 1 || vacanciesList.count() == vacancy.foundVacancy) {
                             vacanciesList.addAll(vacancy.result)
-                            updateState(searchVacancy = vacanciesList, totalFoundVacancy = vacancy.foundVacancy)
-                            _isLastPage.value = true
+                            updateState(
+                                searchVacancy = vacanciesList,
+                                totalFoundVacancy = vacancy.foundVacancy,
+                                isLastPage = true
+                            )
                         }
                         if (currentPage < maxPages - 1) {
                             vacanciesList += vacancy.result
-                            _isLastPage.value = maxPages == 1
-                            updateState(searchVacancy = vacanciesList, totalFoundVacancy = vacancy.foundVacancy)
+                            updateState(
+                                searchVacancy = vacanciesList,
+                                totalFoundVacancy = vacancy.foundVacancy,
+                                isLastPage = maxPages == 1
+                            )
                         }
                     } else if (vacancy.errorMessage!!.isNotEmpty()) {
                         updateState(SearchFragmentState.ServerError)
@@ -117,18 +134,25 @@ class SearchViewModel(
     }
 
     fun searchImmidiently(text: String) {
+        vacanciesList.clear()
         searchJob?.cancel()
         searchResult(text)
     }
 
-    fun searchWithDebounce(text: String) {
-        vacanciesList.clear()
-        updateState(SearchFragmentState.Loading)
-        latestSearchText = text
-        searchJob?.cancel()
-        searchJob = viewModelScope.launch {
-            delay(SEARCH_DEBOUNCE_DELAY)
-            searchResult(text)
+    fun searchWithDebounce(text: String?) {
+        if (text?.isBlank() != false) {
+            searchLiveData.postValue(SearchFragmentState.NoTextInInputEditText)
+            isLastCapitalOfInputSearched = true
+        } else {
+            isLastCapitalOfInputSearched = false
+            vacanciesList.clear()
+            updateState(SearchFragmentState.Loading)
+            latestSearchText = text
+            searchJob?.cancel()
+            searchJob = viewModelScope.launch {
+                delay(SEARCH_DEBOUNCE_DELAY)
+                searchResult(text)
+            }
         }
     }
 
@@ -145,9 +169,6 @@ class SearchViewModel(
     }
 
     fun onLastItemReached() {
-        if (currentPage == maxPages - 1) {
-            updateState(SearchFragmentState.SearchVacancy(vacanciesList, totalFound))
-        }
         if (currentPage < maxPages - 1 && !searchInProcess) {
             currentPage++
             searchResult(latestSearchText!!)
