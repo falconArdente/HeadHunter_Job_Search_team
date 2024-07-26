@@ -47,7 +47,7 @@ class FilterIndustryViewModel(
                         }
 
                         else -> {
-                            filterState.postValue(FilterIndustryState.EmptyList())
+                            filterState.postValue(FilterIndustryState.Error)
                         }
                     }
                 }
