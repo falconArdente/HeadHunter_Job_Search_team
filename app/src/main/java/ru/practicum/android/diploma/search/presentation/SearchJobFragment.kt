@@ -33,6 +33,8 @@ class SearchJobFragment : Fragment() {
     private var suggestionsAdapter: VacancyPositionSuggestsAdapter? = null
     private val viewModel by viewModel<SearchViewModel>()
     private val adapter = VacancyAdapter(emptyList(), clickListenerFun())
+    private var isFirstTimeCall = true
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentSearchJobBinding.inflate(inflater, container, false)
@@ -84,6 +86,10 @@ class SearchJobFragment : Fragment() {
         suggestionsAdapter = VacancyPositionSuggestsAdapter(requireActivity(), binding.searchInput)
         binding.searchInput.setAdapter(suggestionsAdapter)
         viewModel.suggestionsLivaData.observe(viewLifecycleOwner) { renderSuggestions(it) }
+
+        viewModel.isLastPage.observe(viewLifecycleOwner) {
+            adapter.isLastPage = it
+        }
     }
 
     private fun renderSuggestions(incomeSuggestions: List<String>) {
