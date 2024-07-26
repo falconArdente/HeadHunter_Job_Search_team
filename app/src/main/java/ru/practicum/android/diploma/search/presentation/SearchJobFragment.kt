@@ -49,7 +49,9 @@ class SearchJobFragment : Fragment() {
         searchInputClick()
         onScrollListener()
         viewModel.filterStateToObserve.observe(viewLifecycleOwner) { setFilterIcon(it) }
-
+        binding.searchJobsCountButton.setOnClickListener {
+            viewModel.searchImmidiently(binding.searchInput.text.toString())
+        }
         binding.searchFilterButton.setOnClickListener {
             val args = Bundle()
             args.putBoolean(FilterSettingsFragment.PATH_FROM_SEARCH, true)
@@ -79,6 +81,7 @@ class SearchJobFragment : Fragment() {
         binding.searchInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 binding.searchInput.hideKeyboard(requireContext())
+                viewModel.searchImmidiently(binding.searchInput.text.toString())
             }
             false
         }

@@ -116,6 +116,11 @@ class SearchViewModel(
         }
     }
 
+    fun searchImmidiently(text: String) {
+        searchJob?.cancel()
+        searchResult(text)
+    }
+
     fun searchWithDebounce(text: String) {
         vacanciesList.clear()
         updateState(SearchFragmentState.Loading)
