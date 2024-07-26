@@ -91,12 +91,7 @@ class SearchViewModel(
     private fun searchResult(text: String?) {
         searchJobDetails?.cancel()
 
-        if (text?.isBlank() != false) {
-            latestSearchText = text
-            return
-        }
-
-        if (isLastCapitalOfInputSearched) return
+        if (text?.isBlank() != false || isLastCapitalOfInputSearched) return
 
         if (currentPage == 0) updateState(SearchFragmentState.Loading)
         searchJobDetails != viewModelScope.launch {
@@ -125,7 +120,7 @@ class SearchViewModel(
                         }
                     } else if (vacancy.errorMessage!!.isNotEmpty()) {
                         updateState(SearchFragmentState.ServerError)
-                    } else if (vacancy.errorMessage.isNullOrEmpty()) {
+                    } else {
                         updateState(SearchFragmentState.NoResult)
                     }
                 }
