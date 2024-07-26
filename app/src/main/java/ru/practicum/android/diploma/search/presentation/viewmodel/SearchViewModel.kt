@@ -110,8 +110,7 @@ class SearchViewModel(
                                     totalFoundVacancy = vacancy.foundVacancy,
                                     isLastPage = true
                                 )
-                            }
-                            if (currentPage < maxPages - 1) {
+                            } else {
                                 vacanciesList += vacancy.result
                                 updateState(
                                     searchVacancy = vacanciesList,
@@ -120,9 +119,11 @@ class SearchViewModel(
                                 )
                             }
                         }
+
                         vacancy.errorMessage!!.isNotEmpty() -> {
                             updateState(SearchFragmentState.ServerError)
                         }
+
                         else -> updateState(SearchFragmentState.NoResult)
                     }
                 }
