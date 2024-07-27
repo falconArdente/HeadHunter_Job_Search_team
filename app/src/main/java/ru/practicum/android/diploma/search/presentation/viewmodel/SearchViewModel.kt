@@ -120,7 +120,7 @@ class SearchViewModel(
                         }
 
                         vacancy.errorMessage!!.isNotEmpty() -> {
-                            updateState(SearchFragmentState.ServerError)
+                            updateState(SearchFragmentState.ServerError(vacancy.result))
                         }
 
                         else -> updateState(SearchFragmentState.NoResult)
@@ -176,6 +176,8 @@ class SearchViewModel(
             searchJob = viewModelScope.launch {
                 searchResult(latestSearchText!!)
             }
+        } else {
+            updateState(SearchFragmentState.SearchVacancy(vacanciesList, totalFound, isLastPage = true))
         }
     }
 }

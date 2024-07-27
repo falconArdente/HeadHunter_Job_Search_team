@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -81,6 +82,7 @@ class SearchJobFragment : Fragment() {
         binding.searchInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 binding.searchInput.hideKeyboard(requireContext())
+                viewModel.currentPage=0
                 viewModel.searchImmidiently(binding.searchInput.text.toString())
             }
             false
@@ -92,39 +94,106 @@ class SearchJobFragment : Fragment() {
     }
 
     private fun renderSearchState(searchState: SearchFragmentState) {
+        allViewGone()
         when (searchState) {
             is SearchFragmentState.SearchVacancy -> {
                 adapter.updateList(searchState.searchVacancy)
-                adapter.isLastPage = searchState.isLastPage
-                setVisible(placeholder = false, list = true, blueButton = true, progress = false)
+                setVisible(
+                    placeholderText = false,
+                    list = true,
+                    blueButton = true,
+                    progress = false,
+                    progressMini = false
+                )
                 setBlueButtonText(searchState)
             }
 
             is SearchFragmentState.Loading -> {
-                setVisible(placeholder = false, list = false, blueButton = false, progress = true)
+                binding.searchMiniProgressBar.isVisible = true
+                setVisible(
+                    placeholderText = false,
+                    list = false,
+                    blueButton = false,
+                    progress = true,
+                    progressMini = false
+                )
             }
 
             is SearchFragmentState.NoResult -> {
-                binding.searchPlaceholderImage.background =
-                    requireActivity().getDrawable(R.drawable.picture_angry_cat)
-                binding.searchJobsCountButton.text = requireActivity().getString(R.string.no_such_vacancies)
-                binding.searchPlaceholderText.text =
-                    requireActivity().getString(R.string.failed_list_vacancy)
-                setVisible(placeholder = true, list = false, blueButton = true, progress = false)
+                if (viewModel.currentPage != 0) {
+                    showToast(requireActivity().getString(R.string.toast_server_error))
+                    setVisible(
+                        placeholderText = false,
+                        list = true,
+                        blueButton = true,
+                        progress = false,
+                        progressMini = false
+                    )
+
+                } else {
+                    binding.searchPlaceholderImage.background =
+                        requireActivity().getDrawable(R.drawable.picture_angry_cat)
+                    binding.searchJobsCountButton.text = requireActivity().getString(R.string.no_such_vacancies)
+                    binding.searchPlaceholderText.text =
+                        requireActivity().getString(R.string.failed_list_vacancy)
+                    setVisible(
+                        placeholderText = true,
+                        list = false,
+                        blueButton = true,
+                        progress = false,
+                        progressMini = false
+                    )
+                }
             }
 
             is SearchFragmentState.ServerError -> {
-                binding.searchPlaceholderImage.background =
-                    requireActivity().getDrawable(R.drawable.picture_funny_head)
-                binding.searchPlaceholderText.text =
-                    requireActivity().getString(R.string.no_internet)
-                setVisible(placeholder = true, list = false, blueButton = false, progress = false)
+                if (viewModel.currentPage != 0) {
+                    showToast(requireActivity().getString(R.string.toast_no_internet))
+                    setVisible(
+                        placeholderText = false,
+                        list = true,
+                        blueButton = true,
+                        progress = false,
+                        progressMini = false
+                    )
+
+                } else if (searchState.searchVacancy.isEmpty()) {
+                    binding.searchPlaceholderImage.background =
+                        requireActivity().getDrawable(R.drawable.picture_funny_head)
+                    binding.searchPlaceholderText.text =
+                        requireActivity().getString(R.string.no_internet)
+                    setVisible(
+                        placeholderText = true,
+                        list = false,
+                        blueButton = false,
+                        progress = false,
+                        progressMini = false
+                    )
+                }
             }
 
             is SearchFragmentState.NoTextInInputEditText -> {
                 binding.searchPlaceholderImage.background =
                     requireActivity().getDrawable(R.drawable.picture_looking_man)
-                setVisible(placeholder = false, list = false, blueButton = false, progress = false, image = true)
+                setVisible(
+                    placeholderText = false,
+                    list = false,
+                    blueButton = false,
+                    progress = false,
+                    image = true,
+                    progressMini = false
+                )
+            }
+
+            is SearchFragmentState.LoadingNewPage -> {
+                setVisible(
+                    placeholderText = false,
+                    list = true,
+                    blueButton = true,
+                    progress = false,
+                    image = false,
+                    progressMini = true
+                )
             }
 
             else -> Unit
@@ -137,18 +206,20 @@ class SearchJobFragment : Fragment() {
     }
 
     private fun setVisible(
-        placeholder: Boolean,
+        placeholderText: Boolean,
         list: Boolean,
         blueButton: Boolean,
         progress: Boolean,
-        image: Boolean = placeholder,
+        progressMini: Boolean,
+        image: Boolean = placeholderText,
     ) {
         with(binding) {
-            searchPlaceholderText.isVisible = placeholder
+            searchPlaceholderText.isVisible = placeholderText
             searchPlaceholderImage.isVisible = image
             recyclerViewSearch.isVisible = list
             searchJobsCountButton.isVisible = blueButton
             searchProgressBar.isVisible = progress
+            searchMiniProgressBar.isVisible = progressMini
         }
     }
 
@@ -262,12 +333,18 @@ class SearchJobFragment : Fragment() {
                 if (dy > 0) {
                     val pos =
                         (binding.recyclerViewSearch.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+
                     val itemsCount = adapter.itemCount
                     if (pos >= itemsCount - 1) {
+                        viewModel.updateState(SearchFragmentState.LoadingNewPage)
                         viewModel.onLastItemReached()
                     }
                 }
             }
         })
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 }
