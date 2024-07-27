@@ -90,7 +90,6 @@ class SearchViewModel(
     private val searchJobDetails: Job? = null
     private fun searchResult(text: String?) {
         searchJobDetails?.cancel()
-        updateState(SearchFragmentState.Loading)
         if (text?.isBlank() != false || isLastCapitalOfInputSearched) return
 
         if (currentPage == 0) updateState(SearchFragmentState.Loading)
@@ -144,6 +143,7 @@ class SearchViewModel(
         } else {
             isLastCapitalOfInputSearched = false
             vacanciesList.clear()
+            updateState(SearchFragmentState.Loading)
             latestSearchText = text
             searchJob?.cancel()
             searchJob = viewModelScope.launch {
