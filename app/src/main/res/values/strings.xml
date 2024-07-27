@@ -25,6 +25,7 @@
     <string name="net_vacancy_get_by_id_income_error_message">Запрошенная  вакансия не получена</string>
     <string name="net_area_suggestions_request_text_length_error_message">Ожидаемая длина запроса поиска в регионе - от 2 до 3000 символов</string>
     <string name="net_area_suggestions_income_error_message">Список подсказок регионов не получен</string>
+    <string name="net_timeout_error_message">Превышено время ожидания ответа сервера</string>
 
     <string name="search_title">Поиск вакансий</string>
     <string name="search_hint">Введите запрос</string>

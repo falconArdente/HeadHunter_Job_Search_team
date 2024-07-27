@@ -41,6 +41,7 @@ class HeadHunterRepository(private val client: HeadHunterNetworkClient, context:
         context.getString(R.string.net_vacancy_suggestions_request_text_length_error_message)
     private val vacancySearchErrorMessage = context.getString(R.string.net_vacancy_search_income_error_message)
     private val vacancyGetByIdErrorMessage = context.getString(R.string.net_vacancy_get_by_id_income_error_message)
+    private val timeoutErrorMessage = context.getString(R.string.net_timeout_error_message)
 
     override suspend fun getLocales(): Flow<Resource<List<Locale>>> = flow {
         val response = client.doRequest(HeadHunterRequest.Locales)
@@ -136,7 +137,7 @@ class HeadHunterRepository(private val client: HeadHunterNetworkClient, context:
         )
         when (response.resultCode) {
             Response.SUCCESS -> emit(Resource.Success(response as VacancyListResponse))
-            Response.NO_INTERNET -> emit(Resource.InternetConnectionError(vacancySearchErrorMessage))
+            Response.NO_INTERNET -> emit(Resource.InternetConnectionError(timeoutErrorMessage))
             else -> emit(Resource.Error(vacancySearchErrorMessage))
         }
     }
