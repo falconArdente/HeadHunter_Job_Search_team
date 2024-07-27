@@ -2,8 +2,6 @@ package ru.practicum.android.diploma.search.presentation
 
 import android.content.Context
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,7 +41,12 @@ class SearchJobFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewHolderInit()
-        showView()
+
+        viewModel.fragmentStateLiveData().observe(viewLifecycleOwner) {
+            allViewGone()
+            renderSearchState(it)
+        }
+
         searchInputClick()
         onScrollListener()
         viewModel.filterStateToObserve.observe(viewLifecycleOwner) { setFilterIcon(it) }
@@ -57,6 +60,7 @@ class SearchJobFragment : Fragment() {
         }
 
         binding.searchInput.doOnTextChanged { text, _, _, _ ->
+            viewModel.searchWithDebounce(text.toString())
             if (text.isNullOrEmpty()) {
                 binding.searchInputIcon.background = requireActivity().getDrawable(R.drawable.icon_search)
             } else {
@@ -72,7 +76,6 @@ class SearchJobFragment : Fragment() {
         binding.searchInput.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 binding.searchInput.showKeyboard(requireContext())
-                showView()
             }
         }
         binding.searchInput.setOnEditorActionListener { _, actionId, _ ->
@@ -89,31 +92,51 @@ class SearchJobFragment : Fragment() {
         viewModel.isLastPage.observe(viewLifecycleOwner) {
             adapter.isLastPage = it
         }
+    }
+
+    private fun renderSearchState(searchState: SearchFragmentState) {
+        when (searchState) {
+            is SearchFragmentState.SearchVacancy -> {
+                adapter.updateList(searchState.searchVacancy)
+                adapter.isLastPage = searchState.isLastPage
+                setVisible(placeholder = false, list = true, blueButton = true, progress = false)
+                setBlueButtonText(searchState)
+            }
+
+            is SearchFragmentState.Loading -> {
+                setVisible(placeholder = false, list = false, blueButton = false, progress = true)
+            }
+
+            is SearchFragmentState.NoResult -> {
+                binding.searchPlaceholderImage.background =
+                    requireActivity().getDrawable(R.drawable.picture_angry_cat)
+                binding.searchJobsCountButton.text = requireActivity().getString(R.string.no_such_vacancies)
+                binding.searchPlaceholderText.text =
+                    requireActivity().getString(R.string.failed_list_vacancy)
+                setVisible(placeholder = true, list = false, blueButton = true, progress = false)
+            }
+
+            is SearchFragmentState.ServerError -> {
+                binding.searchPlaceholderImage.background =
+                    requireActivity().getDrawable(R.drawable.picture_funny_head)
+                binding.searchPlaceholderText.text =
+                    requireActivity().getString(R.string.no_internet)
+                setVisible(placeholder = true, list = false, blueButton = false, progress = false)
+            }
+
+            is SearchFragmentState.NoTextInInputEditText -> {
+                binding.searchPlaceholderImage.background =
+                    requireActivity().getDrawable(R.drawable.picture_looking_man)
+                setVisible(placeholder = false, list = false, blueButton = false, progress = false, image = true)
+            }
+
+            else -> Unit
+        }
 
     }
 
     private fun renderSuggestions(incomeSuggestions: List<String>) {
         suggestionsAdapter?.applyDataSet(incomeSuggestions)
-
-        binding.searchInput.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                showView()
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-                showView()
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (!p0.isNullOrEmpty()) {
-                    viewModel.searchWithDebounce(p0.toString())
-                } else if (p0.isNullOrEmpty()) {
-                    adapter.updateList(emptyList())
-                    viewModel.updateState(SearchFragmentState.NoTextInInputEditText)
-                    showView()
-                }
-            }
-        })
     }
 
     private fun setVisible(
@@ -145,48 +168,6 @@ class SearchJobFragment : Fragment() {
         val text = " $foundVac $pluralVacancy"
         binding.searchJobsCountButton.text = text
 
-    }
-
-    private fun showView() {
-        viewModel.fragmentStateLiveData().observe(viewLifecycleOwner) {
-            allViewGone()
-            when (it) {
-                is SearchFragmentState.SearchVacancy -> {
-                    adapter.updateList(it.searchVacancy)
-                    setVisible(placeholder = false, list = true, blueButton = true, progress = false)
-                    setBlueButtonText(it)
-                }
-
-                is SearchFragmentState.Loading -> {
-                    setVisible(placeholder = false, list = false, blueButton = false, progress = true)
-                }
-
-                is SearchFragmentState.NoResult -> {
-                    binding.searchPlaceholderImage.background =
-                        requireActivity().getDrawable(R.drawable.picture_angry_cat)
-                    binding.searchJobsCountButton.text = requireActivity().getString(R.string.no_such_vacancies)
-                    binding.searchPlaceholderText.text =
-                        requireActivity().getString(R.string.failed_list_vacancy)
-                    setVisible(placeholder = true, list = false, blueButton = true, progress = false)
-                }
-
-                is SearchFragmentState.ServerError -> {
-                    binding.searchPlaceholderImage.background =
-                        requireActivity().getDrawable(R.drawable.picture_funny_head)
-                    binding.searchPlaceholderText.text =
-                        requireActivity().getString(R.string.no_internet)
-                    setVisible(placeholder = true, list = false, blueButton = false, progress = false)
-                }
-
-                is SearchFragmentState.NoTextInInputEditText -> {
-                    binding.searchPlaceholderImage.background =
-                        requireActivity().getDrawable(R.drawable.picture_looking_man)
-                    setVisible(placeholder = false, list = false, blueButton = false, progress = false, image = true)
-                }
-
-                else -> {}
-            }
-        }
     }
 
     private fun setFilterIcon(filterIsActive: Boolean) {
@@ -236,19 +217,13 @@ class SearchJobFragment : Fragment() {
         binding.searchInputIcon.setOnClickListener {
             binding.searchInput.setText(String())
         }
-        binding.searchInput.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                binding.searchInput.showKeyboard(requireContext())
-                showView()
-            }
-        }
+
         binding.searchInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 binding.searchInput.hideKeyboard(requireContext())
             }
             false
         }
-
     }
 
     override fun onDestroyView() {
