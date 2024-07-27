@@ -107,7 +107,7 @@ class SearchJobFragment : Fragment() {
             }
 
             is SearchFragmentState.NoResult -> {
-                if (viewModel.currentPage!=0) {
+                if (viewModel.currentPage != 0) {
                     showToast(requireActivity().getString(R.string.toast_server_error))
                     binding.recyclerViewSearch.visibility = View.VISIBLE
                 } else {
@@ -121,7 +121,7 @@ class SearchJobFragment : Fragment() {
             }
 
             is SearchFragmentState.ServerError -> {
-                if (viewModel.currentPage!=0) {
+                if (viewModel.currentPage != 0) {
                     showToast(requireActivity().getString(R.string.toast_no_internet))
                     binding.recyclerViewSearch.visibility = View.VISIBLE
                 } else {
