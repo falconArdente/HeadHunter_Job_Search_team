@@ -69,4 +69,20 @@
         <item name="android:inputType">none</item>
         <item name="android:background">@color/Light_Gray_OR_Gray</item>
     </style>
+    <style name="BackButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">@dimen/dp48</item>
+        <item name="android:layout_height">@dimen/dp48</item>
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="CheckBoxStyle" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/Blue</item>
+        <item name="android:color">@color/Blue</item>
+        <item name="android:colorMultiSelectHighlight">@color/Blue</item>
+        <item name="android:colorActivatedHighlight">@color/Blue</item>
+        <item name="colorControlActivated">@color/Blue</item>
+        <item name="android:padding">0dp</item>
+    </style>
+
 </resources>

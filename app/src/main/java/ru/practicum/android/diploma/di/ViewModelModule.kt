@@ -6,6 +6,11 @@ import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
 import ru.practicum.android.diploma.details.presentation.viewmodel.VacancyDetailsViewModel
 import ru.practicum.android.diploma.favorites.presentation.viewmodel.FavoritesViewModel
+import ru.practicum.android.diploma.filter.presentation.viewmodel.CountryFilterViewModel
+import ru.practicum.android.diploma.filter.presentation.viewmodel.FilterIndustryViewModel
+import ru.practicum.android.diploma.filter.presentation.viewmodel.FilterSettingsViewModel
+import ru.practicum.android.diploma.filter.presentation.viewmodel.PlaceToWorkFilterViewModel
+import ru.practicum.android.diploma.filter.presentation.viewmodel.RegionFilterViewModel
 import ru.practicum.android.diploma.search.presentation.viewmodel.SearchViewModel
 
 val viewModelModule = module {
@@ -22,10 +27,35 @@ val viewModelModule = module {
     viewModel<SearchViewModel> {
         SearchViewModel(
             interactor = get(),
-            getSuggestsUseCase = get()
+            getSuggestsUseCase = get(),
+            getFilterUseCase = get(),
         )
     }
     viewModel<FavoritesViewModel> {
         FavoritesViewModel(getFavoritesListUseCase = get())
+    }
+
+    viewModel<CountryFilterViewModel> {
+        CountryFilterViewModel(countryFilterInteractor = get())
+    }
+
+    viewModel<RegionFilterViewModel> {
+        RegionFilterViewModel(regionFilterInteractor = get(), countryFilterInteractor = get())
+    }
+
+    viewModel<FilterSettingsViewModel> {
+        FilterSettingsViewModel(filterStorage = get())
+    }
+
+    viewModel<FilterIndustryViewModel> {
+        FilterIndustryViewModel(
+            filterStorage = get(),
+            filterDictionaries = get(),
+            networkStatus = get()
+        )
+    }
+
+    viewModel<PlaceToWorkFilterViewModel> {
+        PlaceToWorkFilterViewModel(placeToWorkFilterInteractor = get())
     }
 }

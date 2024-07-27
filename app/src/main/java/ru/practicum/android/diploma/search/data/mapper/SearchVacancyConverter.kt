@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.search.data.mapper
 
-import ru.practicum.android.diploma.network.data.dto.linked.Area
+import ru.practicum.android.diploma.filter.domain.model.FilterGeneral
+import ru.practicum.android.diploma.network.data.dto.linked.AreaDTO
 import ru.practicum.android.diploma.network.data.dto.linked.BrandSnippet
 import ru.practicum.android.diploma.network.data.dto.linked.Employer
 import ru.practicum.android.diploma.network.data.dto.linked.LogoUrls
@@ -11,6 +12,7 @@ import ru.practicum.android.diploma.search.domain.model.BrandSnippetModel
 import ru.practicum.android.diploma.search.domain.model.EmployerModel
 import ru.practicum.android.diploma.search.domain.model.LogoUrlsModel
 import ru.practicum.android.diploma.search.domain.model.SalaryModel
+import ru.practicum.android.diploma.search.domain.model.SearchParameters
 import ru.practicum.android.diploma.search.domain.model.Vacancy
 
 class SearchVacancyConverter {
@@ -21,7 +23,7 @@ class SearchVacancyConverter {
             salary = mapToSalaryModel(vacancy.salary),
             employer = mapToEmployerModel(vacancy.employer),
             brandSnippet = mapToBrandSnippetModel(vacancy.brandSnippet),
-            area = mapToAreaModel(vacancy.area)
+            area = mapToAreaModel(vacancy.areaDTO)
         )
     }
 
@@ -31,10 +33,10 @@ class SearchVacancyConverter {
         }
     }
 
-    fun mapToAreaModel(remote: Area?): AreaModel? {
+    fun mapToAreaModel(remote: AreaDTO?): AreaModel? {
         if (remote == null) return null
         return AreaModel(
-            subAreas = remote.subAreas?.map { mapToAreaModel(it) },
+            subAreas = remote.subAreaDTOS?.map { mapToAreaModel(it) },
             id = remote.id,
             name = remote.name,
             prepositional = remote.prepositional,
@@ -82,5 +84,38 @@ class SearchVacancyConverter {
             size240 = logosDTO.size240,
             raw = logosDTO.raw.orEmpty(),
         )
+    }
+
+    private fun checkAreaAndIndustryAbsence(filter: FilterGeneral): Boolean {
+        return filter.area?.areaId.isNullOrEmpty() &&
+            filter.country?.countryId.isNullOrEmpty() &&
+            filter.industry?.industryId.isNullOrEmpty()
+    }
+
+    fun toSearchParameters(filter: FilterGeneral): SearchParameters? {
+        if (
+            !filter.hideNoSalaryItems &&
+            checkAreaAndIndustryAbsence(filter) &&
+            filter.expectedSalary.isNullOrEmpty()
+        ) {
+            return null
+        } else {
+            var areaToGo: String?
+            var industryList: List<String>?
+            with(filter) {
+                areaToGo = if (area?.areaId.isNullOrEmpty()) country?.countryId else area?.areaId
+                if (areaToGo == "") areaToGo = null
+                industryList = if (industry?.industryId.isNullOrEmpty()) null else listOf(industry?.industryId!!)
+                return SearchParameters(
+                    areaId = areaToGo,
+                    industryIds = industryList,
+                    salary = expectedSalary?.toIntOrNull(),
+                    withSalaryOnly = filter.hideNoSalaryItems,
+                    page = null,
+                    perPage = null,
+                    currencyCode = null
+                )
+            }
+        }
     }
 }

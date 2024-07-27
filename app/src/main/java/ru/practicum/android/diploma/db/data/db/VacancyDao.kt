@@ -57,14 +57,10 @@ abstract class VacancyDao {
 
         val jobInfoId = insertJobInfoJoins(vacancy.jobInfoRow)
 
-        val vacancyEntity = VacancyEntity(
+        val vacancyEntity = vacancy.vacancy.copy(
             id = vacancy.vacancy.id,
             jobInfoId = jobInfoId,
-            employerId = employerId,
-            name = vacancy.vacancy.name,
-            description = vacancy.vacancy.description,
-            vacancyUrl = vacancy.vacancy.vacancyUrl,
-            dateAdd = vacancy.vacancy.dateAdd
+            employerId = employerId
         )
 
         insertVacancy(vacancyEntity)
@@ -74,21 +70,14 @@ abstract class VacancyDao {
         val employerId = insertEmployer(employerJoins.employer)
 
         if (employerJoins.logoRow != null) {
-            val logosEntity = LogosEntity(
+            val logosEntity = employerJoins.logoRow.copy(
                 id = 0,
-                size90 = employerJoins.logoRow.size90,
-                size240 = employerJoins.logoRow.size240,
-                employerId = employerId,
-                raw = employerJoins.logoRow.raw
+                employerId = employerId
             )
             insertLogo(logosEntity)
         }
 
-        val areaEntity = AreaEntity(
-            id = employerJoins.areaRow.id,
-            name = employerJoins.areaRow.name
-        )
-        insertArea(areaEntity)
+        insertArea(employerJoins.areaRow)
 
         return employerId
     }
@@ -97,22 +86,19 @@ abstract class VacancyDao {
         val jobInfoId = insertJobInfo(jobInfoJoins.jobInfo)
 
         jobInfoJoins.skillList.forEach { skill ->
-            val skillsEntity = SkillsEntity(
+            val skillsEntity = skill.copy(
                 id = 0,
-                name = skill.name,
                 jobInfoId = jobInfoId
             )
+
             insertSkill(skillsEntity)
         }
         if (jobInfoJoins.salaryRow != null) {
-            val salaryEntity = SalaryEntity(
+            val salaryEntity = jobInfoJoins.salaryRow.copy(
                 id = 0,
-                currency = jobInfoJoins.salaryRow.currency,
-                salaryFrom = jobInfoJoins.salaryRow.salaryFrom,
-                salaryTo = jobInfoJoins.salaryRow.salaryTo,
-                gross = jobInfoJoins.salaryRow.gross,
                 jobInfoId = jobInfoId
             )
+
             insertSalary(salaryEntity)
         }
 
