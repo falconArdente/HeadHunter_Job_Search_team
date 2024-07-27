@@ -171,6 +171,8 @@ class SearchViewModel(
             searchJob = viewModelScope.launch {
                 searchResult(latestSearchText!!)
             }
+        } else {
+            updateState(SearchFragmentState.SearchVacancy(vacanciesList, totalFound, isLastPage = true))
         }
     }
 }

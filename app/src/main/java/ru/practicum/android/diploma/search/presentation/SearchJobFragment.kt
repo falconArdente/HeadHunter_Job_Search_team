@@ -2,6 +2,7 @@ package ru.practicum.android.diploma.search.presentation
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -83,6 +84,7 @@ class SearchJobFragment : Fragment() {
         binding.searchInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 binding.searchInput.hideKeyboard(requireContext())
+                viewModel.currentPage=0
                 viewModel.searchImmidiently(binding.searchInput.text.toString())
             }
             false
@@ -324,6 +326,7 @@ class SearchJobFragment : Fragment() {
                 if (dy > 0) {
                     val pos =
                         (binding.recyclerViewSearch.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+
                     val itemsCount = adapter.itemCount
                     if (pos >= itemsCount - 1) {
                         viewModel.updateState(SearchFragmentState.LoadingNewPage)
