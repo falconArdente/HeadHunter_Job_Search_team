@@ -169,7 +169,10 @@ class SearchViewModel(
     fun onLastItemReached() {
         if (currentPage < maxPages - 1 && !searchInProcess) {
             currentPage++
-            searchResult(latestSearchText!!)
+            searchJob?.cancel()
+            searchJob = viewModelScope.launch {
+                searchResult(latestSearchText!!)
+            }
         }
     }
 }
