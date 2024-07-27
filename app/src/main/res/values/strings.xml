@@ -98,4 +98,7 @@
     <string name="filter_industry_title">Выбор отрасли</string>
     <string name="filter_industry_empty_error">Отрасли не найдены</string>
 
+    <string name="toast_no_internet">Проверьте подключение к интернету</string>
+    <string name="toast_server_error">Произошла ошибка</string>
+
 </resources>
