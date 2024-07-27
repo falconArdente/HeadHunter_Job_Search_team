@@ -13,6 +13,7 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterSettingsBinding
 import ru.practicum.android.diploma.filter.presentation.state.FilterSettingsState
 import ru.practicum.android.diploma.filter.presentation.viewmodel.FilterSettingsViewModel
+import ru.practicum.android.diploma.search.ui.SearchRepeatHandler
 
 class FilterSettingsFragment : Fragment() {
     private var _binding: FragmentFilterSettingsBinding? = null
@@ -59,11 +60,19 @@ class FilterSettingsFragment : Fragment() {
 
         binding.filterApplyButton.setOnClickListener {
             viewModel.saveFilterSettings()
+            doRepeatBoolSequence()
             findNavController().navigateUp()
         }
         binding.filterSalaryCross.setOnClickListener {
             binding.filterSalaryInput.setText(String())
             viewModel.changeSalary(String())
+        }
+    }
+
+    private fun doRepeatBoolSequence() {
+        val repeatHandler = requireActivity()
+        if (repeatHandler is SearchRepeatHandler) {
+            repeatHandler.setRepeat(true)
         }
     }
 

@@ -22,6 +22,7 @@ import ru.practicum.android.diploma.search.domain.model.Vacancy
 import ru.practicum.android.diploma.search.presentation.state.SearchFragmentState
 import ru.practicum.android.diploma.search.presentation.viewmodel.SearchViewModel
 import ru.practicum.android.diploma.search.ui.SearchRecyclerViewEvent
+import ru.practicum.android.diploma.search.ui.SearchRepeatHandler
 import ru.practicum.android.diploma.search.ui.VacancyAdapter
 import ru.practicum.android.diploma.search.ui.VacancyPositionSuggestsAdapter
 
@@ -39,7 +40,6 @@ class SearchJobFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         viewHolderInit()
 
         viewModel.fragmentStateLiveData().observe(viewLifecycleOwner) {
@@ -68,7 +68,6 @@ class SearchJobFragment : Fragment() {
                 viewModel.getSuggestionsForSearch(text.toString())
             }
         }
-
         binding.searchInputIcon.setOnClickListener {
             binding.searchInput.setText(String())
             viewModel.updateState(SearchFragmentState.NoTextInInputEditText)
@@ -245,6 +244,15 @@ class SearchJobFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         viewModel.checkFilterStatus()
+        doFilteredRepeatSequence()
+    }
+
+    private fun doFilteredRepeatSequence() {
+        val repeatHandler = requireActivity()
+        if (repeatHandler is SearchRepeatHandler) {
+            if (repeatHandler.getRepeatBool()) viewModel.repeatSearch()
+            repeatHandler.setRepeat(false)
+        }
     }
 
     private fun onScrollListener() {

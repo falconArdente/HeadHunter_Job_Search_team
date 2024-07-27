@@ -136,6 +136,10 @@ class SearchViewModel(
         searchResult(text)
     }
 
+    fun repeatSearch() {
+        if (!latestSearchText.isNullOrEmpty()) searchImmidiently(latestSearchText!!)
+    }
+
     fun searchWithDebounce(text: String?) {
         if (text?.isBlank() != false) {
             searchLiveData.postValue(SearchFragmentState.NoTextInInputEditText)
