@@ -24,6 +24,7 @@ import ru.practicum.android.diploma.search.domain.model.Vacancy
 import ru.practicum.android.diploma.search.presentation.state.SearchFragmentState
 import ru.practicum.android.diploma.search.presentation.viewmodel.SearchViewModel
 import ru.practicum.android.diploma.search.ui.SearchRecyclerViewEvent
+import ru.practicum.android.diploma.search.ui.SearchRepeatHandler
 import ru.practicum.android.diploma.search.ui.VacancyAdapter
 import ru.practicum.android.diploma.search.ui.VacancyPositionSuggestsAdapter
 
@@ -33,8 +34,6 @@ class SearchJobFragment : Fragment() {
     private var suggestionsAdapter: VacancyPositionSuggestsAdapter? = null
     private val viewModel by viewModel<SearchViewModel>()
     private val adapter = VacancyAdapter(emptyList(), clickListenerFun())
-    private var isFirstTimeCall = true
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentSearchJobBinding.inflate(inflater, container, false)
@@ -43,7 +42,6 @@ class SearchJobFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         viewHolderInit()
         showView()
         searchInputClick()
@@ -66,7 +64,6 @@ class SearchJobFragment : Fragment() {
                 viewModel.getSuggestionsForSearch(text.toString())
             }
         }
-
         binding.searchInputIcon.setOnClickListener {
             binding.searchInput.setText(String())
             viewModel.updateState(SearchFragmentState.NoTextInInputEditText)
@@ -89,10 +86,10 @@ class SearchJobFragment : Fragment() {
         suggestionsAdapter = VacancyPositionSuggestsAdapter(requireActivity(), binding.searchInput)
         binding.searchInput.setAdapter(suggestionsAdapter)
         viewModel.suggestionsLivaData.observe(viewLifecycleOwner) { renderSuggestions(it) }
-
         viewModel.isLastPage.observe(viewLifecycleOwner) {
             adapter.isLastPage = it
         }
+
     }
 
     private fun renderSuggestions(incomeSuggestions: List<String>) {
@@ -276,6 +273,15 @@ class SearchJobFragment : Fragment() {
         super.onResume()
         viewModel.checkFilterStatus()
         showView()
+        doFilteredRepeatSequence()
+    }
+
+    private fun doFilteredRepeatSequence() {
+        val repeatHandler = requireActivity()
+        if (repeatHandler is SearchRepeatHandler) {
+            if (repeatHandler.getRepeatBool()) viewModel.repeatSearch()
+            repeatHandler.setRepeat(false)
+        }
     }
 
     private fun onScrollListener() {

@@ -121,6 +121,10 @@ class SearchViewModel(
         searchResult(text)
     }
 
+    fun repeatSearch() {
+        if (!latestSearchText.isNullOrEmpty()) searchImmidiently(latestSearchText!!)
+    }
+
     fun searchWithDebounce(text: String) {
         vacanciesList.clear()
         updateState(SearchFragmentState.Loading)
