@@ -90,7 +90,6 @@ class SearchViewModel(
     private val searchJobDetails: Job? = null
     private fun searchResult(text: String?) {
         searchJobDetails?.cancel()
-        updateState(SearchFragmentState.Loading)
         if (text?.isBlank() != false || isLastCapitalOfInputSearched) return
 
         if (currentPage == 0) updateState(SearchFragmentState.Loading)
@@ -121,7 +120,7 @@ class SearchViewModel(
                         }
 
                         vacancy.errorMessage!!.isNotEmpty() -> {
-                            updateState(SearchFragmentState.ServerError)
+                            updateState(SearchFragmentState.ServerError(vacancy.result))
                         }
 
                         else -> updateState(SearchFragmentState.NoResult)

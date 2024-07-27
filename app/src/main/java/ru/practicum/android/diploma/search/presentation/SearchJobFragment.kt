@@ -110,6 +110,9 @@ class SearchJobFragment : Fragment() {
                 if (viewModel.currentPage != 0) {
                     showToast(requireActivity().getString(R.string.toast_server_error))
                     binding.recyclerViewSearch.visibility = View.VISIBLE
+                    //    binding.searchProgressBar.visibility = View.GONE
+                    //   adapter.isLastPage=true
+                    //не убирает прогресс бар.подумать
                 } else {
                     binding.searchPlaceholderImage.background =
                         requireActivity().getDrawable(R.drawable.picture_angry_cat)
@@ -124,7 +127,11 @@ class SearchJobFragment : Fragment() {
                 if (viewModel.currentPage != 0) {
                     showToast(requireActivity().getString(R.string.toast_no_internet))
                     binding.recyclerViewSearch.visibility = View.VISIBLE
-                } else {
+                    //      binding.searchProgressBar.visibility = View.GONE
+                    //   adapter.isLastPage=true
+                    //не убирает прогресс бар.подумать
+
+                } else if (searchState.searchVacancy.isEmpty()) {
                     binding.searchPlaceholderImage.background =
                         requireActivity().getDrawable(R.drawable.picture_funny_head)
                     binding.searchPlaceholderText.text =
