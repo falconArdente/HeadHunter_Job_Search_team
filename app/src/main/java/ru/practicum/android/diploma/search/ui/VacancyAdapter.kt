@@ -37,10 +37,10 @@ class VacancyAdapter(
         }
     }
 
-    override fun getItemCount(): Int = vacancyList.size + 1
+    override fun getItemCount(): Int = vacancyList.size
 
     override fun getItemViewType(position: Int): Int {
-        return if (position == itemCount - 1) TYPE_PROGRESS_BAR else TYPE_VACANCY
+        return if (position == vacancyList.size && isLastPage) TYPE_PROGRESS_BAR else TYPE_VACANCY
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -51,6 +51,25 @@ class VacancyAdapter(
             }
         } else if (holder is ProgressBarViewHolder) {
             holder.bind(isLastPage)
+        }
+    }
+
+    fun updateIsLastPage(expression: Boolean) {
+        isLastPage = expression
+        if (expression) {
+            vacancyList + Vacancy(
+                id = String(),
+                name = String(),
+                salary = null,
+                employer = null,
+                brandSnippet = null,
+                area = null
+            )
+            notifyItemChanged(vacancyList.size)
+        } else {
+            vacancyList.drop(vacancyList.size)
+            notifyItemRemoved(vacancyList.size + 1)
+            notifyItemRangeChanged(vacancyList.size, getItemCount())
         }
     }
 

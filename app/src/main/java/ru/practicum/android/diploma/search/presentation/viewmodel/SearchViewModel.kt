@@ -100,6 +100,7 @@ class SearchViewModel(
                 .collect { vacancy ->
                     when {
                         vacancy.result!!.isNotEmpty() -> {
+                            updateState(SearchFragmentState.LoadingInAdapter(false))
                             maxPages = vacancy.pages
                             totalFound = vacancy.foundVacancy
                             if (currentPage == maxPages - 1 || vacanciesList.count() == vacancy.foundVacancy) {
@@ -167,6 +168,7 @@ class SearchViewModel(
     fun onLastItemReached() {
         if (currentPage < maxPages - 1 && !searchInProcess) {
             currentPage++
+            updateState(SearchFragmentState.LoadingInAdapter(true))
             searchJob?.cancel()
             searchJob = viewModelScope.launch {
                 searchResult(latestSearchText!!)

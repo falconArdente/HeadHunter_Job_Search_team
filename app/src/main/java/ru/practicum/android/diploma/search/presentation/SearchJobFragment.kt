@@ -97,13 +97,17 @@ class SearchJobFragment : Fragment() {
         when (searchState) {
             is SearchFragmentState.SearchVacancy -> {
                 adapter.updateList(searchState.searchVacancy)
-                adapter.isLastPage = searchState.isLastPage
+                adapter.updateIsLastPage(false)
                 setVisible(placeholder = false, list = true, blueButton = true, progress = false)
                 setBlueButtonText(searchState)
             }
 
             is SearchFragmentState.Loading -> {
                 setVisible(placeholder = false, list = false, blueButton = false, progress = true)
+            }
+
+            is SearchFragmentState.LoadingInAdapter -> {
+                adapter.updateIsLastPage(searchState.isLast)
             }
 
             is SearchFragmentState.NoResult -> {
