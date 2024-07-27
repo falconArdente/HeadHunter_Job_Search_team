@@ -93,7 +93,7 @@ class RetrofitBasedClient(retrofit: Retrofit, private val networkStatus: Network
             } catch (e: SocketTimeoutException) {
                 Response().apply {
                     errorMessage = e.message
-                    resultCode = Response.FAILURE
+                    resultCode = Response.NO_INTERNET
                 }
             } catch (e: UnknownHostException) {
                 Response().apply {
