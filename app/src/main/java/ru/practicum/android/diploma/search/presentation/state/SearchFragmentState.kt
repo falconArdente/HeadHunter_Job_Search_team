@@ -12,5 +12,6 @@ sealed class SearchFragmentState {
     data class ServerError(val searchVacancy: List<Vacancy>) : SearchFragmentState()
     data object NoResult : SearchFragmentState()
     data object Loading : SearchFragmentState()
+    data object LoadingNewPage : SearchFragmentState()
     data object NoTextInInputEditText : SearchFragmentState()
 }
