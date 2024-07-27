@@ -147,7 +147,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/dp8"
-        app:layout_constraintBottom_toTopOf="@id/emptyNavigationBox"
+        app:layout_constraintBottom_toTopOf="@id/searchMiniProgressBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/searchJobsCountButton">
@@ -162,16 +162,25 @@
                 android:id="@+id/recyclerViewSearch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-
-
         </LinearLayout>
     </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/searchMiniProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="@color/Blue"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/emptyNavigationBox"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchJobsScrollView" />
 
     <View
         android:id="@+id/emptyNavigationBox"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp56"
-        app:layout_constraintTop_toBottomOf="@id/searchJobsScrollView"
+        app:layout_constraintTop_toBottomOf="@id/searchMiniProgressBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

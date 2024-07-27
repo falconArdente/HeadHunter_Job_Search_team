@@ -97,17 +97,14 @@ class SearchJobFragment : Fragment() {
         when (searchState) {
             is SearchFragmentState.SearchVacancy -> {
                 adapter.updateList(searchState.searchVacancy)
-                adapter.updateIsLastPage(false)
                 setVisible(placeholder = false, list = true, blueButton = true, progress = false)
                 setBlueButtonText(searchState)
+                binding.searchMiniProgressBar.isVisible = false
             }
 
             is SearchFragmentState.Loading -> {
+                binding.searchMiniProgressBar.isVisible = true
                 setVisible(placeholder = false, list = false, blueButton = false, progress = true)
-            }
-
-            is SearchFragmentState.LoadingInAdapter -> {
-                adapter.updateIsLastPage(searchState.isLast)
             }
 
             is SearchFragmentState.NoResult -> {
@@ -131,6 +128,7 @@ class SearchJobFragment : Fragment() {
                 if (viewModel.currentPage != 0) {
                     showToast(requireActivity().getString(R.string.toast_no_internet))
                     binding.recyclerViewSearch.visibility = View.VISIBLE
+                    binding.searchMiniProgressBar.isVisible = false
                     //      binding.searchProgressBar.visibility = View.GONE
                     //   adapter.isLastPage=true
                     //не убирает прогресс бар.подумать
@@ -148,6 +146,7 @@ class SearchJobFragment : Fragment() {
                 binding.searchPlaceholderImage.background =
                     requireActivity().getDrawable(R.drawable.picture_looking_man)
                 setVisible(placeholder = false, list = false, blueButton = false, progress = false, image = true)
+                binding.searchMiniProgressBar.isVisible = false
             }
 
             else -> Unit
