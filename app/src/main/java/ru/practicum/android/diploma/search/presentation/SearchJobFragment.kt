@@ -89,9 +89,6 @@ class SearchJobFragment : Fragment() {
         suggestionsAdapter = VacancyPositionSuggestsAdapter(requireActivity(), binding.searchInput)
         binding.searchInput.setAdapter(suggestionsAdapter)
         viewModel.suggestionsLivaData.observe(viewLifecycleOwner) { renderSuggestions(it) }
-        viewModel.isLastPage.observe(viewLifecycleOwner) {
-            adapter.isLastPage = it
-        }
     }
 
     private fun renderSearchState(searchState: SearchFragmentState) {
@@ -247,7 +244,6 @@ class SearchJobFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         viewModel.checkFilterStatus()
-        showView()
         doFilteredRepeatSequence()
     }
 
