@@ -2,6 +2,7 @@ package ru.practicum.android.diploma.search.ui
 
 import android.util.TypedValue
 import android.view.View
+import androidx.core.view.marginTop
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -15,6 +16,20 @@ private const val CORNER = 12f
 
 class VacancyViewHolder(private val binding: JobListItemBinding) : RecyclerView.ViewHolder(binding.root) {
     fun bind(vacancy: Vacancy) {
+        binding.jobTitle.text = jobTitleText(vacancy)
+        binding.jobEmployer.text = vacancy.employer?.name ?: ""
+        binding.jobSalary.text = jobSalaryText(vacancy)
+        Glide.with(itemView)
+            .load(vacancy.employer?.logoUrls?.size90)
+            .placeholder(R.drawable.placeholder_logo)
+            .centerCrop()
+            .transform(RoundedCorners(dpToPx(itemView, CORNER)))
+            .into(binding.jobImage)
+    }
+
+
+    fun bindFirst(vacancy: Vacancy) {
+        binding.secretView.visibility = View.VISIBLE
         binding.jobTitle.text = jobTitleText(vacancy)
         binding.jobEmployer.text = vacancy.employer?.name ?: ""
         binding.jobSalary.text = jobSalaryText(vacancy)

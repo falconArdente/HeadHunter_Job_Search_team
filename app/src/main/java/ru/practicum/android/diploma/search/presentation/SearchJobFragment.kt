@@ -82,7 +82,7 @@ class SearchJobFragment : Fragment() {
         binding.searchInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 binding.searchInput.hideKeyboard(requireContext())
-                viewModel.currentPage=0
+                viewModel.currentPage = 0
                 viewModel.searchImmidiently(binding.searchInput.text.toString())
             }
             false
@@ -91,6 +91,8 @@ class SearchJobFragment : Fragment() {
         suggestionsAdapter = VacancyPositionSuggestsAdapter(requireActivity(), binding.searchInput)
         binding.searchInput.setAdapter(suggestionsAdapter)
         viewModel.suggestionsLivaData.observe(viewLifecycleOwner) { renderSuggestions(it) }
+
+
     }
 
     private fun renderSearchState(searchState: SearchFragmentState) {
