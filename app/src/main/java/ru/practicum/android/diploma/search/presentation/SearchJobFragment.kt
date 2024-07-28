@@ -328,7 +328,7 @@ class SearchJobFragment : Fragment() {
         }
     }
 
-    private fun changeConstraint(isFirstSearch: Boolean = false) {
+    private fun changeConstraint() {
         with(binding) {
             ConstraintSet().apply {
                 clone(root)
