@@ -13,10 +13,12 @@ import ru.practicum.android.diploma.search.domain.api.SearchInteractor
 import ru.practicum.android.diploma.search.domain.model.SearchParameters
 import ru.practicum.android.diploma.search.domain.model.Vacancy
 import ru.practicum.android.diploma.search.presentation.state.SearchFragmentState
+import ru.practicum.android.diploma.utils.debounce
 
 private const val SEARCH_DEBOUNCE_DELAY = 2000L
 private const val CLICK_DEBOUNCE_DELAY = 1000L
 private const val PER_PAGE = 20
+private const val SUGGESTIONS_DEBOUNCE_DELAY = 300L
 
 class SearchViewModel(
     private val interactor: SearchInteractor,
@@ -41,9 +43,15 @@ class SearchViewModel(
     private val vacanciesList = mutableListOf<Vacancy>()
     private var totalFound = 0
     private var isLastCapitalOfInputSearched = false
+    private var suggestionsRequestDebounced: ((String) -> Unit)? = null
 
     init {
         updateState(SearchFragmentState.NoTextInInputEditText)
+        suggestionsRequestDebounced = debounce(
+            SUGGESTIONS_DEBOUNCE_DELAY, viewModelScope, true
+        ) { textForSuggestions ->
+            requestSuggestionsForSearch(textForSuggestions)
+        }
     }
 
     fun checkFilterStatus() {
@@ -52,6 +60,10 @@ class SearchViewModel(
     }
 
     fun getSuggestionsForSearch(textForSuggests: String) {
+        if (suggestionsRequestDebounced != null) suggestionsRequestDebounced?.invoke(textForSuggests)
+    }
+
+    private fun requestSuggestionsForSearch(textForSuggests: String) {
         suggestionsIncomeJob?.cancel()
         suggestionsIncomeJob = viewModelScope.launch {
             getSuggestsUseCase.execute(textForSuggests)
@@ -60,6 +72,7 @@ class SearchViewModel(
                 }
         }
     }
+
 
     fun fragmentStateLiveData(): LiveData<SearchFragmentState> = searchLiveData
     fun updateState(state: SearchFragmentState) {

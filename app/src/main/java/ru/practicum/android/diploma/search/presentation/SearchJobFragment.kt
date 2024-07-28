@@ -42,12 +42,10 @@ class SearchJobFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewHolderInit()
-
         viewModel.fragmentStateLiveData().observe(viewLifecycleOwner) {
             allViewGone()
             renderSearchState(it)
         }
-
         searchInputClick()
         onScrollListener()
         viewModel.filterStateToObserve.observe(viewLifecycleOwner) { setFilterIcon(it) }
@@ -275,10 +273,6 @@ class SearchJobFragment : Fragment() {
     private fun searchInputClick() {
         binding.searchInput.doOnTextChanged { text, _, _, _ ->
             if (text.isNullOrEmpty()) {
-                binding.searchInputIcon.background = requireActivity().getDrawable(R.drawable.icon_search)
-            } else {
-                binding.searchInputIcon.background = requireActivity().getDrawable(R.drawable.icon_cross)
-                viewModel.getSuggestionsForSearch(text.toString())
                 viewModel.currentPage = 0
             }
         }
