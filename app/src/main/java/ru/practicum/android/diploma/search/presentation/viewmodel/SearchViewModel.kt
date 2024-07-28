@@ -26,7 +26,7 @@ class SearchViewModel(
     private val searchLiveData =
         MutableLiveData<SearchFragmentState>(SearchFragmentState.NoTextInInputEditText)
     private var latestSearchText: String? = null
-    private var searchJob: Job? = null
+    private var autoSearchJob: Job? = null
     private var isClickAllowed = true
     private var suggestionsList = MutableLiveData<List<String>>(emptyList())
     val suggestionsLivaData: LiveData<List<String>> = suggestionsList
@@ -87,13 +87,13 @@ class SearchViewModel(
         )
     }
 
-    private val searchJobDetails: Job? = null
+    private var searchJobDetails: Job? = null
     private fun searchResult(text: String?) {
         searchJobDetails?.cancel()
         if (text?.isBlank() != false || isLastCapitalOfInputSearched) return
 
         if (currentPage == 0) updateState(SearchFragmentState.Loading)
-        searchJobDetails != viewModelScope.launch {
+        searchJobDetails = viewModelScope.launch {
             searchInProcess = true
             interactor
                 .searchVacancy(text, parametersForSearch, PER_PAGE, currentPage)
@@ -132,7 +132,7 @@ class SearchViewModel(
 
     fun searchImmidiently(text: String) {
         vacanciesList.clear()
-        searchJob?.cancel()
+        autoSearchJob?.cancel()
         searchResult(text)
     }
 
@@ -149,8 +149,8 @@ class SearchViewModel(
             vacanciesList.clear()
             updateState(SearchFragmentState.Loading)
             latestSearchText = text
-            searchJob?.cancel()
-            searchJob = viewModelScope.launch {
+            autoSearchJob?.cancel()
+            autoSearchJob = viewModelScope.launch {
                 delay(SEARCH_DEBOUNCE_DELAY)
                 searchResult(text)
             }
@@ -172,8 +172,8 @@ class SearchViewModel(
     fun onLastItemReached() {
         if (currentPage < maxPages - 1 && !searchInProcess) {
             currentPage++
-            searchJob?.cancel()
-            searchJob = viewModelScope.launch {
+            autoSearchJob?.cancel()
+            autoSearchJob = viewModelScope.launch {
                 searchResult(latestSearchText!!)
             }
         } else {
@@ -181,4 +181,3 @@ class SearchViewModel(
         }
     }
 }
-
