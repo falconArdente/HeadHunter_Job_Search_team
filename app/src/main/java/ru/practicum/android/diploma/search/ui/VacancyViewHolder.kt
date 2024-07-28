@@ -2,7 +2,6 @@ package ru.practicum.android.diploma.search.ui
 
 import android.util.TypedValue
 import android.view.View
-import androidx.core.view.marginTop
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -26,7 +25,6 @@ class VacancyViewHolder(private val binding: JobListItemBinding) : RecyclerView.
             .transform(RoundedCorners(dpToPx(itemView, CORNER)))
             .into(binding.jobImage)
     }
-
 
     fun bindFirst(vacancy: Vacancy) {
         binding.secretView.visibility = View.VISIBLE

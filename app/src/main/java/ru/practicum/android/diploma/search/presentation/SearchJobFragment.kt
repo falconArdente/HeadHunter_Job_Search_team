@@ -91,8 +91,6 @@ class SearchJobFragment : Fragment() {
         suggestionsAdapter = VacancyPositionSuggestsAdapter(requireActivity(), binding.searchInput)
         binding.searchInput.setAdapter(suggestionsAdapter)
         viewModel.suggestionsLivaData.observe(viewLifecycleOwner) { renderSuggestions(it) }
-
-
     }
 
     private fun renderSearchState(searchState: SearchFragmentState) {
