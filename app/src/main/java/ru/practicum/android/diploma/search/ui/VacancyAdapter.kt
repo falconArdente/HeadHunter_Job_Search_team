@@ -27,7 +27,11 @@ class VacancyAdapter(
     override fun getItemCount(): Int = vacancyList.size
 
     override fun onBindViewHolder(holder: VacancyViewHolder, position: Int) {
-        holder.bind(vacancyList[position])
+        if (position == 0) {
+            holder.bindFirst(vacancyList[position])
+        } else {
+            holder.bind(vacancyList[position])
+        }
         holder.itemView.setOnClickListener {
             onVacancyClickListener.onItemClick(vacancyList[holder.adapterPosition])
         }
@@ -38,6 +42,7 @@ class VacancyAdapter(
         notifyDataSetChanged()
     }
 }
+
 interface SearchRecyclerViewEvent {
     fun onItemClick(vacancy: Vacancy)
 }

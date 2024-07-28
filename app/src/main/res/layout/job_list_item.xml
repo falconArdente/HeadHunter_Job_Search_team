@@ -8,6 +8,13 @@
     android:paddingHorizontal="@dimen/dp16"
     android:paddingVertical="@dimen/dp8">
 
+    <View
+        android:id="@+id/secretView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp48"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
+        />
     <ImageView
         android:id="@+id/jobImage"
         android:layout_width="@dimen/dp45"
@@ -15,7 +22,7 @@
         android:contentDescription="@null"
         app:layout_constraintEnd_toStartOf="@id/jobTitle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/secretView"
         />
 
     <TextView
@@ -30,7 +37,7 @@
         app:layout_constraintBottom_toTopOf="@id/jobEmployer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/jobImage"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/secretView"
         tools:text="Android-разработчик, Москва" />
 
     <TextView
