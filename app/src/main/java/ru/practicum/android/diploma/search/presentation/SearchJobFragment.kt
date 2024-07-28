@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -33,6 +34,7 @@ class SearchJobFragment : Fragment() {
     private var suggestionsAdapter: VacancyPositionSuggestsAdapter? = null
     private val viewModel by viewModel<SearchViewModel>()
     private val adapter = VacancyAdapter(emptyList(), clickListenerFun())
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentSearchJobBinding.inflate(inflater, container, false)
@@ -326,6 +328,17 @@ class SearchJobFragment : Fragment() {
         }
     }
 
+    private fun changeConstraint(isFirstSearch: Boolean = false) {
+        with(binding) {
+            ConstraintSet().apply {
+                clone(root)
+                clear(searchJobsScrollView.id, ConstraintSet.TOP)
+                connect(searchJobsScrollView.id, ConstraintSet.TOP, searchInputBackground.id, ConstraintSet.BOTTOM)
+                applyTo(root)
+            }
+        }
+    }
+
     private fun onScrollListener() {
         binding.recyclerViewSearch.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -338,6 +351,9 @@ class SearchJobFragment : Fragment() {
                     if (pos >= itemsCount - 1) {
                         viewModel.updateState(SearchFragmentState.LoadingNewPage)
                         viewModel.onLastItemReached()
+                    }
+                    if (pos >= 0) {
+                        changeConstraint()
                     }
                 }
             }
