@@ -27,6 +27,8 @@ class SearchViewModel(
         MutableLiveData<SearchFragmentState>(SearchFragmentState.NoTextInInputEditText)
     private var latestSearchText: String? = null
     private var autoSearchDelayJob: Job? = null
+    private var searchJob: Job? = null
+    private var suggestionsIncomeJob: Job? = null
     private var isClickAllowed = true
     private var suggestionsList = MutableLiveData<List<String>>(emptyList())
     val suggestionsLivaData: LiveData<List<String>> = suggestionsList
@@ -50,7 +52,8 @@ class SearchViewModel(
     }
 
     fun getSuggestionsForSearch(textForSuggests: String) {
-        viewModelScope.launch {
+        suggestionsIncomeJob?.cancel()
+        suggestionsIncomeJob = viewModelScope.launch {
             getSuggestsUseCase.execute(textForSuggests)
                 .collect {
                     suggestionsList.postValue(it)
@@ -86,7 +89,7 @@ class SearchViewModel(
         )
     }
 
-    private var searchJob: Job? = null
+
     private fun searchResult(text: String?) {
         if (text.isNullOrBlank()) return
         searchJob?.cancel()
@@ -143,7 +146,6 @@ class SearchViewModel(
         } else {
             isLastCapitalOfInputSearched = false
             vacanciesList.clear()
-            updateState(SearchFragmentState.Loading)
             latestSearchText = text
             autoSearchDelayJob?.cancel()
             autoSearchDelayJob = viewModelScope.launch {
@@ -166,7 +168,7 @@ class SearchViewModel(
     }
 
     fun onLastItemReached() {
-        if (currentPage < pagesCount - 1 ) {
+        if (currentPage < pagesCount - 1) {
             currentPage++
             autoSearchDelayJob?.cancel()
             autoSearchDelayJob = viewModelScope.launch {
