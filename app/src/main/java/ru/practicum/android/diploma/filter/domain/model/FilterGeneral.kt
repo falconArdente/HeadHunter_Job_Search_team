@@ -5,7 +5,7 @@ data class FilterGeneral(
     val area: AreaFilter? = null,
     val industry: IndustryFilter? = null,
     val expectedSalary: String? = null,
-    val hideNoSalaryItems: Boolean = false
+    val hideNoSalaryItems: Boolean? = null
 ) {
     override fun equals(other: Any?): Boolean {
         if (other !is FilterGeneral) return false

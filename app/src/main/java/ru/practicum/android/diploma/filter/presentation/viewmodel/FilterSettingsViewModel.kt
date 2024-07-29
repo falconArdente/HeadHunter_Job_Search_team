@@ -46,11 +46,7 @@ class FilterSettingsViewModel(
             area = tempFilter.area ?: searchFilter.area,
             industry = tempFilter.industry ?: searchFilter.industry,
             expectedSalary = tempFilter.expectedSalary ?: searchFilter.expectedSalary,
-            hideNoSalaryItems = if (tempFilter.hideNoSalaryItems == null) {
-                searchFilter.hideNoSalaryItems
-            } else {
-                tempFilter.hideNoSalaryItems
-            }
+            hideNoSalaryItems = tempFilter.hideNoSalaryItems ?: searchFilter.hideNoSalaryItems
         )
     }
 
@@ -60,7 +56,6 @@ class FilterSettingsViewModel(
         jobStorage = viewModelScope.launch(Dispatchers.IO) {
             filterStorage.saveAllFilterParameters(filterToDisplay)
             filterStorage.clearAllSavedParameters()
-            updateAllFiltersInfo()
         }
     }
 
@@ -72,7 +67,6 @@ class FilterSettingsViewModel(
     fun resetFilterSettings() {
         jobStorage?.cancel()
         jobStorage = viewModelScope.launch(Dispatchers.IO) {
-            filterStorage.clearAllFilterParameters()
             resetFilter()
             updateAllFiltersInfo()
         }

@@ -94,7 +94,7 @@ class SearchVacancyConverter {
 
     fun toSearchParameters(filter: FilterGeneral): SearchParameters? {
         if (
-            !filter.hideNoSalaryItems &&
+            !filter.hideNoSalaryItems!! &&
             checkAreaAndIndustryAbsence(filter) &&
             filter.expectedSalary.isNullOrEmpty()
         ) {
