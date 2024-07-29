@@ -13,6 +13,10 @@ class FilterStorageInteractorImpl(
         repository.clearAllFilterParameters()
     }
 
+    override fun clearAllSavedParameters() {
+        repository.clearAllSavedParameters()
+    }
+
     override fun isFilterActive(): Boolean {
         return repository.isFilterActive()
     }

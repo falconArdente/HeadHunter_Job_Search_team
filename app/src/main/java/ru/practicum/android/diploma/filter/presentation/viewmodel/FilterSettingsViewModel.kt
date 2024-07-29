@@ -53,6 +53,7 @@ class FilterSettingsViewModel(
 
         jobStorage = viewModelScope.launch(Dispatchers.IO) {
             filterStorage.saveAllFilterParameters(savedFilter)
+            filterStorage.clearAllSavedParameters()
             filterState.postValue(FilterSettingsState.SavedFilter())
         }
     }
@@ -93,12 +94,12 @@ class FilterSettingsViewModel(
     }
 
     fun changeSalary(newSalary: String) {
-        savedFilter = savedFilter.copy(expectedSalary = newSalary)
+        filterStorage.saveExpectedSalary(newSalary)
         checkFilterExists()
     }
 
     fun changeHideNoSalary(noSalary: Boolean) {
-        savedFilter = savedFilter.copy(hideNoSalaryItems = noSalary)
+        filterStorage.saveHideNoSalaryItems(noSalary)
         checkFilterExists()
     }
 

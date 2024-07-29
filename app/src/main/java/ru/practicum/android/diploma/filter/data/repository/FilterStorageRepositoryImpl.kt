@@ -53,4 +53,8 @@ class FilterStorageRepositoryImpl(private val filterStorage: FilterStorage) :
         filterStorage.saveSpecificFilterParameters(specificFilterSaved.copy(hideNoSalaryItems = hideNoSalaryItems))
 
     }
+
+    override fun clearAllSavedParameters() {
+        filterStorage.clearAllSavedParameters()
+    }
 }

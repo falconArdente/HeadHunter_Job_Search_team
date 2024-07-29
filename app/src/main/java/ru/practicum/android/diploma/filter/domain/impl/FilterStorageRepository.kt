@@ -37,5 +37,5 @@ interface FilterStorageRepository {
 
     // сохранение флага "не показывать без зп" на экране базового фильтра (если "применить" не было нажато)
     fun saveHideNoSalaryItems(hideNoSalaryItems: Boolean)
-
+    fun clearAllSavedParameters()
 }

@@ -25,4 +25,5 @@ interface FilterStorageInteractor {
     fun saveExpectedSalary(salaryAmount: String)
 
     fun saveHideNoSalaryItems(hideNoSalaryItems: Boolean)
+    fun clearAllSavedParameters()
 }

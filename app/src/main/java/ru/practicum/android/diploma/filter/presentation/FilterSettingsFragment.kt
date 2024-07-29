@@ -60,6 +60,7 @@ class FilterSettingsFragment : Fragment() {
 
         binding.filterApplyButton.setOnClickListener {
             viewModel.saveFilterSettings()
+            //viewModel.resetFilter()
             doRepeatBoolSequence()
             findNavController().navigateUp()
         }
@@ -96,12 +97,12 @@ class FilterSettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val isFromSearch = if (arguments != null) {
-            requireArguments().getBoolean(PATH_FROM_SEARCH)
-        } else {
-            false
-        }
-        arguments?.clear()
+        //val isFromSearch = if (arguments != null) {
+        //    requireArguments().getBoolean(PATH_FROM_SEARCH)
+        // } else {
+        //    false
+//}
+        //   arguments?.clear()
 
         binding.filterSalaryInput.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
@@ -120,10 +121,10 @@ class FilterSettingsFragment : Fragment() {
         binding.filterDontShowWithoutSalaryCheckBox.setOnCheckedChangeListener { _, isChecked ->
             viewModel.changeHideNoSalary(noSalary = isChecked)
         }
-        if (isFromSearch) {
-            viewModel.resetFilter()
-        }
-        viewModel.loadSavedFilterSettings(isFromSearch)
+        // if (isFromSearch) {
+        //viewModel.resetFilter()
+        //}
+        //viewModel.loadSavedFilterSettings(isFromSearch)
     }
 
     private fun render(state: FilterSettingsState) {
