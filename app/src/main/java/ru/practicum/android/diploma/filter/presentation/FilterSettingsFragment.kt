@@ -28,7 +28,7 @@ class FilterSettingsFragment : Fragment() {
     private val viewModel by viewModel<FilterSettingsViewModel>()
     private var previousSalaryText = String()
     private var previousCheckBoxValue = false
-    private var salaryFieldDebounced: ((String) -> Unit)? = null
+    private var salaryGotFocused = false
     private var checkBoxDebounced: ((Boolean) -> Unit)? = null
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,14 +45,6 @@ class FilterSettingsFragment : Fragment() {
     }
 
     private fun initiateDebounce() {
-        salaryFieldDebounced = debounce(
-            SALARY_ITEMS_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, true
-        ) { salaryText ->
-            if (salaryText != previousSalaryText) {
-                viewModel.changeSalary(salaryText)
-                previousSalaryText = salaryText
-            }
-        }
         checkBoxDebounced = debounce(
             SALARY_ITEMS_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, true
         ) { doHideNoSalaryVacs ->
@@ -93,7 +85,14 @@ class FilterSettingsFragment : Fragment() {
         }
         binding.filterSalaryCross.setOnClickListener {
             binding.filterSalaryInput.setText(String())
-            salaryFieldDebounced?.invoke(String())
+            setSalary(String())
+        }
+    }
+
+    private fun setSalary(salary: String) {
+        if (salary != previousSalaryText) {
+            viewModel.changeSalary(salary)
+            previousSalaryText = salary
         }
     }
 
@@ -107,7 +106,7 @@ class FilterSettingsFragment : Fragment() {
     private fun setTextActions() {
         binding.filterSalaryInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                salaryFieldDebounced?.invoke(binding.filterSalaryInput.text.toString())
+                setSalary(binding.filterSalaryInput.text.toString())
                 val inputManager =
                     requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 inputManager.hideSoftInputFromWindow(binding.filterSalaryInput.windowToken, 0)
@@ -116,12 +115,14 @@ class FilterSettingsFragment : Fragment() {
         }
         binding.filterSalaryInput.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
+                salaryGotFocused = true
                 binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Blue))
             } else {
+                salaryGotFocused = false
                 if (binding.filterSalaryInput.text.isNullOrEmpty()) {
                     binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Gray_OR_White))
-                    salaryFieldDebounced?.invoke(binding.filterSalaryInput.text.toString())
                 } else {
+                    setSalary(binding.filterSalaryInput.text.toString())
                     binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Black))
                 }
             }
@@ -148,6 +149,7 @@ class FilterSettingsFragment : Fragment() {
         setTextActions()
         initiateDebounce()
         binding.filterDontShowWithoutSalaryCheckBox.setOnCheckedChangeListener { _, isChecked ->
+            if (salaryGotFocused) setSalary(binding.filterSalaryInput.text.toString())
             checkBoxDebounced?.invoke(isChecked)
         }
     }

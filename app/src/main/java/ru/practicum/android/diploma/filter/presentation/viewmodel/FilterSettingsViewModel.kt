@@ -24,6 +24,7 @@ class FilterSettingsViewModel(
     private var temporaryFilter: FilterGeneral = FilterGeneral()
     private var filterForSearch: FilterGeneral = FilterGeneral()
     private var filterToDisplay: FilterGeneral = FilterGeneral()
+    private var salaryToGo = String()
     private val filterState = MutableLiveData<FilterSettingsState>()
     fun getState(): LiveData<FilterSettingsState> = filterState
 
@@ -86,13 +87,22 @@ class FilterSettingsViewModel(
     }
 
     fun changeSalary(newSalary: String) {
-        filterStorage.saveExpectedSalary(newSalary)
-        updateAllFiltersInfo()
+        jobLoad?.cancel()
+        salaryToGo = newSalary
+        viewModelScope.launch(Dispatchers.IO) {
+            val delayer = async { filterStorage.saveExpectedSalary(newSalary) }
+            delayer.await()
+            updateAllFiltersInfo()
+        }
     }
 
     fun changeHideNoSalary(noSalary: Boolean) {
-        filterStorage.saveHideNoSalaryItems(noSalary)
-        updateAllFiltersInfo()
+        jobLoad?.cancel()
+        viewModelScope.launch(Dispatchers.IO) {
+            val delayer = async { filterStorage.saveHideNoSalaryItems(noSalary) }
+            delayer.await()
+            updateAllFiltersInfo()
+        }
     }
 
     fun resetRegion() {

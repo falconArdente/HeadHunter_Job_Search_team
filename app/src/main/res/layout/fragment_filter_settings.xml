@@ -145,10 +145,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp16"
-            tools:text="Москва, Россия"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/filterWorkPlaceTitle" />
+            app:layout_constraintTop_toBottomOf="@id/filterWorkPlaceTitle"
+            tools:text="Москва, Россия" />
 
         <ImageView
             android:id="@+id/filterWorkPlaceCross"
@@ -193,10 +193,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp16"
-            tools:text="IT"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/filterIndustryTitle" />
+            app:layout_constraintTop_toBottomOf="@id/filterIndustryTitle"
+            tools:text="IT" />
 
         <ImageView
             android:id="@+id/filterIndustryCross"
@@ -247,11 +247,11 @@
         android:layout_marginStart="@dimen/dp16"
         android:hint="@string/enter_amount"
         android:inputType="number"
+        android:textAlignment="textStart"
         android:textColorHint="@color/search_hint_gray_to_white"
         android:textCursorDrawable="@drawable/cursor_drawable"
-        android:textAlignment="textStart"
-        app:layout_constraintEnd_toStartOf="@+id/filterSalaryCross"
         app:layout_constraintBottom_toBottomOf="@id/filterSalaryInputBackground"
+        app:layout_constraintEnd_toStartOf="@+id/filterSalaryCross"
         app:layout_constraintStart_toStartOf="@id/filterSalaryInputBackground"
         app:layout_constraintTop_toBottomOf="@id/filterSalaryInputTitle" />
 
@@ -261,8 +261,8 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/dp16"
         android:background="@drawable/icon_cross"
-        android:visibility="gone"
         android:contentDescription="@null"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/filterSalaryInputBackground"
         app:layout_constraintEnd_toEndOf="@id/filterSalaryInputBackground"
         app:layout_constraintTop_toTopOf="@id/filterSalaryInputBackground"
