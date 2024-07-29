@@ -84,24 +84,6 @@
         app:layout_constraintTop_toTopOf="@id/searchInputBackground"
         tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
-    <Button
-        android:id="@+id/searchJobsCountButton"
-        style="@style/RegularText.16size"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp12"
-        android:backgroundTint="@color/Blue"
-        android:insetTop="0dp"
-        android:insetBottom="0dp"
-        android:letterSpacing="0"
-        android:minHeight="0dp"
-        android:textAllCaps="false"
-        android:textColor="@color/White"
-        app:cornerRadius="@dimen/dp12"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchInputBackground"
-        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,VisualLintOverlap" />
 
     <ProgressBar
         android:id="@+id/searchProgressBar"
@@ -150,7 +132,7 @@
         app:layout_constraintBottom_toTopOf="@id/emptyNavigationBox"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchJobsCountButton">
+        app:layout_constraintTop_toBottomOf="@id/searchInputBackground">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -162,7 +144,6 @@
                 android:id="@+id/recyclerViewSearch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-
             <ProgressBar
                 android:id="@+id/searchMiniProgressBar"
                 android:layout_width="match_parent"
@@ -178,7 +159,6 @@
                 tools:visibility="visible" />
         </LinearLayout>
     </ScrollView>
-
     <View
         android:id="@+id/emptyNavigationBox"
         android:layout_width="match_parent"
@@ -186,5 +166,4 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -242,14 +242,15 @@
     <EditText
         android:id="@+id/filterSalaryInput"
         style="@style/EditTextStyle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp16"
         android:hint="@string/enter_amount"
         android:inputType="number"
-        android:maxLength="12"
         android:textColorHint="@color/search_hint_gray_to_white"
         android:textCursorDrawable="@drawable/cursor_drawable"
+        android:textAlignment="textStart"
+        app:layout_constraintEnd_toStartOf="@+id/filterSalaryCross"
         app:layout_constraintBottom_toBottomOf="@id/filterSalaryInputBackground"
         app:layout_constraintStart_toStartOf="@id/filterSalaryInputBackground"
         app:layout_constraintTop_toBottomOf="@id/filterSalaryInputTitle" />
