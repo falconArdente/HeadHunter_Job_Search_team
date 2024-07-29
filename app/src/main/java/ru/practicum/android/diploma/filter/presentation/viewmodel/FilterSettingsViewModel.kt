@@ -6,14 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filter.domain.impl.FilterStorageRepository
 import ru.practicum.android.diploma.filter.domain.model.AreaFilter
 import ru.practicum.android.diploma.filter.domain.model.CountryFilter
 import ru.practicum.android.diploma.filter.domain.model.FilterGeneral
 import ru.practicum.android.diploma.filter.domain.model.IndustryFilter
-import ru.practicum.android.diploma.filter.presentation.FilterSettingsFragment
 import ru.practicum.android.diploma.filter.presentation.state.FilterSettingsState
 
 class FilterSettingsViewModel(
@@ -22,53 +21,60 @@ class FilterSettingsViewModel(
 
     private var jobStorage: Job? = null
     private var jobLoad: Job? = null
-    private var savedFilter: FilterGeneral = FilterGeneral()
-    private var originalFilter: FilterGeneral = FilterGeneral()
+    private var temporaryFilter: FilterGeneral = FilterGeneral()
+    private var filterForSearch: FilterGeneral = FilterGeneral()
+    private var filterToDisplay: FilterGeneral = FilterGeneral()
+    private var salaryToGo = String()
     private val filterState = MutableLiveData<FilterSettingsState>()
     fun getState(): LiveData<FilterSettingsState> = filterState
 
-    fun loadConfiguredFilterSettings() {
+    fun updateAllFiltersInfo() {
         jobLoad?.cancel()
         jobLoad = viewModelScope.launch(Dispatchers.IO) {
-            savedFilter = getConfiguredFilterSettings()
-            filterState.postValue(FilterSettingsState.Filter(savedFilter))
-            delay(FilterSettingsFragment.DELAY_FILTER_LOAD)
-            checkFilterExists()
+            val asyncTemporaryFilter = async { getConfiguredFilterSettings() }
+            val asyncFilterForSearch = async { getSearchFilterSettings() }
+            temporaryFilter = asyncTemporaryFilter.await()
+            filterForSearch = asyncFilterForSearch.await()
+            filterToDisplay = compareBasedFilter(tempFilter = temporaryFilter, searchFilter = filterForSearch)
+            checkFilterExists(filterToDisplay)
         }
     }
 
-    fun loadSavedFilterSettings(isFirstLoad: Boolean) {
-        if (!isFirstLoad) return
-
-        jobStorage?.cancel()
-
-        jobStorage = viewModelScope.launch(Dispatchers.IO) {
-            originalFilter = getSavedFilterSettings()
-            resetFilter()
-        }
+    private fun compareBasedFilter(tempFilter: FilterGeneral, searchFilter: FilterGeneral): FilterGeneral {
+        return FilterGeneral(
+            country = tempFilter.country ?: searchFilter.country,
+            area = tempFilter.area ?: searchFilter.area,
+            industry = tempFilter.industry ?: searchFilter.industry,
+            expectedSalary = tempFilter.expectedSalary ?: searchFilter.expectedSalary,
+            hideNoSalaryItems = if (tempFilter.hideNoSalaryItems == null) {
+                searchFilter.hideNoSalaryItems
+            } else {
+                tempFilter.hideNoSalaryItems
+            }
+        )
     }
 
     fun saveFilterSettings() {
         jobStorage?.cancel()
 
         jobStorage = viewModelScope.launch(Dispatchers.IO) {
-            filterStorage.saveAllFilterParameters(savedFilter)
-            filterState.postValue(FilterSettingsState.SavedFilter())
+            filterStorage.saveAllFilterParameters(filterToDisplay)
+            filterStorage.clearAllSavedParameters()
+            updateAllFiltersInfo()
         }
     }
 
-    fun resetFilter() {
-        savedFilter = getSavedFilterSettings()
-        savedFilterToConfigured(savedFilter)
+    private fun resetFilter() {
+        filterStorage.clearAllFilterParameters()
+        filterStorage.clearAllSavedParameters()
     }
 
     fun resetFilterSettings() {
         jobStorage?.cancel()
-
         jobStorage = viewModelScope.launch(Dispatchers.IO) {
             filterStorage.clearAllFilterParameters()
             resetFilter()
-            filterState.postValue(FilterSettingsState.SavedFilter())
+            updateAllFiltersInfo()
         }
     }
 
@@ -76,36 +82,33 @@ class FilterSettingsViewModel(
         return filterStorage.getAllSavedParameters()
     }
 
-    private fun getSavedFilterSettings(): FilterGeneral {
+    private fun getSearchFilterSettings(): FilterGeneral {
         return filterStorage.getAllFilterParameters()
     }
 
-    private fun savedFilterToConfigured(filter: FilterGeneral) {
-        filterStorage.saveArea(filter.area)
-        filterStorage.saveCountry(filter.country)
-        filterStorage.saveIndustry(filter.industry)
-        filterStorage.saveHideNoSalaryItems(filter.hideNoSalaryItems)
-        if (filter.expectedSalary != null) {
-            filterStorage.saveExpectedSalary(filter.expectedSalary)
-        } else {
-            filterStorage.saveExpectedSalary(String())
+    fun changeSalary(newSalary: String) {
+        jobLoad?.cancel()
+        salaryToGo = newSalary
+        viewModelScope.launch(Dispatchers.IO) {
+            val delayer = async { filterStorage.saveExpectedSalary(newSalary) }
+            delayer.await()
+            updateAllFiltersInfo()
         }
     }
 
-    fun changeSalary(newSalary: String) {
-        savedFilter = savedFilter.copy(expectedSalary = newSalary)
-        checkFilterExists()
-    }
-
     fun changeHideNoSalary(noSalary: Boolean) {
-        savedFilter = savedFilter.copy(hideNoSalaryItems = noSalary)
-        checkFilterExists()
+        jobLoad?.cancel()
+        viewModelScope.launch(Dispatchers.IO) {
+            val delayer = async { filterStorage.saveHideNoSalaryItems(noSalary) }
+            delayer.await()
+            updateAllFiltersInfo()
+        }
     }
 
     fun resetRegion() {
         resetArea()
         resetCountry()
-        loadConfiguredFilterSettings()
+        updateAllFiltersInfo()
     }
 
     private fun resetArea() {
@@ -124,24 +127,27 @@ class FilterSettingsViewModel(
         filterStorage.saveIndustry(
             IndustryFilter()
         )
-        loadConfiguredFilterSettings()
+        updateAllFiltersInfo()
     }
 
-    private fun checkFilterExists() {
-        val emptyFilter = FilterGeneral()
-
-        val isActiveApply = savedFilter.country?.countryId != originalFilter.country?.countryId
-            || savedFilter.area?.areaId != originalFilter.area?.areaId
-            || savedFilter.industry?.industryId != originalFilter.industry?.industryId
-            || savedFilter.expectedSalary.isNullOrEmpty() != originalFilter.expectedSalary.isNullOrEmpty()
-            || savedFilter.hideNoSalaryItems != originalFilter.hideNoSalaryItems
-
-        val isActiveReset = savedFilter.country?.countryId != emptyFilter.country?.countryId
-            || savedFilter.area?.areaId != emptyFilter.area?.areaId
-            || savedFilter.industry?.industryId != emptyFilter.industry?.industryId
-            || savedFilter.expectedSalary.isNullOrEmpty() != emptyFilter.expectedSalary.isNullOrEmpty()
-            || savedFilter.hideNoSalaryItems != emptyFilter.hideNoSalaryItems
-
-        filterState.postValue(FilterSettingsState.InterfaceActivate(isActiveApply, isActiveReset))
+    private fun checkFilterExists(filterToShow: FilterGeneral?) {
+        val isActiveApply = filterToDisplay != filterForSearch
+        val isActiveReset = filterToDisplay != FilterGeneral()
+        if (filterToShow == null) {
+            filterState.postValue(
+                (filterState.value as FilterSettingsState.Data).copy(
+                    isActiveApply = isActiveApply,
+                    isActiveReset = isActiveReset
+                )
+            )
+        } else {
+            filterState.postValue(
+                FilterSettingsState.Data(
+                    filter = filterToShow,
+                    isActiveApply = isActiveApply,
+                    isActiveReset = isActiveReset
+                )
+            )
+        }
     }
 }

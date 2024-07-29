@@ -35,10 +35,6 @@ class FavoritesViewModel(private val getFavoritesListUseCase: GetFavoritesListUs
         getFavoritesListUseCase.execute()
             .collect { resource ->
                 when (resource) {
-                    is Resource.Error -> {
-                        mutableStateLiveData.postValue(FavoritesListState.Error)
-                    }
-
                     is Resource.Success -> {
                         with(resource.data as List<VacancyDetails>) {
                             if (this.isEmpty()) {
@@ -49,7 +45,7 @@ class FavoritesViewModel(private val getFavoritesListUseCase: GetFavoritesListUs
                         }
                     }
 
-                    else -> Unit
+                    else -> mutableStateLiveData.postValue(FavoritesListState.Error)
                 }
             }
     }

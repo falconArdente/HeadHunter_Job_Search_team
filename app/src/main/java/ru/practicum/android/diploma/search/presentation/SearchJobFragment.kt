@@ -18,7 +18,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchJobBinding
 import ru.practicum.android.diploma.details.presentation.JobDetailsFragment
-import ru.practicum.android.diploma.filter.presentation.FilterSettingsFragment
 import ru.practicum.android.diploma.search.domain.model.Vacancy
 import ru.practicum.android.diploma.search.presentation.state.SearchFragmentState
 import ru.practicum.android.diploma.search.presentation.viewmodel.SearchViewModel
@@ -42,37 +41,38 @@ class SearchJobFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewHolderInit()
-
-        viewModel.fragmentStateLiveData().observe(viewLifecycleOwner) {
-            allViewGone()
-            renderSearchState(it)
+        viewModel.fragmentStateLiveData().observe(viewLifecycleOwner) { searchState ->
+            renderSearchState(searchState)
         }
-
-        searchInputClick()
         onScrollListener()
         viewModel.filterStateToObserve.observe(viewLifecycleOwner) { setFilterIcon(it) }
         binding.searchJobsCountButton.setOnClickListener {
             viewModel.searchImmidiently(binding.searchInput.text.toString())
         }
         binding.searchFilterButton.setOnClickListener {
-            val args = Bundle()
-            args.putBoolean(FilterSettingsFragment.PATH_FROM_SEARCH, true)
-            findNavController().navigate(R.id.action_searchJobFragment_to_filterSettingsFragment, args)
+            findNavController().navigate(R.id.action_searchJobFragment_to_filterSettingsFragment)
         }
+        initSearchInputActions()
+        binding.searchInputIcon.setOnClickListener {
+            binding.searchInput.setText(String())
+            viewModel.updateState(SearchFragmentState.NoTextInInputEditText)
+        }
+        suggestionsAdapter = VacancyPositionSuggestsAdapter(requireActivity(), binding.searchInput)
+        binding.searchInput.setAdapter(suggestionsAdapter)
+        viewModel.suggestionsLivaData.observe(viewLifecycleOwner) { renderSuggestions(it) }
+    }
 
+    private fun initSearchInputActions() {
         binding.searchInput.doOnTextChanged { text, _, _, _ ->
             viewModel.searchWithDebounce(text.toString())
             if (text.isNullOrEmpty()) {
+                viewModel.stopAutoSearch()
                 binding.searchInputIcon.background = requireActivity().getDrawable(R.drawable.icon_search)
             } else {
                 binding.searchInputIcon.background = requireActivity().getDrawable(R.drawable.icon_cross)
                 viewModel.getSuggestionsForSearch(text.toString())
+                viewModel.currentPage = 0
             }
-        }
-        binding.searchInputIcon.setOnClickListener {
-            binding.searchInput.setText(String())
-            viewModel.updateState(SearchFragmentState.NoTextInInputEditText)
-
         }
         binding.searchInput.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
@@ -87,14 +87,9 @@ class SearchJobFragment : Fragment() {
             }
             false
         }
-
-        suggestionsAdapter = VacancyPositionSuggestsAdapter(requireActivity(), binding.searchInput)
-        binding.searchInput.setAdapter(suggestionsAdapter)
-        viewModel.suggestionsLivaData.observe(viewLifecycleOwner) { renderSuggestions(it) }
     }
 
     private fun renderSearchState(searchState: SearchFragmentState) {
-        allViewGone()
         when (searchState) {
             is SearchFragmentState.SearchVacancy -> {
                 adapter.updateList(searchState.searchVacancy)
@@ -157,7 +152,7 @@ class SearchJobFragment : Fragment() {
                         progressMini = false
                     )
 
-                } else if (searchState.searchVacancy.isEmpty()) {
+                } else {
                     binding.searchPlaceholderImage.background =
                         requireActivity().getDrawable(R.drawable.picture_funny_head)
                     binding.searchPlaceholderText.text =
@@ -195,10 +190,7 @@ class SearchJobFragment : Fragment() {
                     progressMini = true
                 )
             }
-
-            else -> Unit
         }
-
     }
 
     private fun renderSuggestions(incomeSuggestions: List<String>) {
@@ -235,7 +227,6 @@ class SearchJobFragment : Fragment() {
             )
         val text = " $foundVac $pluralVacancy"
         binding.searchJobsCountButton.text = text
-
     }
 
     private fun setFilterIcon(filterIsActive: Boolean) {
@@ -246,13 +237,6 @@ class SearchJobFragment : Fragment() {
                 requireActivity().getDrawable(R.drawable.icon_filter)
             }
         )
-    }
-
-    private fun allViewGone() {
-        binding.searchProgressBar.visibility = View.GONE
-        binding.recyclerViewSearch.visibility = View.GONE
-        binding.searchPlaceholderImage.visibility = View.GONE
-        binding.searchJobsCountButton.visibility = View.GONE
     }
 
     private fun clickListenerFun() = object : SearchRecyclerViewEvent {
@@ -270,28 +254,6 @@ class SearchJobFragment : Fragment() {
         binding.recyclerViewSearch.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.recyclerViewSearch.adapter = adapter
-    }
-
-    private fun searchInputClick() {
-        binding.searchInput.doOnTextChanged { text, _, _, _ ->
-            if (text.isNullOrEmpty()) {
-                binding.searchInputIcon.background = requireActivity().getDrawable(R.drawable.icon_search)
-            } else {
-                binding.searchInputIcon.background = requireActivity().getDrawable(R.drawable.icon_cross)
-                viewModel.getSuggestionsForSearch(text.toString())
-                viewModel.currentPage = 0
-            }
-        }
-        binding.searchInputIcon.setOnClickListener {
-            binding.searchInput.setText(String())
-        }
-
-        binding.searchInput.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                binding.searchInput.hideKeyboard(requireContext())
-            }
-            false
-        }
     }
 
     override fun onDestroyView() {

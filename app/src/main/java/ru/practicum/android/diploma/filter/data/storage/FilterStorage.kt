@@ -13,4 +13,5 @@ interface FilterStorage {
 
     fun clearAllFilterParameters()
 
+    fun clearAllSavedParameters()
 }

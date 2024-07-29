@@ -9,7 +9,10 @@ sealed class SearchFragmentState {
         val isLastPage: Boolean
     ) : SearchFragmentState()
 
-    data class ServerError(val searchVacancy: List<Vacancy>) : SearchFragmentState()
+    data class ServerError(
+        val message: String
+    ) : SearchFragmentState()
+
     data object NoResult : SearchFragmentState()
     data object Loading : SearchFragmentState()
     data object LoadingNewPage : SearchFragmentState()
