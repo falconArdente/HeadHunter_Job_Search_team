@@ -31,7 +31,7 @@ class JobDetailsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         // Inflate the layout for this fragment
         _binding = FragmentJobDetailsBinding.inflate(inflater, container, false)
@@ -67,6 +67,7 @@ class JobDetailsFragment : Fragment() {
     }
 
     private fun initializeJobDetailsFragment(vacancyDetailsState: VacancyDetailsState) {
+        setVisibilityOfMainElements(vacancyDetailsState)
         when (vacancyDetailsState) {
             is VacancyDetailsState.Content -> {
                 setVisibilityOfMainElements(vacancyDetailsState)
@@ -103,26 +104,55 @@ class JobDetailsFragment : Fragment() {
                 }
             }
 
-            else -> {
-                setVisibilityOfMainElements(vacancyDetailsState)
+            is VacancyDetailsState.Error -> {
+                binding.jobPlaceholderText.text = requireActivity().getString(R.string.net_vacancy)
+                binding.jobPlaceholderImage.setBackgroundResource(0)
+                binding.jobPlaceholderImage.background = requireActivity().getDrawable(R.drawable.picture_funny_phone)
             }
+
+            is VacancyDetailsState.InternetConnectionError -> {
+                binding.jobPlaceholderText.text = requireActivity().getString(R.string.no_internet)
+                binding.jobPlaceholderImage.setBackgroundResource(0)
+                binding.jobPlaceholderImage.background = requireActivity().getDrawable(R.drawable.picture_funny_head)
+            }
+
+            is VacancyDetailsState.ServerError -> {
+                binding.jobPlaceholderText.text = requireActivity().getString(R.string.server_error)
+                binding.jobPlaceholderImage.setBackgroundResource(0)
+                binding.jobPlaceholderImage.background =
+                    requireActivity().getDrawable(R.drawable.picture_frightened_cat)
+            }
+
+            else -> Unit
         }
     }
 
     private fun setVisibilityOfMainElements(vacancyDetailsState: VacancyDetailsState) {
-        binding.jobInfo.isVisible = vacancyDetailsState is VacancyDetailsState.Content
-        binding.jobTitle.isVisible = vacancyDetailsState is VacancyDetailsState.Content
-        binding.jobSalary.isVisible = vacancyDetailsState is VacancyDetailsState.Content
-        binding.jobCard.isVisible = vacancyDetailsState is VacancyDetailsState.Content
-        binding.jobImage.isVisible = vacancyDetailsState is VacancyDetailsState.Content
-        binding.jobCompany.isVisible = vacancyDetailsState is VacancyDetailsState.Content
-        binding.jobCity.isVisible = vacancyDetailsState is VacancyDetailsState.Content
-        binding.jobPlaceholderImage.isVisible = vacancyDetailsState is VacancyDetailsState.Error
-        binding.jobPlaceholderText.isVisible = vacancyDetailsState is VacancyDetailsState.Error
+        binding.jobInfo.isVisible = vacancyDetailsState is VacancyDetailsState.Content ||
+            vacancyDetailsState is VacancyDetailsState.Favorite
+        binding.jobTitle.isVisible = vacancyDetailsState is VacancyDetailsState.Content ||
+            vacancyDetailsState is VacancyDetailsState.Favorite
+        binding.jobSalary.isVisible = vacancyDetailsState is VacancyDetailsState.Content ||
+            vacancyDetailsState is VacancyDetailsState.Favorite
+        binding.jobCard.isVisible = vacancyDetailsState is VacancyDetailsState.Content ||
+            vacancyDetailsState is VacancyDetailsState.Favorite
+        binding.jobImage.isVisible = vacancyDetailsState is VacancyDetailsState.Content ||
+            vacancyDetailsState is VacancyDetailsState.Favorite
+        binding.jobCompany.isVisible = vacancyDetailsState is VacancyDetailsState.Content ||
+            vacancyDetailsState is VacancyDetailsState.Favorite
+        binding.jobCity.isVisible = vacancyDetailsState is VacancyDetailsState.Content ||
+            vacancyDetailsState is VacancyDetailsState.Favorite
+        binding.jobShareIcon.isVisible = vacancyDetailsState is VacancyDetailsState.Content ||
+            vacancyDetailsState is VacancyDetailsState.Error || vacancyDetailsState is VacancyDetailsState.Favorite
+        binding.jobHeartIcon.isVisible = vacancyDetailsState is VacancyDetailsState.Content ||
+            vacancyDetailsState is VacancyDetailsState.Error || vacancyDetailsState is VacancyDetailsState.Favorite
+        binding.jobPlaceholderImage.isVisible = vacancyDetailsState is VacancyDetailsState.Error ||
+            vacancyDetailsState is VacancyDetailsState.InternetConnectionError ||
+            vacancyDetailsState is VacancyDetailsState.ServerError
+        binding.jobPlaceholderText.isVisible = vacancyDetailsState is VacancyDetailsState.Error ||
+            vacancyDetailsState is VacancyDetailsState.InternetConnectionError ||
+            vacancyDetailsState is VacancyDetailsState.ServerError
         binding.loadingProgressBar.isVisible = vacancyDetailsState is VacancyDetailsState.Loading
-        if (vacancyDetailsState is VacancyDetailsState.Error) {
-            renderErrorPlaceholder(vacancyDetailsState.message)
-        }
 
     }
 
@@ -211,14 +241,7 @@ class JobDetailsFragment : Fragment() {
                 "${binding.jobContactsEmail.text} ${vacancyDetails.employerInfo.contacts.email}"
             binding.jobContactsPhone.text =
                 "${binding.jobContactsPhone.text} " +
-                "${vacancyDetails.employerInfo.contacts.phones?.joinToString(separator = "\n")}"
-        }
-    }
-
-    private fun renderErrorPlaceholder(errorMessage: String) {
-        if (errorMessage.isNotEmpty()) {
-            binding.jobPlaceholderText.text = requireActivity().getString(R.string.no_internet)
-            binding.jobPlaceholderImage.background = requireActivity().getDrawable(R.drawable.picture_funny_head)
+                    "${vacancyDetails.employerInfo.contacts.phones?.joinToString(separator = "\n")}"
         }
     }
 
