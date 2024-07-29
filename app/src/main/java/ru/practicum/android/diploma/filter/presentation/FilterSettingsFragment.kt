@@ -84,8 +84,8 @@ class FilterSettingsFragment : Fragment() {
             findNavController().navigateUp()
         }
         binding.filterSalaryCross.setOnClickListener {
+            viewModel.changeSalary(String())
             binding.filterSalaryInput.setText(String())
-            setSalary(String())
         }
     }
 
@@ -135,7 +135,7 @@ class FilterSettingsFragment : Fragment() {
                     binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Blue))
                 }
             } else {
-                setSalary(binding.filterSalaryInput.text.toString())
+
                 binding.filterSalaryCross.visibility = View.VISIBLE
             }
         }
