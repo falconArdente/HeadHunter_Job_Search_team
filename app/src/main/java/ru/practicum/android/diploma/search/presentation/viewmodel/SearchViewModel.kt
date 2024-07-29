@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.search.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -197,7 +196,8 @@ class SearchViewModel(
                 updateState(SearchFragmentState.SearchVacancy(vacanciesList, totalFound, isLastPage = true))
             }
         } catch (e: ArrayIndexOutOfBoundsException) {
-            Log.e("VacancyListAdding", e.message.toString())
+            updateState(SearchFragmentState.ServerError)
+        } catch (e: IndexOutOfBoundsException) {
             updateState(SearchFragmentState.ServerError)
         }
     }
