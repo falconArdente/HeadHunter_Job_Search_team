@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.search.presentation.viewmodel
 
+import android.database.CursorIndexOutOfBoundsException
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -105,7 +106,11 @@ class SearchViewModel(
     private fun searchResult(text: String?) {
         if (text.isNullOrBlank()) return
         searchJob?.cancel()
-        if (currentPage == 0) updateState(SearchFragmentState.Loading) else updateState(SearchFragmentState.LoadingNewPage)
+        if (currentPage == 0) {
+            updateState(SearchFragmentState.Loading)
+        } else {
+            updateState(SearchFragmentState.LoadingNewPage)
+        }
         searchJob = viewModelScope.launch {
             interactor
                 .searchVacancy(text, parametersForSearch, PER_PAGE, currentPage)
@@ -191,7 +196,7 @@ class SearchViewModel(
             } else {
                 updateState(SearchFragmentState.SearchVacancy(vacanciesList, totalFound, isLastPage = true))
             }
-        } catch (e: IndexOutOfBoundsException) {
+        } catch (e: CursorIndexOutOfBoundsException) {
             updateState(SearchFragmentState.ServerError)
         }
     }
