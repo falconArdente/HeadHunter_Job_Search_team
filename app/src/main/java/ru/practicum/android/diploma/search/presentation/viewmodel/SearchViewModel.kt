@@ -105,7 +105,7 @@ class SearchViewModel(
     private fun searchResult(text: String?) {
         if (text.isNullOrBlank()) return
         searchJob?.cancel()
-        if (currentPage == 0) updateState(SearchFragmentState.Loading)
+        if (currentPage == 0) updateState(SearchFragmentState.Loading) else updateState(SearchFragmentState.LoadingNewPage)
         searchJob = viewModelScope.launch {
             interactor
                 .searchVacancy(text, parametersForSearch, PER_PAGE, currentPage)
@@ -132,7 +132,7 @@ class SearchViewModel(
                         }
 
                         vacancy.errorMessage!!.isNotEmpty() -> {
-                            updateState(SearchFragmentState.ServerError(vacancy.result))
+                            updateState(SearchFragmentState.ServerError)
                         }
 
                         else -> updateState(SearchFragmentState.NoResult)
@@ -181,14 +181,18 @@ class SearchViewModel(
     }
 
     fun onLastItemReached() {
-        if (currentPage < pagesCount - 1 && searchJob?.isActive == false) {
-            currentPage++
-            autoSearchDelayJob?.cancel()
-            autoSearchDelayJob = viewModelScope.launch {
-                searchResult(latestSearchText!!)
+        try {
+            if (currentPage < pagesCount - 1 && searchJob?.isActive == false) {
+                currentPage++
+                autoSearchDelayJob?.cancel()
+                autoSearchDelayJob = viewModelScope.launch {
+                    searchResult(latestSearchText!!)
+                }
+            } else {
+                updateState(SearchFragmentState.SearchVacancy(vacanciesList, totalFound, isLastPage = true))
             }
-        } else {
-            updateState(SearchFragmentState.SearchVacancy(vacanciesList, totalFound, isLastPage = true))
+        } catch (e: IndexOutOfBoundsException) {
+            updateState(SearchFragmentState.ServerError)
         }
     }
 

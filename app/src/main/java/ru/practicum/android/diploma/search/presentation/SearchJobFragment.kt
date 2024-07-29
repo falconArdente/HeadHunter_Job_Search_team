@@ -155,7 +155,7 @@ class SearchJobFragment : Fragment() {
                         progressMini = false
                     )
 
-                } else if (searchState.searchVacancy.isEmpty()) {
+                } else {
                     binding.searchPlaceholderImage.background =
                         requireActivity().getDrawable(R.drawable.picture_funny_head)
                     binding.searchPlaceholderText.text =
