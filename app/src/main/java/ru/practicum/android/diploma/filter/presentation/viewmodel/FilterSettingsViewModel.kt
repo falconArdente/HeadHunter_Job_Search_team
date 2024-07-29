@@ -45,10 +45,10 @@ class FilterSettingsViewModel(
             area = tempFilter.area ?: searchFilter.area,
             industry = tempFilter.industry ?: searchFilter.industry,
             expectedSalary = tempFilter.expectedSalary ?: searchFilter.expectedSalary,
-            hideNoSalaryItems = if (!tempFilter.hideNoSalaryItems) {
+            hideNoSalaryItems = if (tempFilter.hideNoSalaryItems == null) {
                 searchFilter.hideNoSalaryItems
             } else {
-                true
+                tempFilter.hideNoSalaryItems
             }
         )
     }

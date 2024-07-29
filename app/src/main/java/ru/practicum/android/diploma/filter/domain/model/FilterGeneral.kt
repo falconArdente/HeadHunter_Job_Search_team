@@ -9,23 +9,15 @@ data class FilterGeneral(
 ) {
     override fun equals(other: Any?): Boolean {
         if (other !is FilterGeneral) return false
-        val source=prepareFilter(this)
-        val dest=prepareFilter(other)
-        if (source.area?.areaId != dest.area?.areaId) return false
-        if (source.country?.countryId != dest.country?.countryId) return false
-        if (source.industry?.industryId != dest.industry?.industryId) return false
-        if (source.hideNoSalaryItems != dest.hideNoSalaryItems) return false
-        if (source.expectedSalary != dest.expectedSalary) return false
+        if (this.area?.areaId.toString() != other.area?.areaId.toString()) return false
+        if (this.country?.countryId.toString() != other.country?.countryId.toString()) return false
+        if (this.industry?.industryId.toString() != other.industry?.industryId.toString()) return false
+        if (this.hideNoSalaryItems != other.hideNoSalaryItems) return false
+        if (this.expectedSalary.toString() != other.expectedSalary.toString()) return false
         return true
     }
 
-    private fun prepareFilter(filter: FilterGeneral): FilterGeneral {
-        return FilterGeneral(
-            area = if (filter.area?.areaId == null) AreaFilter(areaId = String()) else filter.area,
-            country = if (filter.country?.countryId == null) CountryFilter(countryId = String()) else filter.country,
-            industry = if (filter.industry?.industryId == null) IndustryFilter(industryId = String()) else filter.industry,
-            hideNoSalaryItems = filter.hideNoSalaryItems,
-            expectedSalary = filter.expectedSalary ?: String()
-        )
+    override fun hashCode(): Int {
+        return super.hashCode()
     }
 }

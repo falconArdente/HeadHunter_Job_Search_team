@@ -48,12 +48,18 @@ class FilterSettingsFragment : Fragment() {
         salaryFieldDebounced = debounce(
             SALARY_ITEMS_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, true
         ) { salaryText ->
-            viewModel.changeSalary(salaryText)
+            if (salaryText != previousSalaryText) {
+                viewModel.changeSalary(salaryText)
+                previousSalaryText = salaryText
+            }
         }
         checkBoxDebounced = debounce(
             SALARY_ITEMS_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, true
         ) { doHideNoSalaryVacs ->
-            viewModel.changeHideNoSalary(doHideNoSalaryVacs)
+            if (doHideNoSalaryVacs != previousCheckBoxValue) {
+                viewModel.changeHideNoSalary(doHideNoSalaryVacs)
+                previousCheckBoxValue = doHideNoSalaryVacs
+            }
         }
     }
 
@@ -88,7 +94,6 @@ class FilterSettingsFragment : Fragment() {
         binding.filterSalaryCross.setOnClickListener {
             binding.filterSalaryInput.setText(String())
             salaryFieldDebounced?.invoke(String())
-            previousSalaryText = String()
         }
     }
 
@@ -109,12 +114,26 @@ class FilterSettingsFragment : Fragment() {
             }
             false
         }
+        binding.filterSalaryInput.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Blue))
+            } else {
+                if (binding.filterSalaryInput.text.isNullOrEmpty()) {
+                    binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Gray_OR_White))
+                    salaryFieldDebounced?.invoke(binding.filterSalaryInput.text.toString())
+                } else {
+                    binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Black))
+                }
+            }
+        }
         binding.filterSalaryInput.doOnTextChanged { text, _, _, _ ->
             if (text.isNullOrEmpty()) {
                 binding.filterSalaryCross.visibility = View.GONE
-                binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Gray_OR_White))
+                binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Black))
+                if (binding.filterSalaryInput.hasFocus()) {
+                    binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Blue))
+                }
             } else {
-                binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Blue))
                 binding.filterSalaryCross.visibility = View.VISIBLE
             }
         }
@@ -122,18 +141,6 @@ class FilterSettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.filterSalaryInput.setOnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus) {
-                val text = binding.filterSalaryInput.text.toString()
-                if (text.isNotEmpty()) {
-                    if (text != previousSalaryText) {
-                        salaryFieldDebounced?.invoke(text)
-                        previousSalaryText = text
-                    }
-                    binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Black))
-                }
-            }
-        }
         viewModel.getState().observe(viewLifecycleOwner) { state ->
             render(state)
         }
@@ -141,10 +148,7 @@ class FilterSettingsFragment : Fragment() {
         setTextActions()
         initiateDebounce()
         binding.filterDontShowWithoutSalaryCheckBox.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked != previousCheckBoxValue) {
-                checkBoxDebounced?.invoke(isChecked)
-                previousCheckBoxValue = isChecked
-            }
+            checkBoxDebounced?.invoke(isChecked)
         }
     }
 
@@ -154,11 +158,12 @@ class FilterSettingsFragment : Fragment() {
                 binding.filterApplyButton.isVisible = state.isActiveApply
                 binding.filterResetButton.isVisible = state.isActiveReset
                 binding.filterDontShowWithoutSalaryCheckBox.isChecked = state.filter.hideNoSalaryItems
-
                 if (state.filter.expectedSalary.isNullOrEmpty()) {
                     binding.filterSalaryInput.text.clear()
+                    binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Gray_OR_White))
                 } else {
                     binding.filterSalaryInput.setText(state.filter.expectedSalary)
+                    binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Black))
                 }
 
                 if (state.filter.country?.countryName.isNullOrEmpty()) {
@@ -173,7 +178,7 @@ class FilterSettingsFragment : Fragment() {
                         requireActivity().getString(
                             R.string.filter_region,
                             state.filter.country?.countryName,
-                            state.filter.area?.areaName
+                            state.filter.area.areaName
                         )
                     }
                 }
