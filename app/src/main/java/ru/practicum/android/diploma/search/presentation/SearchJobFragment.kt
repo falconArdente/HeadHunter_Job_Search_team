@@ -18,7 +18,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchJobBinding
 import ru.practicum.android.diploma.details.presentation.JobDetailsFragment
-import ru.practicum.android.diploma.filter.presentation.FilterSettingsFragment
 import ru.practicum.android.diploma.search.domain.model.Vacancy
 import ru.practicum.android.diploma.search.presentation.state.SearchFragmentState
 import ru.practicum.android.diploma.search.presentation.viewmodel.SearchViewModel
@@ -51,9 +50,7 @@ class SearchJobFragment : Fragment() {
             viewModel.searchImmidiently(binding.searchInput.text.toString())
         }
         binding.searchFilterButton.setOnClickListener {
-            val args = Bundle()
-            args.putBoolean(FilterSettingsFragment.PATH_FROM_SEARCH, true)
-            findNavController().navigate(R.id.action_searchJobFragment_to_filterSettingsFragment, args)
+            findNavController().navigate(R.id.action_searchJobFragment_to_filterSettingsFragment)
         }
         initSearchInputActions()
         binding.searchInputIcon.setOnClickListener {

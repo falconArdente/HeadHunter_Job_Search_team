@@ -25,7 +25,7 @@ data class FilterGeneral(
             country = if (filter.country?.countryId == null) CountryFilter(countryId = String()) else filter.country,
             industry = if (filter.industry?.industryId == null) IndustryFilter(industryId = String()) else filter.industry,
             hideNoSalaryItems = filter.hideNoSalaryItems,
-            expectedSalary = if (filter.expectedSalary == null) String() else expectedSalary
+            expectedSalary = filter.expectedSalary ?: String()
         )
     }
 }

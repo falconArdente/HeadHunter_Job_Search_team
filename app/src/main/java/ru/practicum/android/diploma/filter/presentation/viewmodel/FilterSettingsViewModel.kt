@@ -45,7 +45,7 @@ class FilterSettingsViewModel(
             area = tempFilter.area ?: searchFilter.area,
             industry = tempFilter.industry ?: searchFilter.industry,
             expectedSalary = tempFilter.expectedSalary ?: searchFilter.expectedSalary,
-            hideNoSalaryItems = if (tempFilter.hideNoSalaryItems == false) {
+            hideNoSalaryItems = if (!tempFilter.hideNoSalaryItems) {
                 searchFilter.hideNoSalaryItems
             } else {
                 true
@@ -63,14 +63,13 @@ class FilterSettingsViewModel(
         }
     }
 
-    fun resetFilter() {
-        temporaryFilter = getSearchFilterSettings()
-        savedFilterToConfigured(temporaryFilter)
+    private fun resetFilter() {
+        filterStorage.clearAllFilterParameters()
+        filterStorage.clearAllSavedParameters()
     }
 
     fun resetFilterSettings() {
         jobStorage?.cancel()
-
         jobStorage = viewModelScope.launch(Dispatchers.IO) {
             filterStorage.clearAllFilterParameters()
             resetFilter()
@@ -86,26 +85,14 @@ class FilterSettingsViewModel(
         return filterStorage.getAllFilterParameters()
     }
 
-    private fun savedFilterToConfigured(filter: FilterGeneral) {
-        filterStorage.saveArea(filter.area)
-        filterStorage.saveCountry(filter.country)
-        filterStorage.saveIndustry(filter.industry)
-        filterStorage.saveHideNoSalaryItems(filter.hideNoSalaryItems)
-        if (filter.expectedSalary != null) {
-            filterStorage.saveExpectedSalary(filter.expectedSalary)
-        } else {
-            filterStorage.saveExpectedSalary(String())
-        }
-    }
-
     fun changeSalary(newSalary: String) {
         filterStorage.saveExpectedSalary(newSalary)
-        checkFilterExists(null)
+        updateAllFiltersInfo()
     }
 
     fun changeHideNoSalary(noSalary: Boolean) {
         filterStorage.saveHideNoSalaryItems(noSalary)
-        checkFilterExists(null)
+        updateAllFiltersInfo()
     }
 
     fun resetRegion() {
@@ -134,7 +121,7 @@ class FilterSettingsViewModel(
     }
 
     private fun checkFilterExists(filterToShow: FilterGeneral?) {
-        val isActiveApply = temporaryFilter != filterForSearch
+        val isActiveApply = filterToDisplay != filterForSearch
         val isActiveReset = filterToDisplay != FilterGeneral()
         if (filterToShow == null) {
             filterState.postValue(
