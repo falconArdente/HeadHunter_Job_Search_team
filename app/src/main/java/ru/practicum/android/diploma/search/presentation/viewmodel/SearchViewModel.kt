@@ -196,6 +196,7 @@ class SearchViewModel(
                 updateState(SearchFragmentState.SearchVacancy(vacanciesList, totalFound, isLastPage = true))
             }
         } catch (e: ArrayIndexOutOfBoundsException) {
+            if (e.message.isNullOrEmpty()) return
             updateState(SearchFragmentState.ServerError)
         }
     }
