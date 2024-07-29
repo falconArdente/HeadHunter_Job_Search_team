@@ -198,6 +198,8 @@ class SearchViewModel(
             }
         } catch (e: CursorIndexOutOfBoundsException) {
             updateState(SearchFragmentState.ServerError)
+        } catch (e: ArrayIndexOutOfBoundsException) {
+            updateState(SearchFragmentState.ServerError)
         }
     }
 
