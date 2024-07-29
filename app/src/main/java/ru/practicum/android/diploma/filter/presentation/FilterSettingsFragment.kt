@@ -135,7 +135,6 @@ class FilterSettingsFragment : Fragment() {
                     binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Blue))
                 }
             } else {
-
                 binding.filterSalaryCross.visibility = View.VISIBLE
             }
         }
