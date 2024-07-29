@@ -37,16 +37,15 @@ class SearchViewModel(
     private val filterIsOn = MutableLiveData(false)
     val filterStateToObserve: LiveData<Boolean> = filterIsOn
     private var parametersForSearch: SearchParameters? = null
-
     var currentPage = 0
     private var pagesCount = 0
     private val vacanciesList = mutableListOf<Vacancy>()
     private var totalFound = 0
     private var isLastCapitalOfInputSearched = false
     private var suggestionsRequestDebounced: ((String) -> Unit)? = null
+    private var lastSuggestionsRequestText = String()
 
     init {
-        updateState(SearchFragmentState.NoTextInInputEditText)
         suggestionsRequestDebounced = debounce(
             SUGGESTIONS_DEBOUNCE_DELAY, viewModelScope, true
         ) { textForSuggestions ->
@@ -60,11 +59,13 @@ class SearchViewModel(
     }
 
     fun getSuggestionsForSearch(textForSuggests: String) {
+        if (textForSuggests == lastSuggestionsRequestText) return
         if (suggestionsRequestDebounced != null) suggestionsRequestDebounced?.invoke(textForSuggests)
     }
 
     private fun requestSuggestionsForSearch(textForSuggests: String) {
         suggestionsIncomeJob?.cancel()
+        lastSuggestionsRequestText = textForSuggests
         suggestionsIncomeJob = viewModelScope.launch {
             getSuggestsUseCase.execute(textForSuggests)
                 .collect {
@@ -72,7 +73,6 @@ class SearchViewModel(
                 }
         }
     }
-
 
     fun fragmentStateLiveData(): LiveData<SearchFragmentState> = searchLiveData
     fun updateState(state: SearchFragmentState) {
@@ -101,7 +101,6 @@ class SearchViewModel(
             }
         )
     }
-
 
     private fun searchResult(text: String?) {
         if (text.isNullOrBlank()) return
@@ -153,6 +152,7 @@ class SearchViewModel(
     }
 
     fun searchWithDebounce(text: String?) {
+        if (text == latestSearchText) return
         if (text?.isBlank() == true) {
             searchLiveData.postValue(SearchFragmentState.NoTextInInputEditText)
             isLastCapitalOfInputSearched = true
@@ -181,7 +181,7 @@ class SearchViewModel(
     }
 
     fun onLastItemReached() {
-        if (currentPage < pagesCount - 1) {
+        if (currentPage < pagesCount - 1 && searchJob?.isActive == false) {
             currentPage++
             autoSearchDelayJob?.cancel()
             autoSearchDelayJob = viewModelScope.launch {
@@ -190,5 +190,9 @@ class SearchViewModel(
         } else {
             updateState(SearchFragmentState.SearchVacancy(vacanciesList, totalFound, isLastPage = true))
         }
+    }
+
+    fun stopAutoSearch() {
+        autoSearchDelayJob?.cancel()
     }
 }
