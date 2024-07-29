@@ -103,14 +103,18 @@ class SearchViewModel(
         )
     }
 
-    private fun searchResult(text: String?) {
-        if (text.isNullOrBlank()) return
-        searchJob?.cancel()
-        if (currentPage == 0) {
+    private fun showProgressIndicator(page: Int) {
+        if (page == 0) {
             updateState(SearchFragmentState.Loading)
         } else {
             updateState(SearchFragmentState.LoadingNewPage)
         }
+    }
+
+    private fun searchResult(text: String?) {
+        if (text.isNullOrBlank()) return
+        searchJob?.cancel()
+        showProgressIndicator(currentPage)
         searchJob = viewModelScope.launch {
             interactor
                 .searchVacancy(text, parametersForSearch, PER_PAGE, currentPage)
