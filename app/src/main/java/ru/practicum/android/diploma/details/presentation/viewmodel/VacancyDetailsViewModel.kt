@@ -21,9 +21,8 @@ class VacancyDetailsViewModel(
     private val detailsDbInteractor: DetailsDbInteractor,
     private val vacancyId: String,
 ) : AndroidViewModel(application) {
-    private val _stateLiveData = MutableLiveData<VacancyDetailsState>()
+    private val _stateLiveData = MutableLiveData<VacancyDetailsState>(VacancyDetailsState.Loading)
     fun getState(): LiveData<VacancyDetailsState> = _stateLiveData
-
 
 
     private var vacancyDetails: VacancyDetails? = null
@@ -34,9 +33,6 @@ class VacancyDetailsViewModel(
             getVacancyDetailsUseCase.execute(vacancyId).collect {
                 processSearchVacancyResponse(it)
             }
-            detailsDbInteractor.isExistsVacancy(vacancyId.toInt()).collect {
-                _stateLiveData.postValue(VacancyDetailsState.Favorite(it))
-            }
         }
     }
 
@@ -44,7 +40,8 @@ class VacancyDetailsViewModel(
         if (searchResult.data != null) {
             val vacancyDetailsState = VacancyDetailsState.Content(searchResult.data)
             vacancyDetails = vacancyDetailsState.data
-            _stateLiveData.postValue(vacancyDetailsState)
+            _stateLiveData.value = vacancyDetailsState
+            processFavoriteState()
         } else {
             when (searchResult) {
                 is Resource.InternetConnectionError -> {
@@ -55,9 +52,10 @@ class VacancyDetailsViewModel(
                     if (isVacancyInFavorites) {
                         detailsDbInteractor.getVacancyById(vacancyId.toInt()).collect { vacancyDetails ->
                             _stateLiveData.postValue(VacancyDetailsState.Content(vacancyDetails!!))
+                            processFavoriteState()
                         }
                     } else {
-                        _stateLiveData.postValue(VacancyDetailsState.Error(searchResult.message!!))
+                        _stateLiveData.postValue(VacancyDetailsState.InternetConnectionError(searchResult.message!!))
                     }
                 }
 
@@ -72,8 +70,14 @@ class VacancyDetailsViewModel(
                     _stateLiveData.postValue(VacancyDetailsState.Error(searchResult.message!!))
                 }
 
-                else -> _stateLiveData.postValue(VacancyDetailsState.Error(searchResult.message!!))
+                else -> _stateLiveData.postValue(VacancyDetailsState.ServerError(searchResult.message!!))
             }
+        }
+    }
+
+    private suspend fun processFavoriteState() {
+        detailsDbInteractor.isExistsVacancy(vacancyId.toInt()).collect {
+            _stateLiveData.value = VacancyDetailsState.Favorite(it)
         }
     }
 
