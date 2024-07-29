@@ -171,6 +171,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:indeterminateTint="@color/Blue"
+        android:paddingTop="@dimen/dp22"
+        android:paddingBottom="@dimen/dp22"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/emptyNavigationBox"
         app:layout_constraintEnd_toEndOf="parent"
@@ -183,7 +185,6 @@
         android:layout_height="@dimen/dp56"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchMiniProgressBar" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
