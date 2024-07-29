@@ -32,7 +32,7 @@ class FilterSettingsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.loadConfiguredFilterSettings()
+        viewModel.updateAllFiltersInfo()
     }
 
     private fun setClicks() {
@@ -129,7 +129,9 @@ class FilterSettingsFragment : Fragment() {
 
     private fun render(state: FilterSettingsState) {
         when (state) {
-            is FilterSettingsState.Filter -> {
+            is FilterSettingsState.Data -> {
+                binding.filterApplyButton.isVisible = state.isActiveApply
+                binding.filterResetButton.isVisible = state.isActiveReset
                 binding.filterDontShowWithoutSalaryCheckBox.isChecked = state.filter.hideNoSalaryItems
 
                 if (state.filter.expectedSalary.isNullOrEmpty()) {
@@ -165,12 +167,6 @@ class FilterSettingsFragment : Fragment() {
                 }
             }
 
-            is FilterSettingsState.InterfaceActivate -> {
-                val isActive = state.isActiveReset || state.isActiveApply
-                binding.filterApplyButton.isVisible = isActive
-                binding.filterResetButton.isVisible = isActive
-            }
-
             else -> {
                 findNavController().navigateUp()
             }
@@ -185,6 +181,5 @@ class FilterSettingsFragment : Fragment() {
 
     companion object {
         const val PATH_FROM_SEARCH = "PATH_FROM_SEARCH"
-        const val DELAY_FILTER_LOAD = 100L
     }
 }
