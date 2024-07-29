@@ -53,7 +53,7 @@ class FavoritesJobsFragment : Fragment() {
                     favouritesPlaceholderImage.setImageDrawable(
                         AppCompatResources.getDrawable(
                             requireContext(),
-                            R.drawable.picture_angry_cat
+                            R.drawable.picture_checking_phone
                         )
                     )
                     favouritesPlaceholderText.setText(R.string.list_is_empty)

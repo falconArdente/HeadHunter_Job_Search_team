@@ -142,10 +142,14 @@
         <TextView
             android:id="@+id/filterWorkPlaceValue"
             style="@style/RegularText.16size"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp16"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textAlignment="textStart"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/filterWorkPlaceCross"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/filterWorkPlaceTitle"
             tools:text="Москва, Россия" />
@@ -190,10 +194,14 @@
         <TextView
             android:id="@+id/filterIndustryValue"
             style="@style/RegularText.16size"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp16"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textAlignment="textStart"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/filterIndustryCross"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/filterIndustryTitle"
             tools:text="IT" />
