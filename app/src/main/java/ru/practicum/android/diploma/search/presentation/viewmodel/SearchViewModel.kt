@@ -137,7 +137,7 @@ class SearchViewModel(
                         }
 
                         vacancy.errorMessage!!.isNotEmpty() -> {
-                            updateState(SearchFragmentState.ServerError)
+                            updateState(SearchFragmentState.ServerError(vacancy.errorMessage))
                         }
 
                         else -> updateState(SearchFragmentState.NoResult)
@@ -197,7 +197,7 @@ class SearchViewModel(
                 updateState(SearchFragmentState.SearchVacancy(vacanciesList, totalFound, isLastPage = true))
             }
         } catch (e: CursorIndexOutOfBoundsException) {
-            updateState(SearchFragmentState.ServerError)
+            updateState(SearchFragmentState.ServerError(e.message.toString()))
         }
     }
 
