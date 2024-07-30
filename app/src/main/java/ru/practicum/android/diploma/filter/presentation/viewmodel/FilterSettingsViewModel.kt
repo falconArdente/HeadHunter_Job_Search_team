@@ -127,7 +127,7 @@ class FilterSettingsViewModel(
     private fun calculateApplyClearStateAndSend(filterToSend: FilterGeneral?) {
         val isActiveApply = filterToDisplay != filterForSearch
         val isActiveReset =
-            (filterToDisplay != FilterGeneral()) && (filterToDisplay != FilterGeneral(hideNoSalaryItems = false))
+            filterToDisplay != FilterGeneral() && filterToDisplay != FilterGeneral(hideNoSalaryItems = false)
         if (filterToSend == null) {
             filterState.postValue(
                 (filterState.value as FilterSettingsState.Data).copy(
