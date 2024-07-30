@@ -9,11 +9,13 @@ data class FilterGeneral(
 ) {
     override fun equals(other: Any?): Boolean {
         if (other !is FilterGeneral) return false
+        val salary1 = this.expectedSalary ?: String()
+        val salary2 = other.expectedSalary ?: String()
         if (this.area?.areaId.toString() != other.area?.areaId.toString()) return false
         if (this.country?.countryId.toString() != other.country?.countryId.toString()) return false
         if (this.industry?.industryId.toString() != other.industry?.industryId.toString()) return false
         if (this.hideNoSalaryItems.toString() != other.hideNoSalaryItems.toString()) return false
-        if ((this.expectedSalary ?: String()) != (other.expectedSalary ?: String())) return false
+        if (salary1 != salary2) return false
         return true
     }
 
