@@ -82,6 +82,7 @@ class FilterSettingsFragment : Fragment() {
             viewModel.resetIndustry()
         }
         binding.filterResetButton.setOnClickListener {
+            doNotUpdateTextFieldForNow=false
             viewModel.resetFilterSettings()
         }
 
