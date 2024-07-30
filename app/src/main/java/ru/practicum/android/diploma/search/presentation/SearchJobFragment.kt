@@ -2,7 +2,6 @@ package ru.practicum.android.diploma.search.presentation
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -91,7 +90,6 @@ class SearchJobFragment : Fragment() {
     }
 
     private fun renderSearchVacancy(searchState: SearchFragmentState.SearchVacancy) {
-        Log.d("серч", "ее")
         setVisible(
             placeholderText = false,
             list = true,
@@ -99,9 +97,8 @@ class SearchJobFragment : Fragment() {
             progress = false,
             progressMini = false
         )
-        if(viewModel.currentPage==0){
+        if (viewModel.currentPage == 0) {
             adapter.updateList(emptyList())
-            Log.d("страниа",viewModel.currentPage.toString())
         }
         adapter.updateList(searchState.searchVacancy)
         setBlueButtonText(searchState)
@@ -192,7 +189,6 @@ class SearchJobFragment : Fragment() {
             image = false,
             progressMini = true
         )
-        Log.d("нью пэйдж", "ее")
     }
 
     private fun renderSearchState(searchState: SearchFragmentState) {
