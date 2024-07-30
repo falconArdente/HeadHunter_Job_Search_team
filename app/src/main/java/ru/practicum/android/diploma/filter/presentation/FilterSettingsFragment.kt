@@ -20,7 +20,6 @@ import ru.practicum.android.diploma.search.ui.SearchRepeatHandler
 import ru.practicum.android.diploma.utils.debounce
 
 private const val SALARY_ITEMS_DEBOUNCE_DELAY = 100L
-private const val SALARY_TEXT_DEBOUNCE_DELAY = 500L
 
 class FilterSettingsFragment : Fragment() {
     private var _binding: FragmentFilterSettingsBinding? = null
@@ -56,7 +55,7 @@ class FilterSettingsFragment : Fragment() {
         }
 
         salaryTextDebounced = debounce(
-            SALARY_TEXT_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, true
+            SALARY_ITEMS_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, true
         ) { salary ->
             setSalary(salary)
         }
@@ -113,14 +112,10 @@ class FilterSettingsFragment : Fragment() {
     private fun setTextActions() {
         val salaryTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
+                TODO("Not yet implemented")
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-            }
-
-            override fun afterTextChanged(s: Editable?) {
                 if (s.isNullOrEmpty()) {
                     binding.filterSalaryCross.visibility = View.GONE
                     binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Black))
@@ -130,6 +125,9 @@ class FilterSettingsFragment : Fragment() {
                 } else {
                     binding.filterSalaryCross.visibility = View.VISIBLE
                 }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
                 salaryTextDebounced?.invoke(s.toString())
             }
         }
