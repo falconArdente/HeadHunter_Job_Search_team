@@ -2,6 +2,7 @@ package ru.practicum.android.diploma.search.presentation
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -91,6 +92,8 @@ class SearchJobFragment : Fragment() {
 
     private fun renderSearchVacancy(searchState: SearchFragmentState.SearchVacancy) {
         adapter.updateList(searchState.searchVacancy)
+        binding.recyclerViewSearch.setPadding(0,0,0,0)
+        Log.d("серч", "ее")
         setVisible(
             placeholderText = false,
             list = true,
@@ -178,6 +181,7 @@ class SearchJobFragment : Fragment() {
     }
 
     private fun renderLoadingNewPage() {
+        binding.recyclerViewSearch.setPadding(0,0,0,resources.getDimensionPixelOffset(R.dimen.dp80))
         setVisible(
             placeholderText = false,
             list = true,
@@ -186,6 +190,7 @@ class SearchJobFragment : Fragment() {
             image = false,
             progressMini = true
         )
+        Log.d("нью пэйдж", "ее")
     }
 
     private fun renderSearchState(searchState: SearchFragmentState) {
@@ -301,10 +306,8 @@ class SearchJobFragment : Fragment() {
                 if (dy > 0) {
                     val pos =
                         (binding.recyclerViewSearch.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-
                     val itemsCount = adapter.itemCount
                     if (pos >= itemsCount - 1) {
-                        viewModel.updateState(SearchFragmentState.LoadingNewPage)
                         viewModel.onLastItemReached()
                     }
                 }
