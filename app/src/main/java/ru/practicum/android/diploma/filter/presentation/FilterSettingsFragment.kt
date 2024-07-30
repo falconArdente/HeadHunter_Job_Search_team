@@ -29,6 +29,7 @@ class FilterSettingsFragment : Fragment() {
     private var salaryGotFocused = false
     private var checkBoxDebounced: ((Boolean) -> Unit)? = null
     private var salaryTextDebounced: ((String) -> Unit)? = null
+    private var doNotUpdateTextFieldForNow = false
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -40,6 +41,7 @@ class FilterSettingsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        doNotUpdateTextFieldForNow = false
         viewModel.updateAllFiltersInfo()
     }
 
@@ -137,7 +139,6 @@ class FilterSettingsFragment : Fragment() {
                 salaryTextDebounced?.invoke(s.toString())
             }
         }
-
         binding.filterSalaryInput.addTextChangedListener(salaryTextWatcher)
     }
 
@@ -161,13 +162,15 @@ class FilterSettingsFragment : Fragment() {
                 binding.filterApplyButton.isVisible = state.isActiveApply
                 binding.filterResetButton.isVisible = state.isActiveReset
                 binding.filterDontShowWithoutSalaryCheckBox.isChecked = state.filter.hideNoSalaryItems == true
-                if (state.filter.expectedSalary.isNullOrEmpty()) {
-                    binding.filterSalaryInput.text.clear()
-                } else {
-                    binding.filterSalaryInput.setText(state.filter.expectedSalary)
-                    binding.filterSalaryInput.setSelection(state.filter.expectedSalary.count())
+                if (!doNotUpdateTextFieldForNow) {
+                    if (state.filter.expectedSalary.isNullOrEmpty()) {
+                        binding.filterSalaryInput.text.clear()
+                    } else {
+                        binding.filterSalaryInput.setText(state.filter.expectedSalary)
+                        // binding.filterSalaryInput.setSelection(state.filter.expectedSalary.count())
+                    }
+                    doNotUpdateTextFieldForNow = true
                 }
-
                 if (state.filter.country?.countryName.isNullOrEmpty()) {
                     binding.filterWorkPlaceInactive.visibility = View.VISIBLE
                     binding.filterWorkPlaceActive.visibility = View.GONE
