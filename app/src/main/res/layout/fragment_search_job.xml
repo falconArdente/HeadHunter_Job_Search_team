@@ -122,29 +122,19 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchPlaceholderImage" />
+        app:layout_constraintTop_toBottomOf="@id/searchPlaceholderImage"
+        tools:listitem="@layout/job_list_item" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewSearch"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/emptyNavigationBox"
+        app:layout_constraintBottom_toTopOf="@id/searchMiniProgressBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchInputBackground" />
+        app:layout_constraintTop_toBottomOf="@id/searchInputBackground">
 
-    <ProgressBar
-        android:id="@+id/searchMiniProgressBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:indeterminateTint="@color/Blue"
-        android:paddingTop="@dimen/dp22"
-        android:paddingBottom="@dimen/dp22"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/emptyNavigationBox"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="visible" />
+    </androidx.recyclerview.widget.RecyclerView>
 
     <Button
         android:id="@+id/searchJobsCountButton"
@@ -165,6 +155,18 @@
         app:layout_constraintTop_toBottomOf="@+id/searchInputBackground"
         tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,VisualLintOverlap" />
 
+    <ProgressBar
+        android:id="@+id/searchMiniProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="@color/Blue"
+        android:paddingTop="@dimen/dp22"
+        android:paddingBottom="@dimen/dp22"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/emptyNavigationBox"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
 
     <View
         android:id="@+id/emptyNavigationBox"

@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -16,7 +15,6 @@ import ru.practicum.android.diploma.search.domain.model.SearchParameters
 import ru.practicum.android.diploma.search.domain.model.Vacancy
 import ru.practicum.android.diploma.search.presentation.state.SearchFragmentState
 import ru.practicum.android.diploma.utils.debounce
-import java.util.concurrent.TimeUnit
 
 private const val SEARCH_DEBOUNCE_DELAY = 2000L
 private const val CLICK_DEBOUNCE_DELAY = 1000L
@@ -116,8 +114,9 @@ class SearchViewModel(
     private fun searchResult(text: String?) {
         if (text.isNullOrBlank()) return
         searchJob?.cancel()
-       showProgressIndicator(currentPage)
+        showProgressIndicator(currentPage)
         searchJob = viewModelScope.launch {
+            delay(500L)
             interactor
                 .searchVacancy(text, parametersForSearch, PER_PAGE, currentPage)
                 .collect { vacancy ->
@@ -195,6 +194,8 @@ class SearchViewModel(
     }
 
     fun onLastItemReached() {
+        if (searchJob?.isActive == true) return
+
         try {
             if (currentPage < pagesCount - 1 && searchJob?.isActive == false) {
                 currentPage++

@@ -92,7 +92,6 @@ class SearchJobFragment : Fragment() {
 
     private fun renderSearchVacancy(searchState: SearchFragmentState.SearchVacancy) {
         adapter.updateList(searchState.searchVacancy)
-        binding.recyclerViewSearch.setPadding(0,0,0,0)
         Log.d("серч", "ее")
         setVisible(
             placeholderText = false,
@@ -181,7 +180,6 @@ class SearchJobFragment : Fragment() {
     }
 
     private fun renderLoadingNewPage() {
-        binding.recyclerViewSearch.setPadding(0,0,0,resources.getDimensionPixelOffset(R.dimen.dp80))
         setVisible(
             placeholderText = false,
             list = true,
@@ -223,6 +221,9 @@ class SearchJobFragment : Fragment() {
             searchJobsCountButton.isVisible = blueButton
             searchProgressBar.isVisible = progress
             searchMiniProgressBar.isVisible = progressMini
+            if (progressMini) {
+                recyclerViewSearch.smoothScrollToPosition(adapter.itemCount)
+            }
         }
     }
 
