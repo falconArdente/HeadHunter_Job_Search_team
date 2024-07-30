@@ -1,9 +1,10 @@
 package ru.practicum.android.diploma.search.presentation.viewmodel
 
+import android.app.Application
 import android.database.CursorIndexOutOfBoundsException
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -14,6 +15,7 @@ import ru.practicum.android.diploma.search.domain.api.SearchInteractor
 import ru.practicum.android.diploma.search.domain.model.SearchParameters
 import ru.practicum.android.diploma.search.domain.model.Vacancy
 import ru.practicum.android.diploma.search.presentation.state.SearchFragmentState
+import ru.practicum.android.diploma.utils.NetworkStatus
 import ru.practicum.android.diploma.utils.debounce
 
 private const val SEARCH_DEBOUNCE_DELAY = 2000L
@@ -26,7 +28,8 @@ class SearchViewModel(
     private val interactor: SearchInteractor,
     private val getSuggestsUseCase: GetSuggestionsForSearchUseCase,
     private val getFilterUseCase: GetFilterUseCase,
-) : ViewModel() {
+    application: Application,
+) : AndroidViewModel(application) {
     private val searchLiveData =
         MutableLiveData<SearchFragmentState>(SearchFragmentState.NoTextInInputEditText)
     private var latestSearchText: String? = null
@@ -46,6 +49,8 @@ class SearchViewModel(
     private var isLastCapitalOfInputSearched = false
     private var suggestionsRequestDebounced: ((String) -> Unit)? = null
     private var lastSuggestionsRequestText = String()
+
+    private var internetConnectionErrorCounter: Int? = null
 
     init {
         suggestionsRequestDebounced = debounce(
@@ -81,7 +86,7 @@ class SearchViewModel(
         searchLiveData.postValue(state)
     }
 
-    private fun updateState(searchVacancy: List<Vacancy>, totalFoundVacancy: Int, isLastPage: Boolean) {
+    private fun updateState(searchVacancy: List<Vacancy>, totalFoundVacancy: Int) {
         searchLiveData.postValue(
             when (searchLiveData.value) {
                 is SearchFragmentState.SearchVacancy -> {
@@ -89,7 +94,6 @@ class SearchViewModel(
                         .copy(
                             searchVacancy = searchVacancy,
                             totalFoundVacancy = totalFoundVacancy,
-                            isLastPage = isLastPage
                         )
                 }
 
@@ -97,7 +101,6 @@ class SearchViewModel(
                     SearchFragmentState.SearchVacancy(
                         searchVacancy = searchVacancy,
                         totalFoundVacancy = totalFoundVacancy,
-                        isLastPage = isLastPage
                     )
                 }
             }
@@ -107,13 +110,12 @@ class SearchViewModel(
     private fun showProgressIndicator(page: Int) {
         if (page == 0) {
             updateState(SearchFragmentState.Loading)
-        } else {
-            updateState(SearchFragmentState.LoadingNewPage)
         }
     }
 
     private fun searchResult(text: String?) {
         if (text.isNullOrBlank()) return
+        internetConnectionErrorCounter = null
         searchJob?.cancel()
         showProgressIndicator(currentPage)
         searchJob = viewModelScope.launch {
@@ -128,22 +130,34 @@ class SearchViewModel(
                             if (currentPage == pagesCount - 1 || vacanciesList.count() == vacancy.foundVacancy) {
                                 vacanciesList.addAll(vacancy.result)
                                 updateState(
-                                    searchVacancy = vacanciesList,
+                                    searchVacancy = vacanciesList.toList(),
                                     totalFoundVacancy = vacancy.foundVacancy,
-                                    isLastPage = true
                                 )
+                                searchLiveData.value = SearchFragmentState.LastPageProgressBar(true)
                             } else {
                                 vacanciesList += vacancy.result
                                 updateState(
-                                    searchVacancy = vacanciesList,
+                                    searchVacancy = vacanciesList.toList(),
                                     totalFoundVacancy = vacancy.foundVacancy,
-                                    isLastPage = pagesCount == 1
                                 )
+                                searchLiveData.value = SearchFragmentState.LastPageProgressBar(pagesCount == 1)
                             }
                         }
 
                         vacancy.errorMessage!!.isNotEmpty() -> {
-                            updateState(SearchFragmentState.ServerError(vacancy.errorMessage))
+                            if (vacancy.errorMessage == "internet_connection_error" && vacanciesList.isNotEmpty()) {
+                                internetConnectionErrorCounter = 1
+
+                                updateState(
+                                    SearchFragmentState.InternetConnectionErrorInList(
+                                        isLastPage = true,
+                                        currentVacancyList = vacanciesList.toList(),
+                                        hideProgressBar = true
+                                    )
+                                )
+                            } else {
+                                updateState(SearchFragmentState.ServerError(vacancy.errorMessage))
+                            }
                         }
 
                         else -> updateState(SearchFragmentState.NoResult)
@@ -154,6 +168,11 @@ class SearchViewModel(
 
     fun searchImmidiently(text: String) {
         vacanciesList.clear()
+        autoSearchDelayJob?.cancel()
+        searchResult(text)
+    }
+
+    fun searchFromCurrentPage(text: String) {
         autoSearchDelayJob?.cancel()
         searchResult(text)
     }
@@ -194,6 +213,9 @@ class SearchViewModel(
     }
 
     fun onLastItemReached() {
+        if (!checkInternetConnection() && internetConnectionErrorCounter == 1) {
+            return
+        }
         try {
             if (currentPage < pagesCount - 1 && searchJob?.isActive == false) {
                 currentPage++
@@ -201,8 +223,6 @@ class SearchViewModel(
                 autoSearchDelayJob = viewModelScope.launch {
                     searchResult(latestSearchText!!)
                 }
-            } else {
-                updateState(SearchFragmentState.SearchVacancy(vacanciesList, totalFound, isLastPage = true))
             }
         } catch (e: CursorIndexOutOfBoundsException) {
             updateState(SearchFragmentState.ServerError(e.message.toString()))
@@ -211,5 +231,10 @@ class SearchViewModel(
 
     fun stopAutoSearch() {
         autoSearchDelayJob?.cancel()
+    }
+
+    private fun checkInternetConnection(): Boolean {
+        val netWorkStatus = NetworkStatus(getApplication())
+        return netWorkStatus.isConnected()
     }
 }

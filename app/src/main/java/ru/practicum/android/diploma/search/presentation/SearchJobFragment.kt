@@ -33,7 +33,7 @@ class SearchJobFragment : Fragment() {
     private var suggestionsAdapter: VacancyPositionSuggestsAdapter? = null
     private val viewModel by viewModel<SearchViewModel>()
     private val adapter = VacancyAdapter(emptyList(), clickListenerFun())
-    private var isFirstTimeCall = true
+    private var reloadFromCurrentPage = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentSearchJobBinding.inflate(inflater, container, false)
@@ -84,17 +84,21 @@ class SearchJobFragment : Fragment() {
         binding.searchInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 binding.searchInput.hideKeyboard(requireContext())
-                viewModel.currentPage = 0
-                viewModel.searchImmidiently(binding.searchInput.text.toString())
+                if (reloadFromCurrentPage) {
+                    adapter.updateList(updatedVacancyList = adapter.vacancyList, hideProgressbarFlag = false)
+                    binding.recyclerViewSearch.smoothScrollToPosition(adapter.itemCount - 1) // почему не срабатывает?
+                    viewModel.searchFromCurrentPage(binding.searchInput.text.toString())
+                } else {
+                    viewModel.currentPage = 0
+                    viewModel.searchImmidiently(binding.searchInput.text.toString())
+                }
             }
             false
         }
     }
 
     private fun renderSearchVacancy(searchState: SearchFragmentState.SearchVacancy) {
-        Log.d("PROGRESS", "isLastPage: ${searchState.isLastPage}")
-        adapter.isLastPage = searchState.isLastPage
-        adapter.updateList(searchState.searchVacancy)
+        adapter.updateList(updatedVacancyList = searchState.searchVacancy, hideProgressbarFlag = false)
         setVisible(
             placeholderText = false,
             list = true,
@@ -104,8 +108,24 @@ class SearchJobFragment : Fragment() {
         setBlueButtonText(searchState)
     }
 
+    private fun renderProgressBarForLastPage(searchState: SearchFragmentState.LastPageProgressBar) {
+        adapter.isLastPage = searchState.isLastPage
+    }
+
+    private fun renderProgressBarInListWhenInternetConnectionError(
+        searchState: SearchFragmentState.InternetConnectionErrorInList,
+    ) {
+        renderServerError()
+        if (searchState.isLastPage) {
+            adapter.removeLastItem(
+                currentVacancyList = searchState.currentVacancyList,
+                hideProgressbarFlag = searchState.hideProgressBar
+            )
+        }
+    }
+
     private fun renderLoading() {
-        binding.searchMiniProgressBar.isVisible = true
+        binding.searchProgressBar.isVisible = true
         setVisible(
             placeholderText = false,
             list = false,
@@ -174,25 +194,18 @@ class SearchJobFragment : Fragment() {
         )
     }
 
-    private fun renderLoadingNewPage() {
-        setVisible(
-            placeholderText = false,
-            list = true,
-            blueButton = true,
-            progress = false,
-            image = false,
-        )
-    }
-
     private fun renderSearchState(searchState: SearchFragmentState) {
-        Log.d("PROGRESS", "searchState: ${searchState}")
+        reloadFromCurrentPage = searchState is SearchFragmentState.InternetConnectionErrorInList
         when (searchState) {
             is SearchFragmentState.SearchVacancy -> renderSearchVacancy(searchState)
             is SearchFragmentState.Loading -> renderLoading()
             is SearchFragmentState.NoResult -> renderNoResult()
             is SearchFragmentState.ServerError -> renderServerError()
             is SearchFragmentState.NoTextInInputEditText -> renderNoTextInInputEditText()
-            is SearchFragmentState.LoadingNewPage -> renderLoadingNewPage()
+            is SearchFragmentState.LastPageProgressBar -> renderProgressBarForLastPage(searchState)
+            is SearchFragmentState.InternetConnectionErrorInList -> renderProgressBarInListWhenInternetConnectionError(
+                searchState
+            )
         }
     }
 
@@ -213,7 +226,6 @@ class SearchJobFragment : Fragment() {
             recyclerViewSearch.isVisible = list
             searchJobsCountButton.isVisible = blueButton
             searchProgressBar.isVisible = progress
-            searchMiniProgressBar.isVisible = progressMini
         }
     }
 
@@ -300,7 +312,7 @@ class SearchJobFragment : Fragment() {
 
                     val itemsCount = adapter.itemCount
                     if (pos >= itemsCount - 1) {
-                        viewModel.updateState(SearchFragmentState.LoadingNewPage)
+                        Log.d("SCROLL", "Entered in scroll listener in SearchFragment")
                         viewModel.onLastItemReached()
                     }
                 }

@@ -6,15 +6,19 @@ sealed class SearchFragmentState {
     data class SearchVacancy(
         val searchVacancy: List<Vacancy>,
         val totalFoundVacancy: Int,
-        val isLastPage: Boolean
     ) : SearchFragmentState()
 
     data class ServerError(
-        val message: String
+        val message: String,
     ) : SearchFragmentState()
 
     data object NoResult : SearchFragmentState()
     data object Loading : SearchFragmentState()
-    data object LoadingNewPage : SearchFragmentState()
     data object NoTextInInputEditText : SearchFragmentState()
+    data class LastPageProgressBar(val isLastPage: Boolean) : SearchFragmentState()
+    data class InternetConnectionErrorInList(
+        val isLastPage: Boolean,
+        val currentVacancyList: List<Vacancy>,
+        val hideProgressBar: Boolean,
+    ) : SearchFragmentState()
 }

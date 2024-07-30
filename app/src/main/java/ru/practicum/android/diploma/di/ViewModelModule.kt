@@ -29,6 +29,7 @@ val viewModelModule = module {
             interactor = get(),
             getSuggestsUseCase = get(),
             getFilterUseCase = get(),
+            application = androidApplication()
         )
     }
     viewModel<FavoritesViewModel> {

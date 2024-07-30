@@ -13,7 +13,7 @@ class SearchInteractorImpl(val repository: SearchRepository, val converter: Sear
         expression: String,
         parameters: SearchParameters?,
         perPage: Int,
-        currentPage: Int
+        currentPage: Int,
     ): Flow<VacancyListResult> = flow {
         val salaryOnly = parameters?.withSalaryOnly ?: false
         repository
@@ -44,10 +44,14 @@ class SearchInteractorImpl(val repository: SearchRepository, val converter: Sear
                         )
                     }
 
-                    is Resource.Error, is Resource.InternetConnectionError, is Resource.NotFoundError -> {
+                    is Resource.Error, is Resource.NotFoundError -> {
                         emit(
                             VacancyListResult(emptyList(), vacancyListResponse.message, 0, 0, 0)
                         )
+                    }
+
+                    is Resource.InternetConnectionError -> {
+                        emit(VacancyListResult(emptyList(), errorMessage = "internet_connection_error", 0, 0, 0))
                     }
                 }
             }

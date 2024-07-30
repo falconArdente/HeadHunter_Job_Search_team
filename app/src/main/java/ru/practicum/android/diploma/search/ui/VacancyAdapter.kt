@@ -20,6 +20,7 @@ class VacancyAdapter(
         private set
 
     var isLastPage = false
+    private var hideProgressBar = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -41,31 +42,40 @@ class VacancyAdapter(
         }
     }
 
-    override fun getItemCount(): Int = vacancyList.size + 1
+    override fun getItemCount(): Int = vacancyList.size + if (hideProgressBar) 0 else 1
 
     override fun getItemViewType(position: Int): Int {
-        return if (position == itemCount - 1) TYPE_PROGRESS_BAR else TYPE_VACANCY
+        return if (!hideProgressBar && position == itemCount - 1) TYPE_PROGRESS_BAR else TYPE_VACANCY
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is VacancyViewHolder) {
+            holder.itemView.setOnClickListener {
+                onVacancyClickListener.onItemClick(vacancyList[holder.adapterPosition])
+            }
             if (position == 0) {
                 holder.bindFirst(vacancyList[position])
             } else {
                 holder.bind(vacancyList[position])
-                holder.itemView.setOnClickListener {
-                    onVacancyClickListener.onItemClick(vacancyList[holder.adapterPosition])
-                }
             }
         } else if (holder is ProgressBarViewHolder) {
             holder.bind(isLastPage)
         }
     }
 
-    fun updateList(updatedVacancyList: List<Vacancy>) {
+    fun updateList(updatedVacancyList: List<Vacancy>, hideProgressbarFlag: Boolean) {
+        hideProgressBar = hideProgressbarFlag
         vacancyList = updatedVacancyList
         notifyDataSetChanged()
     }
+
+    fun removeLastItem(currentVacancyList: List<Vacancy>, hideProgressbarFlag: Boolean) {
+        if (vacancyList.isNotEmpty() && getItemViewType(vacancyList.size) == TYPE_PROGRESS_BAR) {
+            notifyItemRemoved(vacancyList.size)
+            updateList(currentVacancyList, hideProgressbarFlag)
+        }
+    }
+
 }
 
 interface SearchRecyclerViewEvent {
