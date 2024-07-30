@@ -117,7 +117,7 @@ class SearchViewModel(
         if (text.isNullOrBlank()) return
         searchJob?.cancel()
        showProgressIndicator(currentPage)
-        searchJob = viewModelScope.launch(Dispatchers.IO) {
+        searchJob = viewModelScope.launch {
             interactor
                 .searchVacancy(text, parametersForSearch, PER_PAGE, currentPage)
                 .collect { vacancy ->
