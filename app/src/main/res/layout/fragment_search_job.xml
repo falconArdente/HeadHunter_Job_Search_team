@@ -84,7 +84,6 @@
         app:layout_constraintTop_toTopOf="@id/searchInputBackground"
         tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
-
     <ProgressBar
         android:id="@+id/searchProgressBar"
         android:layout_width="@dimen/dp48"
@@ -128,7 +127,7 @@
         android:id="@+id/recyclerViewSearch"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/emptyNavigationBox"
+        app:layout_constraintBottom_toTopOf="@id/searchMiniProgressBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/searchInputBackground" />
@@ -164,7 +163,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchInputBackground"
         tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,VisualLintOverlap" />
-
 
     <View
         android:id="@+id/emptyNavigationBox"

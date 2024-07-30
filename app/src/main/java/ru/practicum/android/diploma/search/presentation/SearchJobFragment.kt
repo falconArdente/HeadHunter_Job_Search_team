@@ -91,8 +91,6 @@ class SearchJobFragment : Fragment() {
     }
 
     private fun renderSearchVacancy(searchState: SearchFragmentState.SearchVacancy) {
-        adapter.updateList(searchState.searchVacancy)
-        binding.recyclerViewSearch.setPadding(0,0,0,0)
         Log.d("серч", "ее")
         setVisible(
             placeholderText = false,
@@ -101,6 +99,11 @@ class SearchJobFragment : Fragment() {
             progress = false,
             progressMini = false
         )
+        if(viewModel.currentPage==0){
+            adapter.updateList(emptyList())
+            Log.d("страниа",viewModel.currentPage.toString())
+        }
+        adapter.updateList(searchState.searchVacancy)
         setBlueButtonText(searchState)
     }
 
@@ -181,7 +184,6 @@ class SearchJobFragment : Fragment() {
     }
 
     private fun renderLoadingNewPage() {
-        binding.recyclerViewSearch.setPadding(0,0,0,resources.getDimensionPixelOffset(R.dimen.dp80))
         setVisible(
             placeholderText = false,
             list = true,
@@ -223,6 +225,9 @@ class SearchJobFragment : Fragment() {
             searchJobsCountButton.isVisible = blueButton
             searchProgressBar.isVisible = progress
             searchMiniProgressBar.isVisible = progressMini
+            if (progressMini) {
+                recyclerViewSearch.smoothScrollToPosition(adapter.itemCount)
+            }
         }
     }
 
@@ -308,6 +313,8 @@ class SearchJobFragment : Fragment() {
                         (binding.recyclerViewSearch.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
                     val itemsCount = adapter.itemCount
                     if (pos >= itemsCount - 1) {
+                        binding.recyclerViewSearch.smoothScrollToPosition(adapter.itemCount)
+                        //   binding.recyclerViewSearch.setPadding(0, 0, 0, resources.getDimensionPixelOffset(R.dimen.dp80))
                         viewModel.onLastItemReached()
                     }
                 }

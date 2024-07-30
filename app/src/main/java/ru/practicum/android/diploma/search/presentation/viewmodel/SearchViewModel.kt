@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.search.presentation.viewmodel
 
 import android.database.CursorIndexOutOfBoundsException
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -109,14 +110,14 @@ class SearchViewModel(
         if (page == 0) {
             updateState(SearchFragmentState.Loading)
         } else {
-                 updateState(SearchFragmentState.LoadingNewPage)
+            updateState(SearchFragmentState.LoadingNewPage)
         }
     }
 
     private fun searchResult(text: String?) {
         if (text.isNullOrBlank()) return
         searchJob?.cancel()
-       showProgressIndicator(currentPage)
+        showProgressIndicator(currentPage)
         searchJob = viewModelScope.launch {
             interactor
                 .searchVacancy(text, parametersForSearch, PER_PAGE, currentPage)
@@ -195,12 +196,13 @@ class SearchViewModel(
     }
 
     fun onLastItemReached() {
+        Log.d("ласт айтем вью модел", "")
+        if (searchJob?.isActive == true) return
         try {
             if (currentPage < pagesCount - 1 && searchJob?.isActive == false) {
                 currentPage++
                 autoSearchDelayJob?.cancel()
                 autoSearchDelayJob = viewModelScope.launch {
-                   // updateState(SearchFragmentState.LoadingNewPage)
                     searchResult(latestSearchText!!)
                 }
             } else {
@@ -214,4 +216,5 @@ class SearchViewModel(
     fun stopAutoSearch() {
         autoSearchDelayJob?.cancel()
     }
+
 }
