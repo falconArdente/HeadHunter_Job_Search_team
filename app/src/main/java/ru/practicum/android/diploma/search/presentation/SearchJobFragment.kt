@@ -86,7 +86,7 @@ class SearchJobFragment : Fragment() {
                 binding.searchInput.hideKeyboard(requireContext())
                 if (reloadFromCurrentPage) {
                     adapter.updateList(updatedVacancyList = adapter.vacancyList, hideProgressbarFlag = false)
-                    binding.recyclerViewSearch.smoothScrollToPosition(adapter.itemCount - 1) // почему не срабатывает?
+                    binding.recyclerViewSearch.smoothScrollToPosition(adapter.itemCount - 1)
                     viewModel.searchFromCurrentPage(binding.searchInput.text.toString())
                 } else {
                     viewModel.currentPage = 0

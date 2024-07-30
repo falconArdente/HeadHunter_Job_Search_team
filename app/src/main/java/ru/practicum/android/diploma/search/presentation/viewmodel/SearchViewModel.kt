@@ -51,7 +51,7 @@ class SearchViewModel(
     private var suggestionsRequestDebounced: ((String) -> Unit)? = null
     private var lastSuggestionsRequestText = String()
 
-    private var internetConnectionErrorCounter: Int? = null
+    private var internetConnectionErrorFlag: Boolean = false
 
     init {
         suggestionsRequestDebounced = debounce(
@@ -116,7 +116,7 @@ class SearchViewModel(
 
     private fun searchResult(text: String?) {
         if (text.isNullOrBlank()) return
-        internetConnectionErrorCounter = null
+        internetConnectionErrorFlag = false
         searchJob?.cancel()
         showProgressIndicator(currentPage)
         searchJob = viewModelScope.launch {
@@ -151,7 +151,7 @@ class SearchViewModel(
 
                         is Resource.InternetConnectionError -> {
                             if (vacanciesList.isNotEmpty()) {
-                                internetConnectionErrorCounter = 1
+                                internetConnectionErrorFlag = true
 
                                 updateState(
                                     SearchFragmentState.InternetConnectionErrorInList(
@@ -220,7 +220,7 @@ class SearchViewModel(
     }
 
     fun onLastItemReached() {
-        if (!checkInternetConnection() && internetConnectionErrorCounter == 1) {
+        if (!checkInternetConnection() && internetConnectionErrorFlag) {
             return
         }
         try {
