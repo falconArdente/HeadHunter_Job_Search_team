@@ -16,6 +16,7 @@ import ru.practicum.android.diploma.search.domain.model.SearchParameters
 import ru.practicum.android.diploma.search.domain.model.Vacancy
 import ru.practicum.android.diploma.search.presentation.state.SearchFragmentState
 import ru.practicum.android.diploma.utils.NetworkStatus
+import ru.practicum.android.diploma.utils.Resource
 import ru.practicum.android.diploma.utils.debounce
 
 private const val SEARCH_DEBOUNCE_DELAY = 2000L
@@ -122,30 +123,34 @@ class SearchViewModel(
             delay(PROGRESS_BAR_DELAY)
             interactor
                 .searchVacancy(text, parametersForSearch, PER_PAGE, currentPage)
-                .collect { vacancy ->
-                    when {
-                        vacancy.result!!.isNotEmpty() -> {
-                            pagesCount = vacancy.pages
-                            totalFound = vacancy.foundVacancy
-                            if (currentPage == pagesCount - 1 || vacanciesList.count() == vacancy.foundVacancy) {
-                                vacanciesList.addAll(vacancy.result)
-                                updateState(
-                                    searchVacancy = vacanciesList.toList(),
-                                    totalFoundVacancy = vacancy.foundVacancy,
-                                )
-                                searchLiveData.value = SearchFragmentState.LastPageProgressBar(true)
+                .collect { result ->
+                    when (result) {
+                        is Resource.Success -> {
+                            if (result.data!!.result!!.isNotEmpty()) {
+                                pagesCount = result.data.pages
+                                totalFound = result.data.foundVacancy
+                                if (currentPage == pagesCount - 1 || vacanciesList.count() == result.data.foundVacancy) {
+                                    vacanciesList.addAll(result.data.result!!)
+                                    updateState(
+                                        searchVacancy = vacanciesList.toList(),
+                                        totalFoundVacancy = result.data.foundVacancy,
+                                    )
+                                    searchLiveData.value = SearchFragmentState.LastPageProgressBar(true)
+                                } else {
+                                    vacanciesList += result.data.result!!
+                                    updateState(
+                                        searchVacancy = vacanciesList.toList(),
+                                        totalFoundVacancy = result.data.foundVacancy,
+                                    )
+                                    searchLiveData.value = SearchFragmentState.LastPageProgressBar(pagesCount == 1)
+                                }
                             } else {
-                                vacanciesList += vacancy.result
-                                updateState(
-                                    searchVacancy = vacanciesList.toList(),
-                                    totalFoundVacancy = vacancy.foundVacancy,
-                                )
-                                searchLiveData.value = SearchFragmentState.LastPageProgressBar(pagesCount == 1)
+                                updateState(SearchFragmentState.NoResult)
                             }
                         }
 
-                        vacancy.errorMessage!!.isNotEmpty() -> {
-                            if (vacancy.errorMessage == "internet_connection_error" && vacanciesList.isNotEmpty()) {
+                        is Resource.InternetConnectionError -> {
+                            if (vacanciesList.isNotEmpty()) {
                                 internetConnectionErrorCounter = 1
 
                                 updateState(
@@ -156,11 +161,13 @@ class SearchViewModel(
                                     )
                                 )
                             } else {
-                                updateState(SearchFragmentState.ServerError(vacancy.errorMessage))
+                                updateState(SearchFragmentState.ServerError)
                             }
                         }
 
-                        else -> updateState(SearchFragmentState.NoResult)
+                        is Resource.Error, is Resource.NotFoundError -> {
+                            updateState(SearchFragmentState.ServerError)
+                        }
                     }
                 }
         }
@@ -225,7 +232,7 @@ class SearchViewModel(
                 }
             }
         } catch (e: CursorIndexOutOfBoundsException) {
-            updateState(SearchFragmentState.ServerError(e.message.toString()))
+            updateState(SearchFragmentState.ServerError)
         }
     }
 

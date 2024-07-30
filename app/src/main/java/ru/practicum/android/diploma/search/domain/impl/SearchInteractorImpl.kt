@@ -14,7 +14,7 @@ class SearchInteractorImpl(val repository: SearchRepository, val converter: Sear
         parameters: SearchParameters?,
         perPage: Int,
         currentPage: Int,
-    ): Flow<VacancyListResult> = flow {
+    ): Flow<Resource<VacancyListResult>> = flow {
         val salaryOnly = parameters?.withSalaryOnly ?: false
         repository
             .searchVacancy(
@@ -34,24 +34,28 @@ class SearchInteractorImpl(val repository: SearchRepository, val converter: Sear
                         val foundVacancy = vacancyListResponse.data.totalFound
                         val pagesTotal = vacancyListResponse.data.totalPages
                         emit(
-                            VacancyListResult(
-                                result = vacancyList,
-                                errorMessage = "",
-                                foundVacancy = foundVacancy.toInt(),
-                                page = currentPage,
-                                pages = pagesTotal.toInt(),
+                            Resource.Success(
+                                VacancyListResult(
+                                    result = vacancyList,
+                                    errorMessage = "",
+                                    foundVacancy = foundVacancy.toInt(),
+                                    page = currentPage,
+                                    pages = pagesTotal.toInt(),
+                                )
                             )
                         )
                     }
 
-                    is Resource.Error, is Resource.NotFoundError -> {
-                        emit(
-                            VacancyListResult(emptyList(), vacancyListResponse.message, 0, 0, 0)
-                        )
+                    is Resource.Error -> {
+                        emit(Resource.Error(vacancyListResponse.message!!))
+                    }
+
+                    is Resource.NotFoundError -> {
+                        emit(Resource.NotFoundError(vacancyListResponse.message!!))
                     }
 
                     is Resource.InternetConnectionError -> {
-                        emit(VacancyListResult(emptyList(), errorMessage = "internet_connection_error", 0, 0, 0))
+                        emit(Resource.InternetConnectionError(vacancyListResponse.message!!))
                     }
                 }
             }

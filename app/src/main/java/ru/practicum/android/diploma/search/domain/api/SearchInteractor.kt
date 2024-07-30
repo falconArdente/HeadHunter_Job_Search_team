@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.search.domain.api
 import kotlinx.coroutines.flow.Flow
 import ru.practicum.android.diploma.search.domain.model.SearchParameters
 import ru.practicum.android.diploma.search.domain.model.VacancyListResult
+import ru.practicum.android.diploma.utils.Resource
 
 interface SearchInteractor {
     fun searchVacancy(
@@ -10,5 +11,5 @@ interface SearchInteractor {
         parameters: SearchParameters?,
         perPage: Int,
         currentPage: Int
-    ): Flow<VacancyListResult>
+    ): Flow<Resource<VacancyListResult>>
 }

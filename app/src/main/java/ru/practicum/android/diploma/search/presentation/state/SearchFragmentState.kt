@@ -8,9 +8,7 @@ sealed class SearchFragmentState {
         val totalFoundVacancy: Int,
     ) : SearchFragmentState()
 
-    data class ServerError(
-        val message: String,
-    ) : SearchFragmentState()
+    data object ServerError : SearchFragmentState()
 
     data object NoResult : SearchFragmentState()
     data object Loading : SearchFragmentState()
