@@ -2,6 +2,7 @@ package ru.practicum.android.diploma.search.presentation
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,6 +33,7 @@ class SearchJobFragment : Fragment() {
     private var suggestionsAdapter: VacancyPositionSuggestsAdapter? = null
     private val viewModel by viewModel<SearchViewModel>()
     private val adapter = VacancyAdapter(emptyList(), clickListenerFun())
+    private var isFirstTimeCall = true
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentSearchJobBinding.inflate(inflater, container, false)
@@ -90,13 +92,14 @@ class SearchJobFragment : Fragment() {
     }
 
     private fun renderSearchVacancy(searchState: SearchFragmentState.SearchVacancy) {
+        Log.d("PROGRESS", "isLastPage: ${searchState.isLastPage}")
+        adapter.isLastPage = searchState.isLastPage
         adapter.updateList(searchState.searchVacancy)
         setVisible(
             placeholderText = false,
             list = true,
             blueButton = true,
             progress = false,
-            progressMini = false
         )
         setBlueButtonText(searchState)
     }
@@ -108,7 +111,6 @@ class SearchJobFragment : Fragment() {
             list = false,
             blueButton = false,
             progress = true,
-            progressMini = false
         )
     }
 
@@ -120,7 +122,6 @@ class SearchJobFragment : Fragment() {
                 list = true,
                 blueButton = true,
                 progress = false,
-                progressMini = false
             )
 
         } else {
@@ -134,7 +135,6 @@ class SearchJobFragment : Fragment() {
                 list = false,
                 blueButton = true,
                 progress = false,
-                progressMini = false
             )
         }
     }
@@ -147,7 +147,6 @@ class SearchJobFragment : Fragment() {
                 list = true,
                 blueButton = true,
                 progress = false,
-                progressMini = false
             )
         } else {
             binding.searchPlaceholderImage.background =
@@ -159,7 +158,6 @@ class SearchJobFragment : Fragment() {
                 list = false,
                 blueButton = false,
                 progress = false,
-                progressMini = false
             )
         }
     }
@@ -173,7 +171,6 @@ class SearchJobFragment : Fragment() {
             blueButton = false,
             progress = false,
             image = true,
-            progressMini = false
         )
     }
 
@@ -184,11 +181,11 @@ class SearchJobFragment : Fragment() {
             blueButton = true,
             progress = false,
             image = false,
-            progressMini = true
         )
     }
 
     private fun renderSearchState(searchState: SearchFragmentState) {
+        Log.d("PROGRESS", "searchState: ${searchState}")
         when (searchState) {
             is SearchFragmentState.SearchVacancy -> renderSearchVacancy(searchState)
             is SearchFragmentState.Loading -> renderLoading()
@@ -208,7 +205,6 @@ class SearchJobFragment : Fragment() {
         list: Boolean,
         blueButton: Boolean,
         progress: Boolean,
-        progressMini: Boolean,
         image: Boolean = placeholderText,
     ) {
         with(binding) {

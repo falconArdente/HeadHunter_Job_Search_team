@@ -20,6 +20,7 @@ private const val SEARCH_DEBOUNCE_DELAY = 2000L
 private const val CLICK_DEBOUNCE_DELAY = 1000L
 private const val PER_PAGE = 20
 private const val SUGGESTIONS_DEBOUNCE_DELAY = 300L
+private const val PROGRESS_BAR_DELAY = 3000L
 
 class SearchViewModel(
     private val interactor: SearchInteractor,
@@ -116,6 +117,7 @@ class SearchViewModel(
         searchJob?.cancel()
         showProgressIndicator(currentPage)
         searchJob = viewModelScope.launch {
+            delay(PROGRESS_BAR_DELAY)
             interactor
                 .searchVacancy(text, parametersForSearch, PER_PAGE, currentPage)
                 .collect { vacancy ->
