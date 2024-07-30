@@ -12,8 +12,8 @@ data class FilterGeneral(
         if (this.area?.areaId.toString() != other.area?.areaId.toString()) return false
         if (this.country?.countryId.toString() != other.country?.countryId.toString()) return false
         if (this.industry?.industryId.toString() != other.industry?.industryId.toString()) return false
-        if (this.hideNoSalaryItems != other.hideNoSalaryItems) return false
-        if (this.expectedSalary.toString() != other.expectedSalary.toString()) return false
+        if (this.hideNoSalaryItems.toString() != other.hideNoSalaryItems.toString()) return false
+        if ((this.expectedSalary ?: String()) != (other.expectedSalary ?: String())) return false
         return true
     }
 

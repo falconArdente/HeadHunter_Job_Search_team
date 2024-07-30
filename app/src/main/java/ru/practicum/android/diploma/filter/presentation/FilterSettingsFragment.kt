@@ -163,7 +163,6 @@ class FilterSettingsFragment : Fragment() {
                 binding.filterDontShowWithoutSalaryCheckBox.isChecked = state.filter.hideNoSalaryItems == true
                 if (state.filter.expectedSalary.isNullOrEmpty()) {
                     binding.filterSalaryInput.text.clear()
-                    binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Gray_OR_White))
                 } else {
                     binding.filterSalaryInput.setText(state.filter.expectedSalary)
                     binding.filterSalaryInput.setSelection(state.filter.expectedSalary.count())
