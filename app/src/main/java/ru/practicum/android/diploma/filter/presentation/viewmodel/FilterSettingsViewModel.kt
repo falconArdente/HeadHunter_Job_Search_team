@@ -36,7 +36,7 @@ class FilterSettingsViewModel(
             temporaryFilter = asyncTemporaryFilter.await()
             filterForSearch = asyncFilterForSearch.await()
             filterToDisplay = compareBasedFilter(tempFilter = temporaryFilter, searchFilter = filterForSearch)
-            checkFilterExists(filterToDisplay)
+            calculateApplyClearStateAndSend(filterToDisplay)
         }
     }
 
@@ -124,10 +124,11 @@ class FilterSettingsViewModel(
         updateAllFiltersInfo()
     }
 
-    private fun checkFilterExists(filterToShow: FilterGeneral?) {
+    private fun calculateApplyClearStateAndSend(filterToSend: FilterGeneral?) {
         val isActiveApply = filterToDisplay != filterForSearch
-        val isActiveReset = filterToDisplay != FilterGeneral()
-        if (filterToShow == null) {
+        val isActiveReset =
+            (filterToDisplay != FilterGeneral()) && (filterToDisplay != FilterGeneral(hideNoSalaryItems = false))
+        if (filterToSend == null) {
             filterState.postValue(
                 (filterState.value as FilterSettingsState.Data).copy(
                     isActiveApply = isActiveApply,
@@ -137,7 +138,7 @@ class FilterSettingsViewModel(
         } else {
             filterState.postValue(
                 FilterSettingsState.Data(
-                    filter = filterToShow,
+                    filter = filterToSend,
                     isActiveApply = isActiveApply,
                     isActiveReset = isActiveReset
                 )

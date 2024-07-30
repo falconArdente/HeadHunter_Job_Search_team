@@ -113,9 +113,7 @@ class FilterSettingsFragment : Fragment() {
 
     private fun setTextActions() {
         val salaryTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // "Not yet implemented"
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (binding.filterSalaryInput.hasFocus()) {
@@ -168,7 +166,6 @@ class FilterSettingsFragment : Fragment() {
                         binding.filterSalaryInput.text.clear()
                     } else {
                         binding.filterSalaryInput.setText(state.filter.expectedSalary)
-                        // binding.filterSalaryInput.setSelection(state.filter.expectedSalary.count())
                     }
                     doNotUpdateTextFieldForNow = true
                 }
