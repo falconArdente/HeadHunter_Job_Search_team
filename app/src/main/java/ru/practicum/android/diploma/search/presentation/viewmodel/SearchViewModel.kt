@@ -163,6 +163,8 @@ class SearchViewModel(
     fun searchWithDebounce(text: String?) {
         if (text == latestSearchText) return
         if (text?.isBlank() == true) {
+            autoSearchDelayJob?.cancel()
+            latestSearchText = text
             searchLiveData.postValue(SearchFragmentState.NoTextInInputEditText)
             isLastCapitalOfInputSearched = true
         } else {
