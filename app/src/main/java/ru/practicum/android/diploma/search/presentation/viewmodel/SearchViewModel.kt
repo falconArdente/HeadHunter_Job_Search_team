@@ -129,7 +129,8 @@ class SearchViewModel(
                             if (result.data!!.result!!.isNotEmpty()) {
                                 pagesCount = result.data.pages
                                 totalFound = result.data.foundVacancy
-                                if (currentPage == pagesCount - 1 || vacanciesList.count() == result.data.foundVacancy) {
+                                if (currentPage == pagesCount - 1 ||
+                                    vacanciesList.count() == result.data.foundVacancy) {
                                     vacanciesList.addAll(result.data.result!!)
                                     updateState(
                                         searchVacancy = vacanciesList.toList(),
