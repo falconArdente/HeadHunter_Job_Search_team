@@ -1,12 +1,11 @@
 package ru.practicum.android.diploma.filter.presentation
 
-import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -21,6 +20,7 @@ import ru.practicum.android.diploma.search.ui.SearchRepeatHandler
 import ru.practicum.android.diploma.utils.debounce
 
 private const val SALARY_ITEMS_DEBOUNCE_DELAY = 100L
+private const val SALARY_TEXT_DEBOUNCE_DELAY = 500L
 
 class FilterSettingsFragment : Fragment() {
     private var _binding: FragmentFilterSettingsBinding? = null
@@ -30,6 +30,7 @@ class FilterSettingsFragment : Fragment() {
     private var previousCheckBoxValue = false
     private var salaryGotFocused = false
     private var checkBoxDebounced: ((Boolean) -> Unit)? = null
+    private var salaryTextDebounced: ((String) -> Unit)? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -52,6 +53,12 @@ class FilterSettingsFragment : Fragment() {
                 viewModel.changeHideNoSalary(doHideNoSalaryVacs)
                 previousCheckBoxValue = doHideNoSalaryVacs
             }
+        }
+
+        salaryTextDebounced = debounce(
+            SALARY_TEXT_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, true
+        ) { salary ->
+            setSalary(salary)
         }
     }
 
@@ -104,39 +111,33 @@ class FilterSettingsFragment : Fragment() {
     }
 
     private fun setTextActions() {
-        binding.filterSalaryInput.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                setSalary(binding.filterSalaryInput.text.toString())
-                val inputManager =
-                    requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                inputManager.hideSoftInputFromWindow(binding.filterSalaryInput.windowToken, 0)
+        val salaryTextWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
             }
-            false
-        }
-        binding.filterSalaryInput.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                salaryGotFocused = true
-                binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Blue))
-            } else {
-                salaryGotFocused = false
-                if (binding.filterSalaryInput.text.isNullOrEmpty()) {
-                    binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Gray_OR_White))
-                } else {
-                    setSalary(binding.filterSalaryInput.text.toString())
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (s.isNullOrEmpty()) {
+                    binding.filterSalaryCross.visibility = View.GONE
                     binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Black))
+                    if (binding.filterSalaryInput.hasFocus()) {
+                        binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Blue))
+                    }
+                } else {
+                    binding.filterSalaryCross.visibility = View.VISIBLE
                 }
+                salaryTextDebounced?.invoke(s.toString())
             }
         }
+
+        binding.filterSalaryInput.addTextChangedListener(salaryTextWatcher)
+
         binding.filterSalaryInput.doOnTextChanged { text, _, _, _ ->
-            if (text.isNullOrEmpty()) {
-                binding.filterSalaryCross.visibility = View.GONE
-                binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Black))
-                if (binding.filterSalaryInput.hasFocus()) {
-                    binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Blue))
-                }
-            } else {
-                binding.filterSalaryCross.visibility = View.VISIBLE
-            }
+
         }
     }
 
@@ -165,6 +166,7 @@ class FilterSettingsFragment : Fragment() {
                     binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Gray_OR_White))
                 } else {
                     binding.filterSalaryInput.setText(state.filter.expectedSalary)
+                    binding.filterSalaryInput.setSelection(state.filter.expectedSalary.count())
                     binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Black))
                 }
 
