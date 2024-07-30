@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -116,14 +115,21 @@ class FilterSettingsFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s.isNullOrEmpty()) {
-                    binding.filterSalaryCross.visibility = View.GONE
-                    binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Black))
-                    if (binding.filterSalaryInput.hasFocus()) {
-                        binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Blue))
+                if (binding.filterSalaryInput.hasFocus()) {
+                    binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Blue))
+                    if (s.isNullOrEmpty()) {
+                        binding.filterSalaryCross.visibility = View.GONE
+                    } else {
+                        binding.filterSalaryCross.visibility = View.VISIBLE
                     }
                 } else {
-                    binding.filterSalaryCross.visibility = View.VISIBLE
+                    if (s.isNullOrEmpty()) {
+                        binding.filterSalaryCross.visibility = View.GONE
+                        binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Gray_OR_White))
+                    } else {
+                        binding.filterSalaryCross.visibility = View.VISIBLE
+                        binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Black))
+                    }
                 }
             }
 
@@ -133,10 +139,6 @@ class FilterSettingsFragment : Fragment() {
         }
 
         binding.filterSalaryInput.addTextChangedListener(salaryTextWatcher)
-
-        binding.filterSalaryInput.doOnTextChanged { text, _, _, _ ->
-
-        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -165,7 +167,6 @@ class FilterSettingsFragment : Fragment() {
                 } else {
                     binding.filterSalaryInput.setText(state.filter.expectedSalary)
                     binding.filterSalaryInput.setSelection(state.filter.expectedSalary.count())
-                    binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Black))
                 }
 
                 if (state.filter.country?.countryName.isNullOrEmpty()) {
