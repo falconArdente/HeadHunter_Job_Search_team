@@ -97,6 +97,7 @@ class SearchJobFragment : Fragment() {
             progress = false,
             progressMini = false
         )
+        if (searchState.isFirstPage) binding.recyclerViewSearch.scrollToPosition(0)
         adapter.updateList(searchState.searchVacancy)
         setBlueButtonText(searchState)
     }

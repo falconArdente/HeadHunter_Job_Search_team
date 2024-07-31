@@ -6,7 +6,8 @@ sealed class SearchFragmentState {
     data class SearchVacancy(
         val searchVacancy: List<Vacancy>,
         val totalFoundVacancy: Int,
-        val isLastPage: Boolean
+        val isLastPage: Boolean,
+        val isFirstPage: Boolean
     ) : SearchFragmentState()
 
     data class ServerError(
