@@ -36,7 +36,7 @@ class FilterSettingsViewModel(
             temporaryFilter = asyncTemporaryFilter.await()
             filterForSearch = asyncFilterForSearch.await()
             filterToDisplay = compareBasedFilter(tempFilter = temporaryFilter, searchFilter = filterForSearch)
-            checkFilterExists(filterToDisplay)
+            calculateApplyClearStateAndSend(filterToDisplay)
         }
     }
 
@@ -46,11 +46,7 @@ class FilterSettingsViewModel(
             area = tempFilter.area ?: searchFilter.area,
             industry = tempFilter.industry ?: searchFilter.industry,
             expectedSalary = tempFilter.expectedSalary ?: searchFilter.expectedSalary,
-            hideNoSalaryItems = if (tempFilter.hideNoSalaryItems == null) {
-                searchFilter.hideNoSalaryItems
-            } else {
-                tempFilter.hideNoSalaryItems
-            }
+            hideNoSalaryItems = tempFilter.hideNoSalaryItems ?: searchFilter.hideNoSalaryItems
         )
     }
 
@@ -60,7 +56,6 @@ class FilterSettingsViewModel(
         jobStorage = viewModelScope.launch(Dispatchers.IO) {
             filterStorage.saveAllFilterParameters(filterToDisplay)
             filterStorage.clearAllSavedParameters()
-            updateAllFiltersInfo()
         }
     }
 
@@ -72,7 +67,6 @@ class FilterSettingsViewModel(
     fun resetFilterSettings() {
         jobStorage?.cancel()
         jobStorage = viewModelScope.launch(Dispatchers.IO) {
-            filterStorage.clearAllFilterParameters()
             resetFilter()
             updateAllFiltersInfo()
         }
@@ -130,10 +124,11 @@ class FilterSettingsViewModel(
         updateAllFiltersInfo()
     }
 
-    private fun checkFilterExists(filterToShow: FilterGeneral?) {
+    private fun calculateApplyClearStateAndSend(filterToSend: FilterGeneral?) {
         val isActiveApply = filterToDisplay != filterForSearch
-        val isActiveReset = filterToDisplay != FilterGeneral()
-        if (filterToShow == null) {
+        val isActiveReset =
+            filterToDisplay != FilterGeneral() && filterToDisplay != FilterGeneral(hideNoSalaryItems = false)
+        if (filterToSend == null) {
             filterState.postValue(
                 (filterState.value as FilterSettingsState.Data).copy(
                     isActiveApply = isActiveApply,
@@ -143,7 +138,7 @@ class FilterSettingsViewModel(
         } else {
             filterState.postValue(
                 FilterSettingsState.Data(
-                    filter = filterToShow,
+                    filter = filterToSend,
                     isActiveApply = isActiveApply,
                     isActiveReset = isActiveReset
                 )

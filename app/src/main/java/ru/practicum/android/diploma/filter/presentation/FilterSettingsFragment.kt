@@ -1,14 +1,12 @@
 package ru.practicum.android.diploma.filter.presentation
 
-import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -30,6 +28,8 @@ class FilterSettingsFragment : Fragment() {
     private var previousCheckBoxValue = false
     private var salaryGotFocused = false
     private var checkBoxDebounced: ((Boolean) -> Unit)? = null
+    private var salaryTextDebounced: ((String) -> Unit)? = null
+    private var doNotUpdateTextFieldForNow = false
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,6 +41,7 @@ class FilterSettingsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        doNotUpdateTextFieldForNow = false
         viewModel.updateAllFiltersInfo()
     }
 
@@ -52,6 +53,12 @@ class FilterSettingsFragment : Fragment() {
                 viewModel.changeHideNoSalary(doHideNoSalaryVacs)
                 previousCheckBoxValue = doHideNoSalaryVacs
             }
+        }
+
+        salaryTextDebounced = debounce(
+            SALARY_ITEMS_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, true
+        ) { salary ->
+            setSalary(salary)
         }
     }
 
@@ -75,6 +82,9 @@ class FilterSettingsFragment : Fragment() {
             viewModel.resetIndustry()
         }
         binding.filterResetButton.setOnClickListener {
+            doNotUpdateTextFieldForNow = false
+            binding.filterDontShowWithoutSalaryCheckBox.isChecked = false
+            binding.filterDontShowWithoutSalaryCheckBox.isEnabled = false
             viewModel.resetFilterSettings()
         }
 
@@ -86,6 +96,11 @@ class FilterSettingsFragment : Fragment() {
         binding.filterSalaryCross.setOnClickListener {
             viewModel.changeSalary(String())
             binding.filterSalaryInput.setText(String())
+        }
+
+        binding.filterDontShowWithoutSalaryCheckBox.setOnClickListener {
+            if (salaryGotFocused) setSalary(binding.filterSalaryInput.text.toString())
+            checkBoxDebounced?.invoke(binding.filterDontShowWithoutSalaryCheckBox.isChecked)
         }
     }
 
@@ -104,40 +119,35 @@ class FilterSettingsFragment : Fragment() {
     }
 
     private fun setTextActions() {
-        binding.filterSalaryInput.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                setSalary(binding.filterSalaryInput.text.toString())
-                val inputManager =
-                    requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                inputManager.hideSoftInputFromWindow(binding.filterSalaryInput.windowToken, 0)
+        val salaryTextWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                Unit
             }
-            false
-        }
-        binding.filterSalaryInput.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                salaryGotFocused = true
-                binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Blue))
-            } else {
-                salaryGotFocused = false
-                if (binding.filterSalaryInput.text.isNullOrEmpty()) {
-                    binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Gray_OR_White))
-                } else {
-                    setSalary(binding.filterSalaryInput.text.toString())
-                    binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Black))
-                }
-            }
-        }
-        binding.filterSalaryInput.doOnTextChanged { text, _, _, _ ->
-            if (text.isNullOrEmpty()) {
-                binding.filterSalaryCross.visibility = View.GONE
-                binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Black))
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (binding.filterSalaryInput.hasFocus()) {
                     binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Blue))
+                    if (s.isNullOrEmpty()) {
+                        binding.filterSalaryCross.visibility = View.GONE
+                    } else {
+                        binding.filterSalaryCross.visibility = View.VISIBLE
+                    }
+                } else {
+                    if (s.isNullOrEmpty()) {
+                        binding.filterSalaryCross.visibility = View.GONE
+                        binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Gray_OR_White))
+                    } else {
+                        binding.filterSalaryCross.visibility = View.VISIBLE
+                        binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Black))
+                    }
                 }
-            } else {
-                binding.filterSalaryCross.visibility = View.VISIBLE
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                salaryTextDebounced?.invoke(s.toString())
             }
         }
+        binding.filterSalaryInput.addTextChangedListener(salaryTextWatcher)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -148,10 +158,7 @@ class FilterSettingsFragment : Fragment() {
         setClicks()
         setTextActions()
         initiateDebounce()
-        binding.filterDontShowWithoutSalaryCheckBox.setOnCheckedChangeListener { _, isChecked ->
-            if (salaryGotFocused) setSalary(binding.filterSalaryInput.text.toString())
-            checkBoxDebounced?.invoke(isChecked)
-        }
+
     }
 
     private fun render(state: FilterSettingsState) {
@@ -159,15 +166,18 @@ class FilterSettingsFragment : Fragment() {
             is FilterSettingsState.Data -> {
                 binding.filterApplyButton.isVisible = state.isActiveApply
                 binding.filterResetButton.isVisible = state.isActiveReset
-                binding.filterDontShowWithoutSalaryCheckBox.isChecked = state.filter.hideNoSalaryItems
-                if (state.filter.expectedSalary.isNullOrEmpty()) {
-                    binding.filterSalaryInput.text.clear()
-                    binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Gray_OR_White))
-                } else {
-                    binding.filterSalaryInput.setText(state.filter.expectedSalary)
-                    binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Black))
+                if (state.filter.hideNoSalaryItems != null) {
+                    binding.filterDontShowWithoutSalaryCheckBox.isChecked =
+                        state.filter.hideNoSalaryItems == true
                 }
-
+                if (!doNotUpdateTextFieldForNow) {
+                    if (state.filter.expectedSalary.isNullOrEmpty()) {
+                        binding.filterSalaryInput.text.clear()
+                    } else {
+                        binding.filterSalaryInput.setText(state.filter.expectedSalary)
+                    }
+                    doNotUpdateTextFieldForNow = true
+                }
                 if (state.filter.country?.countryName.isNullOrEmpty()) {
                     binding.filterWorkPlaceInactive.visibility = View.VISIBLE
                     binding.filterWorkPlaceActive.visibility = View.GONE
@@ -193,6 +203,7 @@ class FilterSettingsFragment : Fragment() {
                     binding.filterIndustryActive.visibility = View.VISIBLE
                     binding.filterIndustryValue.text = state.filter.industry!!.industryName
                 }
+                binding.filterDontShowWithoutSalaryCheckBox.isEnabled = true
             }
 
             else -> {

@@ -25,7 +25,8 @@ class FilterStorageRepositoryImpl(private val filterStorage: FilterStorage) :
         val finalFilterSaved = filterStorage.getAllFinalFilterParameters()
         return (finalFilterSaved.country != null || finalFilterSaved.area != null
             || finalFilterSaved.industry != null || finalFilterSaved.expectedSalary != null
-            || finalFilterSaved.hideNoSalaryItems)
+            || finalFilterSaved.hideNoSalaryItems != null
+            && finalFilterSaved.hideNoSalaryItems != false)
     }
 
     override fun saveArea(area: AreaFilter?) {
