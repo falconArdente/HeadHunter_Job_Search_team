@@ -97,6 +97,11 @@ class FilterSettingsFragment : Fragment() {
             viewModel.changeSalary(String())
             binding.filterSalaryInput.setText(String())
         }
+
+        binding.filterDontShowWithoutSalaryCheckBox.setOnClickListener {
+            if (salaryGotFocused) setSalary(binding.filterSalaryInput.text.toString())
+            checkBoxDebounced?.invoke(binding.filterDontShowWithoutSalaryCheckBox.isChecked)
+        }
     }
 
     private fun setSalary(salary: String) {
@@ -153,10 +158,7 @@ class FilterSettingsFragment : Fragment() {
         setClicks()
         setTextActions()
         initiateDebounce()
-        binding.filterDontShowWithoutSalaryCheckBox.setOnCheckedChangeListener { _, isChecked ->
-            if (salaryGotFocused) setSalary(binding.filterSalaryInput.text.toString())
-            checkBoxDebounced?.invoke(isChecked)
-        }
+
     }
 
     private fun render(state: FilterSettingsState) {
