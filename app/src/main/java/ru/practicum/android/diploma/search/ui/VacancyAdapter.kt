@@ -71,9 +71,9 @@ class VacancyAdapter(
 
     fun removeLastItem(currentVacancyList: List<Vacancy>, hideProgressbarFlag: Boolean) {
         if (vacancyList.isNotEmpty() && getItemViewType(vacancyList.size) == TYPE_PROGRESS_BAR) {
-            notifyItemRemoved(vacancyList.size)
             hideProgressBar = hideProgressbarFlag
             vacancyList = currentVacancyList
+            notifyItemRemoved(vacancyList.size)
         }
     }
 
