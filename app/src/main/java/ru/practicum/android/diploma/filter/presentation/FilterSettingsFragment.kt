@@ -164,8 +164,10 @@ class FilterSettingsFragment : Fragment() {
             is FilterSettingsState.Data -> {
                 binding.filterApplyButton.isVisible = state.isActiveApply
                 binding.filterResetButton.isVisible = state.isActiveReset
-                if (state.filter.hideNoSalaryItems != null) binding.filterDontShowWithoutSalaryCheckBox.isChecked =
-                    state.filter.hideNoSalaryItems == true
+                if (state.filter.hideNoSalaryItems != null) {
+                    binding.filterDontShowWithoutSalaryCheckBox.isChecked =
+                        state.filter.hideNoSalaryItems == true
+                }
                 if (!doNotUpdateTextFieldForNow) {
                     if (state.filter.expectedSalary.isNullOrEmpty()) {
                         binding.filterSalaryInput.text.clear()
