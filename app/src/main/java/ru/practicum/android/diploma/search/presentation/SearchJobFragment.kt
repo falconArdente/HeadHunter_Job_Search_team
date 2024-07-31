@@ -303,7 +303,8 @@ class SearchJobFragment : Fragment() {
                 super.onScrolled(recyclerView, dx, dy)
                 if (dy > 0) {
                     val pos =
-                        (binding.recyclerViewSearch.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
+                        (binding.recyclerViewSearch.layoutManager as LinearLayoutManager)
+                            .findLastCompletelyVisibleItemPosition()
                     val itemsCount = adapter.itemCount
                     if (pos >= itemsCount - 1) {
                         binding.recyclerViewSearch.smoothScrollToPosition(adapter.itemCount)
