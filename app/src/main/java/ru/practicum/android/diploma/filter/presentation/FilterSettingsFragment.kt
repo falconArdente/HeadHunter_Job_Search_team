@@ -25,7 +25,6 @@ class FilterSettingsFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel by viewModel<FilterSettingsViewModel>()
     private var previousSalaryText = String()
-    private var previousCheckBoxValue = false
     private var salaryGotFocused = false
     private var checkBoxDebounced: ((Boolean) -> Unit)? = null
     private var salaryTextDebounced: ((String) -> Unit)? = null
@@ -49,10 +48,7 @@ class FilterSettingsFragment : Fragment() {
         checkBoxDebounced = debounce(
             SALARY_ITEMS_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, true
         ) { doHideNoSalaryVacs ->
-            if (doHideNoSalaryVacs != previousCheckBoxValue) {
-                viewModel.changeHideNoSalary(doHideNoSalaryVacs)
-                previousCheckBoxValue = doHideNoSalaryVacs
-            }
+            viewModel.changeHideNoSalary(doHideNoSalaryVacs)
         }
 
         salaryTextDebounced = debounce(
@@ -169,8 +165,6 @@ class FilterSettingsFragment : Fragment() {
                 if (state.filter.hideNoSalaryItems != null) {
                     binding.filterDontShowWithoutSalaryCheckBox.isChecked =
                         state.filter.hideNoSalaryItems == true
-                    previousCheckBoxValue =
-                        binding.filterDontShowWithoutSalaryCheckBox.isChecked
                 }
                 if (!doNotUpdateTextFieldForNow) {
                     if (state.filter.expectedSalary.isNullOrEmpty()) {
