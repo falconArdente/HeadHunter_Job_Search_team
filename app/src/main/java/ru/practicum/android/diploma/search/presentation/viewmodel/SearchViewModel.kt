@@ -119,6 +119,7 @@ class SearchViewModel(
             interactor
                 .searchVacancy(text, parametersForSearch, PER_PAGE, currentPage)
                 .collect { vacancy ->
+
                     when {
                         vacancy.result!!.isNotEmpty() -> {
                             pagesCount = vacancy.pages
@@ -192,6 +193,7 @@ class SearchViewModel(
     }
 
     fun onLastItemReached() {
+        if (searchJob?.isActive == true) return
         try {
             if (currentPage < pagesCount - 1 && searchJob?.isActive == false) {
                 currentPage++
@@ -210,4 +212,5 @@ class SearchViewModel(
     fun stopAutoSearch() {
         autoSearchDelayJob?.cancel()
     }
+
 }

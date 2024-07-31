@@ -90,7 +90,6 @@ class SearchJobFragment : Fragment() {
     }
 
     private fun renderSearchVacancy(searchState: SearchFragmentState.SearchVacancy) {
-        adapter.updateList(searchState.searchVacancy)
         setVisible(
             placeholderText = false,
             list = true,
@@ -98,6 +97,7 @@ class SearchJobFragment : Fragment() {
             progress = false,
             progressMini = false
         )
+        adapter.updateList(searchState.searchVacancy)
         setBlueButtonText(searchState)
     }
 
@@ -218,6 +218,9 @@ class SearchJobFragment : Fragment() {
             searchJobsCountButton.isVisible = blueButton
             searchProgressBar.isVisible = progress
             searchMiniProgressBar.isVisible = progressMini
+            if (progressMini) {
+                recyclerViewSearch.smoothScrollToPosition(adapter.itemCount)
+            }
         }
     }
 
@@ -301,10 +304,9 @@ class SearchJobFragment : Fragment() {
                 if (dy > 0) {
                     val pos =
                         (binding.recyclerViewSearch.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-
                     val itemsCount = adapter.itemCount
                     if (pos >= itemsCount - 1) {
-                        viewModel.updateState(SearchFragmentState.LoadingNewPage)
+                        binding.recyclerViewSearch.smoothScrollToPosition(adapter.itemCount)
                         viewModel.onLastItemReached()
                     }
                 }

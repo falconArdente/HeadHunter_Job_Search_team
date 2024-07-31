@@ -11,7 +11,7 @@ private const val TYPE_PROGRESS_BAR = 2
 
 class VacancyAdapter(
     vacancyList: List<Vacancy>,
-    private val onVacancyClickListener: SearchRecyclerViewEvent,
+    private val onVacancyClickListener: SearchRecyclerViewEvent
 ) : RecyclerView.Adapter<VacancyViewHolder>() {
 
     var vacancyList = vacancyList
