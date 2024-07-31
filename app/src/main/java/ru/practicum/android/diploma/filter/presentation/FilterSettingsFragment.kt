@@ -83,6 +83,8 @@ class FilterSettingsFragment : Fragment() {
         }
         binding.filterResetButton.setOnClickListener {
             doNotUpdateTextFieldForNow = false
+            binding.filterDontShowWithoutSalaryCheckBox.isChecked = false
+            binding.filterDontShowWithoutSalaryCheckBox.isEnabled = false
             viewModel.resetFilterSettings()
         }
 
@@ -162,7 +164,8 @@ class FilterSettingsFragment : Fragment() {
             is FilterSettingsState.Data -> {
                 binding.filterApplyButton.isVisible = state.isActiveApply
                 binding.filterResetButton.isVisible = state.isActiveReset
-                binding.filterDontShowWithoutSalaryCheckBox.isChecked = state.filter.hideNoSalaryItems == true
+                if (state.filter.hideNoSalaryItems != null) binding.filterDontShowWithoutSalaryCheckBox.isChecked =
+                    state.filter.hideNoSalaryItems == true
                 if (!doNotUpdateTextFieldForNow) {
                     if (state.filter.expectedSalary.isNullOrEmpty()) {
                         binding.filterSalaryInput.text.clear()
@@ -196,6 +199,7 @@ class FilterSettingsFragment : Fragment() {
                     binding.filterIndustryActive.visibility = View.VISIBLE
                     binding.filterIndustryValue.text = state.filter.industry!!.industryName
                 }
+                binding.filterDontShowWithoutSalaryCheckBox.isEnabled = true
             }
 
             else -> {
