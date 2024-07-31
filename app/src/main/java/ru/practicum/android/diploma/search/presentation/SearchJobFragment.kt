@@ -97,9 +97,6 @@ class SearchJobFragment : Fragment() {
             progress = false,
             progressMini = false
         )
-        if (viewModel.currentPage == 0) {
-            adapter.updateList(emptyList())
-        }
         adapter.updateList(searchState.searchVacancy)
         setBlueButtonText(searchState)
     }
@@ -310,7 +307,6 @@ class SearchJobFragment : Fragment() {
                     val itemsCount = adapter.itemCount
                     if (pos >= itemsCount - 1) {
                         binding.recyclerViewSearch.smoothScrollToPosition(adapter.itemCount)
-                        //   binding.recyclerViewSearch.setPadding(0, 0, 0, resources.getDimensionPixelOffset(R.dimen.dp80))
                         viewModel.onLastItemReached()
                     }
                 }
