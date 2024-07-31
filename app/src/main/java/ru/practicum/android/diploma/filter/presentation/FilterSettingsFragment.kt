@@ -121,21 +121,12 @@ class FilterSettingsFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (binding.filterSalaryInput.hasFocus()) {
-                    binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Blue))
-                    if (s.isNullOrEmpty()) {
-                        binding.filterSalaryCross.visibility = View.GONE
-                    } else {
-                        binding.filterSalaryCross.visibility = View.VISIBLE
-                    }
+                if (s.isNullOrEmpty()) {
+                    binding.filterSalaryCross.visibility = View.GONE
+                    binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Gray_OR_White))
                 } else {
-                    if (s.isNullOrEmpty()) {
-                        binding.filterSalaryCross.visibility = View.GONE
-                        binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Gray_OR_White))
-                    } else {
-                        binding.filterSalaryCross.visibility = View.VISIBLE
-                        binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Black))
-                    }
+                    binding.filterSalaryCross.visibility = View.VISIBLE
+                    binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Black))
                 }
             }
 
@@ -144,6 +135,17 @@ class FilterSettingsFragment : Fragment() {
             }
         }
         binding.filterSalaryInput.addTextChangedListener(salaryTextWatcher)
+        binding.filterSalaryInput.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Blue))
+            } else {
+                if (binding.filterSalaryInput.text.toString().isEmpty()) {
+                    binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Gray_OR_White))
+                } else {
+                    binding.filterSalaryInputTitle.setTextColor(requireActivity().getColor(R.color.Black))
+                }
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
