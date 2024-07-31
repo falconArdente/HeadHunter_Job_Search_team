@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp20"
         android:layout_marginEnd="@dimen/dp4"
-        android:background="@drawable/icon_heart"
+        android:src="@drawable/icon_heart"
         app:layout_constraintEnd_toEndOf="@id/jobRightGuideline"
         app:layout_constraintTop_toTopOf="parent" />
 
