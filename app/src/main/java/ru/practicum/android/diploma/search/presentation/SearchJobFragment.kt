@@ -103,7 +103,6 @@ class SearchJobFragment : Fragment() {
     }
 
     private fun renderLoading() {
-        binding.searchMiniProgressBar.isVisible = true
         setVisible(
             placeholderText = false,
             list = false,

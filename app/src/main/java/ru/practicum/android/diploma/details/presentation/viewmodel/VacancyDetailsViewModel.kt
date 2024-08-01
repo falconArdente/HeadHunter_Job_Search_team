@@ -78,7 +78,7 @@ class VacancyDetailsViewModel(
     private suspend fun processFavoriteState(vacancyToCheck: VacancyDetails?) {
         detailsDbInteractor.isExistsVacancy(vacancyId.toInt()).collect {
             _stateLiveData.value = VacancyDetailsState.Favorite(it)
-            if (vacancyToCheck != null) detailsDbInteractor.insertVacancyWithCheck(vacancyToCheck)
+            if (vacancyToCheck != null && it) detailsDbInteractor.insertVacancyWithCheck(vacancyToCheck)
         }
     }
 
