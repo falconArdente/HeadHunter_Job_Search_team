@@ -41,7 +41,7 @@ class VacancyDetailsViewModel(
             val vacancyDetailsState = VacancyDetailsState.Content(searchResult.data)
             vacancyDetails = vacancyDetailsState.data
             _stateLiveData.value = vacancyDetailsState
-            processFavoriteState()
+            processFavoriteState(vacancyDetails)
         } else {
             when (searchResult) {
                 is Resource.InternetConnectionError -> {
@@ -52,7 +52,7 @@ class VacancyDetailsViewModel(
                     if (isVacancyInFavorites) {
                         detailsDbInteractor.getVacancyById(vacancyId.toInt()).collect { vacancyDetails ->
                             _stateLiveData.postValue(VacancyDetailsState.Content(vacancyDetails!!))
-                            processFavoriteState()
+                            processFavoriteState(null)
                         }
                     } else {
                         _stateLiveData.postValue(VacancyDetailsState.InternetConnectionError(searchResult.message!!))
@@ -75,9 +75,10 @@ class VacancyDetailsViewModel(
         }
     }
 
-    private suspend fun processFavoriteState() {
+    private suspend fun processFavoriteState(vacancyToCheck: VacancyDetails?) {
         detailsDbInteractor.isExistsVacancy(vacancyId.toInt()).collect {
             _stateLiveData.value = VacancyDetailsState.Favorite(it)
+            if (vacancyToCheck != null) detailsDbInteractor.insertVacancyWithCheck(vacancyToCheck)
         }
     }
 
