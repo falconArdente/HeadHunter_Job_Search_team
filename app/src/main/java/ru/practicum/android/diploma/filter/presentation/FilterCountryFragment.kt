@@ -21,7 +21,7 @@ class FilterCountryFragment : Fragment() {
 
     private val viewModelCountry: CountryFilterViewModel by viewModel<CountryFilterViewModel>()
 
-    private var adapter = FilterCountryAdapter(emptyList(), ::clickListenerFun)
+    private var adapter = FilterCountryAdapter(emptyList(), ::setItemOnClickListener)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentFilterWithRecyclerBinding.inflate(inflater, container, false)
@@ -32,33 +32,13 @@ class FilterCountryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.searchTitle.text = requireContext().getString(R.string.choice_country)
-        setViewVisibility()
+        setSearchViewVisibility()
 
         binding.backButtonFilterWithRecycler.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
 
-        viewModelCountry.stateLiveDataCountry.observe(viewLifecycleOwner) {
-            binding.searchPlaceholderImage.isVisible = it is AreaFilterState.Error
-            binding.searchPlaceholderText.isVisible = it is AreaFilterState.Error
-            binding.loadingProgressBar.isVisible = it is AreaFilterState.Loading
-            binding.recyclerViewFilter.isVisible = it is AreaFilterState.AreaContent
-
-            when (it) {
-                is AreaFilterState.AreaContent -> {
-                    adapter.updateList(it.listOfAreas)
-                    binding.recyclerViewFilter.layoutManager =
-                        LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-                    binding.recyclerViewFilter.adapter = adapter
-                }
-
-                is AreaFilterState.Error, is AreaFilterState.Empty -> {
-                    binding.searchPlaceholderText.text = requireContext().getString(R.string.server_error)
-                }
-
-                is AreaFilterState.Loading -> Unit
-            }
-        }
+        viewModelCountry.stateLiveDataCountry.observe(viewLifecycleOwner) { renderUiElements(it) }
 
         viewModelCountry.backEvent.observe(viewLifecycleOwner) {
             requireActivity().onBackPressedDispatcher.onBackPressed()
@@ -70,11 +50,44 @@ class FilterCountryFragment : Fragment() {
         _binding = null
     }
 
-    private fun clickListenerFun(country: AreaDetailsFilterItem) {
+    private fun renderUiElements(state: AreaFilterState) {
+        binding.searchPlaceholderImage.isVisible = state is AreaFilterState.Error ||
+            state is AreaFilterState.InternetConnectionError || state is AreaFilterState.Empty
+        binding.searchPlaceholderText.isVisible = state is AreaFilterState.Error ||
+            state is AreaFilterState.InternetConnectionError || state is AreaFilterState.Empty
+        binding.loadingProgressBar.isVisible = state is AreaFilterState.Loading
+        binding.recyclerViewFilter.isVisible = state is AreaFilterState.AreaContent
+        val state2 = state
+
+        when (state) {
+            is AreaFilterState.AreaContent -> {
+                adapter.updateList(state.listOfAreas)
+                binding.recyclerViewFilter.layoutManager =
+                    LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                binding.recyclerViewFilter.adapter = adapter
+            }
+
+            is AreaFilterState.Error, is AreaFilterState.Empty -> {
+                binding.searchPlaceholderImage.setImageResource(R.drawable.picture_flying_men)
+                binding.searchPlaceholderText.text =
+                    requireContext().getString(R.string.failed_to_receive_region_list)
+            }
+
+            is AreaFilterState.Loading -> Unit
+
+            is AreaFilterState.InternetConnectionError -> {
+                binding.searchPlaceholderImage.setBackgroundResource(0)
+                binding.searchPlaceholderImage.setImageResource(R.drawable.picture_funny_head)
+                binding.searchPlaceholderText.text = requireContext().getString(R.string.no_internet)
+            }
+        }
+    }
+
+    private fun setItemOnClickListener(country: AreaDetailsFilterItem) {
         viewModelCountry.saveCountryChoiceToFilter(country)
     }
 
-    private fun setViewVisibility() {
+    private fun setSearchViewVisibility() {
         binding.filterApplyButton.isVisible = false
         binding.filterInput.isVisible = false
         binding.filterInputIcon.isVisible = false

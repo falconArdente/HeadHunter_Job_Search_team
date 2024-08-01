@@ -8,8 +8,10 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.ActivityRootBinding
+import ru.practicum.android.diploma.search.ui.SearchRepeatHandler
 
-class RootActivity : AppCompatActivity() {
+class RootActivity : AppCompatActivity(), SearchRepeatHandler {
+    private var doRepeat: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityRootBinding.inflate(layoutInflater)
@@ -30,5 +32,13 @@ class RootActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun setRepeat(doRepeat: Boolean) {
+        this.doRepeat = doRepeat
+    }
+
+    override fun getRepeatBool(): Boolean {
+        return doRepeat
     }
 }

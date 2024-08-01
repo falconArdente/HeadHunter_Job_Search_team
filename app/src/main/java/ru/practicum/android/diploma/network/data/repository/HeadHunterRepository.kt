@@ -6,9 +6,6 @@ import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.details.domain.impl.VacancyDetailsRepository
 import ru.practicum.android.diploma.details.domain.model.VacancyDetails
-import ru.practicum.android.diploma.network.data.netapi.HeadHunterNetworkClient
-import ru.practicum.android.diploma.network.data.netapi.MAX_VACANCY_SUGGESTION_REQUEST_TEXT_LENGTH
-import ru.practicum.android.diploma.network.data.netapi.MIN_VACANCY_SUGGESTION_REQUEST_TEXT_LENGTH
 import ru.practicum.android.diploma.network.data.dto.HeadHunterRequest
 import ru.practicum.android.diploma.network.data.dto.linked.AreaDTO
 import ru.practicum.android.diploma.network.data.dto.linked.CountryDTO
@@ -25,6 +22,9 @@ import ru.practicum.android.diploma.network.data.dto.responses.VacancyByIdRespon
 import ru.practicum.android.diploma.network.data.dto.responses.VacancyListResponse
 import ru.practicum.android.diploma.network.data.dto.responses.VacancySuggestionsResponse
 import ru.practicum.android.diploma.network.data.mapper.VacancyDetailsMapper.mapToDomain
+import ru.practicum.android.diploma.network.data.netapi.HeadHunterNetworkClient
+import ru.practicum.android.diploma.network.data.netapi.MAX_VACANCY_SUGGESTION_REQUEST_TEXT_LENGTH
+import ru.practicum.android.diploma.network.data.netapi.MIN_VACANCY_SUGGESTION_REQUEST_TEXT_LENGTH
 import ru.practicum.android.diploma.search.domain.impl.SearchRepository
 import ru.practicum.android.diploma.utils.Resource
 
@@ -41,6 +41,7 @@ class HeadHunterRepository(private val client: HeadHunterNetworkClient, context:
         context.getString(R.string.net_vacancy_suggestions_request_text_length_error_message)
     private val vacancySearchErrorMessage = context.getString(R.string.net_vacancy_search_income_error_message)
     private val vacancyGetByIdErrorMessage = context.getString(R.string.net_vacancy_get_by_id_income_error_message)
+    private val timeoutErrorMessage = context.getString(R.string.net_timeout_error_message)
 
     override suspend fun getLocales(): Flow<Resource<List<Locale>>> = flow {
         val response = client.doRequest(HeadHunterRequest.Locales)
@@ -134,10 +135,10 @@ class HeadHunterRepository(private val client: HeadHunterNetworkClient, context:
                 perPage = perPage,
             )
         )
-        if (response.resultCode == Response.SUCCESS) {
-            emit(Resource.Success(response as VacancyListResponse))
-        } else {
-            emit(Resource.Error(vacancySearchErrorMessage))
+        when (response.resultCode) {
+            Response.SUCCESS -> emit(Resource.Success(response as VacancyListResponse))
+            Response.NO_INTERNET -> emit(Resource.InternetConnectionError(timeoutErrorMessage))
+            else -> emit(Resource.Error(vacancySearchErrorMessage))
         }
     }
 
@@ -150,6 +151,7 @@ class HeadHunterRepository(private val client: HeadHunterNetworkClient, context:
                     val data: VacancyByIdResponse = response as VacancyByIdResponse
                     emit(Resource.Success(data.mapToDomain()))
                 }
+
                 Response.NO_INTERNET -> emit(Resource.InternetConnectionError(vacancyGetByIdErrorMessage))
                 Response.NOT_FOUND -> emit(Resource.NotFoundError(vacancyGetByIdErrorMessage))
                 else -> emit(Resource.Error(vacancyGetByIdErrorMessage))

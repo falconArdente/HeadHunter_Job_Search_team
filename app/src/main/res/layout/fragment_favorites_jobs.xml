@@ -67,7 +67,6 @@
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/dp20"
         android:layout_marginBottom="@dimen/dp56"
-        android:background="@drawable/picture_checking_phone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="328:223"
         app:layout_constraintEnd_toEndOf="@id/favouritesRightGuideline"

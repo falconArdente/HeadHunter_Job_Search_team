@@ -5,13 +5,10 @@ import ru.practicum.android.diploma.filter.domain.impl.FilterStorageRepository
 import ru.practicum.android.diploma.filter.domain.model.AreaFilter
 import ru.practicum.android.diploma.filter.domain.model.CountryFilter
 import ru.practicum.android.diploma.filter.domain.model.FilterGeneral
-import ru.practicum.android.diploma.filter.domain.model.IndustryDetailsFilterItem
 import ru.practicum.android.diploma.filter.domain.model.IndustryFilter
 
 class FilterStorageRepositoryImpl(private val filterStorage: FilterStorage) :
     FilterStorageRepository {
-    private val finalFilterSaved = filterStorage.getAllFinalFilterParameters()
-    private var specificFilterSaved = filterStorage.getAllSavedParameter()
     override fun saveAllFilterParameters(filter: FilterGeneral) {
         filterStorage.saveFinalFilterParameters(filter)
     }
@@ -31,31 +28,33 @@ class FilterStorageRepositoryImpl(private val filterStorage: FilterStorage) :
             || finalFilterSaved.hideNoSalaryItems)
     }
 
-    override fun saveArea(area: AreaFilter) {
-        specificFilterSaved = specificFilterSaved.copy(area = area)
-        filterStorage.saveSpecificFilterParameters(specificFilterSaved)
+    override fun saveArea(area: AreaFilter?) {
+        val specificFilterSaved = filterStorage.getAllSavedParameter()
+        filterStorage.saveSpecificFilterParameters(specificFilterSaved.copy(area = area))
     }
 
-    override fun saveCountry(country: CountryFilter) {
-        specificFilterSaved = specificFilterSaved.copy(country = country)
-        filterStorage.saveSpecificFilterParameters(specificFilterSaved)
+    override fun saveCountry(country: CountryFilter?) {
+        val specificFilterSaved = filterStorage.getAllSavedParameter()
+        filterStorage.saveSpecificFilterParameters(specificFilterSaved.copy(country = country))
     }
 
-    override fun saveIndustry(industry: IndustryDetailsFilterItem) {
-        specificFilterSaved = specificFilterSaved.copy(
-            industry = IndustryFilter(industryId = industry.industryId, industryName = industry.industryName)
-        )
-        filterStorage.saveSpecificFilterParameters(specificFilterSaved)
+    override fun saveIndustry(industry: IndustryFilter?) {
+        val specificFilterSaved = filterStorage.getAllSavedParameter()
+        filterStorage.saveSpecificFilterParameters(specificFilterSaved.copy(industry = industry))
     }
 
     override fun saveExpectedSalary(salaryAmount: String) {
-        specificFilterSaved = specificFilterSaved.copy(expectedSalary = salaryAmount)
-        filterStorage.saveSpecificFilterParameters(specificFilterSaved)
+        val specificFilterSaved = filterStorage.getAllSavedParameter()
+        filterStorage.saveSpecificFilterParameters(specificFilterSaved.copy(expectedSalary = salaryAmount))
     }
 
     override fun saveHideNoSalaryItems(hideNoSalaryItems: Boolean) {
-        specificFilterSaved = specificFilterSaved.copy(hideNoSalaryItems = hideNoSalaryItems)
-        filterStorage.saveSpecificFilterParameters(specificFilterSaved)
+        val specificFilterSaved = filterStorage.getAllSavedParameter()
+        filterStorage.saveSpecificFilterParameters(specificFilterSaved.copy(hideNoSalaryItems = hideNoSalaryItems))
 
+    }
+
+    override fun clearAllSavedParameters() {
+        filterStorage.clearAllSavedParameters()
     }
 }

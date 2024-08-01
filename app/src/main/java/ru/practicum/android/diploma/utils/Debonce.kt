@@ -8,15 +8,15 @@ import kotlinx.coroutines.launch
 fun <T> debounce(
     delayMillis: Long,
     coroutineScope: CoroutineScope,
-    useNewAction: Boolean,
+    restartJobInstance: Boolean,
     action: (T) -> Unit
 ): (T) -> Unit {
     var debounceJob: Job? = null
     return { param: T ->
-        if (useNewAction) {
+        if (restartJobInstance) {
             debounceJob?.cancel()
         }
-        if (debounceJob?.isCompleted != false || useNewAction) {
+        if (debounceJob?.isCompleted != false || restartJobInstance) {
             debounceJob = coroutineScope.launch {
                 delay(delayMillis)
                 action(param)

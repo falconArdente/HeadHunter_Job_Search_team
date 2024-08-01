@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.search.presentation.viewmodel
 
+import android.database.CursorIndexOutOfBoundsException
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,10 +14,12 @@ import ru.practicum.android.diploma.search.domain.api.SearchInteractor
 import ru.practicum.android.diploma.search.domain.model.SearchParameters
 import ru.practicum.android.diploma.search.domain.model.Vacancy
 import ru.practicum.android.diploma.search.presentation.state.SearchFragmentState
+import ru.practicum.android.diploma.utils.debounce
 
 private const val SEARCH_DEBOUNCE_DELAY = 2000L
 private const val CLICK_DEBOUNCE_DELAY = 1000L
 private const val PER_PAGE = 20
+private const val SUGGESTIONS_DEBOUNCE_DELAY = 300L
 
 class SearchViewModel(
     private val interactor: SearchInteractor,
@@ -26,21 +29,29 @@ class SearchViewModel(
     private val searchLiveData =
         MutableLiveData<SearchFragmentState>(SearchFragmentState.NoTextInInputEditText)
     private var latestSearchText: String? = null
+    private var autoSearchDelayJob: Job? = null
     private var searchJob: Job? = null
+    private var suggestionsIncomeJob: Job? = null
     private var isClickAllowed = true
     private var suggestionsList = MutableLiveData<List<String>>(emptyList())
     val suggestionsLivaData: LiveData<List<String>> = suggestionsList
     private val filterIsOn = MutableLiveData(false)
     val filterStateToObserve: LiveData<Boolean> = filterIsOn
     private var parametersForSearch: SearchParameters? = null
-
     var currentPage = 0
-    private var maxPages = 0
+    private var pagesCount = 0
     private val vacanciesList = mutableListOf<Vacancy>()
     private var totalFound = 0
+    private var isLastCapitalOfInputSearched = false
+    private var suggestionsRequestDebounced: ((String) -> Unit)? = null
+    private var lastSuggestionsRequestText = String()
 
     init {
-        updateState(SearchFragmentState.NoTextInInputEditText)
+        suggestionsRequestDebounced = debounce(
+            SUGGESTIONS_DEBOUNCE_DELAY, viewModelScope, true
+        ) { textForSuggestions ->
+            requestSuggestionsForSearch(textForSuggestions)
+        }
     }
 
     fun checkFilterStatus() {
@@ -49,7 +60,14 @@ class SearchViewModel(
     }
 
     fun getSuggestionsForSearch(textForSuggests: String) {
-        viewModelScope.launch {
+        if (textForSuggests == lastSuggestionsRequestText) return
+        if (suggestionsRequestDebounced != null) suggestionsRequestDebounced?.invoke(textForSuggests)
+    }
+
+    private fun requestSuggestionsForSearch(textForSuggests: String) {
+        suggestionsIncomeJob?.cancel()
+        lastSuggestionsRequestText = textForSuggests
+        suggestionsIncomeJob = viewModelScope.launch {
             getSuggestsUseCase.execute(textForSuggests)
                 .collect {
                     suggestionsList.postValue(it)
@@ -62,60 +80,100 @@ class SearchViewModel(
         searchLiveData.postValue(state)
     }
 
-    private fun updateState(searchVacancy: List<Vacancy>, totalFoundVacancy: Int) {
+    private fun updateState(searchVacancy: List<Vacancy>, totalFoundVacancy: Int, isLastPage: Boolean) {
         searchLiveData.postValue(
             when (searchLiveData.value) {
                 is SearchFragmentState.SearchVacancy -> {
                     (searchLiveData.value as SearchFragmentState.SearchVacancy)
-                        .copy(searchVacancy = searchVacancy, totalFoundVacancy = totalFoundVacancy)
+                        .copy(
+                            searchVacancy = searchVacancy,
+                            totalFoundVacancy = totalFoundVacancy,
+                            isLastPage = isLastPage
+                        )
                 }
 
                 else -> {
                     SearchFragmentState.SearchVacancy(
                         searchVacancy = searchVacancy,
-                        totalFoundVacancy = totalFoundVacancy
+                        totalFoundVacancy = totalFoundVacancy,
+                        isLastPage = isLastPage
                     )
                 }
             }
         )
     }
 
-    private val searchJobDetails: Job? = null
-    private fun searchResult(text: String) {
-        searchJobDetails?.cancel()
-        updateState(SearchFragmentState.Loading)
-        searchJobDetails != viewModelScope.launch {
+    private fun showProgressIndicator(page: Int) {
+        if (page == 0) {
+            updateState(SearchFragmentState.Loading)
+        } else {
+            updateState(SearchFragmentState.LoadingNewPage)
+        }
+    }
+
+    private fun searchResult(text: String?) {
+        if (text.isNullOrBlank()) return
+        searchJob?.cancel()
+        showProgressIndicator(currentPage)
+        searchJob = viewModelScope.launch {
             interactor
                 .searchVacancy(text, parametersForSearch, PER_PAGE, currentPage)
                 .collect { vacancy ->
-                    if (vacancy.result!!.isNotEmpty()) {
-                        maxPages = vacancy.pages
-                        if (currentPage == maxPages || vacanciesList.count() == vacancy.foundVacancy) {
-                            vacanciesList.addAll(vacancy.result)
-                            updateState(searchVacancy = vacanciesList, totalFoundVacancy = totalFound)
+                    when {
+                        vacancy.result!!.isNotEmpty() -> {
+                            pagesCount = vacancy.pages
+                            totalFound = vacancy.foundVacancy
+                            if (currentPage == pagesCount - 1 || vacanciesList.count() == vacancy.foundVacancy) {
+                                vacanciesList.addAll(vacancy.result)
+                                updateState(
+                                    searchVacancy = vacanciesList,
+                                    totalFoundVacancy = vacancy.foundVacancy,
+                                    isLastPage = true
+                                )
+                            } else {
+                                vacanciesList += vacancy.result
+                                updateState(
+                                    searchVacancy = vacanciesList,
+                                    totalFoundVacancy = vacancy.foundVacancy,
+                                    isLastPage = pagesCount == 1
+                                )
+                            }
                         }
-                        if (currentPage < maxPages) {
-                            vacanciesList += vacancy.result
+
+                        vacancy.errorMessage!!.isNotEmpty() -> {
+                            updateState(SearchFragmentState.ServerError(vacancy.errorMessage))
                         }
-                        totalFound = vacancy.foundVacancy
-                        updateState(searchVacancy = vacanciesList, totalFoundVacancy = totalFound)
-                    } else if (vacancy.errorMessage!!.isNotEmpty()) {
-                        updateState(SearchFragmentState.ServerError)
-                    } else if (vacancy.errorMessage.isNullOrEmpty()) {
-                        updateState(SearchFragmentState.NoResult)
+
+                        else -> updateState(SearchFragmentState.NoResult)
                     }
                 }
         }
     }
 
-    fun searchWithDebounce(text: String) {
-        //  currentPage = 0
+    fun searchImmidiently(text: String) {
         vacanciesList.clear()
-        latestSearchText = text
-        searchJob?.cancel()
-        searchJob = viewModelScope.launch {
-            delay(SEARCH_DEBOUNCE_DELAY)
-            searchResult(text)
+        autoSearchDelayJob?.cancel()
+        searchResult(text)
+    }
+
+    fun repeatSearch() {
+        if (!latestSearchText.isNullOrEmpty()) searchImmidiently(latestSearchText!!)
+    }
+
+    fun searchWithDebounce(text: String?) {
+        if (text == latestSearchText) return
+        if (text?.isBlank() == true) {
+            searchLiveData.postValue(SearchFragmentState.NoTextInInputEditText)
+            isLastCapitalOfInputSearched = true
+        } else {
+            isLastCapitalOfInputSearched = false
+            vacanciesList.clear()
+            latestSearchText = text
+            autoSearchDelayJob?.cancel()
+            autoSearchDelayJob = viewModelScope.launch {
+                delay(SEARCH_DEBOUNCE_DELAY)
+                searchResult(text)
+            }
         }
     }
 
@@ -132,16 +190,22 @@ class SearchViewModel(
     }
 
     fun onLastItemReached() {
-        if (currentPage == maxPages) {
-            updateState(SearchFragmentState.SearchVacancy(vacanciesList, totalFound))
-        }
-        if (currentPage < maxPages) {
-            currentPage++
-        }
-        if (currentPage < maxPages) {
-            updateState(SearchFragmentState.Loading)
-            searchResult(latestSearchText!!)
+        try {
+            if (currentPage < pagesCount - 1 && searchJob?.isActive == false) {
+                currentPage++
+                autoSearchDelayJob?.cancel()
+                autoSearchDelayJob = viewModelScope.launch {
+                    searchResult(latestSearchText!!)
+                }
+            } else {
+                updateState(SearchFragmentState.SearchVacancy(vacanciesList, totalFound, isLastPage = true))
+            }
+        } catch (e: CursorIndexOutOfBoundsException) {
+            updateState(SearchFragmentState.ServerError(e.message.toString()))
         }
     }
-}
 
+    fun stopAutoSearch() {
+        autoSearchDelayJob?.cancel()
+    }
+}
