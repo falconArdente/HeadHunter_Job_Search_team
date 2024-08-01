@@ -42,7 +42,7 @@ class FavoritesJobsFragment : Fragment() {
         adapter = VacancyDetailsRecyclerAdapter(emptyList(), clickerForItem())
         binding.favouritesJobsList.adapter = adapter
         binding.favouritesJobsList.layoutManager =
-            LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
+            LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, true)
         viewModel.stateToObserve.observe(viewLifecycleOwner) { render(it) }
     }
 
