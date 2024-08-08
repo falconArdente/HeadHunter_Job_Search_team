@@ -42,7 +42,7 @@ class FavoritesJobsFragment : Fragment() {
         adapter = VacancyDetailsRecyclerAdapter(emptyList(), clickerForItem())
         binding.favouritesJobsList.adapter = adapter
         binding.favouritesJobsList.layoutManager =
-            LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
+            LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, true)
         viewModel.stateToObserve.observe(viewLifecycleOwner) { render(it) }
     }
 
@@ -53,7 +53,7 @@ class FavoritesJobsFragment : Fragment() {
                     favouritesPlaceholderImage.setImageDrawable(
                         AppCompatResources.getDrawable(
                             requireContext(),
-                            R.drawable.picture_angry_cat
+                            R.drawable.picture_checking_phone
                         )
                     )
                     favouritesPlaceholderText.setText(R.string.list_is_empty)

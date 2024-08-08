@@ -80,7 +80,12 @@ class SearchViewModel(
         searchLiveData.postValue(state)
     }
 
-    private fun updateState(searchVacancy: List<Vacancy>, totalFoundVacancy: Int, isLastPage: Boolean) {
+    private fun updateState(
+        searchVacancy: List<Vacancy>,
+        totalFoundVacancy: Int,
+        isLastPage: Boolean,
+        isFirstPage: Boolean,
+    ) {
         searchLiveData.postValue(
             when (searchLiveData.value) {
                 is SearchFragmentState.SearchVacancy -> {
@@ -88,7 +93,8 @@ class SearchViewModel(
                         .copy(
                             searchVacancy = searchVacancy,
                             totalFoundVacancy = totalFoundVacancy,
-                            isLastPage = isLastPage
+                            isLastPage = isLastPage,
+                            isFirstPage = isFirstPage
                         )
                 }
 
@@ -96,7 +102,8 @@ class SearchViewModel(
                     SearchFragmentState.SearchVacancy(
                         searchVacancy = searchVacancy,
                         totalFoundVacancy = totalFoundVacancy,
-                        isLastPage = isLastPage
+                        isLastPage = isLastPage,
+                        isFirstPage = isFirstPage
                     )
                 }
             }
@@ -119,6 +126,7 @@ class SearchViewModel(
             interactor
                 .searchVacancy(text, parametersForSearch, PER_PAGE, currentPage)
                 .collect { vacancy ->
+
                     when {
                         vacancy.result!!.isNotEmpty() -> {
                             pagesCount = vacancy.pages
@@ -128,14 +136,16 @@ class SearchViewModel(
                                 updateState(
                                     searchVacancy = vacanciesList,
                                     totalFoundVacancy = vacancy.foundVacancy,
-                                    isLastPage = true
+                                    isLastPage = true,
+                                    isFirstPage = vacancy.page == 0
                                 )
                             } else {
                                 vacanciesList += vacancy.result
                                 updateState(
                                     searchVacancy = vacanciesList,
                                     totalFoundVacancy = vacancy.foundVacancy,
-                                    isLastPage = pagesCount == 1
+                                    isLastPage = pagesCount == 1,
+                                    isFirstPage = vacancy.page == 0
                                 )
                             }
                         }
@@ -163,6 +173,8 @@ class SearchViewModel(
     fun searchWithDebounce(text: String?) {
         if (text == latestSearchText) return
         if (text?.isBlank() == true) {
+            autoSearchDelayJob?.cancel()
+            latestSearchText = text
             searchLiveData.postValue(SearchFragmentState.NoTextInInputEditText)
             isLastCapitalOfInputSearched = true
         } else {
@@ -190,6 +202,7 @@ class SearchViewModel(
     }
 
     fun onLastItemReached() {
+        if (searchJob?.isActive == true) return
         try {
             if (currentPage < pagesCount - 1 && searchJob?.isActive == false) {
                 currentPage++
@@ -198,7 +211,14 @@ class SearchViewModel(
                     searchResult(latestSearchText!!)
                 }
             } else {
-                updateState(SearchFragmentState.SearchVacancy(vacanciesList, totalFound, isLastPage = true))
+                updateState(
+                    SearchFragmentState.SearchVacancy(
+                        vacanciesList,
+                        totalFound,
+                        isLastPage = true,
+                        isFirstPage = false
+                    )
+                )
             }
         } catch (e: CursorIndexOutOfBoundsException) {
             updateState(SearchFragmentState.ServerError(e.message.toString()))
@@ -208,4 +228,5 @@ class SearchViewModel(
     fun stopAutoSearch() {
         autoSearchDelayJob?.cancel()
     }
+
 }
